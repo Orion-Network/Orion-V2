@@ -1,15 +1,10 @@
 package orion.mmorpg.gui;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
-import com.github.stefvanschie.inventoryframework.gui.type.AnvilGui;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
-import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;

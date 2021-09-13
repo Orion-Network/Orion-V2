@@ -1,13 +1,10 @@
 package orion.mmorpg.players;
 
-import com.github.stefvanschie.inventoryframework.gui.GuiItem;
-import jdk.nashorn.internal.objects.LinkedMap;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.players.abilities.Spell;
