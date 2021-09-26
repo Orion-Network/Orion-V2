@@ -6,9 +6,15 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
@@ -26,7 +32,7 @@ public class OrionPlayer {
     private UUID uniqueId;
 
     private double health;
-    private int statsPoints, level;
+    private int statsPoints, level, mana;
     private LinkedList<String> portalStones;
 
     private ItemStack[] equipements;
@@ -34,7 +40,11 @@ public class OrionPlayer {
     transient private KeyedBossBar healthBar;
     transient LinkedHashMap<String, Spell> spells;
     transient LinkedHashMap<String, Long> cooldownSpells;
+    transient LinkedHashMap<Support, Long> supportMap;
     String[] selectedSpells;
+
+    private Support support;
+    private Race race;
 
     public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, int statsPoints, int level) {
         this.infos = infos;
@@ -48,6 +58,8 @@ public class OrionPlayer {
 
         this.equipements = new ItemStack[4];
 
+        this.mana = (int) this.getStats().getIntel();
+
         this.healthBar = Bukkit.createBossBar(NamespacedKey.minecraft("health"), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
@@ -55,8 +67,11 @@ public class OrionPlayer {
 
         spells = new LinkedHashMap<>();
         SpellList.learnSpell(this, "TEST_SPELL");
+        SpellList.learnSpell(this, "BERSERKMODE");
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
+
+        supportMap = new LinkedHashMap<>();
     }
 
     public void updateHealthbar() {
@@ -101,6 +116,14 @@ public class OrionPlayer {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 
     public LinkedList<String> getPortalStones() {
@@ -155,6 +178,27 @@ public class OrionPlayer {
         return selectedSpells;
     }
 
+    public Support getSupport() {
+        return support;
+    }
+
+    public void setSupport(Support support) {
+        this.support = support;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
+    }
+
+    public LinkedHashMap<Support, Long> getSupportMap() {
+        return supportMap;
+    }
+
+    //TODO Respawn
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
         this.setHealth(this.getStats().getVitality());
@@ -162,6 +206,98 @@ public class OrionPlayer {
         Utils.sendInfoMessage(p, "Vous êtes mort.");
     }
 
+    public void onInteract(PlayerInteractEvent event) {
+        if(this.getSupport() != null)
+            this.getSupport().onInteract(event);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onInteract(event);
+        }
+    };
+    public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
+        if(this.getSupport() != null)
+            this.getSupport().onLaunchSpell(player, stats, s);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onLaunchSpell(player, stats, s);
+        }
+    };
+    public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
+        if(this.getSupport() != null)
+            this.getSupport().onHit(event, stats);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onHit(event, stats);
+        }
+    };
+    public void onShootArrow(EntityShootBowEvent event) {
+        if(this.getSupport() != null)
+            this.getSupport().onShootArrow(event);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onShootArrow(event);
+        }
+    };
+    public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
+        if(this.getSupport() != null)
+            this.getSupport().onHitByEntity(entityEvent);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onHitByEntity(entityEvent);
+        }
+    };
+    /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
+    public void onSpellSense(OnSpellSense e) {
+        if(this.getSupport() != null)
+            this.getSupport().onSpellSense(e);
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onSpellSense(e);
+        }
+    };
+    public void onTick() {
+        if(mana < this.getStats().getIntel() - this.getStats().getIntel()/30)
+            mana += this.getStats().getIntel()/30;
+
+        if(this.getSupport() != null)
+            this.getSupport().onTick();
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onTick();
+        }
+    };
     public void onDie() {
-    }
+        if(this.getSupport() != null)
+            this.getSupport().onDie();
+
+        for(Support support : supportMap.keySet()) {
+            if(supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onDie();
+        }
+    };
+
+
 }

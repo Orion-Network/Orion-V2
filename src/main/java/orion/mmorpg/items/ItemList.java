@@ -1,6 +1,7 @@
 package orion.mmorpg.items;
 
 import org.bukkit.inventory.ItemStack;
+import orion.mmorpg.items.armors.CelestianSet;
 import orion.mmorpg.items.armors.StartingSet;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
@@ -25,11 +26,14 @@ public enum ItemList {
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
     STARTING_LEGGINGS(new StartingSet.StartingLeggings(), BasicArmorItem.class),
     STARTING_BOOTS(new StartingSet.StartingBoots(), BasicArmorItem.class),
+    CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
     //GUI Items
     HELMET_PLACEHOLDER(new HelmetPlaceholderItem(), BasicGuiItem.class),
     CHESTPLATE_PLACEHOLDER(new ChestplatePlaceholderItem(), BasicGuiItem.class),
     LEGGINGS_PLACEHOLDER(new LeggingsPlaceholderItem(), BasicGuiItem.class),
     BOOTS_PLACEHOLDER(new BootsPlaceholder(), BasicGuiItem.class),
+    ACCEPT_BUTTON_PLACEHOLDER(new AcceptButtonPlaceholder(), BasicGuiItem.class),
+    REFUSE_BUTTON_PLACEHOLDER(new RefuseButtonPlaceholder(), BasicGuiItem.class),
     SPELL_PLACEHOLDER(new SpellPlaceholderItem(), BasicGuiItem.class),
     PORTALSTONE(new PortalStoneItem(), BasicGuiItem.class),
     //MISC

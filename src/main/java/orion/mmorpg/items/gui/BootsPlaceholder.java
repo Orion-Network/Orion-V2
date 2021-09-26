@@ -5,6 +5,6 @@ import orion.mmorpg.items.sample.BasicGuiItem;
 public class BootsPlaceholder extends BasicGuiItem {
 
     public BootsPlaceholder() {
-        super("Boots", "BOOTS_PLACEHOLDER", 3);
+        super("Boots", "BOOTS_PLACEHOLDER", 4);
     }
 }

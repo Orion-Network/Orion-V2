@@ -44,6 +44,8 @@ public class GrimoryItem extends BasicItem {
             Utils.sendDebugMessage(e.getPlayer(), "slot : " +slot + "Spell : " + data.getSelectedSpells()[slot] +" in spell : " + data.getSpells().get(data.getSelectedSpells()[slot]));
             if(spell != null)
                 spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
+            else
+                Utils.sendInfoMessage(e.getPlayer(), "Le sort n'existe pas");
         } else {
             if(e.getPlayer().isSneaking())
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());

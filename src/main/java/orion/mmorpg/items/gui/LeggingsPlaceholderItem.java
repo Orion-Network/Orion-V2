@@ -5,6 +5,6 @@ import orion.mmorpg.items.sample.BasicGuiItem;
 public class LeggingsPlaceholderItem extends BasicGuiItem {
 
     public LeggingsPlaceholderItem() {
-        super("Leggings", "LEGGINGS_PLACEHOLDER", 2);
+        super("Leggings", "LEGGINGS_PLACEHOLDER", 3);
     }
 }

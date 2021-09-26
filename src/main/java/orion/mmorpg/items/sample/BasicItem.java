@@ -82,6 +82,7 @@ public abstract class BasicItem extends ItemStack {
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("type"), PersistentDataType.STRING, TYPE.toString());
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.setCustomModelData(MODEL_ID);
         item.setItemMeta(meta);
         item.setAmount(amount);
         return item;

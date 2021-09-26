@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public enum PortalStone {
-    SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world1"),0,0,0))
+    SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"),-280,185,-432))
     ;
 
     String title;
@@ -34,8 +34,8 @@ public enum PortalStone {
 
         meta.setDisplayName(ChatColor.YELLOW + title);
         List<String> lore = new LinkedList<>();
-        lore.add(ChatColor.GRAY + "X : " + ChatColor.YELLOW + location.getBlockX() +
-                ChatColor.GRAY + "Y : " + ChatColor.YELLOW + location.getBlockY() +
+        lore.add(ChatColor.GRAY + "X : " + ChatColor.YELLOW + location.getBlockX() + ", " +
+                ChatColor.GRAY + "Y : " + ChatColor.YELLOW + location.getBlockY() + ", " +
                 ChatColor.GRAY + "Z : " + ChatColor.YELLOW + location.getBlockZ());
         meta.setLore(lore);
 

@@ -3,13 +3,17 @@ package orion.mmorpg.items.sample;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
+import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
+import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,12 @@ public abstract class BasicArmorItem extends BasicItem {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR);
         this.ARMORTYPE = ARMORTYPE;
         this.STATS = STATS;
+    }
+
+    @Override
+    public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
+        Utils.sendInfoMessage(e.getPlayer(), "Vous devez vous équiper via le /menu");
+        e.setCancelled(true);
     }
 
     @Override
@@ -45,6 +55,6 @@ public abstract class BasicArmorItem extends BasicItem {
     }
 
     public enum ArmorType {
-        HELMET, CHESTPLATE, LEGGINGS, BOOTS;
+        HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS;
     }
 }

@@ -5,6 +5,6 @@ import orion.mmorpg.items.sample.BasicGuiItem;
 public class HelmetPlaceholderItem extends BasicGuiItem {
 
     public HelmetPlaceholderItem() {
-        super("Helmet", "HELMET_PLACEHOLDER", 0);
+        super("Helmet", "HELMET_PLACEHOLDER", 1);
     }
 }

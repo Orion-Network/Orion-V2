@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
@@ -29,8 +30,14 @@ public class MenuGui extends ChestGui {
         this.p = p;
         this.orionPlayer = orionPlayer;
         this.setOnTopClick(e -> e.setCancelled(true));
-        this.addPane(getArmorPane());
-        this.addPane(getMenuPane());
+
+        if(orionPlayer.getRace() != null) {
+            this.addPane(getArmorPane());
+            this.addPane(getMenuPane());
+            this.show(p);
+        } else {
+            new RaceGui(p, orionPlayer);
+        }
 
         this.setOnBottomClick(e -> {
             e.setCancelled(true);
@@ -62,6 +69,13 @@ public class MenuGui extends ChestGui {
                         if(orionPlayer.getEquipements()[2] != null) {
                             Utils.sendErrorMessage(p, "Unequip chestplate first");
                             return;
+                        }
+
+                        if(item.getType().equals(Material.ELYTRA)) {
+                            if (!orionPlayer.getRace().getSpecies().contains(Race.spec.ELYTRA)) {
+                                Utils.sendErrorMessage(p, "Votre race ne peut pas equiper d'ailes");
+                                return;
+                            }
                         }
 
                         orionPlayer.getEquipements()[2] = item;
@@ -104,6 +118,27 @@ public class MenuGui extends ChestGui {
                         p.getInventory().setBoots(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 3);
+
+                        e.setCurrentItem(null);
+                    } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("WINGS")) {
+                        if (!orionPlayer.getRace().getSpecies().contains(Race.spec.ELYTRA)) {
+                            Utils.sendErrorMessage(p, "Votre race ne peut pas equiper d'ailes");
+                            return;
+                        }
+
+                        if(orionPlayer.getEquipements()[2] != null) {
+                            Utils.sendErrorMessage(p, "Unequip chestplate first");
+                            return;
+                        }
+
+                        orionPlayer.getEquipements()[2] = item;
+                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        Utils.sendInfoMessage(p, "You equipped an Wings");
+
+                        getArmorPane().removeItem(1,1);
+                        p.getInventory().setChestplate(item);
+                        getMenuPane();
+                        getArmorPane().addItem(new GuiItem(item), 1, 1);
 
                         e.setCurrentItem(null);
                     }
@@ -179,6 +214,16 @@ public class MenuGui extends ChestGui {
                     p.getInventory().setBoots(null);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 3);
+                } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("WINGS")) {
+                    orionPlayer.getEquipements()[2] = null;
+                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    Utils.sendInfoMessage(p, "You removed an wings");
+
+                    getArmorPane().removeItem(1, 1);
+                    p.getInventory().addItem(item);
+                    p.getInventory().setChestplate(null);
+                    getMenuPane();
+                    getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
                 }
             }
         });
@@ -191,24 +236,28 @@ public class MenuGui extends ChestGui {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         ItemMeta headMeta = head.getItemMeta();
+        headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
         headMeta.setLore(orionPlayer.getStats().statsAsLore());
         head.setItemMeta(headMeta);
 
         menuPane.addItem(new GuiItem(head), 2, 1);
-        menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
-            if(orionPlayer.getPlayerMode() == Mode.PLAYER)
-                if(p.hasPermission("builder"))
-                    orionPlayer.setPlayerMode(Mode.BUILDER);
+        if(p.isOp()) {
+            menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
+                if(orionPlayer.getPlayerMode() == Mode.PLAYER)
+                    if(p.hasPermission("builder"))
+                        orionPlayer.setPlayerMode(Mode.BUILDER);
 
-            if(orionPlayer.getPlayerMode() == Mode.BUILDER)
-                if(p.hasPermission("admin"))
-                    orionPlayer.setPlayerMode(Mode.ADMIN);
-                else
+                if(orionPlayer.getPlayerMode() == Mode.BUILDER)
+                    if(p.hasPermission("admin"))
+                        orionPlayer.setPlayerMode(Mode.ADMIN);
+                    else
+                        orionPlayer.setPlayerMode(Mode.PLAYER);
+
+                if(orionPlayer.getPlayerMode() == Mode.ADMIN)
                     orionPlayer.setPlayerMode(Mode.PLAYER);
+            }), 3, 1);
+        }
 
-            if(orionPlayer.getPlayerMode() == Mode.ADMIN)
-                orionPlayer.setPlayerMode(Mode.PLAYER);
-        }), 3, 1);
         menuPane.addItem(new GuiItem(ItemList.PORTALSTONE.getProcessedItem(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
         }), 2,2);

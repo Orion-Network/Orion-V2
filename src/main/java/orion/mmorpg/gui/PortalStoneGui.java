@@ -31,7 +31,6 @@ public class PortalStoneGui extends ChestGui {
             PortalStone portalStone = PortalStone.valueOf(id);
 
             listPane.addItem(new GuiItem(portalStone.generateItem(), e -> {
-                //TODO Debug world teleportation
                 p.teleport(portalStone.getLocation());
             }), i,i/6);
             i++;

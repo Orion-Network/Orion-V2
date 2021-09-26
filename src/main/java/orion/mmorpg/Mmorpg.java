@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.ItemCommand;
 import orion.mmorpg.commands.MenuCommand;
 import orion.mmorpg.commands.StatsCommand;
+import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.PlayerManager;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 public final class Mmorpg extends JavaPlugin {
 
     public static boolean debug = true;
+    Client mongoClient = new Client();
     PlayerManager playerManager;
 
     @Override
@@ -55,5 +57,9 @@ public final class Mmorpg extends JavaPlugin {
 
     public void setPlayerManager(PlayerManager playerManager) {
         this.playerManager = playerManager;
+    }
+
+    public Client getMongoClient() {
+        return mongoClient;
     }
 }

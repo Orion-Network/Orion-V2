@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
@@ -50,13 +51,18 @@ public abstract class Spell {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
+        orionPlayer.onLaunchSpell(player, orionPlayer, this);
+        player.getNearbyEntities(5 * 10, 5 *10, 5 *10).forEach(e -> {
+            if(e instanceof Player)
+                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, player, (Player)e, SpellList.valueOf(internal_id), this, OnSpellSense.Target.GLOBAL));
+        });
+        Utils.sendDebugMessage(player, "Sort lancé !");
+        orionPlayer.getCooldownSpells().put(internal_id, System.currentTimeMillis() + cooldown);
         launch(mmorpg, player, orionPlayer);
         return true;
     }
 
-    public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.getCooldownSpells().put(internal_id, System.currentTimeMillis() + cooldown);
-    }
+    public abstract void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer);
 
     public String getInternal_id() {
         return internal_id;

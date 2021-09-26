@@ -15,7 +15,6 @@ public class TestSpell extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        Bukkit.broadcastMessage("worked");
-        super.launch(mmorpg, player, orionPlayer);
+        Bukkit.broadcastMessage(TestSpell.class + "");
     }
 }

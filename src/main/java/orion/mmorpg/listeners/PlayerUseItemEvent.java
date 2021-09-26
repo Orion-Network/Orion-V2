@@ -23,11 +23,12 @@ public class PlayerUseItemEvent implements Listener {
     @EventHandler
     public void onPlayerUseItem(PlayerInteractEvent e) {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-            if(e.getItem().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
-                PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
-                BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
-                item.onUseItem(mmorpg, player, e);
-            }
-
+        if(e.getItem() ==  null)
+            return;
+        if(e.getItem().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
+            BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+            item.onUseItem(mmorpg, player, e);
+        }
     }
 }
