@@ -39,7 +39,7 @@ public abstract class BasicArmorItem extends BasicItem {
         if(item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, OrionGson.GSON.toJson(STATS));
+        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING, ARMORTYPE.name());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);

@@ -6,6 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Rarity;
@@ -35,7 +36,7 @@ public abstract class BasicMeleeWeapon extends BasicItem{
         if(item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, OrionGson.GSON.toJson(STATS));
+        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT, DAMAGE);
         item.setItemMeta(meta);
         return super.generateItem(item, amount);

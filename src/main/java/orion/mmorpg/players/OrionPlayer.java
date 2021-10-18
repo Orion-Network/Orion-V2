@@ -19,13 +19,10 @@ import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class OrionPlayer {
-
+//TODO Add leveling system
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
     private Stats stats;
@@ -38,7 +35,7 @@ public class OrionPlayer {
     private ItemStack[] equipements;
 
     transient private KeyedBossBar healthBar;
-    transient LinkedHashMap<String, Spell> spells;
+    transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
     String[] selectedSpells;
@@ -65,9 +62,33 @@ public class OrionPlayer {
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
 
-        spells = new LinkedHashMap<>();
         SpellList.learnSpell(this, "TEST_SPELL");
         SpellList.learnSpell(this, "BERSERKMODE");
+        cooldownSpells = new LinkedHashMap<>();
+        selectedSpells = new String[9];
+
+        supportMap = new LinkedHashMap<>();
+    }
+
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedList<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
+        this.infos = infos;
+        this.stats = stats;
+        this.uniqueId = uniqueId;
+        this.health = health;
+        this.statsPoints = statsPoints;
+        this.level = level;
+        this.mana = mana;
+        this.portalStones = portalStones;
+        this.equipements = equipements;
+        spells.forEach(spellID ->  SpellList.learnSpell(this, spellID));
+        this.support = support;
+        this.race = race;
+
+        this.healthBar = Bukkit.createBossBar(NamespacedKey.minecraft("health"), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        this.healthBar.setProgress(1);
+        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        this.healthBar.setVisible(true);
+
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
 

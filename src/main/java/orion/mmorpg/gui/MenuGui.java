@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
@@ -48,7 +49,7 @@ public class MenuGui extends ChestGui {
 
             if(container.has(NamespacedKey.minecraft("type"), PersistentDataType.STRING)) {
                 if(container.get(NamespacedKey.minecraft("type"), PersistentDataType.STRING).equalsIgnoreCase("armor")) {
-                    Stats stats = OrionGson.GSON.fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                     if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                         if(orionPlayer.getEquipements()[3] != null) {
                             Utils.sendErrorMessage(p, "Unequip helmet first");
@@ -173,7 +174,7 @@ public class MenuGui extends ChestGui {
                 ItemStack item = e.getCurrentItem();
                 PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 
-                Stats stats = OrionGson.GSON.fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                     orionPlayer.getEquipements()[3] = null;
                     orionPlayer.getStats().combineOrSeparateStats(stats, false);

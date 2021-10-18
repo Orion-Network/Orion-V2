@@ -33,6 +33,7 @@ public class GrimoryItem extends BasicItem {
     }
 
     //TODO cast spell when select spell in selector
+    //TODO change grimory amount based on slot
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         ItemStack item = e.getItem();

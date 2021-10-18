@@ -9,12 +9,14 @@ import orion.mmorpg.commands.StatsCommand;
 import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.PlayerManager;
+import orion.mmorpg.utils.OrionGson;
 
 import java.util.Objects;
 
 public final class Mmorpg extends JavaPlugin {
 
     public static boolean debug = true;
+    public static OrionGson orionGson = new OrionGson();
     Client mongoClient = new Client();
     PlayerManager playerManager;
 
@@ -46,9 +48,12 @@ public final class Mmorpg extends JavaPlugin {
         return playerManager;
     }
 
-
     public static boolean isDebug() {
         return debug;
+    }
+
+    public static OrionGson getOrionGson() {
+        return orionGson;
     }
 
     public static void setDebug(boolean debug) {

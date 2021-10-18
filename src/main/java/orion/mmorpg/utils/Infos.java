@@ -3,9 +3,11 @@ package orion.mmorpg.utils;
 import java.time.LocalDateTime;
 
 public class Infos {
+
+    //TODO Save LocalDateTime
     String playerName;
-    LocalDateTime firstPlayed;
-    LocalDateTime lastPlayed;
+    transient LocalDateTime firstPlayed;
+    transient LocalDateTime lastPlayed;
     long playerTime;
 
     public Infos(String playerName, LocalDateTime firstPlayed, LocalDateTime lastPlayed, long playerTime) {

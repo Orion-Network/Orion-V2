@@ -54,7 +54,7 @@ public class PlayerStatsListener implements Listener {
             if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
-                    Stats stats = OrionGson.GSON.fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                     float damage = container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), stats, damage);
                     e.setDamage(totalDamage);

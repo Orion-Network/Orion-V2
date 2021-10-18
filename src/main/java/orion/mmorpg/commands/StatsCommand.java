@@ -8,6 +8,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.managers.PlayerManager;
 import orion.mmorpg.utils.OrionGson;
@@ -26,7 +27,7 @@ public class StatsCommand implements TabExecutor {
                 ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
                 String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
                 String type = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("type"), PersistentDataType.STRING);
-                Stats stats = OrionGson.GSON.fromJson(meta.getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 float damage = 0;
                 if(meta.getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
                     damage = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
