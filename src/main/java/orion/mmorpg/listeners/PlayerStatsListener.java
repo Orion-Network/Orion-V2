@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,6 +59,10 @@ public class PlayerStatsListener implements Listener {
                     float damage = container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), stats, damage);
                     e.setDamage(totalDamage);
+
+                    LivingEntity entity = (LivingEntity) e.getEntity();
+                    orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
+
                 }
             }
         }
@@ -68,12 +73,13 @@ public class PlayerStatsListener implements Listener {
             e.setCancelled(true);
             float reduction =  1 + (orionPlayer.getStats().getDefence() / (orionPlayer.getStats().getDefence() + 100));
             orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
-            orionPlayer.updateHealthbar();
-            Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction);
 
             if(orionPlayer.getHealth() <= 0)
                 orionPlayer.onDie();
-            orionPlayer.respawn();
+            else
+                orionPlayer.updateHealthbar();
+
+            Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction);
         }
     }
 

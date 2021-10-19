@@ -1,11 +1,14 @@
 package orion.mmorpg.players.races;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
@@ -18,8 +21,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public enum Race {
-    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), ItemList.MINECRAFT_STONE_SWORD.getProcessedItem(1)),
-    CELESTIAN("Celestian", new Stats(1,1,1,1,1,1,1,1,1), ItemList.CELESTIAN_WINGS.getProcessedItem(1), null ,Arrays.asList(spec.ELYTRA), null, null)
+    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde", Rarity.COMMON).generateItem(null, 1)),
+    CELESTIAN("Celestian", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "La race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null ,Arrays.asList(spec.ELYTRA), null, null)
     ;
 
     public String name;

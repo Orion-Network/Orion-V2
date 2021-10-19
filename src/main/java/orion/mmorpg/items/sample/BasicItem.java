@@ -72,6 +72,11 @@ public abstract class BasicItem extends ItemStack {
                 spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
     }
 
+    public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, String LORE, Rarity RARITY) {
+        return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {
+        };
+    }
+
     public ItemStack generateItem(ItemStack item, int amount) {
         if(item == null)
             item = new ItemStack(MATERIAL);

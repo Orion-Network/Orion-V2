@@ -35,6 +35,7 @@ public class OrionPlayer {
     private ItemStack[] equipements;
 
     transient private KeyedBossBar healthBar;
+    transient private KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);;
     transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
@@ -61,8 +62,10 @@ public class OrionPlayer {
         this.healthBar.setProgress(1);
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
+        this.mobHealthBar.setProgress(1);
+        this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        this.mobHealthBar.setVisible(false);
 
-        SpellList.learnSpell(this, "TEST_SPELL");
         SpellList.learnSpell(this, "BERSERKMODE");
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
@@ -88,6 +91,9 @@ public class OrionPlayer {
         this.healthBar.setProgress(1);
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
+        this.mobHealthBar.setProgress(1);
+        this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        this.mobHealthBar.setVisible(false);
 
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
@@ -97,6 +103,18 @@ public class OrionPlayer {
 
     public void updateHealthbar() {
         this.healthBar.setProgress(getHealth()/getStats().getVitality() < 1 ? getHealth()/getStats().getVitality() : 1);
+    }
+
+    public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
+        Bukkit.broadcastMessage(mobHealth + " h");
+        if(mobHealth<=0) {
+            this.mobHealthBar.setVisible(false);
+            this.mobHealthBar.setProgress(1);
+        } else {
+            this.mobHealthBar.setVisible(true);
+            this.mobHealthBar.setTitle(title);
+            this.mobHealthBar.setProgress(mobHealth/maxHealth < 1 ? mobHealth/maxHealth : 1);
+        }
     }
 
     public Infos getInfos() {
@@ -318,6 +336,8 @@ public class OrionPlayer {
             else
                 support.onDie();
         }
+
+        respawn();
     };
 
 

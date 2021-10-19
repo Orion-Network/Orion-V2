@@ -29,6 +29,7 @@ public class PlayerJoinListener implements Listener {
             try {
                 OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
                 mmorpg.getPlayerManager().addPlayer(player.getUniqueId(), orionPlayer);
+                orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(player, "Data loaded !");
                 if(orionPlayer.getRace() == null)
                     player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10 , 70, 20);
