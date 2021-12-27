@@ -6,6 +6,7 @@ import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Utils;
 
@@ -38,6 +39,8 @@ public class RaceGui extends ChestGui {
 
                     new AcceptGui("Devenir " + race.getName(), p, orionPlayer, () -> {
                         orionPlayer.setRace(race);
+                        for(String s : race.spellList)
+                            SpellList.learnSpell(orionPlayer, s);
                         race.getOnRaceSelected().accept(p, orionPlayer);
                     }, "Vous êtes devenu un(e) " + race.getName());
                 } else {

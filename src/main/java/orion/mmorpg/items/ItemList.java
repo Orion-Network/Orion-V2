@@ -9,6 +9,7 @@ import orion.mmorpg.items.minecraft.Wheat;
 import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.GrimoryItem;
+import orion.mmorpg.items.misc.InfiniFirework;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicGuiItem;
 import orion.mmorpg.items.sample.BasicItem;
@@ -35,10 +36,11 @@ public enum ItemList {
     ACCEPT_BUTTON_PLACEHOLDER(new AcceptButtonPlaceholder(), BasicGuiItem.class),
     REFUSE_BUTTON_PLACEHOLDER(new RefuseButtonPlaceholder(), BasicGuiItem.class),
     SPELL_PLACEHOLDER(new SpellPlaceholderItem(), BasicGuiItem.class),
-    PORTALSTONE(new PortalStoneItem(), BasicGuiItem.class),
+    PORTAL_STONE(new PortalStoneItem(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
+    INFINITI_FIREWORK(new InfiniFirework(), BasicItem.class),
     ;
 
     BasicItem item;

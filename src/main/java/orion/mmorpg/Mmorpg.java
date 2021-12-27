@@ -1,6 +1,14 @@
 package orion.mmorpg;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListeningWhitelist;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.events.PacketListener;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.ItemCommand;
@@ -30,7 +38,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
         pm.registerEvents(new EntityHitEntityListener(this), this);
-        pm.registerEvents(new InventoryClickListener(), this);
+        pm.registerEvents(new InventoryClickListener(this), this);
         pm.registerEvents(new PlayerUseItemEvent(this), this);
         pm.registerEvents(new PlayerStatsListener(this), this);
 

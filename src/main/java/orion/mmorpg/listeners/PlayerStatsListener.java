@@ -9,10 +9,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -51,7 +53,6 @@ public class PlayerStatsListener implements Listener {
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            orionPlayer.onHit(e, orionPlayer);
             if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
@@ -59,6 +60,7 @@ public class PlayerStatsListener implements Listener {
                     float damage = container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), stats, damage);
                     e.setDamage(totalDamage);
+                    orionPlayer.onHit(e, orionPlayer);
 
                     LivingEntity entity = (LivingEntity) e.getEntity();
                     orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
@@ -102,5 +104,20 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onSpellSense(OnSpellSense e) {
         mmorpg.getPlayerManager().getPlayer(e.getTarget().getUniqueId()).onSpellSense(e);
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent e) {
+        if(e.getEntity() instanceof Player) {
+            if(e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
+                e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onLevelUp(PlayerLevelChangeEvent e) {
+        OrionPlayer op = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        if(e.getPlayer().getLevel() > op.getLevel())
+            op.levelUp(e.getPlayer(), e.getNewLevel());
     }
 }

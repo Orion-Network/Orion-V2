@@ -1,23 +1,17 @@
 package orion.mmorpg.items.misc;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import dev.dbassett.skullcreator.SkullCreator;
-import io.netty.handler.codec.spdy.SpdyHttpHeaders;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
-
-import java.util.UUID;
 
 public class Gift extends BasicItem {
     public Gift() {

@@ -30,7 +30,7 @@ public class OrionPlayer {
 
     private double health;
     private int statsPoints, level, mana;
-    private LinkedList<String> portalStones;
+    private LinkedHashSet<String> portalStones;
 
     private ItemStack[] equipements;
 
@@ -51,7 +51,7 @@ public class OrionPlayer {
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
         this.level = level;
-        this.portalStones = new LinkedList<>();
+        this.portalStones = new LinkedHashSet<>();
         portalStones.add(PortalStone.SPAWN_STONE.getId());
 
         this.equipements = new ItemStack[4];
@@ -66,14 +66,14 @@ public class OrionPlayer {
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
 
-        SpellList.learnSpell(this, "BERSERKMODE");
+        //SpellList.learnSpell(this, "BERSERKMODE");
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
 
         supportMap = new LinkedHashMap<>();
     }
 
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedList<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
         this.infos = infos;
         this.stats = stats;
         this.uniqueId = uniqueId;
@@ -165,7 +165,7 @@ public class OrionPlayer {
         this.mana = mana;
     }
 
-    public LinkedList<String> getPortalStones() {
+    public LinkedHashSet<String> getPortalStones() {
         return portalStones;
     }
 
@@ -237,11 +237,20 @@ public class OrionPlayer {
         return supportMap;
     }
 
+    public void levelUp(Player p, int level) {
+        this.setLevel(level);
+        Utils.sendInfoMessage(p, "Bravo, vous êtes monté de niveau !");
+    }
+
+    public void heal(double health) {
+        this.setHealth(this.getHealth() + health < this.getStats().getVitality() ? this.getHealth() + health : this.getStats().getVitality());
+        this.updateHealthbar();
+    }
+
     //TODO Respawn
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
-        this.setHealth(this.getStats().getVitality());
-        this.updateHealthbar();
+        heal(this.getStats().getVitality());
         Utils.sendInfoMessage(p, "Vous êtes mort.");
     }
 
@@ -274,8 +283,9 @@ public class OrionPlayer {
         for(Support support : supportMap.keySet()) {
             if(supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
-            else
+            else {
                 support.onHit(event, stats);
+            }
         }
     };
     public void onShootArrow(EntityShootBowEvent event) {

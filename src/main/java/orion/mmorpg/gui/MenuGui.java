@@ -256,10 +256,11 @@ public class MenuGui extends ChestGui {
 
                 if(orionPlayer.getPlayerMode() == Mode.ADMIN)
                     orionPlayer.setPlayerMode(Mode.PLAYER);
+                Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode());
             }), 3, 1);
         }
 
-        menuPane.addItem(new GuiItem(ItemList.PORTALSTONE.getProcessedItem(1), e -> {
+        menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.getProcessedItem(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
         }), 2,2);
 

@@ -11,6 +11,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
+import orion.mmorpg.utils.Utils;
 
 public class BerserkMode extends Spell {
     public BerserkMode() {
@@ -19,7 +20,7 @@ public class BerserkMode extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.getSupportMap().put(new BerserkModeSupport(), getCooldown());
+        orionPlayer.getSupportMap().put(new BerserkModeSupport(), (1000*60)+System.currentTimeMillis());
     }
 
     class BerserkModeSupport extends Support {
@@ -40,6 +41,7 @@ public class BerserkMode extends Spell {
         @Override
         public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
             event.setDamage(event.getDamage()*1.5);
+            Utils.sendDebugMessage(event.getDamager(), event.getDamage() + " f damages");
         }
 
         @Override

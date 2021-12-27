@@ -20,20 +20,17 @@ import orion.mmorpg.utils.Stats;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class Client {
-    public MongoClient mongoClient = new MongoClient("localhost", 27017);
+    public MongoClient mongoClient = new MongoClient("mongo", 27017);
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
 
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");
 
-    static Type portalStoneType = new TypeToken<LinkedList<PortalStone>>(){}.getType();
+    static Type portalStoneType = new TypeToken<LinkedHashSet<PortalStone>>(){}.getType();
     static Type spellSetType = new TypeToken<Set<String>>(){}.getType();
 
     public boolean hasPlayer(UUID uuid) {
@@ -87,7 +84,7 @@ public class Client {
         int level = document.getInteger("level");
         int mana = document.getInteger("mana");
 
-        LinkedList<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
+        LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
         //ItemStack[] equipements = BukkitSerialization.itemStackArrayFromBase64(document.getString("equipements"));
         ItemStack[] equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"), ItemStack[].class);
 

@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.list.BerserkMode;
+import orion.mmorpg.players.abilities.list.Heal;
 import orion.mmorpg.players.abilities.list.TestSpell;
 import orion.mmorpg.utils.Rarity;
 
@@ -14,7 +15,8 @@ import java.util.List;
 
 public enum SpellList {
     TEST_SPELL(TestSpell.class, "Test spell", Rarity.UNOBTAINABLE, Material.PAPER, Arrays.asList("test")),
-    BERSERKMODE(BerserkMode.class,"Berserk Mode", Rarity.UNCOMMON, Material.IRON_AXE, Arrays.asList("Boost vos stats"))
+    BERSERKMODE(BerserkMode.class,"Berserk Mode", Rarity.UNCOMMON, Material.IRON_AXE, Arrays.asList("Boost vos stats")),
+    HEAL(Heal.class, "Heal", Rarity.COMMON, Material.POTION, Arrays.asList("Heal 1/10 de votre vitalité."))
     ;
 
     Class<? extends Spell> spellClass;

@@ -6,6 +6,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
+import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
@@ -20,18 +21,8 @@ public class TestSpell extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        if(player.isSneaking()) {
-            mmorpg.getMongoClient().savePlayer(orionPlayer);
-            Utils.sendInfoMessage(player, "Data saved !");
-        } else {
-            try {
-                mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
-                Utils.sendInfoMessage(player, "Data loaded !");
-            } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-                Utils.sendErrorMessage(player, "Error in loading");
-            }
+        for(String s : orionPlayer.getSpells().keySet()) {
+            player.sendMessage(s);
         }
-
     }
 }

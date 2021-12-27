@@ -20,31 +20,35 @@ import java.util.List;
 public class StatsCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args[0].equalsIgnoreCase("player")) {
+        //TODO Finish the command
+        if(args.length == 0) {
+        } else {
+            if(args[0].equalsIgnoreCase("player")) {
 
-        } else if(args[0].equalsIgnoreCase("item")) {
-            if(sender instanceof Player) {
-                ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
-                String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
-                String type = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("type"), PersistentDataType.STRING);
-                Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
-                float damage = 0;
-                if(meta.getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
-                    damage = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
+            } else if(args[0].equalsIgnoreCase("item")) {
+                if(sender instanceof Player) {
+                    ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
+                    String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
+                    String type = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("type"), PersistentDataType.STRING);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                    float damage = 0;
+                    if(meta.getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
+                        damage = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
 
-                StringBuilder builder = new StringBuilder();
-                builder.append(ChatColor.GRAY + "INTERNAL_ID: " + ChatColor.YELLOW + internal_id + "\n");
-                builder.append(ChatColor.GRAY + "TYPE: " + ChatColor.YELLOW + type + "\n");
-                if(damage != 0)
-                    builder.append(ChatColor.GRAY + "DAMAGE: " + ChatColor.RED + damage + "\n");
-                if(stats != null) {
-                    builder.append(String.join("\n", stats.statsAsLore()));
-                    builder.append("\n");
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(ChatColor.GRAY + "INTERNAL_ID: " + ChatColor.YELLOW + internal_id + "\n");
+                    builder.append(ChatColor.GRAY + "TYPE: " + ChatColor.YELLOW + type + "\n");
+                    if(damage != 0)
+                        builder.append(ChatColor.GRAY + "DAMAGE: " + ChatColor.RED + damage + "\n");
+                    if(stats != null) {
+                        builder.append(String.join("\n", stats.statsAsLore()));
+                        builder.append("\n");
+                    }
+
+                    builder.append(ChatColor.GRAY + "Data: " + ChatColor.LIGHT_PURPLE + meta.getPersistentDataContainer().getKeys());
+
+                    sender.sendMessage(builder.toString());
                 }
-
-                builder.append(ChatColor.GRAY + "Data: " + ChatColor.LIGHT_PURPLE + meta.getPersistentDataContainer().getKeys());
-
-                sender.sendMessage(builder.toString());
             }
         }
         return false;

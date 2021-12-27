@@ -21,8 +21,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public enum Race {
-    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde", Rarity.COMMON).generateItem(null, 1)),
-    CELESTIAN("Celestian", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "La race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null ,Arrays.asList(spec.ELYTRA), null, null)
+    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL"}, null, null, null),
+    CELESTIAN("Celestian", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null ,Arrays.asList(spec.ELYTRA), null, null)
     ;
 
     public String name;
@@ -53,7 +53,8 @@ public enum Race {
         else
             this.spellList = new String[0];
         this.species = new ArrayList<>();
-        this.species.addAll(species);
+        if(species != null)
+            this.species.addAll(species);
         this.support = support;
         if(onRaceSelected != null)
             this.onRaceSelected = onRaceSelected;

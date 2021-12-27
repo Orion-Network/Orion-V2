@@ -1,5 +1,9 @@
 package orion.mmorpg.items.misc;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
@@ -16,6 +20,10 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GrimoryItem extends BasicItem {
     public GrimoryItem() {
@@ -43,8 +51,11 @@ public class GrimoryItem extends BasicItem {
         if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Spell spell = data.getSpells().get(data.getSelectedSpells()[slot]);
             Utils.sendDebugMessage(e.getPlayer(), "slot : " +slot + "Spell : " + data.getSelectedSpells()[slot] +" in spell : " + data.getSpells().get(data.getSelectedSpells()[slot]));
-            if(spell != null)
+            if(spell != null) {
                 spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
+                if(data.getCooldownSpells().get(spell.getInternal_id()) > System.currentTimeMillis())
+                    e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getInternal_id()) - System.currentTimeMillis())/1000)+ "s restantes."));
+            }
             else
                 Utils.sendInfoMessage(e.getPlayer(), "Le sort n'existe pas");
         } else {
@@ -56,6 +67,10 @@ public class GrimoryItem extends BasicItem {
                 else
                     container.set(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER, slot + 1);
                 slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
+
+                String[] slots = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                slots[slot] = ChatColor.GREEN + "" + (slot+1) + ChatColor.WHITE;
+                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.join(slots, " ")));
                 if(data.getSelectedSpells()[slot] != null) {
                     SpellList spell = SpellList.valueOf(data.getSelectedSpells()[slot]);
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " : " + spell.getName());
