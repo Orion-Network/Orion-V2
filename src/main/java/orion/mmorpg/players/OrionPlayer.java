@@ -66,7 +66,6 @@ public class OrionPlayer {
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
 
-        //SpellList.learnSpell(this, "BERSERKMODE");
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
 

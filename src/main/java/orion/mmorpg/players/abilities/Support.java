@@ -40,6 +40,8 @@ public abstract class Support {
     public abstract void onSpellSense(OnSpellSense e);
     public abstract void onTick();
     public abstract void onDie();
+    //TODO Implementing
+    public abstract void onSupportEnd(Player p, OrionPlayer stats);
 
     public String getName() {
         return name;

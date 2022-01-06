@@ -7,9 +7,10 @@ import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
 import orion.mmorpg.items.minecraft.Wheat;
 import orion.mmorpg.items.minecraft.WoodenSword;
+import orion.mmorpg.items.misc.CelestialSerum;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.GrimoryItem;
-import orion.mmorpg.items.misc.InfiniFirework;
+import orion.mmorpg.items.misc.InfiniteFirework;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicGuiItem;
 import orion.mmorpg.items.sample.BasicItem;
@@ -40,7 +41,8 @@ public enum ItemList {
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
-    INFINITI_FIREWORK(new InfiniFirework(), BasicItem.class),
+    INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
+    CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     ;
 
     BasicItem item;

@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -31,6 +32,12 @@ public final class Mmorpg extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        FileConfiguration config = this.getConfig();
+        config.options().copyDefaults(true);
+        saveConfig();
+
+        config.addDefault("username", "root");
+        config.addDefault("password", "");
         playerManager = new PlayerManager();
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -49,7 +56,7 @@ public final class Mmorpg extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.saveConfig();
     }
 
     public PlayerManager getPlayerManager() {

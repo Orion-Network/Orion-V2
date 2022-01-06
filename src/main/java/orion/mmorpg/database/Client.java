@@ -2,6 +2,7 @@ package orion.mmorpg.database;
 
 import com.google.common.reflect.TypeToken;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -25,7 +26,8 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.eq;
 
 public class Client {
-    public MongoClient mongoClient = new MongoClient("mongo", 27017);
+    MongoClientURI uri = new MongoClientURI("mongodb://admin:azerty123@mongo/?authSource=orion");
+    public MongoClient mongoClient = new MongoClient(uri);
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
 
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");

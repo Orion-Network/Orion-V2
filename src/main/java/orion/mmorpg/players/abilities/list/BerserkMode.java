@@ -68,5 +68,10 @@ public class BerserkMode extends Spell {
         public void onDie() {
 
         }
+
+        @Override
+        public void onSupportEnd(Player p, OrionPlayer stats) {
+
+        }
     }
 }
