@@ -7,21 +7,20 @@ import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
 import orion.mmorpg.items.minecraft.Wheat;
 import orion.mmorpg.items.minecraft.WoodenSword;
-import orion.mmorpg.items.misc.CelestialSerum;
-import orion.mmorpg.items.misc.Gift;
-import orion.mmorpg.items.misc.GrimoryItem;
-import orion.mmorpg.items.misc.InfiniteFirework;
+import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicGuiItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.weapons.AdminSword;
+import orion.mmorpg.items.weapons.JokerCard;
 
 public enum ItemList {
     MINECRAFT_WHEAT(new Wheat(), BasicItem.class),
     //Weapon Items
     MINECRAFT_WOODEN_SWORD(new WoodenSword(), BasicMeleeWeapon.class),
     MINECRAFT_STONE_SWORD(new StoneSword(), BasicMeleeWeapon.class),
+    JOKER_CARD(new JokerCard(), BasicMeleeWeapon.class),
     ADMIN_SWORD(new AdminSword(), BasicMeleeWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
@@ -43,6 +42,8 @@ public enum ItemList {
     GRIMORY(new GrimoryItem(), BasicItem.class),
     INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
+    SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
+    TEST_ITEM(new TestItem(), BasicItem.class),
     ;
 
     BasicItem item;

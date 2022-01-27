@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -71,6 +72,8 @@ public abstract class BasicItem extends ItemStack {
             if(spell != null)
                 spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
     }
+
+    public void onHitWithItem(EntityDamageByEntityEvent e){}
 
     public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, String LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {

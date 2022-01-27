@@ -13,7 +13,7 @@ import orion.mmorpg.utils.Rarity;
 
 public class CelestialSerum extends BasicItem {
     public CelestialSerum() {
-        super(Material.POTION, "Serum Celeste", "celestial_serum", 0, "Un serum pouvant selon les légendes vous faire atteindre le 7 ème ciel", Rarity.MYTHIC);
+        super(Material.POTION, "Serum Celeste", "CELESTIAL_SERUM", 0, "Un serum pouvant selon les légendes vous faire atteindre le 7 ème ciel", Rarity.MYTHIC);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class CelestialSerum extends BasicItem {
                 SpellList.learnSpell(data, s);
             race.getOnRaceSelected().accept(e.getPlayer(), data);
         }, "Vous êtes devenu un(e) " + race.getName());
-        this.setAmount(0);
+        e.getItem().setAmount(0);
         e.getPlayer().updateInventory();
     }
 }

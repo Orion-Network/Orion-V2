@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.sample.BasicRangedWeapon;
 import orion.mmorpg.players.OrionPlayer;
@@ -55,12 +56,15 @@ public class PlayerStatsListener implements Listener {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
+                BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+                if(container.has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
+                    e.setDamage(container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT));
+                item.onHitWithItem(e);
                 if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
                     Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
-                    float damage = container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
-                    float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), stats, damage);
-                    e.setDamage(totalDamage);
                     orionPlayer.onHit(e, orionPlayer);
+                    float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), stats, (float) e.getDamage());
+                    e.setDamage(totalDamage);
 
                     LivingEntity entity = (LivingEntity) e.getEntity();
                     orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
