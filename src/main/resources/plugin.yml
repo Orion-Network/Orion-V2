@@ -7,9 +7,9 @@ description: A MMORPG Plugin for Orion Network
 libraries:
   - com.github.stefvanschie.inventoryframework:IF:0.10.0
 commands:
-  stats:
-    permission: "stats.use"
-    description: "See stats of a player or an item"
+  data:
+    permission: "data.use"
+    description: "See data of a player or an item"
   item:
     permission: "item.use"
     description: "Give item"

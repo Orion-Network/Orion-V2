@@ -28,7 +28,7 @@ public class GoatHunger extends Spell {
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
         Effect lineEffect = new GoatHungerEffect(Mmorpg.effectManager);
         RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
-        if(rayTraceResult.getHitEntity() == player) return;
+        if(rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == player) return;
         lineEffect.setLocation(player.getEyeLocation());
         lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
         lineEffect.start();

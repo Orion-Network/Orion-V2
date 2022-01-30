@@ -9,7 +9,7 @@ import orion.mmorpg.utils.Stats;
 public class AdminSword extends BasicMeleeWeapon {
     public AdminSword() {
         super(Material.NETHERITE_SWORD, "Admin Sword", "ADMIN_SWORD", 0, "You shall not have this !", Rarity.UNOBTAINABLE, "admin.use",
-                new Stats(0,100,15,0,0,0,0,0,0), 200);
+                new Stats(1,100,15,1,1,1,1,1,1), 200);
         this.spell = new GoatHunger();
     }
 }

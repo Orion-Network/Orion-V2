@@ -8,14 +8,11 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.races.Race;
-import orion.mmorpg.utils.BukkitSerialization;
 import orion.mmorpg.utils.Infos;
-import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Stats;
 
 import java.io.IOException;
@@ -43,7 +40,7 @@ public class Client {
     public void savePlayer(OrionPlayer player) {
         Document document = new Document();
         document.put("infos", Mmorpg.getOrionGson().getGSON().toJson(player.getInfos()));
-        document.put("stats", Mmorpg.getOrionGson().getGSON().toJson(player.getStats()));
+        document.put("stats", Mmorpg.getOrionGson().getGSON().toJson(player.getBaseStats()));
         document.put("uuid", player.getUniqueId().toString());
 
         document.put("health", player.getHealth());

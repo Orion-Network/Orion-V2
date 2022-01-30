@@ -1,5 +1,6 @@
 package orion.mmorpg.players.abilities.spells;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
@@ -13,8 +14,7 @@ public class TestSpell extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        for(String s : orionPlayer.getSpells().keySet()) {
-            player.sendMessage(s);
-        }
+        player.setWalkSpeed(0.2f);
+        player.sendMessage(ChatColor.of("#CE9FC9") + "Test roz : " + player.getWalkSpeed());
     }
 }

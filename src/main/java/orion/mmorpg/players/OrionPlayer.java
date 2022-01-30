@@ -11,6 +11,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -26,6 +28,7 @@ public class OrionPlayer {
 //TODO Add leveling system
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
+    private Stats baseStats;
     private Stats stats;
     private UUID uniqueId;
 
@@ -47,9 +50,11 @@ public class OrionPlayer {
     private Support support;
     private Race race;
 
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, int statsPoints, int level) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int level) {
         this.infos = infos;
-        this.stats = stats;
+        this.baseStats = baseStats;
+        this.equipements = new ItemStack[4];
+        this.stats = calculateStats();
         this.uniqueId = uniqueId;
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
@@ -57,9 +62,7 @@ public class OrionPlayer {
         this.portalStones = new LinkedHashSet<>();
         portalStones.add(PortalStone.SPAWN_STONE.getId());
 
-        this.equipements = new ItemStack[4];
-
-        this.mana = (int) this.getStats().getIntel();
+        this.mana = (int) this.stats.getIntel();
 
         this.healthBar = Bukkit.createBossBar(NamespacedKey.minecraft("health"), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
@@ -75,16 +78,17 @@ public class OrionPlayer {
         supportMap = new LinkedHashMap<>();
     }
 
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
         this.infos = infos;
-        this.stats = stats;
+        this.baseStats = baseStats;
+        this.equipements = equipements;
+        this.stats = calculateStats();
         this.uniqueId = uniqueId;
         this.health = health;
         this.statsPoints = statsPoints;
         this.level = level;
         this.mana = mana;
         this.portalStones = portalStones;
-        this.equipements = equipements;
         spells.forEach(spellID ->  SpellList.learnSpell(this, spellID));
         this.support = support;
         this.race = race;
@@ -104,7 +108,7 @@ public class OrionPlayer {
     }
 
     public void updateHealthbar() {
-        this.healthBar.setProgress(getHealth()/getStats().getVitality() < 1 ? getHealth()/getStats().getVitality() : 1);
+        this.healthBar.setProgress(getHealth()/ getStats().getVitality() < 1 ? getHealth()/ getStats().getVitality() : 1);
     }
 
     public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
@@ -127,12 +131,48 @@ public class OrionPlayer {
         this.infos = infos;
     }
 
-    public Stats getStats() {
-        return stats;
+    public Stats calculateStats(Stats... stats) {
+        if(stats.length == 0) {
+            Stats playerStats = this.getBaseStats();
+            Stats[] armorStatsIter = new Stats[4];
+            int i = 0;
+            for (ItemStack equipement : equipements) {
+                if(equipement != null)
+                    armorStatsIter[i] = Mmorpg.getOrionGson().getGSON().fromJson(equipement.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                i++;
+            }
+            Stats armorStats = calculateStats(armorStatsIter);
+            Stats handStats = new Stats(0,0,0,0,0,0,0,0,0);
+            ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getItemOnCursor();
+            if(item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING))
+                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+            return calculateStats(playerStats, armorStats, handStats);
+        }
+        Stats.Builder builder = new Stats.Builder();
+        for(Stats stat : stats) {
+            builder.withStrength(builder.getStrength()+stat.getStrength());
+            builder.withStrength(builder.getCritical_chance()+stat.getCritical_chance());
+            builder.withStrength(builder.getCritical_damage()+stat.getCritical_damage());
+            builder.withStrength(builder.getAttack_speed()+stat.getAttack_speed());
+            builder.withStrength(builder.getVitality()+stat.getVitality());
+            builder.withStrength(builder.getIntel()+stat.getIntel());
+            builder.withStrength(builder.getDefence()+stat.getDefence());
+            builder.withStrength(builder.getSpeed()+stat.getSpeed());
+            builder.withStrength(builder.getLuck()+stat.getLuck());
+        }
+        return builder.build();
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public Stats getBaseStats() {
+        return baseStats;
+    }
+
+    public void setBaseStats(Stats baseStats) {
+        this.baseStats = baseStats;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 
     public double getHealth() {

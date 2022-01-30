@@ -22,7 +22,7 @@ public class MasterScrollItem extends BasicItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING);
-        Utils.sendInfoMessage(e.getPlayer(), "Vous avez appris le sort" + SpellList.valueOf(spell).getName());
+        Utils.sendInfoMessage(e.getPlayer(), "Vous avez appris le sort : " + SpellList.valueOf(spell).getName());
         SpellList.learnSpell(data, spell);
         e.getItem().setAmount(e.getItem().getAmount()-1);
         e.getPlayer().updateInventory();

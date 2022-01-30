@@ -1,6 +1,7 @@
 package orion.mmorpg.utils;
 
-import org.bukkit.ChatColor;
+
+import net.md_5.bungee.api.ChatColor;
 
 public enum Rarity {
     UNOBTAINABLE(ChatColor.DARK_GRAY, "\u272c"),

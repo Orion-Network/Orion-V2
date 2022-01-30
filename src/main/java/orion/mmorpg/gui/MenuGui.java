@@ -2,9 +2,7 @@ package orion.mmorpg.gui;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,7 +17,6 @@ import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
-import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
@@ -59,7 +56,7 @@ public class MenuGui extends ChestGui {
                         }
 
                         orionPlayer.getEquipements()[3] = item;
-                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        orionPlayer.getBaseStats().combineOrSeparateStats(stats, true);
                         Utils.sendInfoMessage(p, "You equipped an helmet");
 
                         getArmorPane().removeItem(1,0);
@@ -83,7 +80,7 @@ public class MenuGui extends ChestGui {
                         }
 
                         orionPlayer.getEquipements()[2] = item;
-                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        orionPlayer.getBaseStats().combineOrSeparateStats(stats, true);
                         Utils.sendInfoMessage(p, "You equipped an chestplate");
 
                         getArmorPane().removeItem(1,1);
@@ -98,7 +95,7 @@ public class MenuGui extends ChestGui {
                         }
 
                         orionPlayer.getEquipements()[1] = item;
-                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        orionPlayer.getBaseStats().combineOrSeparateStats(stats, true);
                         Utils.sendInfoMessage(p, "You equipped an leggings");
 
                         getArmorPane().removeItem(1,2);
@@ -113,7 +110,7 @@ public class MenuGui extends ChestGui {
                         }
 
                         orionPlayer.getEquipements()[0] = item;
-                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        orionPlayer.getBaseStats().combineOrSeparateStats(stats, true);
                         Utils.sendInfoMessage(p, "You equipped a boots");
 
                         getArmorPane().removeItem(1,3);
@@ -133,7 +130,7 @@ public class MenuGui extends ChestGui {
                         }
 
                         orionPlayer.getEquipements()[2] = item;
-                        orionPlayer.getStats().combineOrSeparateStats(stats, true);
+                        orionPlayer.getBaseStats().combineOrSeparateStats(stats, true);
                         Utils.sendInfoMessage(p, "You equipped an Wings");
 
                         getArmorPane().removeItem(1,1);
@@ -176,7 +173,7 @@ public class MenuGui extends ChestGui {
                 Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                     orionPlayer.getEquipements()[3] = null;
-                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    orionPlayer.getBaseStats().combineOrSeparateStats(stats, false);
                     Utils.sendInfoMessage(p, "You removed an helmet");
 
                     getArmorPane().removeItem(1, 0);
@@ -185,7 +182,7 @@ public class MenuGui extends ChestGui {
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 0);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("CHESTPLATE")) {
                     orionPlayer.getEquipements()[2] = null;
-                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    orionPlayer.getBaseStats().combineOrSeparateStats(stats, false);
                     Utils.sendInfoMessage(p, "You removed an chestplate");
 
                     getArmorPane().removeItem(1, 1);
@@ -194,7 +191,7 @@ public class MenuGui extends ChestGui {
                     getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("LEGGINGS")) {
                     orionPlayer.getEquipements()[1] = null;
-                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    orionPlayer.getBaseStats().combineOrSeparateStats(stats, false);
                     Utils.sendInfoMessage(p, "You removed an leggings");
 
                     getArmorPane().removeItem(1, 2);
@@ -203,7 +200,7 @@ public class MenuGui extends ChestGui {
                     getArmorPane().addItem(LEGGINGS_PLACEHOLDER, 1, 2);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("BOOTS")) {
                     orionPlayer.getEquipements()[0] = null;
-                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    orionPlayer.getBaseStats().combineOrSeparateStats(stats, false);
                     Utils.sendInfoMessage(p, "You removed an boots");
 
                     getArmorPane().removeItem(1, 3);
@@ -212,7 +209,7 @@ public class MenuGui extends ChestGui {
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 3);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("WINGS")) {
                     orionPlayer.getEquipements()[2] = null;
-                    orionPlayer.getStats().combineOrSeparateStats(stats, false);
+                    orionPlayer.getBaseStats().combineOrSeparateStats(stats, false);
                     Utils.sendInfoMessage(p, "You removed an wings");
 
                     getArmorPane().removeItem(1, 1);
@@ -232,7 +229,8 @@ public class MenuGui extends ChestGui {
 
         ItemMeta headMeta = head.getItemMeta();
         headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
-        headMeta.setLore(orionPlayer.getStats().statsAsLore());
+        //TODO add weapon stats
+        headMeta.setLore(orionPlayer.getBaseStats().statsAsLore());
         head.setItemMeta(headMeta);
 
         menuPane.addItem(new GuiItem(head), 2, 1);
