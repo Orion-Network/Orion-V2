@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.list.ProjectSoul;
+import orion.mmorpg.players.abilities.supports.ProjectSoul;
 import orion.mmorpg.utils.Rarity;
 
 public class SoulSwitcher extends BasicItem {

@@ -1,4 +1,4 @@
-package orion.mmorpg.players.abilities.list;
+package orion.mmorpg.players.abilities.supports;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;

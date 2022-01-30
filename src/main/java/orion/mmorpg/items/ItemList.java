@@ -1,6 +1,9 @@
 package orion.mmorpg.items;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.armors.CelestianSet;
 import orion.mmorpg.items.armors.StartingSet;
 import orion.mmorpg.items.gui.*;
@@ -27,6 +30,7 @@ public enum ItemList {
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
     STARTING_LEGGINGS(new StartingSet.StartingLeggings(), BasicArmorItem.class),
     STARTING_BOOTS(new StartingSet.StartingBoots(), BasicArmorItem.class),
+    CELESTIAN_CROWN(new CelestianSet.CelestianCrown(), BasicArmorItem.class),
     CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
     //GUI Items
     HELMET_PLACEHOLDER(new HelmetPlaceholderItem(), BasicGuiItem.class),
@@ -40,6 +44,7 @@ public enum ItemList {
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
+    MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
     INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
@@ -64,5 +69,10 @@ public enum ItemList {
 
     public ItemStack getProcessedItem(int amount) {
         return item.generateItem(null, amount);
+    }
+
+    public static BasicItem getItemFromItemstack(ItemStack itemStack) {
+        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
+        return valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
     }
 }

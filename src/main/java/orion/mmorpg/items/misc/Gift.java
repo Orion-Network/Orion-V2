@@ -30,7 +30,6 @@ public class Gift extends BasicItem {
     @Override
     public void onPickupItem(EntityPickupItemEvent e, ItemStack item) {
         super.onPickupItem(e, item);
-        Bukkit.broadcastMessage("test 2");
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         Utils.sendInfoMessage(e.getEntity(), "Vous avez reçus " + item.getAmount() + " " + item.getItemMeta().getDisplayName() + " de " + container.get(NamespacedKey.minecraft("gifter"), PersistentDataType.STRING));
     }

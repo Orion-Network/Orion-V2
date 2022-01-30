@@ -1,5 +1,6 @@
 package orion.mmorpg.players;
 
+import de.slikey.effectlib.Effect;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
@@ -39,6 +40,8 @@ public class OrionPlayer {
     transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
+
+    transient HashMap<String, Effect> effectHashMap = new HashMap<>();
     String[] selectedSpells;
 
     private Support support;
@@ -236,6 +239,14 @@ public class OrionPlayer {
         return supportMap;
     }
 
+    public HashMap<String, Effect> getEffectHashMap() {
+        return effectHashMap;
+    }
+
+    public void setEffectHashMap(HashMap<String, Effect> effectHashMap) {
+        this.effectHashMap = effectHashMap;
+    }
+
     public void levelUp(Player p, int level) {
         this.setLevel(level);
         Utils.sendInfoMessage(p, "Bravo, vous êtes monté de niveau !");
@@ -263,7 +274,8 @@ public class OrionPlayer {
             else
                 support.onInteract(event);
         }
-    };
+    }
+
     public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
         if(this.getSupport() != null)
             this.getSupport().onLaunchSpell(player, stats, s);
@@ -274,7 +286,8 @@ public class OrionPlayer {
             else
                 support.onLaunchSpell(player, stats, s);
         }
-    };
+    }
+
     public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
         if(this.getSupport() != null)
             this.getSupport().onHit(event, stats);
@@ -286,7 +299,8 @@ public class OrionPlayer {
                 support.onHit(event, stats);
             }
         }
-    };
+    }
+
     public void onShootArrow(EntityShootBowEvent event) {
         if(this.getSupport() != null)
             this.getSupport().onShootArrow(event);
@@ -297,7 +311,8 @@ public class OrionPlayer {
             else
                 support.onShootArrow(event);
         }
-    };
+    }
+
     public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
         if(this.getSupport() != null)
             this.getSupport().onHitByEntity(entityEvent);
@@ -308,7 +323,8 @@ public class OrionPlayer {
             else
                 support.onHitByEntity(entityEvent);
         }
-    };
+    }
+
     /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
     public void onSpellSense(OnSpellSense e) {
         if(this.getSupport() != null)
@@ -320,7 +336,8 @@ public class OrionPlayer {
             else
                 support.onSpellSense(e);
         }
-    };
+    }
+
     public void onTick() {
         if(mana < this.getStats().getIntel() - this.getStats().getIntel()/30)
             mana += this.getStats().getIntel()/30;
@@ -334,7 +351,8 @@ public class OrionPlayer {
             else
                 support.onTick();
         }
-    };
+    }
+
     public void onDie() {
         if(this.getSupport() != null)
             this.getSupport().onDie();
@@ -347,7 +365,7 @@ public class OrionPlayer {
         }
 
         respawn();
-    };
+    }
 
 
 }

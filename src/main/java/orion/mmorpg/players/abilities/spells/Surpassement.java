@@ -1,4 +1,4 @@
-package orion.mmorpg.players.abilities.list;
+package orion.mmorpg.players.abilities.spells;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -13,19 +13,19 @@ import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
-public class BerserkMode extends Spell {
-    public BerserkMode() {
-        super("BERSERKMODE", 0, Element.EARTH, 1000*60*5);
+public class Surpassement extends Spell {
+    public Surpassement() {
+        super("BOOSTED_MODE", 5, Element.EARTH, 1000*60*5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.getSupportMap().put(new BerserkModeSupport(), (1000*60)+System.currentTimeMillis());
+        orionPlayer.getSupportMap().put(new BoostedMode(), (1000*60)+System.currentTimeMillis());
     }
 
-    class BerserkModeSupport extends Support {
-        public BerserkModeSupport() {
-            super("Berserk Mode", Rarity.UNCOMMON, "Vous fais entrer dans une rage augmentant vos dégats et réduisant ceux reçus");
+    class BoostedMode extends Support {
+        public BoostedMode() {
+            super("Boosted Mode", Rarity.UNCOMMON, "Vous fais entrer dans une rage augmentant vos dégats et réduisant ceux reçus");
         }
 
         @Override

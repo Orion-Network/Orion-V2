@@ -3,6 +3,7 @@ package orion.mmorpg.items.sample;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,6 +53,24 @@ public abstract class BasicArmorItem extends BasicItem {
         lore.addAll(STATS.statsAsLore());
 
         return super.generateLore(lore);
+    }
+
+    public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
+        onCosmeticEquip(p, data, item);
+        return true;
+    }
+
+    public void onCosmeticEquip(Player p, OrionPlayer data, ItemStack item) {
+
+    }
+
+    public boolean onUnequip(Player p, OrionPlayer data, ItemStack item) {
+        onCosmeticUnequip(p, data, item);
+        return true;
+    }
+
+    public void onCosmeticUnequip(Player p, OrionPlayer data, ItemStack item) {
+
     }
 
     public enum ArmorType {

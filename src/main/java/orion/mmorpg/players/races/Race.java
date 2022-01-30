@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public enum Race {
-    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL"}, null, null, null),
+    HUMAN("Human", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL", "BOOSTED_MODE"}, null, null, null),
     CELESTIAN("Celestian", new Stats(1,1,1,1,1,1,1,1,1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null ,Arrays.asList(spec.ELYTRA), null, null)
     ;
 

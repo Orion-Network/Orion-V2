@@ -2,22 +2,14 @@ package orion.mmorpg.items.misc;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.list.ProjectSoul;
+import orion.mmorpg.players.abilities.supports.ProjectSoul;
 import orion.mmorpg.utils.Rarity;
 
 public class TestItem extends BasicItem {

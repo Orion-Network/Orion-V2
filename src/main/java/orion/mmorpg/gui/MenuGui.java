@@ -15,6 +15,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
@@ -49,6 +50,7 @@ public class MenuGui extends ChestGui {
 
             if(container.has(NamespacedKey.minecraft("type"), PersistentDataType.STRING)) {
                 if(container.get(NamespacedKey.minecraft("type"), PersistentDataType.STRING).equalsIgnoreCase("armor")) {
+                    if(!((BasicArmorItem)ItemList.getItemFromItemstack(e.getCurrentItem())).onEquip(p, orionPlayer, item)) return;
                     Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                     if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                         if(orionPlayer.getEquipements()[3] != null) {
@@ -61,7 +63,6 @@ public class MenuGui extends ChestGui {
                         Utils.sendInfoMessage(p, "You equipped an helmet");
 
                         getArmorPane().removeItem(1,0);
-                        p.getInventory().setHelmet(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 0);
 
@@ -72,11 +73,13 @@ public class MenuGui extends ChestGui {
                             return;
                         }
 
-                        if(item.getType().equals(Material.ELYTRA)) {
+                        if(item.getType().equals(Material.ELYTRA) && p.getInventory().getChestplate() == null) {
                             if (!orionPlayer.getRace().getSpecies().contains(Race.spec.ELYTRA)) {
                                 Utils.sendErrorMessage(p, "Votre race ne peut pas equiper d'ailes");
                                 return;
                             }
+                            Utils.sendErrorMessage(p, "Vous ne pouvez pas avoir de plastron cosmétique et des ailes");
+                            return;
                         }
 
                         orionPlayer.getEquipements()[2] = item;
@@ -84,7 +87,6 @@ public class MenuGui extends ChestGui {
                         Utils.sendInfoMessage(p, "You equipped an chestplate");
 
                         getArmorPane().removeItem(1,1);
-                        p.getInventory().setChestplate(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 1);
 
@@ -100,7 +102,6 @@ public class MenuGui extends ChestGui {
                         Utils.sendInfoMessage(p, "You equipped an leggings");
 
                         getArmorPane().removeItem(1,2);
-                        p.getInventory().setLeggings(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 2);
 
@@ -116,7 +117,6 @@ public class MenuGui extends ChestGui {
                         Utils.sendInfoMessage(p, "You equipped a boots");
 
                         getArmorPane().removeItem(1,3);
-                        p.getInventory().setBoots(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 3);
 
@@ -137,7 +137,6 @@ public class MenuGui extends ChestGui {
                         Utils.sendInfoMessage(p, "You equipped an Wings");
 
                         getArmorPane().removeItem(1,1);
-                        p.getInventory().setChestplate(item);
                         getMenuPane();
                         getArmorPane().addItem(new GuiItem(item), 1, 1);
 
@@ -156,7 +155,7 @@ public class MenuGui extends ChestGui {
 
     public StaticPane getArmorPane() {
         for(int i = 0; i< 4; i++) {
-            if(p.getInventory().getArmorContents()[i] == null) {
+            if(orionPlayer.getEquipements()[i] == null) {
                 if(i == 0)
                     armorPane.addItem(BOOTS_PLACEHOLDER, 1, 3);
                 if(i == 1)
@@ -166,14 +165,14 @@ public class MenuGui extends ChestGui {
                 if(i == 3)
                     armorPane.addItem(HELMET_PLACEHOLDER, 1, 0);
             } else {
-                armorPane.addItem(new GuiItem(p.getInventory().getArmorContents()[i].clone()), 1, 3-i);
+                armorPane.addItem(new GuiItem(orionPlayer.getEquipements()[i].clone()), 1, 3-i);
             }
         }
         armorPane.setOnClick(e -> {
-            if(e.getCurrentItem().getType() != Material.AIR) {
+            if(e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getType() != Material.CARROT_ON_A_STICK) {
                 ItemStack item = e.getCurrentItem();
                 PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-
+                if(!((BasicArmorItem)ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item)) return;
                 Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                     orionPlayer.getEquipements()[3] = null;
@@ -182,7 +181,6 @@ public class MenuGui extends ChestGui {
 
                     getArmorPane().removeItem(1, 0);
                     p.getInventory().addItem(item);
-                    p.getInventory().setHelmet(null);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 0);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("CHESTPLATE")) {
@@ -192,7 +190,6 @@ public class MenuGui extends ChestGui {
 
                     getArmorPane().removeItem(1, 1);
                     p.getInventory().addItem(item);
-                    p.getInventory().setChestplate(null);
                     getMenuPane();
                     getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("LEGGINGS")) {
@@ -202,7 +199,6 @@ public class MenuGui extends ChestGui {
 
                     getArmorPane().removeItem(1, 2);
                     p.getInventory().addItem(item);
-                    p.getInventory().setLeggings(null);
                     getMenuPane();
                     getArmorPane().addItem(LEGGINGS_PLACEHOLDER, 1, 2);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("BOOTS")) {
@@ -212,7 +208,6 @@ public class MenuGui extends ChestGui {
 
                     getArmorPane().removeItem(1, 3);
                     p.getInventory().addItem(item);
-                    p.getInventory().setBoots(null);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 3);
                 } else if(container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("WINGS")) {
@@ -222,7 +217,6 @@ public class MenuGui extends ChestGui {
 
                     getArmorPane().removeItem(1, 1);
                     p.getInventory().addItem(item);
-                    p.getInventory().setChestplate(null);
                     getMenuPane();
                     getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
                 }

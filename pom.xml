@@ -62,6 +62,10 @@
                                     <pattern>org.mongodb</pattern>
                                     <shadedPattern>orion.mmorpg.mongo</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>dev.dbassett</pattern>
+                                    <shadedPattern>skullcreator</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -78,7 +82,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/.devcontainer/mmorpg/plugins</outputDirectory>
+                            <outputDirectory>\\wsl.localhost\docker-desktop-data\version-pack-data\community\docker\volumes\devcontainer_mmorpg\_data\plugins</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}/target/</directory>

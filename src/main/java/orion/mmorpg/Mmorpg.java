@@ -1,5 +1,6 @@
 package orion.mmorpg;
 
+import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -16,13 +17,16 @@ import java.util.Objects;
 
 public final class Mmorpg extends JavaPlugin {
 
+    public static Mmorpg INSTANCE;
     public static boolean debug = true;
     public static OrionGson orionGson = new OrionGson();
     Client mongoClient = new Client();
     PlayerManager playerManager;
+    public static EffectManager effectManager;
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         // Plugin startup logic
         FileConfiguration config = this.getConfig();
         config.options().copyDefaults(true);
@@ -31,6 +35,7 @@ public final class Mmorpg extends JavaPlugin {
         config.addDefault("username", "root");
         config.addDefault("password", "");
         playerManager = new PlayerManager();
+        effectManager =  new EffectManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
 
