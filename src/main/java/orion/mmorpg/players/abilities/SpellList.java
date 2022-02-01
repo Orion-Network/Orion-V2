@@ -16,7 +16,8 @@ public enum SpellList {
     BOOSTED_MODE(Surpassement.class,"Boosted Mode", Rarity.UNCOMMON, Material.IRON_AXE, Arrays.asList("Boost vos stats")),
     HEAL(Heal.class, "Heal", Rarity.COMMON, Material.POTION, Arrays.asList("Heal 1/10 de votre vitalité.")),
     SKY_FLUX(SkyFlux.class, "Flux Ciel", Rarity.RARE, Material.PHANTOM_MEMBRANE, Arrays.asList("Envoie un punch dans la cible")),
-    GOAT_HUNGER(GoatHunger.class, "Goat Hunger", Rarity.HERO, Material.SOUL_TORCH, Arrays.asList("Leurs âmes seront volée"))
+    GOAT_HUNGER(GoatHunger.class, "Goat Hunger", Rarity.HERO, Material.SOUL_TORCH, Arrays.asList("Leurs âmes seront volée")),
+    INSTANT_TRANSMISSION(InstantTransmission.class, "Instant Transmission", Rarity.RARE, Material.ENDER_EYE, Arrays.asList("Vous téléporte de 8 blocks"))
     ;
 
     Class<? extends Spell> spellClass;

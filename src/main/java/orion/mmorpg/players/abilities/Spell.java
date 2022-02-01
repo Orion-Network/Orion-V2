@@ -2,17 +2,12 @@ package orion.mmorpg.players.abilities;
 
 import de.slikey.effectlib.EffectType;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
-import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
-
-import java.util.ArrayList;
 
 public abstract class Spell {
 
@@ -36,6 +31,7 @@ public abstract class Spell {
     }
 
     public boolean beforeLaunch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, boolean needSpell) {
+        this.canceled = false;
         if(needSpell) {
             if(!orionPlayer.getSpells().containsKey(internal_id)) {
                 Utils.sendInfoMessage(player, "Nous ne connaissez pas ce sort.");
@@ -51,12 +47,13 @@ public abstract class Spell {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
-        orionPlayer.onLaunchSpell(player, orionPlayer, this);
         player.getNearbyEntities(5 * 10, 5 *10, 5 *10).forEach(e -> {
             if(e instanceof Player)
                 Bukkit.getPluginManager().callEvent(new OnSpellSense(false, player, (Player)e, SpellList.valueOf(internal_id), this, OnSpellSense.Target.GLOBAL));
         });
-        Utils.sendDebugMessage(player, "Sort lancé !");
+        if(this.isCanceled()) return false;
+        Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
+        orionPlayer.onLaunchSpell(player, orionPlayer, this);
         orionPlayer.getCooldownSpells().put(internal_id, System.currentTimeMillis() + cooldown);
         launch(mmorpg, player, orionPlayer);
         return true;

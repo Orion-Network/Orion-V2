@@ -51,5 +51,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerQuitEvent(PlayerQuitEvent event) {
         mmorpg.getMongoClient().savePlayer(mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId()));
+        mmorpg.getPlayerManager().getPlayersMap().remove(event.getPlayer().getUniqueId());
     }
 }

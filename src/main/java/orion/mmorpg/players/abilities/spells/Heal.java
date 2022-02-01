@@ -13,6 +13,6 @@ public class Heal extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.heal(orionPlayer.getBaseStats().getVitality()/10);
+        orionPlayer.heal(orionPlayer.getStats().getVitality()/10);
     }
 }

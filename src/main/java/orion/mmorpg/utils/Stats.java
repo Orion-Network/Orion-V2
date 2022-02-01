@@ -55,19 +55,6 @@ public class Stats {
         return lore;
     }
 
-    public Stats combineOrSeparateStats(Stats stats, boolean combine) {
-        setStrength((combine ? stats.getStrength() : stats.getStrength() * -1)+getStrength());
-        setCritical_chance((combine ? stats.getCritical_chance() : stats.getCritical_chance() * -1)+getCritical_chance());
-        setCritical_damage((combine ? stats.getCritical_damage() : stats.getCritical_damage() * -1)+getCritical_damage());
-        setAttack_speed((combine ? stats.getAttack_speed() : stats.getAttack_speed() * -1)+getAttack_speed());
-        setVitality((combine ? stats.getVitality() : stats.getVitality() * -1)+getVitality());
-        setIntel((combine ? stats.getIntel() : stats.getIntel() * -1)+getIntel());
-        setDefence((combine ? stats.getDefence() : stats.getDefence() * -1)+getDefence());
-        setSpeed((combine ? stats.getSpeed() : stats.getSpeed() * -1)+getSpeed());
-        setLuck((combine ? stats.getLuck() : stats.getLuck() * -1)+getLuck());
-        return this;
-    }
-
     public float getStrength() {
         return strength;
     }
@@ -141,22 +128,24 @@ public class Stats {
     }
 
     public enum StatsInfo {
-        STRENGTH("🗡", ChatColor.of("#F00020")),
-        CRITICAL_DAMAGE("☠ ", ChatColor.of("#FF6600")),
-        CRITICAL_CHANCE("☣ ", ChatColor.of("#FFD500")),
-        ATTACK_SPEED("⚔", ChatColor.of("#3A9D23")),
-        VITALITY("❤", ChatColor.of("#F9429E")),
-        INTELLIGENCE("࿇", ChatColor.of("#00ACEE")),
-        DEFENCE("🛡", ChatColor.of("#884DA7")),
-        SPEED("࿓", ChatColor.of("#201725")),
-        LUCK("☘", ChatColor.of("#FFA500"))
+        STRENGTH("🗡", ChatColor.of("#F00020"), Float.MAX_VALUE),
+        CRITICAL_DAMAGE("☠ ", ChatColor.of("#FF6600"), Float.MAX_VALUE),
+        CRITICAL_CHANCE("☣ ", ChatColor.of("#FFD500"), 100),
+        ATTACK_SPEED("⚔", ChatColor.of("#3A9D23"), 400),
+        VITALITY("❤", ChatColor.of("#F9429E"), Float.MAX_VALUE),
+        INTELLIGENCE("࿇", ChatColor.of("#00ACEE"), Float.MAX_VALUE),
+        DEFENCE("🛡", ChatColor.of("#884DA7"), Float.MAX_VALUE),
+        SPEED("࿓", ChatColor.of("#207125"), 1000),
+        LUCK("☘", ChatColor.of("#FFA500"), Float.MAX_VALUE)
         ;
 
         String character;
         ChatColor color;
-        StatsInfo(String character, ChatColor color) {
+        float cap;
+        StatsInfo(String character, ChatColor color, float cap) {
             this.character = character;
             this.color = color;
+            this.cap = cap;
         }
 
         public String getCharacter() {
@@ -165,6 +154,10 @@ public class Stats {
 
         public ChatColor getColor() {
             return color;
+        }
+
+        public float getCap() {
+            return cap;
         }
     }
 

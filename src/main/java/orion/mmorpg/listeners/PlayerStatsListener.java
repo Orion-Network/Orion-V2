@@ -2,6 +2,7 @@ package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,6 +49,7 @@ public class PlayerStatsListener implements Listener {
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
+            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed()/20);
             if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
@@ -55,9 +57,8 @@ public class PlayerStatsListener implements Listener {
                     e.setDamage(container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT));
                 item.onHitWithItem(e);
                 if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
-                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                     orionPlayer.onHit(e, orionPlayer);
-                    float totalDamage = Utils.calculateDamage(orionPlayer.getBaseStats(), stats, (float) e.getDamage());
+                    float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                     e.setDamage(totalDamage);
 
                     LivingEntity entity = (LivingEntity) e.getEntity();
@@ -71,7 +72,7 @@ public class PlayerStatsListener implements Listener {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             orionPlayer.onHitByEntity(e);
             e.setCancelled(true);
-            float reduction =  1 + (orionPlayer.getBaseStats().getDefence() / (orionPlayer.getBaseStats().getDefence() + 100));
+            float reduction =  1 + (orionPlayer.getStats().getDefence() / (orionPlayer.getStats().getDefence() + 100));
             orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
 
             if(orionPlayer.getHealth() <= 0)
@@ -121,7 +122,7 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        float speed = (200+orionPlayer.getBaseStats().getSpeed())/1000;
+        float speed = (200+orionPlayer.getStats().getSpeed())/Stats.StatsInfo.SPEED.getCap();
         e.getPlayer().setWalkSpeed((speed > 1 ? 1 : (speed < -1 ? -1 : speed)));
     }
 }

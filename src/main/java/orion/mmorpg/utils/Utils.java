@@ -20,10 +20,10 @@ public class Utils {
             e.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + message);
     }
 
-    public static float calculateDamage(Stats playerStats, Stats weaponStats, float damage) {
-        float strength = playerStats.getStrength() + weaponStats.getStrength();
-        float critical_chance = playerStats.getCritical_chance() + weaponStats.getCritical_chance();
-        float critical_damage = playerStats.getCritical_damage() + weaponStats.getCritical_damage();
+    public static float calculateDamage(Stats playerStats, float damage) {
+        float strength = playerStats.getStrength();
+        float critical_chance = playerStats.getCritical_chance();
+        float critical_damage = playerStats.getCritical_damage();
 
         float totalDamage = (5 + damage)*(1+(strength/100));
         Random r = new Random();
