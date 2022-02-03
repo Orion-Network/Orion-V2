@@ -251,6 +251,10 @@ public class MenuGui extends ChestGui {
             new PortalStoneGui(p, orionPlayer).show(p);
         }), 2,2);
 
+        menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.getProcessedItem(1), e -> {
+            new WikiGui(Mmorpg.INSTANCE).show(p);
+        }), 1, 2);
+
         return menuPane;
     }
 

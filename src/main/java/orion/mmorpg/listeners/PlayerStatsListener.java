@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -124,5 +125,10 @@ public class PlayerStatsListener implements Listener {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
         float speed = (200+orionPlayer.getStats().getSpeed())/Stats.StatsInfo.SPEED.getCap();
         e.getPlayer().setWalkSpeed((speed > 1 ? 1 : (speed < -1 ? -1 : speed)));
+    }
+    @EventHandler
+    public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
+        OrionPlayer player = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        player.calculateStats();
     }
 }

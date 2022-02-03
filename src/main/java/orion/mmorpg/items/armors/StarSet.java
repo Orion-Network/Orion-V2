@@ -9,7 +9,7 @@ public class StarSet {
     public static class StarsetHelmet extends BasicArmorItem {
 
         public StarsetHelmet() {
-            super(Material.NETHERITE_HELMET, "Starset Helmet", "STARSET_HELMET", 0, "Don't", Rarity.UNOBTAINABLE, ArmorType.HELMET,
+            super(Material.FLOWERING_AZALEA, "Starset Helmet", "STARSET_HELMET", 0, "Don't", Rarity.UNOBTAINABLE, ArmorType.HELMET,
                     new Stats.Builder().build());
         }
 

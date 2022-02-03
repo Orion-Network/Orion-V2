@@ -48,11 +48,12 @@ public enum ItemList {
     REFUSE_BUTTON_PLACEHOLDER(new RefuseButtonPlaceholder(), BasicGuiItem.class),
     SPELL_PLACEHOLDER(new SpellPlaceholderItem(), BasicGuiItem.class),
     PORTAL_STONE(new PortalStoneItem(), BasicGuiItem.class),
+    WIKI_BOOK_PLACEHOLDER(new WikiBookPlaceholder(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
     MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
-    INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
+    INFINITE_FIrlREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
     TEST_ITEM(new TestItem(), BasicItem.class),

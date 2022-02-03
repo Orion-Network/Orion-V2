@@ -124,4 +124,40 @@ public abstract class BasicItem extends ItemStack {
 
         return lore;
     }
+
+    public Material getMATERIAL() {
+        return MATERIAL;
+    }
+
+    public String getNAME() {
+        return NAME;
+    }
+
+    public String getINTERNAL_ID() {
+        return INTERNAL_ID;
+    }
+
+    public int getMODEL_ID() {
+        return MODEL_ID;
+    }
+
+    public String getLORE() {
+        return LORE;
+    }
+
+    public Rarity getRARITY() {
+        return RARITY;
+    }
+
+    public String getPERMISSION() {
+        return PERMISSION;
+    }
+
+    public ItemType getTYPE() {
+        return TYPE;
+    }
+
+    public Spell getSpell() {
+        return spell;
+    }
 }
