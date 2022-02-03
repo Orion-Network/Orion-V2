@@ -65,8 +65,12 @@ public class ItemCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> tab = new LinkedList<>();
         if(args[0].equalsIgnoreCase("give")) {
-            if (args.length == 2)
-                return Arrays.asList("Player_Name");
+            if (args.length == 2) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    tab.add(p.getName());
+                }
+                return tab;
+            }
             if(args[2].equalsIgnoreCase("master_scroll")) {
                 for (SpellList spell : SpellList.values())
                     if (spell.name().startsWith(args[args.length - 1].toUpperCase()))

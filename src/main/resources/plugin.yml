@@ -16,3 +16,9 @@ commands:
   menu:
     permission: "menu.use"
     description: "Show menu"
+  party:
+    permission: "party.use"
+    description: "Create party"
+  admin:
+    permission: "admin.command"
+    description: "Administrator Command"

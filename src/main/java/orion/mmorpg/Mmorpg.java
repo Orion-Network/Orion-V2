@@ -5,11 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import orion.mmorpg.commands.ItemCommand;
-import orion.mmorpg.commands.MenuCommand;
-import orion.mmorpg.commands.DataCommand;
+import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
+import orion.mmorpg.managers.PartyManager;
 import orion.mmorpg.managers.PlayerManager;
 import orion.mmorpg.utils.OrionGson;
 
@@ -23,6 +22,7 @@ public final class Mmorpg extends JavaPlugin {
     Client mongoClient = new Client();
     PlayerManager playerManager;
     public static EffectManager effectManager;
+    PartyManager partyManager;
 
     @Override
     public void onEnable() {
@@ -36,6 +36,7 @@ public final class Mmorpg extends JavaPlugin {
         config.addDefault("password", "");
         playerManager = new PlayerManager();
         effectManager =  new EffectManager(this);
+        partyManager = new PartyManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
 
@@ -49,6 +50,8 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
         Objects.requireNonNull(getCommand("item")).setExecutor(new ItemCommand());
+        Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
+        Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
     }
 
     @Override
@@ -58,6 +61,10 @@ public final class Mmorpg extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public PartyManager getPartyManager() {
+        return partyManager;
     }
 
     public static boolean isDebug() {
@@ -70,10 +77,6 @@ public final class Mmorpg extends JavaPlugin {
 
     public static void setDebug(boolean debug) {
         Mmorpg.debug = debug;
-    }
-
-    public void setPlayerManager(PlayerManager playerManager) {
-        this.playerManager = playerManager;
     }
 
     public Client getMongoClient() {

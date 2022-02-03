@@ -17,6 +17,7 @@ import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.parties.Party;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Stats;
@@ -43,6 +44,7 @@ public class OrionPlayer {
     transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
+    transient Party party;
 
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
     String[] selectedSpells;
@@ -52,10 +54,10 @@ public class OrionPlayer {
 
     public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int level) {
         this.infos = infos;
+        this.uniqueId = uniqueId;
         this.baseStats = baseStats;
         this.equipements = new ItemStack[4];
         this.stats = calculateStats();
-        this.uniqueId = uniqueId;
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
         this.level = level;
@@ -80,10 +82,10 @@ public class OrionPlayer {
 
     public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
         this.infos = infos;
+        this.uniqueId = uniqueId;
         this.baseStats = baseStats;
         this.equipements = equipements;
         this.stats = calculateStats();
-        this.uniqueId = uniqueId;
         this.health = health;
         this.statsPoints = statsPoints;
         this.level = level;
@@ -143,22 +145,25 @@ public class OrionPlayer {
             }
             Stats armorStats = calculateStats(armorStatsIter);
             Stats handStats = new Stats(0,0,0,0,0,0,0,0,0);
-            ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getItemOnCursor();
-            if(item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING))
+            ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
+            if(item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
                 handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+            }
             return calculateStats(playerStats, armorStats, handStats);
         }
         Stats.Builder builder = new Stats.Builder();
         for(Stats stat : stats) {
+            if(stat == null)
+                continue;
             builder.withStrength(builder.getStrength()+stat.getStrength());
-            builder.withStrength(builder.getCritical_chance()+stat.getCritical_chance());
-            builder.withStrength(builder.getCritical_damage()+stat.getCritical_damage());
-            builder.withStrength(builder.getAttack_speed()+stat.getAttack_speed());
-            builder.withStrength(builder.getVitality()+stat.getVitality());
-            builder.withStrength(builder.getIntel()+stat.getIntel());
-            builder.withStrength(builder.getDefence()+stat.getDefence());
-            builder.withStrength(builder.getSpeed()+stat.getSpeed());
-            builder.withStrength(builder.getLuck()+stat.getLuck());
+            builder.withCritical_chance(builder.getCritical_chance()+stat.getCritical_chance());
+            builder.withCritical_damage(builder.getCritical_damage()+stat.getCritical_damage());
+            builder.withAttack_speed(builder.getAttack_speed()+stat.getAttack_speed());
+            builder.withVitality(builder.getVitality()+stat.getVitality());
+            builder.withIntel(builder.getIntel()+stat.getIntel());
+            builder.withDefence(builder.getDefence()+stat.getDefence());
+            builder.withSpeed(builder.getSpeed()+stat.getSpeed());
+            builder.withLuck(builder.getLuck()+stat.getLuck());
         }
         return builder.build();
     }
@@ -172,7 +177,7 @@ public class OrionPlayer {
     }
 
     public Stats getStats() {
-        return stats;
+        return calculateStats();
     }
 
     public double getHealth() {
@@ -285,6 +290,14 @@ public class OrionPlayer {
 
     public void setEffectHashMap(HashMap<String, Effect> effectHashMap) {
         this.effectHashMap = effectHashMap;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public void setParty(Party p) {
+        this.party = p;
     }
 
     public void levelUp(Player p, int level) {

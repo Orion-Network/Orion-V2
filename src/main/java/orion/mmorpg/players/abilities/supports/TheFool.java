@@ -1,0 +1,64 @@
+package orion.mmorpg.players.abilities.supports;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import orion.mmorpg.events.OnSpellSense;
+import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.Spell;
+import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.utils.Rarity;
+import orion.mmorpg.utils.Utils;
+
+public class TheFool extends Support {
+    public TheFool() {
+        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.");
+    }
+
+    @Override
+    public void onInteract(PlayerInteractEvent event) {
+
+    }
+
+    @Override
+    public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
+
+    }
+
+    @Override
+    public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
+
+    }
+
+    @Override
+    public void onShootArrow(EntityShootBowEvent event) {
+
+    }
+
+    @Override
+    public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
+
+    }
+
+    @Override
+    public void onSpellSense(OnSpellSense e) {
+        e.getSpell().canceled = true;
+        Utils.sendInfoMessage(e.getSender(), "Votre sort à été annulé");
+    }
+
+    @Override
+    public void onTick() {
+
+    }
+
+    @Override
+    public void onDie() {
+
+    }
+
+    @Override
+    public void onSupportEnd(Player p, OrionPlayer stats) {
+
+    }
+}

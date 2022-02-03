@@ -9,7 +9,7 @@ public class StartingSet {
     public static class StartingHelmet extends BasicArmorItem {
         public StartingHelmet() {
             super(Material.LEATHER_HELMET, "Starting Helmet", "STARTING_HELMET", 0, null, Rarity.COMMON, ArmorType.HELMET,
-                    new Stats(0,0,0,0,5,0,2,0,0));
+                    new Stats(7,0,0,0,5,0,2,0,0));
         }
     }
 

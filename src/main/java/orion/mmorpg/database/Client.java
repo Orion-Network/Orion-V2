@@ -1,8 +1,8 @@
 package orion.mmorpg.database;
 
 import com.google.common.reflect.TypeToken;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -18,13 +18,15 @@ import orion.mmorpg.utils.Stats;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class Client {
-    MongoClientURI uri = new MongoClientURI("mongodb://admin:azerty123@mongo/?authSource=orion");
-    public MongoClient mongoClient = new MongoClient(uri);
+    String uri = "mongodb://admin:azerty123@mongo/?authSource=orion";
+    public MongoClient mongoClient = MongoClients.create(uri);
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
 
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");

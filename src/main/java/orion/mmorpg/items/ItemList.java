@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.armors.CelestianSet;
+import orion.mmorpg.items.armors.StarSet;
 import orion.mmorpg.items.armors.StartingSet;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
@@ -16,6 +17,7 @@ import orion.mmorpg.items.sample.BasicGuiItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.weapons.AdminSword;
+import orion.mmorpg.items.weapons.AspectOfJairi;
 import orion.mmorpg.items.weapons.JokerCard;
 
 public enum ItemList {
@@ -25,6 +27,7 @@ public enum ItemList {
     MINECRAFT_STONE_SWORD(new StoneSword(), BasicMeleeWeapon.class),
     JOKER_CARD(new JokerCard(), BasicMeleeWeapon.class),
     ADMIN_SWORD(new AdminSword(), BasicMeleeWeapon.class),
+    ASPECT_OF_JAIRI(new AspectOfJairi(), BasicMeleeWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
@@ -32,6 +35,10 @@ public enum ItemList {
     STARTING_BOOTS(new StartingSet.StartingBoots(), BasicArmorItem.class),
     CELESTIAN_CROWN(new CelestianSet.CelestianCrown(), BasicArmorItem.class),
     CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
+    STARSET_HELMET(new StarSet.StarsetHelmet(), BasicArmorItem.class),
+    STARSET_CHESTPLATE(new StarSet.StarsetChestplate(), BasicArmorItem.class),
+    STARSET_LEGGINGS(new StarSet.StarsetLeggings(), BasicArmorItem.class),
+    STARSET_BOOTS(new StarSet.StarsetBoots(), BasicArmorItem.class),
     //GUI Items
     HELMET_PLACEHOLDER(new HelmetPlaceholderItem(), BasicGuiItem.class),
     CHESTPLATE_PLACEHOLDER(new ChestplatePlaceholderItem(), BasicGuiItem.class),
@@ -41,11 +48,12 @@ public enum ItemList {
     REFUSE_BUTTON_PLACEHOLDER(new RefuseButtonPlaceholder(), BasicGuiItem.class),
     SPELL_PLACEHOLDER(new SpellPlaceholderItem(), BasicGuiItem.class),
     PORTAL_STONE(new PortalStoneItem(), BasicGuiItem.class),
+    WIKI_BOOK_PLACEHOLDER(new WikiBookPlaceholder(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
     MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
-    INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
+    INFINITE_FIrlREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
     TEST_ITEM(new TestItem(), BasicItem.class),
