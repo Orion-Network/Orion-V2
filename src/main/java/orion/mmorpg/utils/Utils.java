@@ -38,7 +38,18 @@ public class Utils {
                 ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
                 ChatColor.YELLOW + "Is Critical : " + ChatColor.RED + (critical == 1)  + "\n" +
                 ChatColor.YELLOW + "Critical Multiplier: " + ChatColor.RED + (1 + ((critical_damage*critical)/100)) + "\n" +
-                ChatColor.YELLOW + "Total: " + ChatColor.RED + String.valueOf(totalDamage*(1 + ((critical_damage*critical)/100))));
+                ChatColor.YELLOW + "Total: " + ChatColor.RED + totalDamage * (1 + ((critical_damage * critical) / 100)));
         return totalDamage*(1 + ((critical_damage*critical)/100));
+    }
+
+    public static float calculateMagicDamage(Stats playerStats, float damage) {
+        float intel = playerStats.getIntel();
+
+        float totalDamage = (5 + damage)*(1+(intel/50));
+        if(Mmorpg.isDebug())
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Intel: " + ChatColor.RED + intel + "\n" +
+                    ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
+                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n");
+        return totalDamage;
     }
 }

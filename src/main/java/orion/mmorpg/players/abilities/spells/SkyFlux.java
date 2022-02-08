@@ -2,12 +2,9 @@ package orion.mmorpg.players.abilities.spells;
 
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
-import de.slikey.effectlib.effect.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import de.slikey.effectlib.effect.SphereEffect;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
@@ -28,7 +25,6 @@ public class SkyFlux extends Spell {
         if(rayTraceResult.getHitEntity() == player) return;
         Effect lineEffect = new TestEffect(Mmorpg.effectManager, player.getEyeLocation().getDirection().normalize());
         lineEffect.setLocation(player.getEyeLocation());
-        //lineEffect.autoOrient = true;
         lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
         lineEffect.start();
         System.out.println(rayTraceResult.getHitEntity().getName());

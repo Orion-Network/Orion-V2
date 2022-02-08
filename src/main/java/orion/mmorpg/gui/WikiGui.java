@@ -8,10 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.sample.BasicArmorItem;
-import orion.mmorpg.items.sample.BasicItem;
-import orion.mmorpg.items.sample.BasicMeleeWeapon;
-import orion.mmorpg.items.sample.BasicRangedWeapon;
+import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Utils;
@@ -79,7 +76,7 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane weaponPane = new PaginatedPane(0,0,9,5);
         for(ItemList item : ItemList.values()) {
-            if(item.getItemClass() != BasicMeleeWeapon.class && item.getItemClass() != BasicRangedWeapon.class) continue;
+            if(item.getItemClass() != BasicMeleeWeapon.class && item.getItemClass() != BasicRangedWeapon.class && item.getItemClass() != BasicMagicWeapon.class) continue;
             if(hiddenItems.contains(item)) continue;
             populateList.add(new GuiItem(item.getProcessedItem(1), (event) -> {
                 event.getWhoClicked().getInventory().addItem(item.getProcessedItem(1));

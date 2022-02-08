@@ -17,7 +17,8 @@ public enum SpellList {
     HEAL(Heal.class, "Heal", Rarity.COMMON, Material.POTION, Arrays.asList("Heal 1/10 de votre vitalité.")),
     SKY_FLUX(SkyFlux.class, "Flux Ciel", Rarity.RARE, Material.PHANTOM_MEMBRANE, Arrays.asList("Envoie un punch dans la cible")),
     GOAT_HUNGER(GoatHunger.class, "Goat Hunger", Rarity.HERO, Material.SOUL_TORCH, Arrays.asList("Leurs âmes seront volée")),
-    INSTANT_TRANSMISSION(InstantTransmission.class, "Instant Transmission", Rarity.RARE, Material.ENDER_EYE, Arrays.asList("Vous téléporte de 8 blocks"))
+    INSTANT_TRANSMISSION(InstantTransmission.class, "Instant Transmission", Rarity.RARE, Material.ENDER_EYE, Arrays.asList("Vous téléporte de 8 blocks")),
+    SELF_SUCCION(SelfSuccion.class, "Succion Personelle", Rarity.RARE, Material.IRON_SWORD, Arrays.asList("Divise votre vie par 2 et", "Soigne votre party de 10% des dégats subits", "Ou vous applique l'éffet de Succion Sanguine"))
     ;
 
     Class<? extends Spell> spellClass;

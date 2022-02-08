@@ -4,12 +4,9 @@ import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.EffectManager;
 import de.slikey.effectlib.effect.AtomEffect;
 import de.slikey.effectlib.effect.CircleEffect;
-import de.slikey.effectlib.effect.ImageEffect;
-import de.slikey.effectlib.effect.SphereEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
@@ -26,12 +23,12 @@ public class GoatHunger extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        Effect lineEffect = new GoatHungerEffect(Mmorpg.effectManager);
+        Effect goatHungerEffect = new GoatHungerEffect(Mmorpg.effectManager);
         RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
         if(rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == player) return;
-        lineEffect.setLocation(player.getEyeLocation());
-        lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
-        lineEffect.start();
+        goatHungerEffect.setLocation(player.getEyeLocation());
+        goatHungerEffect.setTargetEntity(rayTraceResult.getHitEntity());
+        goatHungerEffect.start();
     }
     class GoatHungerEffect extends CircleEffect {
 

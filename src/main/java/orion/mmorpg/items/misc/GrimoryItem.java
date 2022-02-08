@@ -21,10 +21,6 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class GrimoryItem extends BasicItem {
     public GrimoryItem() {
         super(Material.BOOK, "Grimory", "GRIMORY", 1, "A grimory containing all your spells", Rarity.RARE);

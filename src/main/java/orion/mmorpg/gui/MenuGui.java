@@ -223,7 +223,7 @@ public class MenuGui extends ChestGui {
         headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
         LinkedList<String> infos = new LinkedList<>();
         if(orionPlayer.getSupport() != null)
-            infos.add(orionPlayer.getSupport().getName());
+            infos.add(ChatColor.YELLOW + orionPlayer.getSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);

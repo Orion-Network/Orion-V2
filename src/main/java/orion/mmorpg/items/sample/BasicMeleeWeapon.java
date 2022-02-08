@@ -8,7 +8,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
-import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
@@ -50,5 +49,13 @@ public abstract class BasicMeleeWeapon extends BasicItem{
         lore.addAll(STATS.statsAsLore());
 
         return super.generateLore(lore);
+    }
+
+    public Stats getSTATS() {
+        return STATS;
+    }
+
+    public float getDAMAGE() {
+        return DAMAGE;
     }
 }

@@ -12,13 +12,8 @@ import orion.mmorpg.items.minecraft.StoneSword;
 import orion.mmorpg.items.minecraft.Wheat;
 import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
-import orion.mmorpg.items.sample.BasicArmorItem;
-import orion.mmorpg.items.sample.BasicGuiItem;
-import orion.mmorpg.items.sample.BasicItem;
-import orion.mmorpg.items.sample.BasicMeleeWeapon;
-import orion.mmorpg.items.weapons.AdminSword;
-import orion.mmorpg.items.weapons.AspectOfJairi;
-import orion.mmorpg.items.weapons.JokerCard;
+import orion.mmorpg.items.sample.*;
+import orion.mmorpg.items.weapons.*;
 
 public enum ItemList {
     MINECRAFT_WHEAT(new Wheat(), BasicItem.class),
@@ -28,6 +23,8 @@ public enum ItemList {
     JOKER_CARD(new JokerCard(), BasicMeleeWeapon.class),
     ADMIN_SWORD(new AdminSword(), BasicMeleeWeapon.class),
     ASPECT_OF_JAIRI(new AspectOfJairi(), BasicMeleeWeapon.class),
+    BAHTON(new BahTon(), BasicMagicWeapon.class),
+    ARCANE(new ArcAne(), BasicRangedWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
