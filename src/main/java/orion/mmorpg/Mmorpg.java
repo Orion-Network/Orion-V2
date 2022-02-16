@@ -24,6 +24,9 @@ public final class Mmorpg extends JavaPlugin {
     public static EffectManager effectManager;
     PartyManager partyManager;
 
+    /**
+     * Create default configuration or load it, initialize managers, register listeners and commands when plugin is enabled.
+     */
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -46,6 +49,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new InventoryClickListener(this), this);
         pm.registerEvents(new PlayerUseItemEvent(this), this);
         pm.registerEvents(new PlayerStatsListener(this), this);
+        pm.registerEvents(new PlayerChatListener(), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
@@ -54,6 +58,9 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
     }
 
+    /**
+     * Save config when plugin is disabled
+     */
     @Override
     public void onDisable() {
         this.saveConfig();

@@ -66,6 +66,10 @@
                                     <pattern>dev.dbassett</pattern>
                                     <shadedPattern>skullcreator</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>xyz.upperlevel.spigot.book</pattern>
+                                    <shadedPattern>spigot-book-api</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -162,6 +166,11 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xyz.upperlevel.spigot.book</groupId>
+            <artifactId>spigot-book-api</artifactId>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
