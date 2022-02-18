@@ -7,6 +7,6 @@ import orion.mmorpg.utils.Stats;
 
 public class BahTon extends BasicMagicWeapon {
     public BahTon() {
-        super(Material.IRON_SHOVEL, "BahTon", "BAHTON", 0, "Un baton simple avec peu de magie", Rarity.COMMON, new Stats.Builder().withIntel(2).build(), 5);
+        super(Material.IRON_SHOVEL, "BahTon", "BAHTON", 1, "Un baton simple avec peu de magie", Rarity.COMMON, new Stats.Builder().withIntel(2).build(), 5);
     }
 }

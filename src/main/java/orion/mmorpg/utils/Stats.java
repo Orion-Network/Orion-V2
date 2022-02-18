@@ -5,6 +5,9 @@ import net.md_5.bungee.api.ChatColor;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A class to handle different Stats
+ */
 public class Stats {
     float strength, critical_chance, critical_damage, attack_speed, vitality, intel, defence, speed, luck;
 
@@ -20,6 +23,10 @@ public class Stats {
         this.luck = luck;
     }
 
+    /**
+     * Builder for generate a Stats Object
+     * @param builder Builder used to generate a Stats Object
+     */
     private Stats(Builder builder) {
         setStrength(builder.strength);
         setCritical_chance(builder.critical_chance);
@@ -32,6 +39,10 @@ public class Stats {
         setLuck(builder.luck);
     }
 
+    /**
+     * Generate an array list of every stats with there value, color and sigil
+     * @return Generated list of stats
+     */
     public List<String> statsAsLore() {
         List<String> lore = new LinkedList<>();
         if(strength != 0)

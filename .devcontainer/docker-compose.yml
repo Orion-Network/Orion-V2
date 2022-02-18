@@ -20,8 +20,8 @@ services:
       WORLD: /worlds/world
     volumes:
       # attach a directory relative to the directory containing this compose file
-      - mmorpg:/data
-      - mmorpg_world:/worlds/world
+      - mmorpg:/data:Z
+      - mmorpg_world:/worlds/world:Z
     depends_on: [mongo]
 volumes:
   mmorpg:

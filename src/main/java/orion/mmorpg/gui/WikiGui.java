@@ -107,14 +107,14 @@ public class WikiGui extends ChestGui {
     public StaticPane getNavigationPane() {
         StaticPane navigationPane = new StaticPane(0,5,9,1);
 
-        navigationPane.addItem(new GuiItem(new ItemStack(Material.GREEN_WOOL), e -> {
+        navigationPane.addItem(new GuiItem(ItemList.LEFT_BUTTON_PLACEHOLDER.getProcessedItem(1), e -> {
             PaginatedPane currentPane = ((PaginatedPane)mainPane.getPanes(mainPane.getPage()));
             if(currentPane.getPage() > 0)
                 currentPane.setPage(currentPane.getPage()-1);
             this.update();
         }), 0,0);
 
-        navigationPane.addItem(new GuiItem(new ItemStack(Material.GREEN_WOOL), e -> {
+        navigationPane.addItem(new GuiItem(ItemList.RIGHT_BUTTON_PLACEHOLDER.getProcessedItem(1), e -> {
             PaginatedPane currentPane = ((PaginatedPane)mainPane.getPanes(mainPane.getPage()));
             if(currentPane.getPage() < currentPane.getPages() - 1)
                 currentPane.setPage(currentPane.getPage() + 1);

@@ -8,18 +8,40 @@ import orion.mmorpg.Mmorpg;
 import java.util.Random;
 
 public class Utils {
-
+    /**
+     * Send info message to entity with good formatting.
+     * @param e The entity to send message
+     * @param message The message to send
+     */
     public static void sendInfoMessage(Entity e, String message) {
         e.sendMessage(ChatColor.YELLOW + message);
     }
+
+    /**
+     * Send Error message to entity with good formating
+     * @param e The entity to send message
+     * @param message The message to send
+     */
     public static void sendErrorMessage(Entity e, String message) {
         e.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + message);
     }
+
+    /**
+     * Send debug message if debugging is enabled
+     * @param e The entity to send message
+     * @param message The message to send
+     */
     public static void sendDebugMessage(Entity e, String message) {
         if(Mmorpg.isDebug())
             e.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + message);
     }
 
+    /**
+     * Compute damage to inflict based on Strength, Critical Chance, Critical Damages and default damage
+     * @param playerStats Stats who will be used for computing damages {@link Stats}
+     * @param damage Default damage to inflict
+     * @return Computed damages
+     */
     public static float calculateDamage(Stats playerStats, float damage) {
         float strength = playerStats.getStrength();
         float critical_chance = playerStats.getCritical_chance();
@@ -42,6 +64,12 @@ public class Utils {
         return totalDamage*(1 + ((critical_damage*critical)/100));
     }
 
+    /**
+     * Compute magic damage to inflict based ond Intel
+     * @param playerStats Stats who will be used to compute magic damages {@link Stats}
+     * @param damage Default damages to inflict
+     * @return Computed magic damages
+     */
     public static float calculateMagicDamage(Stats playerStats, float damage) {
         float intel = playerStats.getIntel();
 

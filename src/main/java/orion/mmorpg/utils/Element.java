@@ -1,5 +1,8 @@
 package orion.mmorpg.utils;
 
+/**
+ * An enum to handle Elements used in spells
+ */
 public enum Element {
     PHYSIC,
     MAGIC,

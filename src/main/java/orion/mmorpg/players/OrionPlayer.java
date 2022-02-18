@@ -25,22 +25,25 @@ import orion.mmorpg.utils.Utils;
 
 import java.util.*;
 
+/**
+ * A class representing a Player in Orion.
+ */
 public class OrionPlayer {
 //TODO Add leveling system
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
     private Stats baseStats;
-    private Stats stats;
+    private final Stats stats;
     private UUID uniqueId;
 
     private double health;
     private int statsPoints, level, mana;
-    private LinkedHashSet<String> portalStones;
+    private final LinkedHashSet<String> portalStones;
 
     private ItemStack[] equipements;
 
     transient private KeyedBossBar healthBar;
-    transient private KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);;
+    transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
     transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
@@ -52,6 +55,14 @@ public class OrionPlayer {
     private Support support;
     private Race race;
 
+    /**
+     * Default Constructor of OrionPlayer class used on first logging.
+     * @param infos Infos of the new player {@link Infos}
+     * @param baseStats Base stats of the new player {@link Stats}
+     * @param uniqueId UniqueId of the new player {@link Player#getUniqueId()}
+     * @param statsPoints Default stats point of new player
+     * @param level Level of the new player
+     */
     public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int level) {
         this.infos = infos;
         this.uniqueId = uniqueId;
@@ -80,6 +91,21 @@ public class OrionPlayer {
         supportMap = new LinkedHashMap<>();
     }
 
+    /**
+     * Default Constructor of OrionPlayer class used on new logging retrieving data from Database.
+     * @param infos Retrieved Infos of the player
+     * @param baseStats Retrieved Stats of the player
+     * @param uniqueId Retrieved UniqueId of the player
+     * @param health Health before the player log out
+     * @param statsPoints Retrieved Stats Points
+     * @param level Retrieved Level
+     * @param mana Retrieved mana
+     * @param portalStones Retrieved Portal Stones
+     * @param equipements Retrieved Equipments
+     * @param spells Retrieved Spells
+     * @param support Retrieved Support
+     * @param race Retrieved Race
+     */
     public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;

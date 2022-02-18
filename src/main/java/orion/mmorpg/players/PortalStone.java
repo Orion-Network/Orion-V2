@@ -1,17 +1,18 @@
 package orion.mmorpg.players;
 
-import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import orion.mmorpg.items.ItemList;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * an Enum of every teleportation location accessible via {@link orion.mmorpg.gui.PortalStoneGui}
+ */
 public enum PortalStone {
     SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"),-280,185,-432))
     ;
@@ -28,6 +29,10 @@ public enum PortalStone {
         this.location = location;
     }
 
+    /**
+     * Generate an ItemStack representing the PortalStone to be used in gui
+     * @return ItemStack of the PortalStone
+     */
     public ItemStack generateItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

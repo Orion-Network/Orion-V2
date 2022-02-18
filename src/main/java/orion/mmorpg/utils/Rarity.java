@@ -3,6 +3,9 @@ package orion.mmorpg.utils;
 
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * An enum to handle rarity of items, spells, supports and races
+ */
 public enum Rarity {
     UNOBTAINABLE(ChatColor.DARK_GRAY, "\u272c"),
     MYTHIC(ChatColor.DARK_PURPLE, "\u269d\u269d\u269d"),

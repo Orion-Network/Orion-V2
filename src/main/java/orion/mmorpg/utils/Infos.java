@@ -2,6 +2,9 @@ package orion.mmorpg.utils;
 
 import java.time.LocalDateTime;
 
+/**
+ * An class to handle basic infos about a player
+ */
 public class Infos {
 
     //TODO Save LocalDateTime
