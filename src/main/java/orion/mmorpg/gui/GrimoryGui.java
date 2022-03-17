@@ -14,6 +14,7 @@ public class GrimoryGui extends ChestGui {
     Mmorpg mmorpg;
     Player player;
     OrionPlayer orionPlayer;
+    OutlinePane spellPane = new OutlinePane(0, 0, 9, 1);
 
     public GrimoryGui(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
         super(1, ChatColor.YELLOW + "Grimory");
@@ -24,10 +25,9 @@ public class GrimoryGui extends ChestGui {
         this.addPane(getSpellPane());
     }
 
-    OutlinePane spellPane = new OutlinePane(0,0,9,1);
     public OutlinePane getSpellPane() {
-        for(String spell : orionPlayer.getSelectedSpells()) {
-            if(spell == null)
+        for (String spell : orionPlayer.getSelectedSpells()) {
+            if (spell == null)
                 spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.getProcessedItem(1)));
             else
                 spellPane.addItem(new GuiItem(SpellList.valueOf(spell).getItem()));
@@ -44,6 +44,7 @@ public class GrimoryGui extends ChestGui {
         Player player;
         OrionPlayer orionPlayer;
         int clickedSlot;
+        OutlinePane spellList = new OutlinePane(0, 0, 9, 3);
 
         public SpellSelector(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, int clickedSlot) {
             super(3, "Select Spell");
@@ -57,9 +58,8 @@ public class GrimoryGui extends ChestGui {
             show(player);
         }
 
-        OutlinePane spellList = new OutlinePane(0,0,9,3);
         public OutlinePane getSpellList() {
-            for(String spell : orionPlayer.getSpells().keySet()) {
+            for (String spell : orionPlayer.getSpells().keySet()) {
                 spellList.addItem(new GuiItem(SpellList.valueOf(spell).getItem(), e -> {
                     orionPlayer.getSelectedSpells()[clickedSlot] = spell;
                     player.closeInventory();

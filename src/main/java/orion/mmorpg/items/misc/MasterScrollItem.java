@@ -22,9 +22,15 @@ public class MasterScrollItem extends BasicItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING);
+        if (spell == null) {
+            e.getItem().setAmount(0);
+            e.getPlayer().updateInventory();
+            Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
+            return;
+        }
         Utils.sendInfoMessage(e.getPlayer(), "Vous avez appris le sort : " + SpellList.valueOf(spell).getName());
         SpellList.learnSpell(data, spell);
-        e.getItem().setAmount(e.getItem().getAmount()-1);
+        e.getItem().setAmount(e.getItem().getAmount() - 1);
         e.getPlayer().updateInventory();
         super.onUseItem(mmorpg, data, e);
     }

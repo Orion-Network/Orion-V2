@@ -7,6 +7,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 
 public class OnSpellSense extends Event {
+    private static final HandlerList HANDLERS = new HandlerList();
     Player sender, target;
     Spell s;
     SpellList type;
@@ -21,13 +22,11 @@ public class OnSpellSense extends Event {
         this.targetType = targetType;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
-
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 
@@ -51,8 +50,7 @@ public class OnSpellSense extends Event {
         return targetType;
     }
 
-    public enum Target
-    {
+    public enum Target {
         DIRECT, INDIRECT, ZONE, GLOBAL
     }
 }

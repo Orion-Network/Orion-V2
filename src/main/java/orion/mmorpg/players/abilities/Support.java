@@ -16,6 +16,7 @@ public abstract class Support {
     Rarity rarity;
     String description;
     HashMap<String, Object> dataMap;
+
     public Support(String name, Rarity rarity, String description) {
         this.name = name;
         this.rarity = rarity;
@@ -32,14 +33,22 @@ public abstract class Support {
     }
 
     public abstract void onInteract(PlayerInteractEvent event);
+
     public abstract void onLaunchSpell(Player player, OrionPlayer stats, Spell s);
+
     public abstract void onHit(EntityDamageByEntityEvent event, OrionPlayer stats);
+
     public abstract void onShootArrow(EntityShootBowEvent event);
+
     public abstract void onHitByEntity(EntityDamageByEntityEvent entityEvent);
+
     /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
     public abstract void onSpellSense(OnSpellSense e);
+
     public abstract void onTick();
+
     public abstract void onDie();
+
     //TODO Implementing
     public abstract void onSupportEnd(Player p, OrionPlayer stats);
 

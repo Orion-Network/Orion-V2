@@ -22,15 +22,17 @@ public class SkyFlux extends Spell {
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
 
         RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, 2);
-        if(rayTraceResult.getHitEntity() == player) return;
+        if (rayTraceResult.getHitEntity() == player) return;
         Effect lineEffect = new TestEffect(Mmorpg.effectManager, player.getEyeLocation().getDirection().normalize());
         lineEffect.setLocation(player.getEyeLocation());
         lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
         lineEffect.start();
         System.out.println(rayTraceResult.getHitEntity().getName());
     }
+
     class TestEffect extends SphereEffect {
         Vector v;
+
         public TestEffect(EffectManager effectManager, Vector v) {
             super(effectManager);
             this.v = v;
@@ -41,7 +43,7 @@ public class SkyFlux extends Spell {
         public void onRun() {
             super.onRun();
             setLocation(getLocation().add(v));
-            if(getTargetEntity().getLocation().distance(getLocation()) <= 1.5) {
+            if (getTargetEntity().getLocation().distance(getLocation()) <= 1.5) {
                 getTargetEntity().setVelocity(new Vector(0, 5, 0));
                 this.cancel();
             }

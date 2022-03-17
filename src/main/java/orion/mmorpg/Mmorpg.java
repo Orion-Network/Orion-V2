@@ -3,6 +3,7 @@ package orion.mmorpg;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
@@ -10,19 +11,36 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.PartyManager;
 import orion.mmorpg.managers.PlayerManager;
+import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.OrionGson;
+import orion.mmorpg.utils.Utils;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 public final class Mmorpg extends JavaPlugin {
 
     public static Mmorpg INSTANCE;
-    public static boolean debug = true;
+    public static boolean debug;
     public static OrionGson orionGson = new OrionGson();
+    public static EffectManager effectManager;
+    public final FileConfiguration config = this.getConfig();
     Client mongoClient = new Client();
     PlayerManager playerManager;
-    public static EffectManager effectManager;
     PartyManager partyManager;
+
+    public static boolean isDebug() {
+        return debug;
+    }
+
+    public static void setDebug(boolean debug) {
+        Mmorpg.debug = debug;
+    }
+
+    public static OrionGson getOrionGson() {
+        return orionGson;
+    }
 
     /**
      * Create default configuration or load it, initialize managers, register listeners and commands when plugin is enabled.
@@ -30,15 +48,18 @@ public final class Mmorpg extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
-        // Plugin startup logic
-        FileConfiguration config = this.getConfig();
+
+        config.addDefault("mongo.username", "root");
+        config.addDefault("mongo.password", "");
+        config.addDefault("misc.debugging", false);
+
         config.options().copyDefaults(true);
         saveConfig();
 
-        config.addDefault("username", "root");
-        config.addDefault("password", "");
+        setDebug(config.getBoolean("misc.debugging"));
+
         playerManager = new PlayerManager();
-        effectManager =  new EffectManager(this);
+        effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -56,6 +77,27 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("item")).setExecutor(new ItemCommand());
         Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
+
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            if (getMongoClient().hasPlayer(p.getUniqueId())) {
+                try {
+                    OrionPlayer orionPlayer = getMongoClient().loadPlayer(p.getUniqueId());
+                    getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
+                    orionPlayer.updateHealthbar();
+                    Utils.sendInfoMessage(p, "Data loaded !");
+                    if (orionPlayer.getRace() == null)
+                        p.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
+                    return;
+                } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+                    ex.printStackTrace();
+                    p.kickPlayer("Error in loading");
+                }
+            } else {
+                OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(p);
+                getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
+                p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
+            }
+        }
     }
 
     /**
@@ -63,7 +105,12 @@ public final class Mmorpg extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        this.saveConfig();
+        for (OrionPlayer p : getPlayerManager().getPlayersMap().values()) {
+            System.out.println("Saving : " + p.getUniqueId().toString());
+            p.getHealthBar().removeAll();
+            getMongoClient().savePlayer(p);
+            getPlayerManager().getPlayersMap().remove(p.getUniqueId());
+        }
     }
 
     public PlayerManager getPlayerManager() {
@@ -72,18 +119,6 @@ public final class Mmorpg extends JavaPlugin {
 
     public PartyManager getPartyManager() {
         return partyManager;
-    }
-
-    public static boolean isDebug() {
-        return debug;
-    }
-
-    public static OrionGson getOrionGson() {
-        return orionGson;
-    }
-
-    public static void setDebug(boolean debug) {
-        Mmorpg.debug = debug;
     }
 
     public Client getMongoClient() {

@@ -25,6 +25,7 @@ public class Stats {
 
     /**
      * Builder for generate a Stats Object
+     *
      * @param builder Builder used to generate a Stats Object
      */
     private Stats(Builder builder) {
@@ -41,27 +42,28 @@ public class Stats {
 
     /**
      * Generate an array list of every stats with there value, color and sigil
+     *
      * @return Generated list of stats
      */
     public List<String> statsAsLore() {
         List<String> lore = new LinkedList<>();
-        if(strength != 0)
+        if (strength != 0)
             lore.add(StatsInfo.STRENGTH.getColor() + StatsInfo.STRENGTH.character + " Strength: " + ChatColor.RED + strength);
-        if(critical_damage != 0)
+        if (critical_damage != 0)
             lore.add(StatsInfo.CRITICAL_DAMAGE.getColor() + StatsInfo.CRITICAL_DAMAGE.character + "Critical Damage: " + ChatColor.RED + critical_damage);
-        if(critical_chance != 0)
+        if (critical_chance != 0)
             lore.add(StatsInfo.CRITICAL_CHANCE.getColor() + StatsInfo.CRITICAL_CHANCE.character + "Critical Chance: " + ChatColor.RED + critical_chance + "%");
-        if(attack_speed != 0)
+        if (attack_speed != 0)
             lore.add(StatsInfo.ATTACK_SPEED.getColor() + StatsInfo.ATTACK_SPEED.character + " Attack Speed: " + ChatColor.YELLOW + attack_speed);
-        if(vitality != 0)
+        if (vitality != 0)
             lore.add(StatsInfo.VITALITY.getColor() + StatsInfo.VITALITY.character + " Vitality: " + ChatColor.YELLOW + vitality);
-        if(intel != 0)
+        if (intel != 0)
             lore.add(StatsInfo.INTELLIGENCE.getColor() + StatsInfo.INTELLIGENCE.character + " Intelligence: " + ChatColor.YELLOW + intel);
-        if(defence != 0)
+        if (defence != 0)
             lore.add(StatsInfo.DEFENCE.getColor() + StatsInfo.DEFENCE.character + " Defence: " + ChatColor.YELLOW + defence);
-        if(speed != 0)
+        if (speed != 0)
             lore.add(StatsInfo.SPEED.getColor() + StatsInfo.SPEED.character + " Speed: " + ChatColor.WHITE + speed);
-        if(luck != 0)
+        if (luck != 0)
             lore.add(StatsInfo.LUCK.getColor() + StatsInfo.LUCK.character + " Luck: " + ChatColor.WHITE + luck);
         return lore;
     }
@@ -147,12 +149,12 @@ public class Stats {
         INTELLIGENCE("࿇", ChatColor.of("#00ACEE"), Float.MAX_VALUE),
         DEFENCE("🛡", ChatColor.of("#884DA7"), Float.MAX_VALUE),
         SPEED("࿓", ChatColor.of("#207125"), 1000),
-        LUCK("☘", ChatColor.of("#FFA500"), Float.MAX_VALUE)
-        ;
+        LUCK("☘", ChatColor.of("#FFA500"), Float.MAX_VALUE);
 
         String character;
         ChatColor color;
         float cap;
+
         StatsInfo(String character, ChatColor color, float cap) {
             this.character = character;
             this.color = color;

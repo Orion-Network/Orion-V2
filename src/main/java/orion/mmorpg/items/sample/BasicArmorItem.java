@@ -1,6 +1,5 @@
 package orion.mmorpg.items.sample;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -11,7 +10,6 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
@@ -37,7 +35,7 @@ public abstract class BasicArmorItem extends BasicItem {
 
     @Override
     public ItemStack generateItem(ItemStack item, int amount) {
-        if(item == null)
+        if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
@@ -48,7 +46,7 @@ public abstract class BasicArmorItem extends BasicItem {
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
         lore.addAll(STATS.statsAsLore());
 
@@ -74,6 +72,6 @@ public abstract class BasicArmorItem extends BasicItem {
     }
 
     public enum ArmorType {
-        HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS;
+        HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS
     }
 }

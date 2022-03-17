@@ -40,7 +40,7 @@ public class Party {
         data.setParty(this);
 
         Score sc = scoreboard.getObjective(DisplaySlot.SIDEBAR).getScore(player.getName());
-        sc.setScore(players.size()+1);
+        sc.setScore(players.size() + 1);
     }
 
     public boolean removePlayer(OrionPlayer player) {
@@ -52,14 +52,14 @@ public class Party {
         Set<String> infos = new HashSet<>();
         infos.add(uuid.toString());
         StringBuilder sb = new StringBuilder();
-        for(OrionPlayer p : players)
+        for (OrionPlayer p : players)
             sb.append(Bukkit.getPlayer(p.getUniqueId()).getDisplayName());
         infos.add(sb.toString());
         return infos;
     }
 
     public Score getPlayerScore(Player player) {
-        for(String str : scoreboard.getEntries())
+        for (String str : scoreboard.getEntries())
             if (str.startsWith(player.getDisplayName()))
                 return scoreboard.getObjective(DisplaySlot.SIDEBAR).getScore(str);
         return null;

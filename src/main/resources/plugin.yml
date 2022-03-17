@@ -8,17 +8,17 @@ libraries:
   - com.github.stefvanschie.inventoryframework:IF:0.10.0
 commands:
   data:
-    permission: "data.use"
+    permission: "orion.data.use"
     description: "See data of a player or an item"
   item:
-    permission: "item.use"
+    permission: "orion.item.use"
     description: "Give item"
   menu:
-    permission: "menu.use"
+    permission: "orion.menu.use"
     description: "Show menu"
   party:
-    permission: "party.use"
+    permission: "orion.party.use"
     description: "Create party"
   admin:
-    permission: "admin.command"
+    permission: "orion.admin.command"
     description: "Administrator Command"

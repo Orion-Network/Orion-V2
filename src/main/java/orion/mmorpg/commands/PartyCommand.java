@@ -25,43 +25,43 @@ public class PartyCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(!(sender instanceof Player)) return false;
+        if (!(sender instanceof Player)) return false;
 
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId());
-        if(args[0].equalsIgnoreCase("create")) {
-            if(orionPlayer.getParty() == null)
+        if (args[0].equalsIgnoreCase("create")) {
+            if (orionPlayer.getParty() == null)
                 mmorpg.getPartyManager().createParty().addPlayer((Player) sender, orionPlayer);
             else
                 Utils.sendInfoMessage((Player) sender, "Vous devez quitter votre party avant d'en créer une.");
-        } else if(args[0].equalsIgnoreCase("invite")) {
-            if(orionPlayer.getParty() != null)
-                if(Bukkit.getPlayer(args[1]) != null)
+        } else if (args[0].equalsIgnoreCase("invite")) {
+            if (orionPlayer.getParty() != null)
+                if (Bukkit.getPlayer(args[1]) != null)
                     orionPlayer.getParty().invite((Player) sender, args[1]);
                 else
                     Utils.sendInfoMessage((Player) sender, "Ce joueur n'existe pas.");
             else
                 Utils.sendInfoMessage((Player) sender, "Vous êtes dans aucune party.");
-        } else if (args[0].equalsIgnoreCase("leave")){
-            if(orionPlayer.getParty() != null) {
+        } else if (args[0].equalsIgnoreCase("leave")) {
+            if (orionPlayer.getParty() != null) {
                 if (orionPlayer.getParty().removePlayer(orionPlayer))
                     mmorpg.getPartyManager().removeParty(orionPlayer.getParty());
                 orionPlayer.setParty(null);
                 ((Player) sender).setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 Utils.sendInfoMessage((Player) sender, "Vous avez quitté la party");
             }
-        } else if(args[0].equalsIgnoreCase("join")) {
-            if(Bukkit.getPlayer(args[0]) != null) {
+        } else if (args[0].equalsIgnoreCase("join")) {
+            if (Bukkit.getPlayer(args[0]) != null) {
                 OrionPlayer targetPlayer = mmorpg.getPlayerManager().getPlayer(Bukkit.getPlayer(args[0]).getUniqueId());
-                if(targetPlayer.getParty() != null)
-                    if(targetPlayer.getParty().getInvites().contains((Player) sender))
+                if (targetPlayer.getParty() != null)
+                    if (targetPlayer.getParty().getInvites().contains((Player) sender))
                         targetPlayer.getParty().addPlayer((Player) sender, mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId()));
                     else
                         Utils.sendInfoMessage((Player) sender, "Vous n'avez mas été invité dans cette party.");
                 else
                     Utils.sendInfoMessage((Player) sender, "Ce joueur n'a pas de party");
             }
-        } else if(args[0].equalsIgnoreCase("infos")) {
-            if(orionPlayer.getParty() != null)
+        } else if (args[0].equalsIgnoreCase("infos")) {
+            if (orionPlayer.getParty() != null)
                 for (String info : orionPlayer.getParty().getInfos())
                     Utils.sendInfoMessage((Entity) sender, info);
             else

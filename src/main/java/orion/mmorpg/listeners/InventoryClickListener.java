@@ -23,20 +23,20 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if(e.getSlotType() == InventoryType.SlotType.RESULT) {
+        if (e.getSlotType() == InventoryType.SlotType.RESULT) {
             e.setCancelled(true);
             new MenuGui((Player) e.getWhoClicked(), this.mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
         }
-        if(e.getSlotType() == InventoryType.SlotType.ARMOR) {
-            if(Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR)) {
-                ((BasicArmorItem)ItemList.getItemFromItemstack(Objects.requireNonNull(e.getCursor()))).onCosmeticEquip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()), e.getCursor());
+        if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
+            if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR)) {
+                ((BasicArmorItem) ItemList.getItemFromItemstack(Objects.requireNonNull(e.getCursor()))).onCosmeticEquip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()), e.getCursor());
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez équipé un cosmétique.");
             } else {
-                ((BasicArmorItem)ItemList.getItemFromItemstack(e.getCurrentItem())).onCosmeticUnequip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()), e.getCurrentItem());
+                ((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onCosmeticUnequip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()), e.getCurrentItem());
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez déséquipé un cosmétique.");
             }
         }
-        if(e.isShiftClick())
+        if (e.isShiftClick())
             e.setCancelled(true);
     }
 }

@@ -1,6 +1,5 @@
 package orion.mmorpg.commands;
 
-import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -19,7 +18,7 @@ public class MenuCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             new MenuGui((Player) sender, this.mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId()));
         }
         return false;

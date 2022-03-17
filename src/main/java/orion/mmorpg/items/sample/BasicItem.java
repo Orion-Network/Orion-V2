@@ -65,23 +65,25 @@ public abstract class BasicItem extends ItemStack {
         this.PERMISSION = PERMISSION;
     }
 
-    public void onPickupItem(EntityPickupItemEvent e, ItemStack item){}
-
-    public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR))
-            if(spell != null)
-                spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
-    }
-
-    public void onHitWithItem(EntityDamageByEntityEvent e){}
-
     public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, String LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {
         };
     }
 
+    public void onPickupItem(EntityPickupItemEvent e, ItemStack item) {
+    }
+
+    public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR))
+            if (spell != null)
+                spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
+    }
+
+    public void onHitWithItem(EntityDamageByEntityEvent e) {
+    }
+
     public ItemStack generateItem(ItemStack item, int amount) {
-        if(item == null)
+        if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(RARITY.getChatColor() + NAME);
@@ -97,19 +99,19 @@ public abstract class BasicItem extends ItemStack {
     }
 
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
 
-        if(LORE != null) {
-            if(lore.size() != 0)
+        if (LORE != null) {
+            if (lore.size() != 0)
                 lore.add("\n");
             lore.add(ChatColor.GRAY + LORE);
         }
-        if(this.spell != null) {
-            if(lore.size() != 0)
+        if (this.spell != null) {
+            if (lore.size() != 0)
                 lore.add("\n");
             SpellList sp = SpellList.valueOf(spell.getInternal_id());
-            lore.add(ChatColor.GOLD +"" + ChatColor.BOLD + "Sort : " + sp.getName());
+            lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Sort : " + sp.getName());
             List<String> finalLore = new ArrayList<>();
             sp.getLore().forEach(e -> {
                 e = ChatColor.GRAY + e;
@@ -120,7 +122,7 @@ public abstract class BasicItem extends ItemStack {
         }
 
         lore.add("\n");
-        lore.add(RARITY.getChatColor() + "" + ChatColor.BOLD + RARITY.toString());
+        lore.add(RARITY.getChatColor() + "" + ChatColor.BOLD + RARITY);
 
         return lore;
     }

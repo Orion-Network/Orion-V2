@@ -1,17 +1,14 @@
 package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
@@ -27,8 +24,13 @@ import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.sample.BasicRangedWeapon;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.LocationSpell;
+import orion.mmorpg.players.abilities.Spell;
+import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class PlayerStatsListener implements Listener {
     Mmorpg mmorpg;
@@ -43,51 +45,51 @@ public class PlayerStatsListener implements Listener {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         orionPlayer.onInteract(event);
         Player p = event.getPlayer();
-        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed()/20);
+        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerHitEntity(EntityDamageByEntityEvent e) {
-        if(e.isCancelled()) return;
-        if(e.getDamager() instanceof Player) {
+        if (e.isCancelled()) return;
+        if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed()/20);
-            if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
+            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
-                if(container.has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
+                if (container.has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
                     e.setDamage(container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT));
                 item.onHitWithItem(e);
-                if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
+                if (ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
                     orionPlayer.onHit(e, orionPlayer);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                     e.setDamage(totalDamage);
-                    if(!(e.getEntity() instanceof Player)) {
+                    if (!(e.getEntity() instanceof Player)) {
                         LivingEntity entity = (LivingEntity) e.getEntity();
                         orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
                     } else {
                         OrionPlayer target = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
-                        orionPlayer.updateMobHealthBar(target.getHealth(), target.getStats().getVitality(), e.getEntity().getName());
+                        orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage, target.getStats().getVitality(), e.getEntity().getName());
                     }
                 }
             }
         }
-        if(e.getDamager() instanceof Arrow) {
+        if (e.getDamager() instanceof Arrow) {
             Arrow entity = (Arrow) e.getDamager();
-            if(entity.hasMetadata("damage")) {
+            if (entity.hasMetadata("damage")) {
                 e.setDamage(entity.getMetadata("damage").get(0).asFloat());
             }
         }
 
-        if(e.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             orionPlayer.onHitByEntity(e);
-            float reduction =  1 + (orionPlayer.getStats().getDefence() / (orionPlayer.getStats().getDefence() + 100));
+            float reduction = 1 + (orionPlayer.getStats().getDefence() / (orionPlayer.getStats().getDefence() + 100));
             orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
 
-            if(orionPlayer.getHealth() <= 0)
+            if (orionPlayer.getHealth() <= 0)
                 orionPlayer.onDie();
             else
                 orionPlayer.updateHealthbar();
@@ -99,15 +101,23 @@ public class PlayerStatsListener implements Listener {
 
     @EventHandler
     public void useBow(EntityShootBowEvent e) {
-        if(e.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
-            if(p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if(ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
+                if (ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
                     BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
-                    MetadataValue damage = new FixedMetadataValue(mmorpg, Utils.calculateDamage(orionPlayer.getStats(), basicRangedWeapon.getDAMAGE()));
+                    float arrowDamage = 1;
+                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
+                        arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
+                    MetadataValue damage = new FixedMetadataValue(mmorpg, Utils.calculateDamage(orionPlayer.getStats(), basicRangedWeapon.getDAMAGE() + arrowDamage));
                     e.getProjectile().setMetadata("damage", damage);
+                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("spell"), PersistentDataType.STRING)) {
+                        String spell = e.getConsumable().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell"), PersistentDataType.STRING);
+                        e.getProjectile().setMetadata("spell", new FixedMetadataValue(mmorpg, spell));
+                    }
+                    ((Arrow) e.getProjectile()).setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
                     orionPlayer.onShootArrow(e);
                     basicRangedWeapon.onShootBow(e);
                 }
@@ -122,8 +132,8 @@ public class PlayerStatsListener implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
-        if(e.getEntity() instanceof Player) {
-            if(e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
+        if (e.getEntity() instanceof Player) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
                 e.setCancelled(true);
         }
     }
@@ -131,17 +141,49 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onLevelUp(PlayerLevelChangeEvent e) {
         OrionPlayer op = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        if(e.getPlayer().getLevel() > op.getLevel())
+        if (e.getPlayer().getLevel() > op.getLevel())
             op.levelUp(e.getPlayer(), e.getNewLevel());
     }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        float speed = (200+orionPlayer.getStats().getSpeed())/Stats.StatsInfo.SPEED.getCap();
+        float speed = (200 + orionPlayer.getStats().getSpeed()) / Stats.StatsInfo.SPEED.getCap();
         e.getPlayer().setWalkSpeed((speed > 1 ? 1 : (speed < -1 ? -1 : speed)));
     }
+
     @EventHandler
     public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onHungerDeplete(FoodLevelChangeEvent e) {
+        e.setCancelled(true);
+        e.setFoodLevel(19);
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent e) {
+        if (e.getHitEntity() != null)
+            Utils.sendDebugMessage((Entity) e.getEntity().getShooter(), e.getHitEntity().getName());
+        if (e.getHitBlock() != null)
+            Utils.sendDebugMessage((Entity) e.getEntity().getShooter(), e.getHitBlock() + "");
+        if (e.getEntity().hasMetadata("spell")) {
+            if (e.getEntity().getShooter() instanceof Player) {
+                Player p = (Player) e.getEntity().getShooter();
+                OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
+                Location location = (e.getHitBlock() != null ? e.getHitBlock().getLocation().clone().add(0, 1.1, 0) : e.getHitEntity().getLocation().clone().add(0, 0.1, 0));
+                location.setDirection(p.getEyeLocation().getDirection());
+                try {
+                    Spell s = (Spell) SpellList.valueOf(e.getEntity().getMetadata("spell").get(0).asString()).getSpellClass().getConstructors()[0].newInstance();
+                    if (s instanceof LocationSpell)
+                        ((LocationSpell) s).launchFromLocation(mmorpg, p, orionPlayer, location);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        e.getEntity().remove();
     }
 }

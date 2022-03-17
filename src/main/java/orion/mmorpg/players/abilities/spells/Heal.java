@@ -8,11 +8,11 @@ import orion.mmorpg.utils.Element;
 
 public class Heal extends Spell {
     public Heal() {
-        super("HEAL", 1, Element.WHITE, 1000*60);
+        super("HEAL", 1, Element.WHITE, 1000 * 60);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.heal(orionPlayer.getStats().getVitality()/10);
+        orionPlayer.heal(orionPlayer.getStats().getVitality() / 10);
     }
 }

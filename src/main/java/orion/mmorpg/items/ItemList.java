@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.armors.CelestianSet;
+import orion.mmorpg.items.armors.KnightSet;
 import orion.mmorpg.items.armors.StarSet;
 import orion.mmorpg.items.armors.StartingSet;
 import orion.mmorpg.items.gui.*;
@@ -14,28 +15,39 @@ import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.items.weapons.*;
+import orion.mmorpg.items.weapons.arrows.GravityArrow;
+import orion.mmorpg.items.weapons.arrows.TransmissionArrow;
 
 public enum ItemList {
     MINECRAFT_WHEAT(new Wheat(), BasicItem.class),
     //Weapon Items
     MINECRAFT_WOODEN_SWORD(new WoodenSword(), BasicMeleeWeapon.class),
     MINECRAFT_STONE_SWORD(new StoneSword(), BasicMeleeWeapon.class),
+    KNIGHT_SWORD(new KnightSet.KnightSword(), BasicMeleeWeapon.class),
     JOKER_CARD(new JokerCard(), BasicMeleeWeapon.class),
     ADMIN_SWORD(new AdminSword(), BasicMeleeWeapon.class),
     ASPECT_OF_JAIRI(new AspectOfJairi(), BasicMeleeWeapon.class),
     BAHTON(new BahTon(), BasicMagicWeapon.class),
     ARCANE(new ArcAne(), BasicRangedWeapon.class),
+    HOUYI_BOW(new HouYi(), BasicRangedWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
     STARTING_LEGGINGS(new StartingSet.StartingLeggings(), BasicArmorItem.class),
     STARTING_BOOTS(new StartingSet.StartingBoots(), BasicArmorItem.class),
+    KNIGHT_HELMET(new KnightSet.KnightHelmet(), BasicArmorItem.class),
+    KNIGHT_CHESTPLATE(new KnightSet.KnightChestplate(), BasicArmorItem.class),
+    KNIGHT_LEGGINGS(new KnightSet.KnightLeggings(), BasicArmorItem.class),
+    KNIGHT_BOOTS(new KnightSet.KnightBoots(), BasicArmorItem.class),
     CELESTIAN_CROWN(new CelestianSet.CelestianCrown(), BasicArmorItem.class),
     CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
     STARSET_HELMET(new StarSet.StarsetHelmet(), BasicArmorItem.class),
     STARSET_CHESTPLATE(new StarSet.StarsetChestplate(), BasicArmorItem.class),
     STARSET_LEGGINGS(new StarSet.StarsetLeggings(), BasicArmorItem.class),
     STARSET_BOOTS(new StarSet.StarsetBoots(), BasicArmorItem.class),
+    //Arrows
+    GRAVITY_ARROW(new GravityArrow(), BasicArrow.class),
+    TRANSMISSION_ARROW(new TransmissionArrow(), BasicArrow.class),
     //GUI Items
     HELMET_PLACEHOLDER(new HelmetPlaceholderItem(), BasicGuiItem.class),
     CHESTPLATE_PLACEHOLDER(new ChestplatePlaceholderItem(), BasicGuiItem.class),
@@ -54,7 +66,7 @@ public enum ItemList {
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
     MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
-    INFINITE_FIrlREWORK(new InfiniteFirework(), BasicItem.class),
+    INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
     TEST_ITEM(new TestItem(), BasicItem.class),
@@ -68,6 +80,11 @@ public enum ItemList {
         this.itemClass = itemClass;
     }
 
+    public static BasicItem getItemFromItemstack(ItemStack itemStack) {
+        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
+        return valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+    }
+
     public BasicItem getItem() {
         return item;
     }
@@ -78,10 +95,5 @@ public enum ItemList {
 
     public ItemStack getProcessedItem(int amount) {
         return item.generateItem(null, amount);
-    }
-
-    public static BasicItem getItemFromItemstack(ItemStack itemStack) {
-        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-        return valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
     }
 }

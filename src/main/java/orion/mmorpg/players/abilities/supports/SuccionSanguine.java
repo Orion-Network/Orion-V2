@@ -28,8 +28,8 @@ public class SuccionSanguine extends Support {
 
     @Override
     public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
-        float totalDamage = Utils.calculateDamage(stats.getStats(), (float) event.getDamage()) * ((Player)event.getDamager()).getAttackCooldown();
-        stats.heal(totalDamage/50);
+        float totalDamage = Utils.calculateDamage(stats.getStats(), (float) event.getDamage()) * ((Player) event.getDamager()).getAttackCooldown();
+        stats.heal(totalDamage / 50);
     }
 
     @Override

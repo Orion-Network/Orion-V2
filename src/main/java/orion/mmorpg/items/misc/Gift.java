@@ -1,7 +1,6 @@
 package orion.mmorpg.items.misc;
 
 import dev.dbassett.skullcreator.SkullCreator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.entity.EntityPickupItemEvent;

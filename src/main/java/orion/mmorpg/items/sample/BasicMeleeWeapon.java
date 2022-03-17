@@ -14,7 +14,7 @@ import orion.mmorpg.utils.Stats;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicMeleeWeapon extends BasicItem{
+public abstract class BasicMeleeWeapon extends BasicItem {
     public final Stats STATS;
     public final float DAMAGE;
 
@@ -24,7 +24,7 @@ public abstract class BasicMeleeWeapon extends BasicItem{
         this.DAMAGE = DAMAGE;
     }
 
-    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY , Stats STATS, float DAMAGE) {
+    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.MELEE_WEAPON);
         this.STATS = STATS;
         this.DAMAGE = DAMAGE;
@@ -32,7 +32,7 @@ public abstract class BasicMeleeWeapon extends BasicItem{
 
     @Override
     public ItemStack generateItem(ItemStack item, int amount) {
-        if(item == null)
+        if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
@@ -43,7 +43,7 @@ public abstract class BasicMeleeWeapon extends BasicItem{
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + DAMAGE);
         lore.addAll(STATS.statsAsLore());

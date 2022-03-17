@@ -19,9 +19,8 @@ public abstract class Spell {
     public boolean asynchronous = true;
     public int delay = 0;
     public int period = 1;
-    private EffectType type = EffectType.INSTANT;
-
     public boolean canceled = false;
+    private final EffectType type = EffectType.INSTANT;
 
     public Spell(String internal_id, int level, Element element, long cooldown) {
         this.internal_id = internal_id;
@@ -32,26 +31,26 @@ public abstract class Spell {
 
     public boolean beforeLaunch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, boolean needSpell) {
         this.canceled = false;
-        if(needSpell) {
-            if(!orionPlayer.getSpells().containsKey(internal_id)) {
+        if (needSpell) {
+            if (!orionPlayer.getSpells().containsKey(internal_id)) {
                 Utils.sendInfoMessage(player, "Nous ne connaissez pas ce sort.");
                 return false;
             }
         }
-        if(orionPlayer.getLevel() < level) {
+        if (orionPlayer.getLevel() < level) {
             Utils.sendInfoMessage(player, "Votre niveau est trop bas.");
             return false;
         }
-        if(orionPlayer.getCooldownSpells().containsKey(internal_id))
-            if(orionPlayer.getCooldownSpells().get(internal_id) > System.currentTimeMillis()) {
+        if (orionPlayer.getCooldownSpells().containsKey(internal_id))
+            if (orionPlayer.getCooldownSpells().get(internal_id) > System.currentTimeMillis()) {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
-        player.getNearbyEntities(5 * 10, 5 *10, 5 *10).forEach(e -> {
-            if(e instanceof Player)
-                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, player, (Player)e, SpellList.valueOf(internal_id), this, OnSpellSense.Target.GLOBAL));
+        player.getNearbyEntities(5 * 10, 5 * 10, 5 * 10).forEach(e -> {
+            if (e instanceof Player)
+                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, player, (Player) e, SpellList.valueOf(internal_id), this, OnSpellSense.Target.GLOBAL));
         });
-        if(this.isCanceled()) return false;
+        if (this.isCanceled()) return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
         orionPlayer.onLaunchSpell(player, orionPlayer, this);
         orionPlayer.getCooldownSpells().put(internal_id, System.currentTimeMillis() + cooldown);

@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.AcceptGui;
-import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
@@ -22,7 +21,7 @@ public class CelestialSerum extends BasicItem {
         Race race = Race.CELESTIAN;
         new AcceptGui("Devenir " + race.getName(), e.getPlayer(), data, () -> {
             data.setRace(race);
-            for(String s : race.spellList)
+            for (String s : race.spellList)
                 SpellList.learnSpell(data, s);
             race.getOnRaceSelected().accept(e.getPlayer(), data);
         }, "Vous êtes devenu un(e) " + race.getName());

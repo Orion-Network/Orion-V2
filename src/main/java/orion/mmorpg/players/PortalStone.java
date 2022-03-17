@@ -14,8 +14,8 @@ import java.util.List;
  * an Enum of every teleportation location accessible via {@link orion.mmorpg.gui.PortalStoneGui}
  */
 public enum PortalStone {
-    SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"),-280,185,-432))
-    ;
+    SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 438, 68, 1217)),
+    ARENA_STONE("Arena", "ARENA_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 462, 42, 1217));
 
     String title;
     String id;
@@ -31,6 +31,7 @@ public enum PortalStone {
 
     /**
      * Generate an ItemStack representing the PortalStone to be used in gui
+     *
      * @return ItemStack of the PortalStone
      */
     public ItemStack generateItem() {

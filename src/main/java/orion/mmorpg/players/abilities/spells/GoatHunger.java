@@ -25,11 +25,12 @@ public class GoatHunger extends Spell {
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
         Effect goatHungerEffect = new GoatHungerEffect(Mmorpg.effectManager);
         RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
-        if(rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == player) return;
+        if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == player) return;
         goatHungerEffect.setLocation(player.getEyeLocation());
         goatHungerEffect.setTargetEntity(rayTraceResult.getHitEntity());
         goatHungerEffect.start();
     }
+
     class GoatHungerEffect extends CircleEffect {
 
         public GoatHungerEffect(EffectManager effectManager) {
@@ -44,24 +45,24 @@ public class GoatHunger extends Spell {
         public void onRun() {
             super.onRun();
             Location direction = target.getLocation().subtract(origin.getLocation());
-            if(this.getLocation().distance(getTargetEntity().getLocation()) > 2) {
+            if (this.getLocation().distance(getTargetEntity().getLocation()) > 2) {
                 setLocation(getLocation().add(direction.toVector().normalize()));
             } else {
                 this.cancel();
-                if(getTargetEntity() instanceof Player) {
-                    ((Player)getTargetEntity()).setWalkSpeed(0);
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId()).onDie(), 5*1000);
+                if (getTargetEntity() instanceof Player) {
+                    ((Player) getTargetEntity()).setWalkSpeed(0);
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId()).onDie(), 5 * 1000);
                 } else {
-                    ((LivingEntity)getTargetEntity()).setAI(false);
+                    ((LivingEntity) getTargetEntity()).setAI(false);
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> {
-                        ((LivingEntity)getTargetEntity()).setAI(true);
+                        ((LivingEntity) getTargetEntity()).setAI(true);
                         getTargetEntity().remove();
-                    }, 5*20);
+                    }, 5 * 20);
                 }
                 AtomEffect effect = new AtomEffect(Mmorpg.effectManager);
                 effect.setEntity(getTargetEntity());
                 effect.disappearWithOriginEntity = true;
-                effect.duration = 5*1000;
+                effect.duration = 5 * 1000;
                 effect.particleNucleus = Particle.SOUL;
                 effect.radiusNucleus = 0.5F;
                 effect.particleOrbital = Particle.SOUL_FIRE_FLAME;

@@ -12,6 +12,8 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.abilities.Spell;
@@ -23,45 +25,43 @@ import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * A class representing a Player in Orion.
  */
 public class OrionPlayer {
-//TODO Add leveling system
-    private Mode playerMode = Mode.PLAYER;
-    private Infos infos;
-    private Stats baseStats;
     private final Stats stats;
-    private UUID uniqueId;
-
-    private double health;
-    private int statsPoints, level, mana;
     private final LinkedHashSet<String> portalStones;
-
-    private ItemStack[] equipements;
-
-    transient private KeyedBossBar healthBar;
     transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
     transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
+    ItemStack[] quiver;
     transient LinkedHashMap<String, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
     transient Party party;
-
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
     String[] selectedSpells;
-
+    //TODO Add leveling system
+    private Mode playerMode = Mode.PLAYER;
+    private Infos infos;
+    private Stats baseStats;
+    private UUID uniqueId;
+    private double health;
+    private int statsPoints, level, mana;
+    private ItemStack[] equipements;
+    transient private KeyedBossBar healthBar;
     private Support support;
     private Race race;
 
     /**
      * Default Constructor of OrionPlayer class used on first logging.
-     * @param infos Infos of the new player {@link Infos}
-     * @param baseStats Base stats of the new player {@link Stats}
-     * @param uniqueId UniqueId of the new player {@link Player#getUniqueId()}
+     *
+     * @param infos       Infos of the new player {@link Infos}
+     * @param baseStats   Base stats of the new player {@link Stats}
+     * @param uniqueId    UniqueId of the new player {@link Player#getUniqueId()}
      * @param statsPoints Default stats point of new player
-     * @param level Level of the new player
+     * @param level       Level of the new player
      */
     public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int level) {
         this.infos = infos;
@@ -74,6 +74,7 @@ public class OrionPlayer {
         this.level = level;
         this.portalStones = new LinkedHashSet<>();
         portalStones.add(PortalStone.SPAWN_STONE.getId());
+        portalStones.add(PortalStone.ARENA_STONE.getId());
 
         this.mana = (int) this.stats.getIntel();
 
@@ -87,26 +88,28 @@ public class OrionPlayer {
 
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
+        quiver = new ItemStack[9];
 
         supportMap = new LinkedHashMap<>();
     }
 
     /**
      * Default Constructor of OrionPlayer class used on new logging retrieving data from Database.
-     * @param infos Retrieved Infos of the player
-     * @param baseStats Retrieved Stats of the player
-     * @param uniqueId Retrieved UniqueId of the player
-     * @param health Health before the player log out
-     * @param statsPoints Retrieved Stats Points
-     * @param level Retrieved Level
-     * @param mana Retrieved mana
+     *
+     * @param infos        Retrieved Infos of the player
+     * @param baseStats    Retrieved Stats of the player
+     * @param uniqueId     Retrieved UniqueId of the player
+     * @param health       Health before the player log out
+     * @param statsPoints  Retrieved Stats Points
+     * @param level        Retrieved Level
+     * @param mana         Retrieved mana
      * @param portalStones Retrieved Portal Stones
-     * @param equipements Retrieved Equipments
-     * @param spells Retrieved Spells
-     * @param support Retrieved Support
-     * @param race Retrieved Race
+     * @param equipements  Retrieved Equipments
+     * @param spells       Retrieved Spells
+     * @param support      Retrieved Support
+     * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -117,7 +120,7 @@ public class OrionPlayer {
         this.level = level;
         this.mana = mana;
         this.portalStones = portalStones;
-        spells.forEach(spellID ->  SpellList.learnSpell(this, spellID));
+        spells.forEach(spellID -> SpellList.learnSpell(this, spellID));
         this.support = support;
         this.race = race;
 
@@ -130,24 +133,30 @@ public class OrionPlayer {
         this.mobHealthBar.setVisible(false);
 
         cooldownSpells = new LinkedHashMap<>();
-        selectedSpells = new String[9];
+        this.selectedSpells = selectedSpells;
+        this.quiver = quiver;
 
         supportMap = new LinkedHashMap<>();
     }
 
+    public static OrionPlayer generateSamplePlayer(Player p) {
+        Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
+        Stats stats = new Stats(1, 10, 50, 100, 20, 0, 0, 25, 0);
+        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
+    }
+
     public void updateHealthbar() {
-        this.healthBar.setProgress(getHealth()/ getStats().getVitality() < 1 ? getHealth()/ getStats().getVitality() : 1);
+        this.healthBar.setProgress(getHealth() / getStats().getVitality() < 1 ? getHealth() / getStats().getVitality() : 1);
     }
 
     public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
-        Bukkit.broadcastMessage(mobHealth + " h");
-        if(mobHealth<=0) {
+        if (mobHealth <= 0) {
             this.mobHealthBar.setVisible(false);
             this.mobHealthBar.setProgress(1);
         } else {
             this.mobHealthBar.setVisible(true);
             this.mobHealthBar.setTitle(title);
-            this.mobHealthBar.setProgress(mobHealth/maxHealth < 1 ? mobHealth/maxHealth : 1);
+            this.mobHealthBar.setProgress(mobHealth / maxHealth < 1 ? mobHealth / maxHealth : 1);
         }
     }
 
@@ -160,36 +169,36 @@ public class OrionPlayer {
     }
 
     public Stats calculateStats(Stats... stats) {
-        if(stats.length == 0) {
+        if (stats.length == 0) {
             Stats playerStats = this.getBaseStats();
             Stats[] armorStatsIter = new Stats[4];
             int i = 0;
             for (ItemStack equipement : equipements) {
-                if(equipement != null)
+                if (equipement != null)
                     armorStatsIter[i] = Mmorpg.getOrionGson().getGSON().fromJson(equipement.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 i++;
             }
             Stats armorStats = calculateStats(armorStatsIter);
-            Stats handStats = new Stats(0,0,0,0,0,0,0,0,0);
+            Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
             ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
-            if(item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
+            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
                 handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
             }
             return calculateStats(playerStats, armorStats, handStats);
         }
         Stats.Builder builder = new Stats.Builder();
-        for(Stats stat : stats) {
-            if(stat == null)
+        for (Stats stat : stats) {
+            if (stat == null)
                 continue;
-            builder.withStrength(builder.getStrength()+stat.getStrength());
-            builder.withCritical_chance(builder.getCritical_chance()+stat.getCritical_chance());
-            builder.withCritical_damage(builder.getCritical_damage()+stat.getCritical_damage());
-            builder.withAttack_speed(builder.getAttack_speed()+stat.getAttack_speed());
-            builder.withVitality(builder.getVitality()+stat.getVitality());
-            builder.withIntel(builder.getIntel()+stat.getIntel());
-            builder.withDefence(builder.getDefence()+stat.getDefence());
-            builder.withSpeed(builder.getSpeed()+stat.getSpeed());
-            builder.withLuck(builder.getLuck()+stat.getLuck());
+            builder.withStrength(builder.getStrength() + stat.getStrength());
+            builder.withCritical_chance(builder.getCritical_chance() + stat.getCritical_chance());
+            builder.withCritical_damage(builder.getCritical_damage() + stat.getCritical_damage());
+            builder.withAttack_speed(builder.getAttack_speed() + stat.getAttack_speed());
+            builder.withVitality(builder.getVitality() + stat.getVitality());
+            builder.withIntel(builder.getIntel() + stat.getIntel());
+            builder.withDefence(builder.getDefence() + stat.getDefence());
+            builder.withSpeed(builder.getSpeed() + stat.getSpeed());
+            builder.withLuck(builder.getLuck() + stat.getLuck());
         }
         return builder.build();
     }
@@ -290,6 +299,10 @@ public class OrionPlayer {
         return selectedSpells;
     }
 
+    public ItemStack[] getQuiver() {
+        return quiver;
+    }
+
     public Support getSupport() {
         return support;
     }
@@ -339,16 +352,18 @@ public class OrionPlayer {
     //TODO Respawn
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
+        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
+        p.teleport(PortalStone.SPAWN_STONE.getLocation());
         heal(this.getStats().getVitality());
         Utils.sendInfoMessage(p, "Vous êtes mort.");
     }
 
     public void onInteract(PlayerInteractEvent event) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onInteract(event);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onInteract(event);
@@ -356,11 +371,11 @@ public class OrionPlayer {
     }
 
     public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onLaunchSpell(player, stats, s);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onLaunchSpell(player, stats, s);
@@ -368,11 +383,11 @@ public class OrionPlayer {
     }
 
     public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onHit(event, stats);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else {
                 support.onHit(event, stats);
@@ -381,11 +396,11 @@ public class OrionPlayer {
     }
 
     public void onShootArrow(EntityShootBowEvent event) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onShootArrow(event);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onShootArrow(event);
@@ -393,11 +408,11 @@ public class OrionPlayer {
     }
 
     public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onHitByEntity(entityEvent);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onHitByEntity(entityEvent);
@@ -406,11 +421,11 @@ public class OrionPlayer {
 
     /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
     public void onSpellSense(OnSpellSense e) {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onSpellSense(e);
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onSpellSense(e);
@@ -418,14 +433,14 @@ public class OrionPlayer {
     }
 
     public void onTick() {
-        if(mana < this.getStats().getIntel() - this.getStats().getIntel()/30)
-            mana += this.getStats().getIntel()/30;
+        if (mana < this.getStats().getIntel() - this.getStats().getIntel() / 30)
+            mana += this.getStats().getIntel() / 30;
 
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onTick();
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onTick();
@@ -433,11 +448,11 @@ public class OrionPlayer {
     }
 
     public void onDie() {
-        if(this.getSupport() != null)
+        if (this.getSupport() != null)
             this.getSupport().onDie();
 
-        for(Support support : supportMap.keySet()) {
-            if(supportMap.get(support) < System.currentTimeMillis())
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
                 supportMap.remove(support);
             else
                 support.onDie();

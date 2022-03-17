@@ -7,13 +7,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.PortalStone;
-import orion.mmorpg.utils.Utils;
-
-import javax.sound.sampled.Port;
 
 public class PortalStoneGui extends ChestGui {
     Player p;
     OrionPlayer orionPlayer;
+    private final StaticPane listPane = new StaticPane(0, 0, 9, 1);
+
     public PortalStoneGui(Player p, OrionPlayer orionPlayer) {
         super(1, ChatColor.GREEN + "Portal Stones");
         this.p = p;
@@ -23,16 +22,15 @@ public class PortalStoneGui extends ChestGui {
         this.addPane(getListPane());
     }
 
-    private StaticPane listPane = new StaticPane(0,0,9, 1);
     public StaticPane getListPane() {
         int i = 0;
-        for(String id : orionPlayer.getPortalStones()) {
+        for (String id : orionPlayer.getPortalStones()) {
 
             PortalStone portalStone = PortalStone.valueOf(id);
 
             listPane.addItem(new GuiItem(portalStone.generateItem(), e -> {
                 p.teleport(portalStone.getLocation());
-            }), i,i/6);
+            }), i, i / 6);
             i++;
         }
         return listPane;

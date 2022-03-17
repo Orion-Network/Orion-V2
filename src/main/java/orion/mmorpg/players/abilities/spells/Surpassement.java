@@ -15,12 +15,12 @@ import orion.mmorpg.utils.Utils;
 
 public class Surpassement extends Spell {
     public Surpassement() {
-        super("BOOSTED_MODE", 5, Element.EARTH, 1000*60*5);
+        super("BOOSTED_MODE", 5, Element.EARTH, 1000 * 60 * 5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.getSupportMap().put(new BoostedMode(), (1000*60)+System.currentTimeMillis());
+        orionPlayer.getSupportMap().put(new BoostedMode(), (1000 * 60) + System.currentTimeMillis());
     }
 
     class BoostedMode extends Support {
@@ -40,7 +40,7 @@ public class Surpassement extends Spell {
 
         @Override
         public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
-            event.setDamage(event.getDamage()*1.5);
+            event.setDamage(event.getDamage() * 1.5);
             Utils.sendDebugMessage(event.getDamager(), event.getDamage() + " f damages");
         }
 
@@ -51,7 +51,7 @@ public class Surpassement extends Spell {
 
         @Override
         public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
-            entityEvent.setDamage(entityEvent.getDamage()/0.3);
+            entityEvent.setDamage(entityEvent.getDamage() / 0.3);
         }
 
         @Override

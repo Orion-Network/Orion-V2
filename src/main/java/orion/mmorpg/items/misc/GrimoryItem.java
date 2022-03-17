@@ -28,7 +28,7 @@ public class GrimoryItem extends BasicItem {
 
     @Override
     public ItemStack generateItem(ItemStack item, int amount) {
-        if(item == null)
+        if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER, 0);
@@ -43,18 +43,17 @@ public class GrimoryItem extends BasicItem {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         int slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
-        if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+        if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Spell spell = data.getSpells().get(data.getSelectedSpells()[slot]);
-            Utils.sendDebugMessage(e.getPlayer(), "slot : " +slot + "Spell : " + data.getSelectedSpells()[slot] +" in spell : " + data.getSpells().get(data.getSelectedSpells()[slot]));
-            if(spell != null) {
-                spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
-                if(data.getCooldownSpells().get(spell.getInternal_id()) > System.currentTimeMillis())
-                    e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getInternal_id()) - System.currentTimeMillis())/1000)+ "s restantes."));
-            }
-            else
+            Utils.sendDebugMessage(e.getPlayer(), "slot : " + slot + "Spell : " + data.getSelectedSpells()[slot] + " in spell : " + data.getSpells().get(data.getSelectedSpells()[slot]));
+            if (spell != null) {
+                boolean canLaunch = spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
+                if (!canLaunch && data.getCooldownSpells().get(spell.getInternal_id()) > System.currentTimeMillis())
+                    e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getInternal_id()) - System.currentTimeMillis()) / 1000) + "s restantes."));
+            } else
                 Utils.sendInfoMessage(e.getPlayer(), "Le sort n'existe pas");
         } else {
-            if(e.getPlayer().isSneaking())
+            if (e.getPlayer().isSneaking())
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());
             else {
                 if (slot == 8)
@@ -64,9 +63,9 @@ public class GrimoryItem extends BasicItem {
                 slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
 
                 String[] slots = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-                slots[slot] = ChatColor.GREEN + "" + (slot+1) + ChatColor.WHITE;
+                slots[slot] = ChatColor.GREEN + "" + (slot + 1) + ChatColor.WHITE;
                 e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.join(slots, " ")));
-                if(data.getSelectedSpells()[slot] != null) {
+                if (data.getSelectedSpells()[slot] != null) {
                     SpellList spell = SpellList.valueOf(data.getSelectedSpells()[slot]);
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " : " + spell.getName());
                 } else {

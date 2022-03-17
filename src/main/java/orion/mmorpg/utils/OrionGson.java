@@ -2,15 +2,14 @@ package orion.mmorpg.utils;
 
 import com.google.gson.*;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.ItemList;
 
 import java.lang.reflect.Type;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class OrionGson {
 
         @Override
         public JsonElement serialize(ItemStack itemStack, Type type, JsonSerializationContext jsonSerializationContext) {
-            if(itemStack == null)
+            if (itemStack == null)
                 return JsonNull.INSTANCE;
             JsonObject jsonObject = new JsonObject();
             ItemMeta meta = Objects.requireNonNull(Objects.requireNonNull(itemStack.getItemMeta()));
@@ -44,8 +43,8 @@ public class OrionGson {
 
         @Override
         public ItemStack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            if(!jsonElement.isJsonObject())
-                if(Objects.equals(jsonElement.getAsString(), "null"))
+            if (!jsonElement.isJsonObject())
+                if (Objects.equals(jsonElement.getAsString(), "null"))
                     return null;
             System.out.println(jsonElement);
             JsonObject object = jsonElement.getAsJsonObject();
@@ -60,11 +59,11 @@ public class OrionGson {
         @Override
         public JsonElement serialize(ItemStack[] itemStacks, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject items = new JsonObject();
-            for(int i = 0; i < itemStacks.length; i++) {
-                if(itemStacks[i] != null)
+            for (int i = 0; i < itemStacks.length; i++) {
+                if (itemStacks[i] != null)
                     items.add(String.valueOf(i), itemStackAdapter.serialize(itemStacks[i], null, null));
                 else
-                    items.addProperty(String.valueOf(i),"null");
+                    items.addProperty(String.valueOf(i), "null");
             }
             System.out.println(items);
             return items;
@@ -77,9 +76,9 @@ public class OrionGson {
             System.out.println("Size : " + jsonArray.size());
             ItemStack[] items = new ItemStack[jsonArray.size()];
 
-            for(int i = 0; i < jsonArray.size(); i++) {
+            for (int i = 0; i < jsonArray.size(); i++) {
                 System.out.println("Debug : " + jsonArray.get(String.valueOf(i)) + " " + jsonArray.get(String.valueOf(i)).getClass());
-                if(jsonArray.get(String.valueOf(i)) == null) {
+                if (jsonArray.get(String.valueOf(i)) == null) {
                     items[i] = null;
                     System.out.println("Test");
                 } else {

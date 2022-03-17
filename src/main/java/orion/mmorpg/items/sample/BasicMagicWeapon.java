@@ -31,7 +31,7 @@ public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         super.onUseItem(mmorpg, data, e);
         Player player = e.getPlayer();
-        if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK) ) {
+        if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             castSpell(player);
         }
     }
@@ -58,6 +58,7 @@ public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
         Player caster;
         OrionPlayer casterData;
         float damage;
+
         public AttackEffect(EffectManager effectManager, Vector v, Player caster, OrionPlayer casterData, float damage) {
             super(effectManager);
             this.v = v;
@@ -74,11 +75,11 @@ public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
         public void onRun() {
             super.onRun();
             setLocation(getLocation().add(v));
-            getLocation().getWorld().getNearbyEntities(getLocation(), 1,1,1, e -> ((e instanceof Damageable) && (e != caster))).forEach(e -> {
+            getLocation().getWorld().getNearbyEntities(getLocation(), 1, 1, 1, e -> ((e instanceof Damageable) && (e != caster))).forEach(e -> {
                 float totalDamage = Utils.calculateMagicDamage(casterData.getStats(), damage);
-                ((LivingEntity)e).damage(totalDamage, caster);
+                ((LivingEntity) e).damage(totalDamage, caster);
                 e.setVelocity(e.getVelocity().add(e.getLocation().toVector().subtract(getLocation().toVector()).normalize().multiply(1)));
-                if(!(e instanceof Player))
+                if (!(e instanceof Player))
                     casterData.updateMobHealthBar(((LivingEntity) e).getHealth() - totalDamage, ((LivingEntity) e).getMaxHealth(), e.getName());
                 else {
                     OrionPlayer target = Mmorpg.INSTANCE.getPlayerManager().getPlayer(e.getUniqueId());

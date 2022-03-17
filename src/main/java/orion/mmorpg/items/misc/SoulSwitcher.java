@@ -14,21 +14,22 @@ import orion.mmorpg.utils.Rarity;
 
 public class SoulSwitcher extends BasicItem {
     Player p;
+
     public SoulSwitcher() {
         super(Material.PHANTOM_MEMBRANE, "Soul Switcher", "SOUL_SWITCHER", 0, "Une prouesse technologique pouvant vous faire changer d'âme.", Rarity.MYTHIC);
     }
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        if(data.getSupport() == null || data.getSupport().getClass() != ProjectSoul.class) return;
-        if(e.getPlayer().isSneaking()) {
-            if(p != null)
+        if (data.getSupport() == null || data.getSupport().getClass() != ProjectSoul.class) return;
+        if (e.getPlayer().isSneaking()) {
+            if (p != null)
                 e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(p.getName()));
             else
                 e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Aucun âme lié"));
         } else {
             Location loc = e.getPlayer().getLocation();
-            if(p != null && p != e.getPlayer()) {
+            if (p != null && p != e.getPlayer()) {
                 e.getPlayer().teleport(p);
                 p.teleport(loc);
             }

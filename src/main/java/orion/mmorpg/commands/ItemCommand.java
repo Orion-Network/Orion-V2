@@ -1,18 +1,12 @@
 package orion.mmorpg.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.EntityEffect;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.MasterScrollItem;
@@ -26,29 +20,29 @@ public class ItemCommand implements TabExecutor {
     //TODO Rework command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length > 1) {
+        if (args.length > 1) {
             if (args[0].equalsIgnoreCase("give")) {
                 if (args.length > 2) {
-                    if(args[2].equalsIgnoreCase("master_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem)ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                    if (args[2].equalsIgnoreCase("master_scroll")) {
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                         return true;
                     }
 
                     Bukkit.getPlayer(args[1]).getInventory().addItem(ItemList.valueOf(args[2]).getProcessedItem(1));
                 } else {
-                    if(sender instanceof Player) {
-                        if(args[2].equalsIgnoreCase("scroll")) {
-                            ((Player) sender).getInventory().addItem(((MasterScrollItem)ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2]));
+                    if (sender instanceof Player) {
+                        if (args[2].equalsIgnoreCase("scroll")) {
+                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2]));
                             return true;
                         }
                         ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).getProcessedItem(1));
                     }
                 }
-            } else if(args[0].equalsIgnoreCase("drop")) {
-                if(sender instanceof Player) {
+            } else if (args[0].equalsIgnoreCase("drop")) {
+                if (sender instanceof Player) {
                     Player p = (Player) sender;
-                    if(args[1].equalsIgnoreCase("gift")) {
-                        ItemStack gift = ((Gift)ItemList.GIFT.getItem()).generateGift(args[2], p.getDisplayName());
+                    if (args[1].equalsIgnoreCase("gift")) {
+                        ItemStack gift = ((Gift) ItemList.GIFT.getItem()).generateGift(args[2], p.getDisplayName());
                         Item item = p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), gift);
                         item.setGlowing(true);
                         return true;
@@ -64,36 +58,36 @@ public class ItemCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> tab = new LinkedList<>();
-        if(args[0].equalsIgnoreCase("give")) {
+        if (args[0].equalsIgnoreCase("give")) {
             if (args.length == 2) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     tab.add(p.getName());
                 }
                 return tab;
             }
-            if(args[2].equalsIgnoreCase("master_scroll")) {
+            if (args[2].equalsIgnoreCase("master_scroll")) {
                 for (SpellList spell : SpellList.values())
                     if (spell.name().startsWith(args[args.length - 1].toUpperCase()))
                         tab.add(spell.name());
                 return tab;
             }
 
-            for(ItemList item : ItemList.values())
-                if(item.name().startsWith(args[args.length-1].toUpperCase()))
+            for (ItemList item : ItemList.values())
+                if (item.name().startsWith(args[args.length - 1].toUpperCase()))
                     tab.add(item.name());
 
-                return tab;
+            return tab;
 
-        } else if(args[0].equalsIgnoreCase("drop")) {
-            if(args[1].equalsIgnoreCase("gift")) {
-                for(ItemList item : ItemList.values())
-                    if(item.name().startsWith(args[args.length-1].toUpperCase()))
+        } else if (args[0].equalsIgnoreCase("drop")) {
+            if (args[1].equalsIgnoreCase("gift")) {
+                for (ItemList item : ItemList.values())
+                    if (item.name().startsWith(args[args.length - 1].toUpperCase()))
                         tab.add(item.name());
 
                 return tab;
             }
-            for(ItemList item : ItemList.values())
-                if(item.name().startsWith(args[args.length-1].toUpperCase()))
+            for (ItemList item : ItemList.values())
+                if (item.name().startsWith(args[args.length - 1].toUpperCase()))
                     tab.add(item.name());
 
             return tab;

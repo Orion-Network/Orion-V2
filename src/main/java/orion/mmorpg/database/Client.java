@@ -9,7 +9,6 @@ import org.bson.Document;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
@@ -18,6 +17,7 @@ import orion.mmorpg.utils.Stats;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -25,14 +25,16 @@ import java.util.UUID;
 import static com.mongodb.client.model.Filters.eq;
 
 public class Client {
+    static Type portalStoneType = new TypeToken<LinkedHashSet<String>>() {
+    }.getType();
+    static Type spellSetType = new TypeToken<Set<String>>() {
+    }.getType();
+    static Type quiverMapType = new TypeToken<LinkedHashMap<ItemStack, Integer>>() {
+    }.getType();
     String uri = "mongodb://admin:azerty123@mongo/?authSource=orion";
     public MongoClient mongoClient = MongoClients.create(uri);
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
-
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");
-
-    static Type portalStoneType = new TypeToken<LinkedHashSet<PortalStone>>(){}.getType();
-    static Type spellSetType = new TypeToken<Set<String>>(){}.getType();
 
     public boolean hasPlayer(UUID uuid) {
         Document doc = playerCollection.find(eq("uuid", uuid.toString())).first();
@@ -55,20 +57,20 @@ public class Client {
         document.put("equipements", Mmorpg.getOrionGson().getGSON().toJson(player.getEquipements()));
 
         document.put("spells", Mmorpg.getOrionGson().getGSON().toJson(player.getSpells().keySet()));
+        document.put("selectedSpells", Mmorpg.getOrionGson().getGSON().toJson(player.getSelectedSpells()));
+        document.put("quiver", Mmorpg.getOrionGson().getGSON().toJson(player.getQuiver()));
 
-        if(player.getSupport() != null)
+        if (player.getSupport() != null)
             document.put("support", player.getSupport().getClass().getName());
         else
             document.put("support", null);
 
-        if(player.getRace() != null)
+        if (player.getRace() != null)
             document.put("race", player.getRace().toString());
         else
             document.put("race", null);
 
-        //playerCollection.insertOne(document);
-
-        if(!hasPlayer(player.getUniqueId()))
+        if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
         else
             playerCollection.replaceOne(eq("uuid", player.getUniqueId().toString()), document);
@@ -86,23 +88,31 @@ public class Client {
         int mana = document.getInteger("mana");
 
         LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
-        //ItemStack[] equipements = BukkitSerialization.itemStackArrayFromBase64(document.getString("equipements"));
         ItemStack[] equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"), ItemStack[].class);
 
         Set<String> spells = Mmorpg.getOrionGson().GSON.fromJson(document.getString("spells"), spellSetType);
-
+        String[] selectedSpells;
+        if (document.containsKey("selectedSpells"))
+            selectedSpells = Mmorpg.getOrionGson().GSON.fromJson((String) document.get("selectedSpells"), String[].class);
+        else
+            selectedSpells = new String[9];
+        ItemStack[] quiver;
+        if (document.containsKey("quiver"))
+            quiver = Mmorpg.getOrionGson().GSON.fromJson((String) document.get("quiver"), ItemStack[].class);
+        else
+            quiver = new ItemStack[9];
         Support support;
-        if(document.getString("support") == null)
+        if (document.getString("support") == null)
             support = null;
         else
-             support = (Support) Class.forName(document.getString("support")).getConstructor().newInstance();
+            support = (Support) Class.forName(document.getString("support")).getConstructor().newInstance();
 
         Race race;
-        if(document.getString("race") == null)
+        if (document.getString("race") == null)
             race = null;
         else
             race = Race.valueOf(document.getString("race"));
 
-        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, support, race);
+        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, selectedSpells, quiver, support, race);
     }
 }

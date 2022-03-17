@@ -22,7 +22,7 @@ public class PartyManager {
     }
 
     public Party getParty(UUID uuid) {
-        if(partyMap.containsKey(uuid))
+        if (partyMap.containsKey(uuid))
             return partyMap.get(uuid);
         return null;
     }
