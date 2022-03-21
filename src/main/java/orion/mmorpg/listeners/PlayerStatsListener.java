@@ -4,10 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -154,7 +156,14 @@ public class PlayerStatsListener implements Listener {
 
     @EventHandler
     public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
-        OrionPlayer player = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        if(e.getPlayer().getInventory().getItem(e.getNewSlot()) == null) return;
+        OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        if(orionPlayer.getSlotTypes()[e.getNewSlot()] == OrionPlayer.SlotType.USE_SLOT) {
+            Block block = e.getPlayer().getTargetBlock(null, 10);
+            Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(e.getPlayer(), Action.RIGHT_CLICK_AIR, e.getPlayer().getInventory().getItem(e.getNewSlot()), block, ( block != null ? block.getFace(block) : null)));
+            e.getPlayer().getInventory().setHeldItemSlot(e.getPreviousSlot());
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler

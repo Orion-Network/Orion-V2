@@ -1,0 +1,44 @@
+package orion.mmorpg.gui;
+
+import com.github.stefvanschie.inventoryframework.gui.GuiItem;
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
+import org.bukkit.entity.Player;
+import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ItemList;
+import orion.mmorpg.players.OrionPlayer;
+
+public class SlotGui extends ChestGui {
+    Mmorpg mmorpg;
+    Player player;
+    OrionPlayer orionPlayer;
+    public SlotGui(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
+        super(1, "Slot Selection");
+        this.mmorpg = mmorpg;
+        this.player = player;
+        this.orionPlayer = orionPlayer;
+        this.addPane(getOutlinePane());
+    }
+
+    OutlinePane outlinePane = new OutlinePane(0,0,9,1);
+    private OutlinePane getOutlinePane() {
+        for (OrionPlayer.SlotType slotType : orionPlayer.getSlotTypes()) {
+            if(slotType.equals(OrionPlayer.SlotType.FREE_SLOT))
+                outlinePane.addItem(new GuiItem(ItemList.UNUSABLE_PLACEHOLDER.getProcessedItem(1)));
+            else
+                outlinePane.addItem(new GuiItem(ItemList.USABLE_PLACEHOLDER.getProcessedItem(1)));
+        }
+        outlinePane.setOnClick(e -> {
+            e.setCancelled(true);
+            if(e.getCurrentItem().getItemMeta().getCustomModelData() == ItemList.UNUSABLE_PLACEHOLDER.getItem().getMODEL_ID()) {
+                orionPlayer.getSlotTypes()[e.getSlot()] = OrionPlayer.SlotType.USE_SLOT;
+                outlinePane.getItems().set(e.getSlot(), new GuiItem(ItemList.USABLE_PLACEHOLDER.getProcessedItem(1)));
+            } else {
+                orionPlayer.getSlotTypes()[e.getSlot()] = OrionPlayer.SlotType.FREE_SLOT;
+                outlinePane.getItems().set(e.getSlot(), new GuiItem(ItemList.UNUSABLE_PLACEHOLDER.getProcessedItem(1)));
+            }
+            this.update();
+        });
+        return outlinePane;
+    }
+}

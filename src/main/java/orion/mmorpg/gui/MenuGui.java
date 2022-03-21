@@ -258,6 +258,7 @@ public class MenuGui extends ChestGui {
         menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
             new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
         }), 3, 2);
+        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 3,3);
 
         return menuPane;
     }

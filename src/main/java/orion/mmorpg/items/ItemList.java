@@ -62,6 +62,9 @@ public enum ItemList {
     SPELL_PLACEHOLDER(new SpellPlaceholderItem(), BasicGuiItem.class),
     PORTAL_STONE(new PortalStoneItem(), BasicGuiItem.class),
     WIKI_BOOK_PLACEHOLDER(new WikiBookPlaceholder(), BasicGuiItem.class),
+    UNUSABLE_PLACEHOLDER(new UnusablePlaceholder(), BasicGuiItem.class),
+    USABLE_PLACEHOLDER(new UsablePlaceholder(), BasicGuiItem.class),
+    SETTINGS_PLACEHOLDER(new SettingsPlaceholder(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),

@@ -41,6 +41,7 @@ public class OrionPlayer {
     transient LinkedHashMap<Support, Long> supportMap;
     transient Party party;
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
+    public SlotType[] slotTypes;
     String[] selectedSpells;
     //TODO Add leveling system
     private Mode playerMode = Mode.PLAYER;
@@ -90,6 +91,16 @@ public class OrionPlayer {
         selectedSpells = new String[9];
         quiver = new ItemStack[9];
 
+        this.slotTypes = new SlotType[]{SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT,
+                SlotType.USE_SLOT};
+
         supportMap = new LinkedHashMap<>();
     }
 
@@ -109,7 +120,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -135,6 +146,7 @@ public class OrionPlayer {
         cooldownSpells = new LinkedHashMap<>();
         this.selectedSpells = selectedSpells;
         this.quiver = quiver;
+        this.slotTypes = slotTypes;
 
         supportMap = new LinkedHashMap<>();
     }
@@ -303,6 +315,10 @@ public class OrionPlayer {
         return quiver;
     }
 
+    public SlotType[] getSlotTypes() {
+        return slotTypes;
+    }
+
     public Support getSupport() {
         return support;
     }
@@ -461,5 +477,8 @@ public class OrionPlayer {
         respawn();
     }
 
-
+    public enum SlotType {
+        FREE_SLOT,
+        USE_SLOT
+    }
 }

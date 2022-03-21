@@ -59,6 +59,7 @@ public class Client {
         document.put("spells", Mmorpg.getOrionGson().getGSON().toJson(player.getSpells().keySet()));
         document.put("selectedSpells", Mmorpg.getOrionGson().getGSON().toJson(player.getSelectedSpells()));
         document.put("quiver", Mmorpg.getOrionGson().getGSON().toJson(player.getQuiver()));
+        document.put("slotTypes", Mmorpg.getOrionGson().getGSON().toJson(player.getSlotTypes()));
 
         if (player.getSupport() != null)
             document.put("support", player.getSupport().getClass().getName());
@@ -101,6 +102,19 @@ public class Client {
             quiver = Mmorpg.getOrionGson().GSON.fromJson((String) document.get("quiver"), ItemStack[].class);
         else
             quiver = new ItemStack[9];
+        OrionPlayer.SlotType[] slotTypes;
+        if(document.containsKey("slotTypes"))
+            slotTypes = Mmorpg.getOrionGson().GSON.fromJson(document.getString("slotTypes"), OrionPlayer.SlotType[].class);
+        else
+            slotTypes = new OrionPlayer.SlotType[]{OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.FREE_SLOT,
+                OrionPlayer.SlotType.USE_SLOT};
         Support support;
         if (document.getString("support") == null)
             support = null;
@@ -113,6 +127,6 @@ public class Client {
         else
             race = Race.valueOf(document.getString("race"));
 
-        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, selectedSpells, quiver, support, race);
+        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
     }
 }
