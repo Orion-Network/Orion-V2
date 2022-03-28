@@ -11,6 +11,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.misc.MasterScrollItem;
+import orion.mmorpg.items.misc.SpellScroll;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.utils.Utils;
 
@@ -33,6 +35,10 @@ public class PlayerPickupListener implements Listener {
                     if (e.getEntity().hasPermission(ItemList.valueOf(internal_id).getItem().PERMISSION)) {
                         ItemList item = ItemList.valueOf(internal_id);
                         ItemStack itemStack = item.getProcessedItem(e.getItem().getItemStack().getAmount());
+                        if(item.getItem().getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))
+                            itemStack = ((MasterScrollItem)item.getItem()).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING));
+                        else if(item.getItem().getINTERNAL_ID().endsWith("SPELL_SCROLL"))
+                            itemStack = ((SpellScroll)item.getItem()).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING));
                         e.getItem().setItemStack(itemStack);
                         item.getItem().onPickupItem(e, itemStack);
                     } else {

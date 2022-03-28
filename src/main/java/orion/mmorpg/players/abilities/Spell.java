@@ -22,6 +22,7 @@ public abstract class Spell {
     public boolean canceled = false;
     private final EffectType type = EffectType.INSTANT;
 
+
     public Spell(String internal_id, int level, Element element, long cooldown) {
         this.internal_id = internal_id;
         this.level = level;
@@ -58,6 +59,7 @@ public abstract class Spell {
         return true;
     }
 
+    //TODO Change to a boolean to check if spell has been launched
     public abstract void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer);
 
     public String getInternal_id() {

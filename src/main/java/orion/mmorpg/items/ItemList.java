@@ -30,6 +30,7 @@ public enum ItemList {
     BAHTON(new BahTon(), BasicMagicWeapon.class),
     ARCANE(new ArcAne(), BasicRangedWeapon.class),
     HOUYI_BOW(new HouYi(), BasicRangedWeapon.class),
+    AMATERASU(new Amaterasu(), BasicMeleeWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
@@ -69,10 +70,12 @@ public enum ItemList {
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
     MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
+    SPELL_SCROLL(new SpellScroll(), BasicItem.class),
     INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
     TEST_ITEM(new TestItem(), BasicItem.class),
+    MENU_ITEM(new MenuItem(), BasicItem.class),
     ;
 
     BasicItem item;

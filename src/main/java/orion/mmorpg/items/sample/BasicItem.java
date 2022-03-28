@@ -1,5 +1,6 @@
 package orion.mmorpg.items.sample;
 
+import com.sun.tools.javac.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,6 +20,7 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class BasicItem extends ItemStack {
@@ -30,6 +32,7 @@ public abstract class BasicItem extends ItemStack {
     public final Rarity RARITY;
     public final String PERMISSION;
     public final ItemType TYPE;
+    public final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
     public Spell spell;
 
     protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
@@ -90,6 +93,10 @@ public abstract class BasicItem extends ItemStack {
         meta.setLore(generateLore(meta.getLore()));
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING, INTERNAL_ID);
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("type"), PersistentDataType.STRING, TYPE.toString());
+        for(String id : DATA.keySet()) {
+            Pair<PersistentDataType, Object> data = DATA.get(id);
+            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.fst, data.snd);
+        }
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.setCustomModelData(MODEL_ID);
@@ -157,6 +164,10 @@ public abstract class BasicItem extends ItemStack {
 
     public ItemType getTYPE() {
         return TYPE;
+    }
+
+    public LinkedHashMap<String, Pair<PersistentDataType, Object>> getDATA() {
+        return DATA;
     }
 
     public Spell getSpell() {

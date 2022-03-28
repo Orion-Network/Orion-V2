@@ -16,7 +16,7 @@ import orion.mmorpg.utils.Utils;
 public class MasterScrollItem extends BasicItem {
 
     public MasterScrollItem() {
-        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", 1, "Un parchemin pouvant vous apprendre des sorts", Rarity.RARE);
+        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", 1, "Un parchemin pouvant vous apprendre des sorts", Rarity.SUPERRARE);
     }
 
     @Override

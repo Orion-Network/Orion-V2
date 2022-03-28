@@ -19,6 +19,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
+import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.LinkedList;
 
@@ -49,7 +50,7 @@ public class MenuGui extends ChestGui {
         this.setOnBottomClick(e -> {
             e.setCancelled(true);
             ItemStack item = e.getCurrentItem();
-            if (item.getType() == Material.AIR)
+            if (item == null || item.getType() == Material.AIR)
                 return;
             PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 
@@ -229,8 +230,8 @@ public class MenuGui extends ChestGui {
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);
 
-        menuPane.addItem(new GuiItem(head), 2, 1);
-        if (p.isOp()) {
+        menuPane.addItem(new GuiItem(head), 2, 0);
+        if (p.hasPermission("*")) {
             menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
                 if (orionPlayer.getPlayerMode() == Mode.PLAYER)
                     if (p.hasPermission("builder"))
@@ -245,25 +246,37 @@ public class MenuGui extends ChestGui {
                 if (orionPlayer.getPlayerMode() == Mode.ADMIN)
                     orionPlayer.setPlayerMode(Mode.PLAYER);
                 Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode());
-            }), 3, 1);
+            }), 3, 0);
         }
+        ItemStack book = generateGuideBook();
+        menuPane.addItem(new GuiItem(book, e-> {
+            BookUtil.openPlayer(p, book);
+        }), 1,0);
 
         menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.getProcessedItem(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
-        }), 2, 2);
+        }), 2, 1);
 
         menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.getProcessedItem(1), e -> {
             new WikiGui(Mmorpg.INSTANCE).show(p);
-        }), 1, 2);
+        }), 1, 1);
         menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
             new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
-        }), 3, 2);
-        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 3,3);
+        }), 3, 1);
+        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,2);
 
         return menuPane;
     }
 
     public void show() {
         this.show(p);
+    }
+
+    private ItemStack generateGuideBook() {
+        return BookUtil.writtenBook().author("GameMaster").title(ChatColor.GREEN + "Guide").pages(
+                new BookUtil.PageBuilder()
+                        .add("Alpha 0.1")
+                        .build()
+        ).build();
     }
 }

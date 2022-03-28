@@ -23,12 +23,14 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+        if(!e.getInventory().getType().equals(InventoryType.CRAFTING)) return;
+        e.getInventory().setItem(0, ItemList.MENU_ITEM.getProcessedItem(1));
         if (e.getSlotType() == InventoryType.SlotType.RESULT) {
             e.setCancelled(true);
             new MenuGui((Player) e.getWhoClicked(), this.mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
         }
         if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
-            if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR)) {
+            if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR) && e.getCurrentItem() != null) {
                 ((BasicArmorItem) ItemList.getItemFromItemstack(Objects.requireNonNull(e.getCursor()))).onCosmeticEquip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()), e.getCursor());
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez équipé un cosmétique.");
             } else {

@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.MasterScrollItem;
+import orion.mmorpg.items.misc.SpellScroll;
 import orion.mmorpg.players.abilities.SpellList;
 
 import java.util.Arrays;
@@ -26,13 +27,19 @@ public class ItemCommand implements TabExecutor {
                     if (args[2].equalsIgnoreCase("master_scroll")) {
                         Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                         return true;
+                    } else if(args[2].equalsIgnoreCase("spell_scroll")) {
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                        return true;
                     }
 
                     Bukkit.getPlayer(args[1]).getInventory().addItem(ItemList.valueOf(args[2]).getProcessedItem(1));
                 } else {
                     if (sender instanceof Player) {
-                        if (args[2].equalsIgnoreCase("scroll")) {
+                        if (args[2].equalsIgnoreCase("master_scroll")) {
                             ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2]));
+                            return true;
+                        } else if(args[2].equalsIgnoreCase("spell_scroll")) {
+                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                             return true;
                         }
                         ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).getProcessedItem(1));
@@ -65,7 +72,7 @@ public class ItemCommand implements TabExecutor {
                 }
                 return tab;
             }
-            if (args[2].equalsIgnoreCase("master_scroll")) {
+            if (args[2].equalsIgnoreCase("master_scroll") || args[2].equalsIgnoreCase("spell_scroll")) {
                 for (SpellList spell : SpellList.values())
                     if (spell.name().startsWith(args[args.length - 1].toUpperCase()))
                         tab.add(spell.name());
