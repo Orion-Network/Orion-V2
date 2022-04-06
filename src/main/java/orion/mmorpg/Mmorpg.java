@@ -11,6 +11,7 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.PartyManager;
 import orion.mmorpg.managers.PlayerManager;
+import orion.mmorpg.managers.MobManager;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Utils;
@@ -29,6 +30,7 @@ public final class Mmorpg extends JavaPlugin {
     Client mongoClient = new Client();
     PlayerManager playerManager;
     PartyManager partyManager;
+    MobManager mobManager;
 
     public static boolean isDebug() {
         return debug;
@@ -61,6 +63,7 @@ public final class Mmorpg extends JavaPlugin {
         playerManager = new PlayerManager();
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
+        //mobManager = new MobManager();
 
         PluginManager pm = Bukkit.getPluginManager();
 
@@ -98,6 +101,8 @@ public final class Mmorpg extends JavaPlugin {
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
         }
+
+        //Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
     }
 
     /**

@@ -27,7 +27,6 @@ public class SkyFlux extends Spell {
         lineEffect.setLocation(player.getEyeLocation());
         lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
         lineEffect.start();
-        System.out.println(rayTraceResult.getHitEntity().getName());
     }
 
     class TestEffect extends SphereEffect {

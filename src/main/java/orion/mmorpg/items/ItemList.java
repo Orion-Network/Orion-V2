@@ -30,7 +30,7 @@ public enum ItemList {
     BAHTON(new BahTon(), BasicMagicWeapon.class),
     ARCANE(new ArcAne(), BasicRangedWeapon.class),
     HOUYI_BOW(new HouYi(), BasicRangedWeapon.class),
-    AMATERASU(new Amaterasu(), BasicMeleeWeapon.class),
+    MURAMASA(new Muramasa(), BasicMeleeWeapon.class),
     //Armor Items
     STARTING_HELMET(new StartingSet.StartingHelmet(), BasicArmorItem.class),
     STARTING_CHESTPLATE(new StartingSet.StartingChestplate(), BasicArmorItem.class),
@@ -76,6 +76,7 @@ public enum ItemList {
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
     TEST_ITEM(new TestItem(), BasicItem.class),
     MENU_ITEM(new MenuItem(), BasicItem.class),
+    ETERNAL_COMPASS(new EternalCompass(), BasicItem.class),
     ;
 
     BasicItem item;

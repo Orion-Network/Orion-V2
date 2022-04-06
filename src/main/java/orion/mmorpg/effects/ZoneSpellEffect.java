@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.Objects;
 
 public class ZoneSpellEffect extends ImageEffect {
-    public BaseImage baseImage = BaseImage.PENTAGRAM;
 
     public ZoneSpellEffect(EffectManager effectManager) {
         super(effectManager);
@@ -19,13 +18,16 @@ public class ZoneSpellEffect extends ImageEffect {
         this.angularVelocityZ = 0;
         this.plane = BaseImageEffect.Plane.Y;
         this.rotation = new Vector(90, 0, 0);
+    }
+
+    public void load(BaseImage baseImage) {
         File f = Objects.requireNonNull(Mmorpg.INSTANCE.getDataFolder().listFiles((dir, name) -> name.equalsIgnoreCase(baseImage.getImageName())))[0];
         this.loadFile(f);
     }
 
     public enum BaseImage {
         PENTAGRAM("pentagram.png"),
-        ALCHEMY("alchemy.png"),
+        ALCHEMY("alchemy_1.png"),
         ;
 
         private final String imageName;

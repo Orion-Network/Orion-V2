@@ -12,10 +12,11 @@ import orion.mmorpg.utils.Rarity;
 import java.util.HashMap;
 
 public abstract class Support {
-    String name;
-    Rarity rarity;
-    String description;
-    HashMap<String, Object> dataMap;
+
+    protected String name;
+    protected Rarity rarity;
+    protected String description;
+    protected HashMap<String, Object> dataMap;
 
     public Support(String name, Rarity rarity, String description) {
         this.name = name;
@@ -42,7 +43,7 @@ public abstract class Support {
 
     public abstract void onHitByEntity(EntityDamageByEntityEvent entityEvent);
 
-    /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
+    //public void onHitBySpell(onHitBySpell e, Player player, OrionPlayer stats, Entity caster, Spell s) {};
     public abstract void onSpellSense(OnSpellSense e);
 
     public abstract void onTick();

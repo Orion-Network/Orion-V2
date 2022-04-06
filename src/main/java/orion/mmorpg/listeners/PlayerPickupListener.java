@@ -1,6 +1,7 @@
 package orion.mmorpg.listeners;
 
 import com.google.common.base.Enums;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,10 +30,14 @@ public class PlayerPickupListener implements Listener {
             if (mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId()).getPlayerMode() != Mode.PLAYER)
                 return;
             ItemMeta meta = e.getItem().getItemStack().getItemMeta();
-            if (meta.getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
-                String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
+            if (ChatColor.stripColor(meta.getDisplayName()).startsWith("%mm%:") || meta.getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+                String internal_id = "";
+                if(ChatColor.stripColor(meta.getDisplayName()).startsWith("%mm%:"))
+                    internal_id = ChatColor.stripColor(meta.getDisplayName()).substring(5);
+                else
+                    internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
                 if (Enums.getIfPresent(ItemList.class, internal_id).isPresent()) {
-                    if (e.getEntity().hasPermission(ItemList.valueOf(internal_id).getItem().PERMISSION)) {
+                    if (e.getEntity().hasPermission(ItemList.valueOf(internal_id).getItem().getPERMISSION())) {
                         ItemList item = ItemList.valueOf(internal_id);
                         ItemStack itemStack = item.getProcessedItem(e.getItem().getItemStack().getAmount());
                         if(item.getItem().getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))

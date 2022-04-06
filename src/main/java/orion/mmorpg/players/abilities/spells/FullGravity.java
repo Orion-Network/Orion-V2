@@ -29,6 +29,7 @@ public class FullGravity extends Spell implements LocationSpell {
         zoneSpellEffect.particle = Particle.SMOKE_NORMAL;
         zoneSpellEffect.duration = 15 * 1000;
         zoneSpellEffect.setLocation(location);
+        zoneSpellEffect.load(ZoneSpellEffect.BaseImage.PENTAGRAM);
         zoneSpellEffect.start();
         new BukkitRunnable() {
             int i = 0;

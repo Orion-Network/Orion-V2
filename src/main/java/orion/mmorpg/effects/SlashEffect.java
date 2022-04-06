@@ -10,18 +10,16 @@ import org.bukkit.util.Vector;
 
 public class SlashEffect extends Effect {
     public Particle particle = Particle.SOUL;
-    public boolean orient = false;
-    public double xRotation, yRotation, zRotation = 0;
     public float radius = 7;
     public int particles = 100;
     protected float step = 0;
-    public int particlesPerIterations = 10;
+    public int particlesPerIterations = 20;
 
     public SlashEffect(EffectManager effectManager) {
         super(effectManager);
         this.type = EffectType.REPEATING;
         this.period = 1;
-        this.iterations = 10;
+        this.iterations = 5;
     }
 
     @Override
@@ -36,8 +34,6 @@ public class SlashEffect extends Effect {
             double t = (Math.PI / particles) * step;
             double x = (Math.sin(t)*radius)/2;
             double z = Math.cos(t)*radius/2;
-            System.out.println(t);
-            //display(particle, location.clone().add(x/2, y/2, 0));
             for(float j = 0; j < 1; j+=0.1) {
                 float size = step / 100; // 0 - 0.9
                 size = size > 0.4 ? (float) (0.9 - size) : size;
@@ -46,7 +42,6 @@ public class SlashEffect extends Effect {
 
                 display(particle, location.clone().add(v));
             }
-
             step++;
         }
 

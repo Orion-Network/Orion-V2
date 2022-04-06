@@ -17,6 +17,7 @@ import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.ArrayList;
@@ -24,16 +25,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class BasicItem extends ItemStack {
-    public final Material MATERIAL;
-    public final String NAME;
-    public final String INTERNAL_ID;
-    public final int MODEL_ID;
-    public final String LORE;
-    public final Rarity RARITY;
-    public final String PERMISSION;
-    public final ItemType TYPE;
-    public final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
-    public Spell spell;
+    protected final Material MATERIAL;
+    protected final String NAME;
+    protected final String INTERNAL_ID;
+    protected final int MODEL_ID;
+    protected final String LORE;
+    protected final Rarity RARITY;
+    protected final String PERMISSION;
+    protected final ItemType TYPE;
+    protected Element ELEMENT = Element.PHYSIC;
+    protected final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
+    protected Spell spell;
 
     protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
         this.MATERIAL = MATERIAL;
@@ -156,6 +158,10 @@ public abstract class BasicItem extends ItemStack {
 
     public Rarity getRARITY() {
         return RARITY;
+    }
+
+    public Element getELEMENT() {
+        return ELEMENT;
     }
 
     public String getPERMISSION() {
