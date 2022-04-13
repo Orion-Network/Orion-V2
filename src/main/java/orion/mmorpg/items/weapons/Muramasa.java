@@ -27,6 +27,7 @@ public class Muramasa extends BasicMeleeWeapon {
         castAttack(e.getPlayer(), data);
     }
 
+    //TODO : Sword kill entities two times
     @Override
     public void onHitWithItem(EntityDamageByEntityEvent e) {
         super.onHitWithItem(e);

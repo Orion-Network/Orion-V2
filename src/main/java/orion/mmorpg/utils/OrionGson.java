@@ -1,6 +1,8 @@
 package orion.mmorpg.utils;
 
 import com.google.gson.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +23,7 @@ public class OrionGson {
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
         builder.registerTypeAdapter(ItemStack[].class, new ItemStackArrayAdapter());
+        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         GSON = builder.create();
     }
 
@@ -95,6 +98,25 @@ public class OrionGson {
 
         public JsonElement serialize(LocalDateTime localDateTime, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(localDateTime.toInstant(ZoneOffset.UTC).getEpochSecond()); // "yyyy-mm-dd"
+        }
+    }
+
+    private class LocationAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
+
+        @Override
+        public JsonElement serialize(Location location, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("world", location.getWorld().getName());
+            jsonObject.addProperty("x", location.getX());
+            jsonObject.addProperty("y", location.getY());
+            jsonObject.addProperty("z", location.getZ());
+            return jsonObject;
+        }
+
+        @Override
+        public Location deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            return new Location(Bukkit.getWorld(jsonObject.get("world").getAsString()), jsonObject.get("x").getAsDouble(), jsonObject.get("y").getAsDouble(), jsonObject.get("z").getAsDouble());
         }
     }
 }

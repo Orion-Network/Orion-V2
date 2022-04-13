@@ -7,13 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
-public class MasterScrollItem extends BasicItem {
+public class MasterScrollItem extends BasicConsumableItem {
 
     public MasterScrollItem() {
         super(Material.PAPER, "Parchemin", "MASTER_SCROLL", 1, "Un parchemin pouvant vous apprendre des sorts", Rarity.SUPERRARE);
@@ -30,8 +30,6 @@ public class MasterScrollItem extends BasicItem {
         }
         Utils.sendInfoMessage(e.getPlayer(), "Vous avez appris le sort : " + SpellList.valueOf(spell).getName());
         SpellList.learnSpell(data, spell);
-        e.getItem().setAmount(e.getItem().getAmount() - 1);
-        e.getPlayer().updateInventory();
         super.onUseItem(mmorpg, data, e);
     }
 

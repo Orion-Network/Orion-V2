@@ -4,13 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.AcceptGui;
-import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Rarity;
 
-public class CelestialSerum extends BasicItem {
+public class CelestialSerum extends BasicConsumableItem {
     public CelestialSerum() {
         super(Material.POTION, "Serum Celeste", "CELESTIAL_SERUM", 0, "Un serum pouvant selon les légendes vous faire atteindre le 7 ème ciel", Rarity.MYTHIC);
     }
@@ -25,7 +25,5 @@ public class CelestialSerum extends BasicItem {
                 SpellList.learnSpell(data, s);
             race.getOnRaceSelected().accept(e.getPlayer(), data);
         }, "Vous êtes devenu un(e) " + race.getName());
-        e.getItem().setAmount(0);
-        e.getPlayer().updateInventory();
     }
 }

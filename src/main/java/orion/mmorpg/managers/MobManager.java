@@ -1,36 +1,50 @@
 package orion.mmorpg.managers;
 
-import net.minecraft.world.entity.EntityCreature;
 import org.bukkit.Location;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import orion.mmorpg.mobs.list.AngryChicken;
-import orion.mmorpg.players.PortalStone;
+import orion.mmorpg.Mmorpg;
+import orion.mmorpg.mobs.samples.SampleMob;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-public class MobManager<T extends EntityCreature> implements Runnable {
-    HashMap<T, Long> entityMap = new HashMap<>();
+public class MobManager<T extends SampleMob> implements Runnable {
+    HashMap<String, T> mobs = new HashMap<>();
+    HashMap<SampleMob.MobData, Long> mobList = new HashMap<>();
+    Mmorpg mmorpg;
 
-    public MobManager() {
-        AngryChicken chicken = new AngryChicken(PortalStone.ARENA_STONE.getLocation());
-
-        chicken.getWorld().addEntity(chicken, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        this.entityMap.put((T) chicken, System.currentTimeMillis());
+    public MobManager(Mmorpg mmorpg) {
+        this.mmorpg = mmorpg;
     }
 
     @Override
     public void run() {
-        entityMap.forEach((entity, respawnTime) -> {
-            System.out.println(entity.isAlive() + " " + entity.isRemoved());
-            if(!entity.isRemoved()) return;
-            System.out.println("Dead" + System.currentTimeMillis() + " " + respawnTime);
-            if(respawnTime < System.currentTimeMillis()) {
-                System.out.println("Spawn");
-                //entity.getWorld().addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                entity.setHealth(entity.getMaxHealth());
-                Location loc = PortalStone.ARENA_STONE.getLocation();
-                entity.setPosition(loc.getX(), loc.getY(), loc.getZ());
-                entity.unsetRemoved();
+        mobList.forEach((mob, time) -> {
+            if(time < System.currentTimeMillis()) {
+                System.out.println(mob.getLocation().getWorld().isChunkLoaded(mob.getLocation().getChunk()));
+                try {
+                    SampleMob sampleMob = mob.generateMob();
+                    sampleMob.spawn();
+                } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        mobList.values().removeIf(time -> time < System.currentTimeMillis());
+    }
+
+    public void addMob(SampleMob.MobData mobData) {
+        mobList.put(mobData, System.currentTimeMillis() + mobData.getSpawnTime());
+    }
+
+    public void loadMobs() {
+        mmorpg.getMongoClient().getMobCollection().find().forEach((document) -> {
+            try {
+                Class<? extends SampleMob> clazz = (Class<? extends SampleMob>) Class.forName(document.getString("className"));
+                Location location = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("location"), Location.class);
+                SampleMob sampleMob = (SampleMob) clazz.getDeclaredConstructors()[0].newInstance(document.getString("uuid"), location);
+                sampleMob.spawn();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
             }
         });
     }

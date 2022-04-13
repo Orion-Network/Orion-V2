@@ -6,8 +6,10 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.races.Race;
@@ -35,6 +37,7 @@ public class Client {
     public MongoClient mongoClient = MongoClients.create(uri);
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");
+    public MongoCollection<Document> mobCollection = orionDatabase.getCollection("mobs");
 
     public boolean hasPlayer(UUID uuid) {
         Document doc = playerCollection.find(eq("uuid", uuid.toString())).first();
@@ -128,5 +131,29 @@ public class Client {
             race = Race.valueOf(document.getString("race"));
 
         return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
+    }
+
+    public void saveMob(SampleMob mob) {
+        Document document = new Document();
+
+        document.put("className", mob.getMobData().getMobClass().getName());
+        document.put("location", Mmorpg.getOrionGson().GSON.toJson(mob.getMobData().getLocation()));
+
+        mobCollection.insertOne(document);
+        System.out.println("Saved mob");
+    }
+
+    public SampleMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Document doc = mobCollection.find(eq("uuid", uuid)).first();
+
+        Location location = Mmorpg.getOrionGson().GSON.fromJson(doc.getString("location"), Location.class);
+        Class<? extends SampleMob> mobClass = (Class<? extends SampleMob>) Class.forName(doc.getString("className"));
+        String uuidMob = doc.getString("uuid");
+
+        return mobClass.getConstructor(String.class, Location.class).newInstance(uuidMob, location);
+    }
+
+    public MongoCollection<Document> getMobCollection() {
+        return mobCollection;
     }
 }

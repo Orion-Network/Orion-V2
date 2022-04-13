@@ -63,13 +63,13 @@ public final class Mmorpg extends JavaPlugin {
         playerManager = new PlayerManager();
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
-        //mobManager = new MobManager();
+        mobManager = new MobManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
-        pm.registerEvents(new EntityHitEntityListener(this), this);
+        pm.registerEvents(new ChunkListener(this), this);
         pm.registerEvents(new InventoryClickListener(this), this);
         pm.registerEvents(new PlayerUseItemEvent(this), this);
         pm.registerEvents(new PlayerStatsListener(this), this);
@@ -80,6 +80,7 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("item")).setExecutor(new ItemCommand());
         Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
+        Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {
@@ -102,7 +103,8 @@ public final class Mmorpg extends JavaPlugin {
             }
         }
 
-        //Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
+        mobManager.loadMobs();
+        Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
     }
 
     /**
@@ -124,6 +126,10 @@ public final class Mmorpg extends JavaPlugin {
 
     public PartyManager getPartyManager() {
         return partyManager;
+    }
+
+    public MobManager getMobManager() {
+        return mobManager;
     }
 
     public Client getMongoClient() {

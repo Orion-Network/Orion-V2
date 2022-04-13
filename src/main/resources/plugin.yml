@@ -22,3 +22,6 @@ commands:
   admin:
     permission: "orion.admin.command"
     description: "Administrator Command"
+  mob:
+    permission: "orion.mob.use"
+    description: "Spawn mob"
