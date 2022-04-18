@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
+import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.managers.PartyManager;
 import orion.mmorpg.managers.PlayerManager;
 import orion.mmorpg.managers.MobManager;
@@ -31,6 +32,7 @@ public final class Mmorpg extends JavaPlugin {
     PlayerManager playerManager;
     PartyManager partyManager;
     MobManager mobManager;
+    ChunkManager chunkManager;
 
     public static boolean isDebug() {
         return debug;
@@ -61,6 +63,7 @@ public final class Mmorpg extends JavaPlugin {
         setDebug(config.getBoolean("misc.debugging"));
 
         playerManager = new PlayerManager();
+        chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
         mobManager = new MobManager(this);
@@ -74,6 +77,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerUseItemEvent(this), this);
         pm.registerEvents(new PlayerStatsListener(this), this);
         pm.registerEvents(new PlayerChatListener(), this);
+        pm.registerEvents(new ServerListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
@@ -118,10 +122,16 @@ public final class Mmorpg extends JavaPlugin {
             getMongoClient().savePlayer(p);
             getPlayerManager().getPlayersMap().remove(p.getUniqueId());
         }
+
+        getMobManager().despawnMobs();
     }
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public ChunkManager getChunkManager() {
+        return chunkManager;
     }
 
     public PartyManager getPartyManager() {

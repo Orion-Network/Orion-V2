@@ -1,6 +1,5 @@
 package orion.mmorpg.listeners;
 
-import org.bukkit.Chunk;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -8,29 +7,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.mobs.samples.SampleMob;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class ChunkListener implements Listener {
 
     Mmorpg mmorpg;
-    private LinkedHashMap<Chunk, Set<SampleMob.MobData>> chunkMobs = new LinkedHashMap<>();
+
 
     public ChunkListener(Mmorpg mmorpg) {
         this.mmorpg = mmorpg;
     }
 
     @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {
-        if(chunkMobs.containsKey(event.getChunk())) {
-            for(SampleMob.MobData mobData : chunkMobs.get(event.getChunk())) {
+    public void onChunkLoad(ChunkLoadEvent event) {//TODO Chunk is loaded, is in chunk but not found in chunk manager
+        if(mmorpg.getChunkManager().containChunk(event.getChunk())) {
+            System.out.println("Loading chunk: " + event.getChunk().getX() + " " + event.getChunk().getZ() + " " + event.getChunk().getWorld().getName());
+            for(SampleMob.MobData mobData : mmorpg.getChunkManager().getChunk(event.getChunk())) {
                 try {
                     SampleMob mob = mobData.generateMob();
                     mob.spawn();
+                    System.out.println("Spawning entity: " + mob.getClass().getName());
                 } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -50,7 +50,7 @@ public class ChunkListener implements Listener {
             nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.a);
             System.out.println("Unloading entity: " + nmsEntity.getClass().getName());
         }
-        chunkMobs.put(event.getChunk(), mobs);
+        mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(event.getChunk().getX(), event.getChunk().getZ()), mobs);
     }
 
 

@@ -70,6 +70,10 @@
                                     <pattern>xyz.upperlevel.spigot.book</pattern>
                                     <shadedPattern>spigot-book-api</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>fr.mrmicky.fastboard</pattern>
+                                    <shadedPattern>orion.mmorpg.fastboard</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -184,6 +188,12 @@
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 </project>

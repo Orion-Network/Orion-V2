@@ -15,7 +15,9 @@ import java.util.List;
  */
 public enum PortalStone {
     SPAWN_STONE("Spawn", "SPAWN_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 438, 68, 1217)),
-    ARENA_STONE("Arena", "ARENA_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 462, 42, 1217));
+    ARENA_STONE("Arena", "ARENA_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 462, 42, 1217)),
+    CAMPMENT_STONE("Campsite", "CAMPMENT_STONE", Material.AMETHYST_SHARD, new Location(Bukkit.getWorld("world"), 403, 25, 927)),
+    ;
 
     String title;
     String id;

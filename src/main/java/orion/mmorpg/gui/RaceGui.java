@@ -9,10 +9,14 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class RaceGui extends ChestGui {
 
     Player p;
     OrionPlayer orionPlayer;
+    List<Race> excludedRaces = Arrays.asList(Race.CELESTIAN);
     int rows = (int) Math.ceil(Race.values().length / 9);
     OutlinePane racePane = new OutlinePane(0, 0, 9, 1);
 
@@ -31,6 +35,7 @@ public class RaceGui extends ChestGui {
 
     public OutlinePane generateRacePane() {
         for (Race race : Race.values()) {
+            if(excludedRaces.contains(race)) continue;
             racePane.addItem(new GuiItem(race.getItemStack(), e -> {
                 if (orionPlayer.getRace() == null) {
 

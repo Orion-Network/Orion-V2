@@ -1,7 +1,9 @@
 package orion.mmorpg.players;
 
 import de.slikey.effectlib.Effect;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -48,10 +50,11 @@ public class OrionPlayer {
     private Infos infos;
     private Stats baseStats;
     private UUID uniqueId;
-    private double health;
-    private int statsPoints, level, mana;
+    private double health, exp;
+    private int statsPoints, spentStatsPoint, level, mana;
     private ItemStack[] equipements;
     transient private KeyedBossBar healthBar;
+    transient FastBoard fastBoard;
     private Support support;
     private Race race;
 
@@ -64,7 +67,7 @@ public class OrionPlayer {
      * @param statsPoints Default stats point of new player
      * @param level       Level of the new player
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int level) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int spentStatsPoint, int level, double exp) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -72,7 +75,9 @@ public class OrionPlayer {
         this.stats = calculateStats();
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
+        this.spentStatsPoint = spentStatsPoint;
         this.level = level;
+        this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
         portalStones.add(PortalStone.SPAWN_STONE.getId());
         portalStones.add(PortalStone.ARENA_STONE.getId());
@@ -102,6 +107,7 @@ public class OrionPlayer {
                 SlotType.USE_SLOT};
 
         supportMap = new LinkedHashMap<>();
+        fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
     }
 
     /**
@@ -120,7 +126,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int level, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -128,7 +134,9 @@ public class OrionPlayer {
         this.stats = calculateStats();
         this.health = health;
         this.statsPoints = statsPoints;
+        this.spentStatsPoint = spentStatsPoint;
         this.level = level;
+        this.exp = exp;
         this.mana = mana;
         this.portalStones = portalStones;
         spells.forEach(spellID -> SpellList.learnSpell(this, spellID));
@@ -149,16 +157,24 @@ public class OrionPlayer {
         this.slotTypes = slotTypes;
 
         supportMap = new LinkedHashMap<>();
+        fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
     }
 
     public static OrionPlayer generateSamplePlayer(Player p) {
         Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
         Stats stats = new Stats(1, 10, 50, 100, 20, 0, 0, 25, 0);
-        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
+        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0, 0, 0);
     }
 
     public void updateHealthbar() {
-        this.healthBar.setProgress(getHealth() / getStats().getVitality() < 1 ? getHealth() / getStats().getVitality() : 1);
+        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.stats.getVitality());
+        double healthValue = this.getHealth() / this.stats.getVitality();
+        if(healthValue > 1)
+            this.healthBar.setProgress(1);
+        else if (healthValue < 0)
+            this.healthBar.setProgress(0);
+        else
+            this.healthBar.setProgress(healthValue);
     }
 
     public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
@@ -243,12 +259,28 @@ public class OrionPlayer {
         this.statsPoints = statsPoints;
     }
 
+    public int getSpentStatsPoint() {
+        return spentStatsPoint;
+    }
+
+    public void setSpentStatsPoint(int spentStatsPoint) {
+        this.spentStatsPoint = spentStatsPoint;
+    }
+
     public int getLevel() {
         return level;
     }
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public double getExp() {
+        return exp;
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
     }
 
     public int getMana() {
@@ -347,6 +379,14 @@ public class OrionPlayer {
         this.effectHashMap = effectHashMap;
     }
 
+    public FastBoard getFastBoard() {
+        return fastBoard;
+    }
+
+    public void setFastBoard(FastBoard fastBoard) {
+        this.fastBoard = fastBoard;
+    }
+
     public Party getParty() {
         return party;
     }
@@ -370,8 +410,24 @@ public class OrionPlayer {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
         p.teleport(PortalStone.SPAWN_STONE.getLocation());
-        heal(this.getStats().getVitality());
+        setHealth(this.getStats().getVitality());
         Utils.sendInfoMessage(p, "Vous êtes mort.");
+        updateHealthbar();
+        this.mobHealthBar.setVisible(false);
+    }
+
+    public void addExperience(Player p, double exp) {
+        this.setExp(this.getExp() + exp);
+        if(this.getExp() >= this.getExpToNextLevel()) {
+            this.setExp(this.getExp() - this.getExpToNextLevel());
+            this.setLevel(this.getLevel() + 1);
+            Utils.sendInfoMessage(p, "You have leveled up to level " + this.getLevel() + " !");
+            if(this.getLevel() % 3 == 0 && this.getLevel() > this.getStatsPoints()) {
+                this.setStatsPoints(this.getStatsPoints() + 3);
+                Utils.sendInfoMessage(p, "You have gained 3 stats points !");
+            }
+        }
+
     }
 
     public void onInteract(PlayerInteractEvent event) {
@@ -449,6 +505,7 @@ public class OrionPlayer {
     }
 
     public void onTick() {
+        updateFastboard();
         if (mana < this.getStats().getIntel() - this.getStats().getIntel() / 30)
             mana += this.getStats().getIntel() / 30;
 
@@ -463,6 +520,22 @@ public class OrionPlayer {
         }
     }
 
+    ArrayList<String> board = new ArrayList<>();
+    private void updateFastboard() {
+        board.clear();
+        this.fastBoard.updateTitle("Statistiques");
+        if(this.getRace() != null)
+            board.add(ChatColor.WHITE + "Race : " + ChatColor.GOLD + this.getRace().getName());
+        board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " (" + (int) ((getExp() / getExpToNextLevel())*100) + "%)" );
+        board.add(ChatColor.YELLOW + "Quête : " + ChatColor.GRAY + " TBI ");
+
+        if(party != null) {
+            board.add(ChatColor.YELLOW + "Groupe : ");
+            party.getPlayers().forEach(p -> board.add(Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + p.getHealth() + "/" + p.getStats().getVitality()));
+        }
+        this.fastBoard.updateLines(board);
+    }
+
     public void onDie() {
         if (this.getSupport() != null)
             this.getSupport().onDie();
@@ -475,6 +548,10 @@ public class OrionPlayer {
         }
 
         respawn();
+    }
+
+    public double getExpToNextLevel() {
+        return (Math.pow(this.getLevel(), 2) * 100) + 25;
     }
 
     public enum SlotType {

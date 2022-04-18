@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
@@ -17,7 +18,9 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public enum Race {
-    HUMAN("Human", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL", "BOOSTED_MODE"}, null, null, null),
+    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL", "BOOSTED_MODE"}, null, null, (p, op) -> {
+        p.getInventory().addItem(ItemList.MINECRAFT_WOODEN_SWORD.getProcessedItem(1), ItemList.STARTING_CHESTPLATE.getProcessedItem(1));
+    }),
     CELESTIAN("Celestian", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null);
 
     public String name;

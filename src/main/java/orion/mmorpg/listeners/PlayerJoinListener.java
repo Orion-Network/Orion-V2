@@ -26,6 +26,9 @@ public class PlayerJoinListener implements Listener {
             try {
                 OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
                 mmorpg.getPlayerManager().addPlayer(player.getUniqueId(), orionPlayer);
+                if(orionPlayer.getHealth() <= 0) {
+                    orionPlayer.respawn();
+                }
                 orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(player, "Data loaded !");
                 if (orionPlayer.getRace() == null)

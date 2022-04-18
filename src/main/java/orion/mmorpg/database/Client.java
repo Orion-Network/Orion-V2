@@ -52,7 +52,9 @@ public class Client {
 
         document.put("health", player.getHealth());
         document.put("statsPoint", player.getStatsPoints());
+        document.put("spentStatsPoint", player.getSpentStatsPoint());
         document.put("level", player.getLevel());
+        document.put("exp", player.getExp());
         document.put("mana", player.getMana());
 
         document.put("portalStones", Mmorpg.getOrionGson().getGSON().toJson(player.getPortalStones()));
@@ -88,7 +90,9 @@ public class Client {
 
         double health = document.getDouble("health");
         int statsPoint = document.getInteger("statsPoint");
+        int spentStatsPoint = document.containsKey("spentStatsPoint") ? document.getInteger("spentStatsPoint") : 0;
         int level = document.getInteger("level");
+        double exp = document.containsKey("exp") ? document.getDouble("exp") : 0;
         int mana = document.getInteger("mana");
 
         LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
@@ -130,17 +134,17 @@ public class Client {
         else
             race = Race.valueOf(document.getString("race"));
 
-        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, level, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
+        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
     }
 
     public void saveMob(SampleMob mob) {
         Document document = new Document();
 
         document.put("className", mob.getMobData().getMobClass().getName());
+        document.put("uuid", mob.getMobData().getUuid());
         document.put("location", Mmorpg.getOrionGson().GSON.toJson(mob.getMobData().getLocation()));
 
         mobCollection.insertOne(document);
-        System.out.println("Saved mob");
     }
 
     public SampleMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {

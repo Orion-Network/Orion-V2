@@ -138,10 +138,11 @@ public class PlayerStatsListener implements Listener {
     }
 
     @EventHandler
-    public void onLevelUp(PlayerLevelChangeEvent e) {
-        OrionPlayer op = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        if (e.getPlayer().getLevel() > op.getLevel())
-            op.levelUp(e.getPlayer(), e.getNewLevel());
+    public void onExpChange(PlayerExpChangeEvent e) {
+        Player p = e.getPlayer();
+        OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
+        orionPlayer.addExperience(p, e.getAmount());
+        e.setAmount(0);
     }
 
     @EventHandler

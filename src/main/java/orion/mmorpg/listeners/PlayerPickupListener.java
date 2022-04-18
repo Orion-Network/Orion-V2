@@ -30,7 +30,7 @@ public class PlayerPickupListener implements Listener {
             if (mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId()).getPlayerMode() != Mode.PLAYER)
                 return;
             ItemMeta meta = e.getItem().getItemStack().getItemMeta();
-            if (ChatColor.stripColor(meta.getDisplayName()).startsWith("%mm%:") || meta.getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            if (ChatColor.stripColor(meta.  getDisplayName()).startsWith("%mm%:") || meta.getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
                 String internal_id = "";
                 if(ChatColor.stripColor(meta.getDisplayName()).startsWith("%mm%:"))
                     internal_id = ChatColor.stripColor(meta.getDisplayName()).substring(5);
@@ -65,6 +65,7 @@ public class PlayerPickupListener implements Listener {
                     e.getItem().setItemStack(ItemList.valueOf(internal_id).getProcessedItem(e.getItem().getItemStack().getAmount()));
                 }
             }
+            ((Player) e.getEntity()).updateInventory();
         }
     }
 }

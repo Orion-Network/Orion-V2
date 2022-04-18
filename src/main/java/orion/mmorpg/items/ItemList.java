@@ -1,5 +1,7 @@
 package orion.mmorpg.items;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,6 +19,7 @@ import orion.mmorpg.items.sample.*;
 import orion.mmorpg.items.weapons.*;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
 import orion.mmorpg.items.weapons.arrows.TransmissionArrow;
+import orion.mmorpg.utils.Rarity;
 
 public enum ItemList {
     MINECRAFT_WHEAT(new Wheat(), BasicItem.class),
@@ -77,6 +80,15 @@ public enum ItemList {
     TEST_ITEM(new TestItem(), BasicItem.class),
     MENU_ITEM(new MenuItem(), BasicItem.class),
     ETERNAL_COMPASS(new EternalCompass(), BasicItem.class),
+    //Currency
+    BRONZE_COIN(BasicItem.generateBasicItem(Material.COPPER_INGOT, "Pièce de Bronze", "BRONZE_COIN", 1, ChatColor.GOLD + "Valeur : 1 $", Rarity.UNCOMMON), BasicItem.class),
+    IRON_COIN(BasicItem.generateBasicItem(Material.IRON_INGOT, "Pièce d'Argent", "IRON_COIN", 1, ChatColor.GOLD + "Valeur : 64 $", Rarity.UNCOMMON), BasicItem.class),
+    GOLD_COIN(BasicItem.generateBasicItem(Material.GOLD_INGOT, "Pièce d'Or", "GOLD_COIN", 1, ChatColor.GOLD + "Valeur : 4096 $", Rarity.UNCOMMON), BasicItem.class),
+    EMERALD_COIN(BasicItem.generateBasicItem(Material.EMERALD, "Pièce d'Emeraude", "EMERALD_COIN", 1, ChatColor.GOLD + "Valeur : 262144 $", Rarity.RARE), BasicItem.class),
+    //Beta Floor Drops
+    DRY_WHEAT(BasicItem.generateBasicItem(Material.WHEAT, "Blé Sec", "DRY_WHEAT", 1, null, Rarity.COMMON), BasicItem.class),
+    WHEAT_SEEDS(BasicItem.generateBasicItem(Material.WHEAT_SEEDS, "Graines", "WHEAT_SEEDS", 1, null, Rarity.COMMON), BasicItem.class),
+    SHEEP_LAMB(BasicItem.generateBasicItem(Material.MUTTON, "Lambeau de Mouton", "SHEEP_LAMB", 1, null, Rarity.COMMON), BasicItem.class),
     ;
 
     BasicItem item;

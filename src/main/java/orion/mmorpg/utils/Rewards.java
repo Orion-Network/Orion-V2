@@ -11,13 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.Random;
 
 public class Rewards extends ArrayList<Rewards.Reward> {
+    double exp = 0;
     int itemNumber = 1;
     boolean isRandom = true;
     boolean dropBadLuckDust = false;
 
     public ArrayList<ItemStack> generateRewards() {
+        ArrayList<ItemStack> rewards = new ArrayList<>();
+        if(this.isEmpty()) return rewards;
         if(isRandom) {
-            ArrayList<ItemStack> rewards = new ArrayList<>();
             LinkedHashMap<Reward, Integer> doubles = new LinkedHashMap<>();
             for (int i = 0; i < itemNumber; i++) {
                 Random rand = new Random();
@@ -63,6 +65,14 @@ public class Rewards extends ArrayList<Rewards.Reward> {
 
     public void setDropBadLuckDust(boolean dropBadLuckDust) {
         this.dropBadLuckDust = dropBadLuckDust;
+    }
+
+    public double getExp() {
+        return exp;
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
     }
 
     public static class Reward {

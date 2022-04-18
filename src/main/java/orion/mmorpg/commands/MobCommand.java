@@ -4,14 +4,19 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,8 +33,25 @@ public class MobCommand implements TabExecutor {
             SampleMob mob = summonMob(commandSender, args);
             mob.setRespawn(false);
         } else if(args[0].equalsIgnoreCase("list")) {
-
+            mmorpg.getMobManager().getMobs().forEach((uuid, mob) -> {
+                commandSender.sendMessage(uuid + mob.getClass().getSimpleName());
+            });
         } else if(args[0].equalsIgnoreCase("info")) {
+
+        } else if(args[0].equalsIgnoreCase("chunks")) {
+            for(ChunkManager.ChunkIdentifier chunk : mmorpg.getChunkManager().getChunkMobs().keySet()) {
+                mmorpg.getChunkManager().getChunk(chunk).forEach(mob -> {
+                    commandSender.sendMessage(mob.getMobClass().getSimpleName());
+                });
+            }
+        } else if(args[0].equalsIgnoreCase("chunkMob")) {
+            if(mmorpg.getChunkManager().containChunk(((Player) commandSender).getLocation().getChunk())) {
+                mmorpg.getChunkManager().getChunk(((Player) commandSender).getLocation().getChunk()).forEach(mob -> {
+                    Utils.sendInfoMessage((Entity) commandSender, mob.getMobClass().getSimpleName());
+                });
+            } else {
+                Utils.sendInfoMessage((Entity) commandSender, "No mobs in this chunk");
+            }
 
         } else if (args[0].equalsIgnoreCase("remove")) {
 
@@ -70,6 +92,6 @@ public class MobCommand implements TabExecutor {
         } else if(strings.length == 3) {
 
         }
-        return tab;
+        return Arrays.asList("spawn", "list", "info", "remove", "set", "chunkMob", "chunks");
     }
 }

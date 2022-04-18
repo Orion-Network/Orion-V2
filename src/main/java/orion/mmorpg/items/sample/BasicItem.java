@@ -75,6 +75,11 @@ public abstract class BasicItem extends ItemStack {//TODO Consommable
         };
     }
 
+    public static BasicItem generateBasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
+        return new BasicItem(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY) {
+        };
+    }
+
     public void onPickupItem(EntityPickupItemEvent e, ItemStack item) {
     }
 
