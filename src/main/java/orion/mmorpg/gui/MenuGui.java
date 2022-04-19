@@ -227,10 +227,11 @@ public class MenuGui extends ChestGui {
         if (orionPlayer.getSupport() != null)
             infos.add(ChatColor.YELLOW + orionPlayer.getSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
+        infos.add(ChatColor.WHITE + "Appuyez pour ouvrir le menu des stats");
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);
 
-        menuPane.addItem(new GuiItem(head), 2, 0);
+        menuPane.addItem(new GuiItem(head, e->new StatsGui(p, orionPlayer).show(p)), 2, 0);
         if (p.hasPermission("*")) {
             menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
                 if (orionPlayer.getPlayerMode() == Mode.PLAYER)

@@ -48,6 +48,7 @@ public class Client {
         Document document = new Document();
         document.put("infos", Mmorpg.getOrionGson().getGSON().toJson(player.getInfos()));
         document.put("stats", Mmorpg.getOrionGson().getGSON().toJson(player.getBaseStats()));
+        document.put("pointStats", Mmorpg.getOrionGson().getGSON().toJson(player.getPointStats()));
         document.put("uuid", player.getUniqueId().toString());
 
         document.put("health", player.getHealth());
@@ -87,6 +88,7 @@ public class Client {
 
         Infos info = Mmorpg.getOrionGson().GSON.fromJson(document.getString("infos"), Infos.class);
         Stats stats = Mmorpg.getOrionGson().GSON.fromJson(document.getString("stats"), Stats.class);
+        Stats pointStats = Mmorpg.getOrionGson().GSON.fromJson(document.getString("pointStats"), Stats.class);
 
         double health = document.getDouble("health");
         int statsPoint = document.getInteger("statsPoint");
@@ -134,7 +136,7 @@ public class Client {
         else
             race = Race.valueOf(document.getString("race"));
 
-        return new OrionPlayer(info, stats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
     }
 
     public void saveMob(SampleMob mob) {

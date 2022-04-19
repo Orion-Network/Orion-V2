@@ -49,6 +49,7 @@ public class OrionPlayer {
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
     private Stats baseStats;
+    private Stats pointStats;
     private UUID uniqueId;
     private double health, exp;
     private int statsPoints, spentStatsPoint, level, mana;
@@ -67,10 +68,11 @@ public class OrionPlayer {
      * @param statsPoints Default stats point of new player
      * @param level       Level of the new player
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, int statsPoints, int spentStatsPoint, int level, double exp) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, int statsPoints, int spentStatsPoint, int level, double exp) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
+        this.pointStats = pointStats;
         this.equipements = new ItemStack[4];
         this.stats = calculateStats();
         this.health = stats.getVitality();
@@ -126,10 +128,11 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
+        this.pointStats = pointStats;
         this.equipements = equipements;
         this.stats = calculateStats();
         this.health = health;
@@ -163,7 +166,7 @@ public class OrionPlayer {
     public static OrionPlayer generateSamplePlayer(Player p) {
         Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
         Stats stats = new Stats(1, 10, 50, 100, 20, 0, 0, 25, 0);
-        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0, 0, 0);
+        return new OrionPlayer(infos, stats, new Stats.Builder().build() , p.getUniqueId(), 0, 0, 0, 0);
     }
 
     public void updateHealthbar() {
@@ -212,7 +215,7 @@ public class OrionPlayer {
             if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
                 handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
             }
-            return calculateStats(playerStats, armorStats, handStats);
+            return calculateStats(playerStats, armorStats, handStats, getPointStats());
         }
         Stats.Builder builder = new Stats.Builder();
         for (Stats stat : stats) {
@@ -237,6 +240,14 @@ public class OrionPlayer {
 
     public void setBaseStats(Stats baseStats) {
         this.baseStats = baseStats;
+    }
+
+    public Stats getPointStats() {
+        return pointStats;
+    }
+
+    public void setPointStats(Stats pointStats) {
+        this.pointStats = pointStats;
     }
 
     public Stats getStats() {

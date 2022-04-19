@@ -9,6 +9,7 @@ public enum Mobs {
     SHEEP(Sheep.class),
     MOUNTAIN_ZOMBIE(MountainZombie.class),
     CRYPT_SKELETON(CryptSkeleton.class),
+    GUARDIAN(Guardian.class),
     ;
 
     Class<? extends SampleMob> mobClass;
