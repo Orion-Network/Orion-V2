@@ -45,6 +45,8 @@ public enum ItemList {
     KNIGHT_BOOTS(new KnightSet.KnightBoots(), BasicArmorItem.class),
     CELESTIAN_CROWN(new CelestianSet.CelestianCrown(), BasicArmorItem.class),
     CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
+    CELESTIAN_RING(new CelestianSet.CelestianRing(), BasicArmorItem.class),
+    CELESTIAN_BELT(new CelestianSet.CelestianBelt(), BasicArmorItem.class),
     STARSET_HELMET(new StarSet.StarsetHelmet(), BasicArmorItem.class),
     STARSET_CHESTPLATE(new StarSet.StarsetChestplate(), BasicArmorItem.class),
     STARSET_LEGGINGS(new StarSet.StarsetLeggings(), BasicArmorItem.class),
@@ -73,6 +75,8 @@ public enum ItemList {
     FIRST_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.FirstSpecialPlaceholder(), BasicGuiItem.class),
     SECOND_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.SecondSpecialPlaceholder(), BasicGuiItem.class),
     THIRD_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.ThirdSpecialPlaceholder(), BasicGuiItem.class),
+    RING_PLACEHOLDER(new RingPlaceholder(), BasicGuiItem.class),
+    BELT_PLACEHOLDER(new BeltPlaceholder(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),

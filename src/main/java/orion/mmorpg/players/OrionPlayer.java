@@ -78,7 +78,7 @@ public class OrionPlayer {
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
         this.pointStats = pointStats;
-        this.equipements = new ItemStack[4];
+        this.equipements = new ItemStack[7];
         this.stats = calculateStats();
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
@@ -207,7 +207,7 @@ public class OrionPlayer {
     public Stats calculateStats(Stats... stats) {
         if (stats.length == 0) {
             Stats playerStats = this.getBaseStats();
-            Stats[] armorStatsIter = new Stats[4];
+            Stats[] armorStatsIter = new Stats[7];
             int i = 0;
             for (ItemStack equipement : equipements) {
                 if (equipement != null)

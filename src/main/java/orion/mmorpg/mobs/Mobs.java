@@ -1,7 +1,8 @@
 package orion.mmorpg.mobs;
 
-import orion.mmorpg.mobs.bosses.Destroyer;
+import orion.mmorpg.mobs.bosses.Invocator;
 import orion.mmorpg.mobs.list.*;
+import orion.mmorpg.mobs.mounts.TestWolf;
 import orion.mmorpg.mobs.pets.FunnyWolf;
 import orion.mmorpg.mobs.samples.SampleMob;
 
@@ -18,8 +19,11 @@ public enum Mobs {
     //Pet Mobs
     FUNNY_WOLF(FunnyWolf.class),
 
+    //Mounts Mobs
+    TEST_WOLF(TestWolf.class),
+
     //Bosses
-    DESTROYER(Destroyer.class),
+    INVOCATOR(Invocator.class),
     ;
 
     Class<? extends SampleMob> mobClass;

@@ -54,4 +54,18 @@ public class CelestianSet {
                     new Stats(0, 0, 0, 0, 5, 0, 2, 0, 0));
         }
     }
+
+    public static class CelestianRing extends BasicArmorItem {
+        public CelestianRing() {
+            super(Material.BLUE_DYE, "Anneau Céleste", "CELESTIAN_RING", 1, null, Rarity.COMMON, ArmorType.RING,
+                    new Stats.Builder().withCritical_chance(5).withCritical_damage(3).build());
+        }
+    }
+
+    public static class CelestianBelt extends BasicArmorItem {
+        public CelestianBelt() {
+            super(Material.MAGENTA_DYE, "Ceinture Céleste", "CELESTIAN_BELT", 3, null, Rarity.COMMON, ArmorType.BELT,
+                    new Stats.Builder().withSpeed(20).build());
+        }
+    }
 }

@@ -23,20 +23,20 @@ public abstract class SampleBossMob extends SampleMob {
     }
 
     @Override
-    protected void d(DamageSource damagesource) {
-        super.d(damagesource);
+    public boolean damageEntity(DamageSource damagesource, float f) {
         if(damagesource.getEntity() != null)
             if(damagesource.getEntity().getBukkitEntity() instanceof Player)
                 lastHitBy = damagesource.getEntity().getBukkitEntity();
-
+        return super.damageEntity(damagesource, f);
     }
-
-    
 
     @Override
     public void die(DamageSource damagesource) {
         if(damagesource.getEntity() != null) {
-            Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été vaincu par " + ChatColor.YELLOW + lastHitBy.getName());
+            if(lastHitBy != null)
+                Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été vaincu par " + ChatColor.YELLOW + lastHitBy.getName());
+            else
+                Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été vaincu");
         }
         super.die(damagesource);
     }

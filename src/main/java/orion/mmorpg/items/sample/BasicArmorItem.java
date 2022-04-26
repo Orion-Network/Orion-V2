@@ -72,6 +72,6 @@ public abstract class BasicArmorItem extends BasicItem {
     }
 
     public enum ArmorType {
-        HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS
+        HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS, BELT, RING
     }
 }

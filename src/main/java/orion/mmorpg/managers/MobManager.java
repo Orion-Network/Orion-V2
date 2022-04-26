@@ -63,16 +63,13 @@ public class MobManager<T extends SampleMob> extends AbstractManager implements 
         Location location = sampleMob.getSpawnLocation();
         if(location.getChunk().isLoaded()) {
             sampleMob.spawn();
-            System.out.println("Spawned mob " + sampleMob.getName() + " at " + location.getX() + ", " + location.getY() + ", " + location.getZ() + "loaded" + location.getChunk().isLoaded());
         } else {
             if (mmorpg.getChunkManager().containChunk(location.getChunk())) {
                 mmorpg.getChunkManager().getChunk(location.getChunk()).add(sampleMob.getMobData());
-                System.out.println("Spawned mob " + sampleMob.getName() + "added to chunk");
             } else {
                 Set<SampleMob.MobData> mobDataSet = new LinkedHashSet<>();
                 mobDataSet.add(sampleMob.getMobData());
                 mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(location.getChunk().getX(), location.getChunk().getZ()), mobDataSet);
-                System.out.println("Spawned mob " + sampleMob.getName() + "created chunk");
             }
         }
     }
