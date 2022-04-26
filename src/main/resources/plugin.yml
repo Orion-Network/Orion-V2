@@ -25,3 +25,6 @@ commands:
   mob:
     permission: "orion.mob.use"
     description: "Spawn mob"
+  support:
+    permission: "orion.support.use"
+    description: "Support Command"

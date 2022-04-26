@@ -25,7 +25,6 @@ public class ChunkListener implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {//TODO Chunk is loaded, is in chunk but not found in chunk manager
         if(mmorpg.getChunkManager().containChunk(event.getChunk())) {
-            System.out.println("Loading chunk: " + event.getChunk().getX() + " " + event.getChunk().getZ() + " " + event.getChunk().getWorld().getName());
             for(SampleMob.MobData mobData : mmorpg.getChunkManager().getChunk(event.getChunk())) {
                 try {
                     SampleMob mob = mobData.generateMob();
@@ -48,7 +47,6 @@ public class ChunkListener implements Listener {
                 mobs.add(((SampleMob) nmsEntity).getMobData());
             }
             nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.a);
-            System.out.println("Unloading entity: " + nmsEntity.getClass().getName());
         }
         mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(event.getChunk().getX(), event.getChunk().getZ()), mobs);
     }

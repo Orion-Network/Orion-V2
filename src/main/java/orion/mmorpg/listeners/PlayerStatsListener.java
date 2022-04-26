@@ -132,7 +132,7 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
-            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
+            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || EntityDamageEvent.DamageCause.FIRE == e.getCause() || EntityDamageEvent.DamageCause.LAVA == e.getCause() || EntityDamageEvent.DamageCause.FIRE_TICK == e.getCause())
                 e.setCancelled(true);
         }
     }
@@ -154,8 +154,9 @@ public class PlayerStatsListener implements Listener {
 
     @EventHandler
     public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
-        if(e.getPlayer().getInventory().getItem(e.getNewSlot()) == null) return;
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        orionPlayer.onSwitchSlot(e.getPlayer(), orionPlayer, e);
+        if(e.getPlayer().getInventory().getItem(e.getNewSlot()) == null) return;
         if(orionPlayer.getSlotTypes()[e.getNewSlot()] == OrionPlayer.SlotType.USE_SLOT) {
             Block block = e.getPlayer().getTargetBlock(null, 10);
             Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(e.getPlayer(), Action.RIGHT_CLICK_AIR, e.getPlayer().getInventory().getItem(e.getNewSlot()), block, ( block != null ? block.getFace(block) : null)));

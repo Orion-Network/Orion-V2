@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
@@ -56,6 +57,11 @@ public class Soleil extends Support {
 
     @Override
     public void onDie() {
+
+    }
+
+    @Override
+    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
 
     }
 

@@ -2,6 +2,7 @@ package orion.mmorpg.players;
 
 import de.slikey.effectlib.Effect;
 import fr.mrmicky.fastboard.FastBoard;
+import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -12,12 +13,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
+import orion.mmorpg.mobs.samples.SamplePetMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
@@ -56,6 +59,8 @@ public class OrionPlayer {
     private ItemStack[] equipements;
     transient private KeyedBossBar healthBar;
     transient FastBoard fastBoard;
+    transient SamplePetMob pet;
+
     private Support support;
     private Race race;
 
@@ -81,7 +86,7 @@ public class OrionPlayer {
         this.level = level;
         this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
-        portalStones.add(PortalStone.SPAWN_STONE.getId());
+        portalStones.add(PortalStone.ARENA_SPAWN_STONE.getId());
         portalStones.add(PortalStone.ARENA_STONE.getId());
 
         this.mana = (int) this.stats.getIntel();
@@ -362,12 +367,25 @@ public class OrionPlayer {
         return slotTypes;
     }
 
+    public SamplePetMob getPet() {
+        return pet;
+    }
+
+    public void setPet(SamplePetMob pet) {
+        if(this.pet != null)
+            this.pet.setRemoved(Entity.RemovalReason.a);
+        this.pet = pet;
+    }
+
     public Support getSupport() {
         return support;
     }
 
     public void setSupport(Support support) {
+        if(this.support != null)
+            this.support.onDeselected(Bukkit.getPlayer(this.uniqueId), this);
         this.support = support;
+        support.onSelected(Bukkit.getPlayer(this.getUniqueId()), this);
     }
 
     public Race getRace() {
@@ -420,7 +438,7 @@ public class OrionPlayer {
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
-        p.teleport(PortalStone.SPAWN_STONE.getLocation());
+        p.teleport(PortalStone.ARENA_SPAWN_STONE.getLocation());
         setHealth(this.getStats().getVitality());
         Utils.sendInfoMessage(p, "Vous êtes mort.");
         updateHealthbar();
@@ -515,6 +533,18 @@ public class OrionPlayer {
         }
     }
 
+    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
+        if (this.getSupport() != null)
+            this.getSupport().onSwitchSlot(player, stats, event);
+
+        for (Support support : supportMap.keySet()) {
+            if (supportMap.get(support) < System.currentTimeMillis())
+                supportMap.remove(support);
+            else
+                support.onSwitchSlot(player, stats, event);
+        }
+    }
+
     public void onTick() {
         updateFastboard();
         if (mana < this.getStats().getIntel() - this.getStats().getIntel() / 30)
@@ -567,6 +597,7 @@ public class OrionPlayer {
 
     public enum SlotType {
         FREE_SLOT,
-        USE_SLOT
+        USE_SLOT,
+        RESTRICTED_SLOT
     }
 }

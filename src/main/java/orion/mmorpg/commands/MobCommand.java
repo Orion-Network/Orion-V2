@@ -12,6 +12,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.mobs.samples.SamplePetMob;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +53,6 @@ public class MobCommand implements TabExecutor {
             } else {
                 Utils.sendInfoMessage((Entity) commandSender, "No mobs in this chunk");
             }
-
         } else if (args[0].equalsIgnoreCase("remove")) {
 
         } else if (args[0].equalsIgnoreCase("set")) {
@@ -72,6 +72,10 @@ public class MobCommand implements TabExecutor {
 
         try {
             final SampleMob mob = (SampleMob) Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), location);
+            if(mob instanceof SamplePetMob) {
+                ((SamplePetMob) mob).summonPet((Player) commandSender);
+                return mob;
+            }
             mob.spawn();
             return mob;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {

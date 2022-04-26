@@ -7,12 +7,12 @@ import orion.mmorpg.mobs.samples.SampleMob;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-public class ChunkManager {
-    Mmorpg mmorpg;
+public class ChunkManager extends AbstractManager {
     private LinkedHashMap<ChunkIdentifier, Set<SampleMob.MobData>> chunkMobs = new LinkedHashMap<>();
 
-    public ChunkManager(Mmorpg mmorpg) {
-        this.mmorpg = mmorpg;
+
+    public ChunkManager(Mmorpg plugin) {
+        super(plugin);
     }
 
     public LinkedHashMap<ChunkIdentifier, Set<SampleMob.MobData>> getChunkMobs() {

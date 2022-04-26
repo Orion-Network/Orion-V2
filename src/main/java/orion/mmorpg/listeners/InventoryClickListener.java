@@ -10,6 +10,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.MenuGui;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicArmorItem;
+import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
 import java.util.Objects;
@@ -23,6 +24,7 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+        OrionPlayer player = mmorpg.getPlayerManager().getPlayer(Objects.requireNonNull(e.getWhoClicked()).getUniqueId());
         if(!e.getInventory().getType().equals(InventoryType.CRAFTING)) return;
         e.getInventory().setItem(0, ItemList.MENU_ITEM.getProcessedItem(1));
         if (e.getSlotType() == InventoryType.SlotType.RESULT) {
@@ -38,6 +40,8 @@ public class InventoryClickListener implements Listener {
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez déséquipé un cosmétique.");
             }
         }
+        if(player.getSlotTypes()[e.getSlot()] == OrionPlayer.SlotType.RESTRICTED_SLOT)
+            e.setCancelled(true);
         if (e.isShiftClick())
             e.setCancelled(true);
     }

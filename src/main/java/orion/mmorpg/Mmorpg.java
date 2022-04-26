@@ -62,7 +62,7 @@ public final class Mmorpg extends JavaPlugin {
 
         setDebug(config.getBoolean("misc.debugging"));
 
-        playerManager = new PlayerManager();
+        playerManager = new PlayerManager(this);
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
@@ -85,6 +85,7 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
         Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
+        Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {

@@ -1,14 +1,16 @@
 package orion.mmorpg.managers;
 
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-public class PlayerManager {
+public class PlayerManager extends AbstractManager {
     private final LinkedHashMap<UUID, OrionPlayer> playersMap;
 
-    public PlayerManager() {
+    public PlayerManager(Mmorpg mmorpg) {
+        super(mmorpg);
         this.playersMap = new LinkedHashMap<>();
     }
 

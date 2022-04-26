@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class MobManager<T extends SampleMob> implements Runnable {
+public class MobManager<T extends SampleMob> extends AbstractManager implements Runnable {
     HashMap<String, T> mobs = new HashMap<>();
     HashMap<SampleMob.MobData, Long> mobList = new HashMap<>();
-    Mmorpg mmorpg;
 
     public MobManager(Mmorpg mmorpg) {
-        this.mmorpg = mmorpg;
+        super(mmorpg);
     }
+
 
     @Override
     public void run() {

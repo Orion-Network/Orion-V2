@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
@@ -49,6 +50,40 @@ public abstract class Support {
     public abstract void onTick();
 
     public abstract void onDie();
+
+    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
+        if(this instanceof SpecialsSupport) {
+            switch (event.getNewSlot()) {
+                case 6:
+                    ((SpecialsSupport) this).getFirstSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
+                case 7:
+                    ((SpecialsSupport) this).getSecondSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
+                case 8:
+                    ((SpecialsSupport) this).getThirdSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
+            }
+        }
+    }
+
+    public void onDeselected(Player player, OrionPlayer orionPlayer) {
+        if(this instanceof SpecialsSupport) {
+            ((SpecialsSupport) this).removeItems(player, orionPlayer);
+        }
+    }
+
+    public void onSelected(Player player, OrionPlayer stats) {
+        if(this instanceof SpecialsSupport) {
+            ((SpecialsSupport) this).getItems(player, stats);
+        }
+    };
 
     //TODO Implementing
     public abstract void onSupportEnd(Player p, OrionPlayer stats);

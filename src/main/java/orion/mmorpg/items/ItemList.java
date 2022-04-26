@@ -68,7 +68,11 @@ public enum ItemList {
     WIKI_BOOK_PLACEHOLDER(new WikiBookPlaceholder(), BasicGuiItem.class),
     UNUSABLE_PLACEHOLDER(new UnusablePlaceholder(), BasicGuiItem.class),
     USABLE_PLACEHOLDER(new UsablePlaceholder(), BasicGuiItem.class),
+    RESTRICTED_PLACEHOLDER(new RestrictedPlaceholder(), BasicGuiItem.class),
     SETTINGS_PLACEHOLDER(new SettingsPlaceholder(), BasicGuiItem.class),
+    FIRST_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.FirstSpecialPlaceholder(), BasicGuiItem.class),
+    SECOND_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.SecondSpecialPlaceholder(), BasicGuiItem.class),
+    THIRD_SPECIAL_PLACEHOLDER(new SpecialPlaceholder.ThirdSpecialPlaceholder(), BasicGuiItem.class),
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
@@ -89,6 +93,8 @@ public enum ItemList {
     DRY_WHEAT(BasicItem.generateBasicItem(Material.WHEAT, "Blé Sec", "DRY_WHEAT", 1, null, Rarity.COMMON), BasicItem.class),
     WHEAT_SEEDS(BasicItem.generateBasicItem(Material.WHEAT_SEEDS, "Graines", "WHEAT_SEEDS", 1, null, Rarity.COMMON), BasicItem.class),
     SHEEP_LAMB(BasicItem.generateBasicItem(Material.MUTTON, "Lambeau de Mouton", "SHEEP_LAMB", 1, null, Rarity.COMMON), BasicItem.class),
+    NORDIC_WOLF_FUR(BasicItem.generateBasicItem(Material.LEATHER, "Fourrure de Loup Nordique", "NORDIC_WOLF_FUR", 1, null, Rarity.COMMON), BasicItem.class),
+    NORDIC_WOLF_BONE(BasicItem.generateBasicItem(Material.BONE, "Os de Loup Nordique", "NORDIC_WOLF_BONE", 1, null, Rarity.COMMON), BasicItem.class),
     ;
 
     BasicItem item;

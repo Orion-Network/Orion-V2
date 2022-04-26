@@ -25,15 +25,17 @@ public class SlotGui extends ChestGui {
         for (OrionPlayer.SlotType slotType : orionPlayer.getSlotTypes()) {
             if(slotType.equals(OrionPlayer.SlotType.FREE_SLOT))
                 outlinePane.addItem(new GuiItem(ItemList.UNUSABLE_PLACEHOLDER.getProcessedItem(1)));
-            else
+            else if(slotType.equals(OrionPlayer.SlotType.USE_SLOT))
                 outlinePane.addItem(new GuiItem(ItemList.USABLE_PLACEHOLDER.getProcessedItem(1)));
+            else if(slotType.equals(OrionPlayer.SlotType.RESTRICTED_SLOT))
+                outlinePane.addItem(new GuiItem(ItemList.RESTRICTED_PLACEHOLDER.getProcessedItem(1)));
         }
         outlinePane.setOnClick(e -> {
             e.setCancelled(true);
             if(e.getCurrentItem().getItemMeta().getCustomModelData() == ItemList.UNUSABLE_PLACEHOLDER.getItem().getMODEL_ID()) {
                 orionPlayer.getSlotTypes()[e.getSlot()] = OrionPlayer.SlotType.USE_SLOT;
                 outlinePane.getItems().set(e.getSlot(), new GuiItem(ItemList.USABLE_PLACEHOLDER.getProcessedItem(1)));
-            } else {
+            } else if(e.getCurrentItem().getItemMeta().getCustomModelData() == ItemList.USABLE_PLACEHOLDER.getItem().getMODEL_ID()) {
                 orionPlayer.getSlotTypes()[e.getSlot()] = OrionPlayer.SlotType.FREE_SLOT;
                 outlinePane.getItems().set(e.getSlot(), new GuiItem(ItemList.UNUSABLE_PLACEHOLDER.getProcessedItem(1)));
             }

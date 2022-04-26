@@ -3,9 +3,12 @@ package orion.mmorpg.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
@@ -18,8 +21,16 @@ public class AdminCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        if(commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            if(player.getInventory().getItemInMainHand() != null) {
+                ItemMeta meta = player.getInventory().getItemInMainHand().getItemMeta();
+                meta.setCustomModelData(Integer.valueOf(args[1]));
+                player.getInventory().getItemInMainHand().setItemMeta(meta);
+                Utils.sendInfoMessage(player, "&aSuccessfully set custom model data to " + args[1]);
+            }
+        }
         return false;
     }
 

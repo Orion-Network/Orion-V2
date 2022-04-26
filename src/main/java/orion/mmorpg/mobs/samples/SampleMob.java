@@ -98,7 +98,6 @@ public abstract class SampleMob extends EntityCreature {
 
     @Override
     protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
-        entityhuman.getBukkitEntity().sendMessage(this.getHealth() + " " + this.getMaxHealth() + " " + this.getStats().getVitality() + " " + this.getAttributeMap().a(GenericAttributes.a).getBaseValue() + " " + this.getAttributeMap().a(GenericAttributes.a).getValue());
         return super.b(entityhuman, enumhand);
     }
 
@@ -115,11 +114,13 @@ public abstract class SampleMob extends EntityCreature {
     @Override
     protected void initPathfinder() {}
 
+    //TODO See why mob respawns when it dies
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
         if(respawn)
             Mmorpg.INSTANCE.getMobManager().addMob(getMobData());
+        if(damagesource.getEntity() == null) return;
         if(damagesource.getEntity().getBukkitEntity() instanceof Player) {
             Player player = (Player) damagesource.getEntity().getBukkitEntity();
             OrionPlayer orionplayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());

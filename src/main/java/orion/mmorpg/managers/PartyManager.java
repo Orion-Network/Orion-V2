@@ -6,12 +6,11 @@ import orion.mmorpg.players.parties.Party;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-public class PartyManager {
-    Mmorpg mmorpg;
+public class PartyManager extends AbstractManager {
     LinkedHashMap<UUID, Party> partyMap;
 
     public PartyManager(Mmorpg mmorpg) {
-        this.mmorpg = mmorpg;
+        super(mmorpg);
         this.partyMap = new LinkedHashMap<>();
     }
 

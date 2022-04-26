@@ -1,5 +1,6 @@
 package orion.mmorpg.listeners;
 
+import net.minecraft.world.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,7 +49,10 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void playerQuitEvent(PlayerQuitEvent event) {
-        mmorpg.getMongoClient().savePlayer(mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId()));
-        mmorpg.getPlayerManager().getPlayersMap().remove(event.getPlayer().getUniqueId());
+        OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        if(player.getPet() != null)
+            player.getPet().setRemoved(Entity.RemovalReason.a);
+        mmorpg.getMongoClient().savePlayer(player);
+        mmorpg.getPlayerManager().getPlayersMap().remove(player.getUniqueId());
     }
 }

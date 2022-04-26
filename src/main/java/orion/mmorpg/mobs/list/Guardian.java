@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalArrowAttack;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
@@ -13,8 +14,11 @@ import net.minecraft.world.entity.projectile.ProjectileHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.mobs.pathfinders.MoveTowardsTargetIfRange;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
 import orion.mmorpg.mobs.samples.SampleMob;
@@ -23,6 +27,10 @@ import orion.mmorpg.utils.Stats;
 public class Guardian extends SampleMob implements IRangedEntity {
     public Guardian(String uuid, Location location) {
         super("Garde", 99, EntityTypes.aB, uuid, location, new Stats.Builder().withVitality(1000).withStrength(1000).withSpeed(5).build());
+        this.setSlot(EnumItemSlot.f, CraftItemStack.asNMSCopy(ItemList.STARSET_HELMET.getProcessedItem(1)));
+        this.setSlot(EnumItemSlot.e, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(Material.DIAMOND_CHESTPLATE)));
+        this.setSlot(EnumItemSlot.d, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(Material.DIAMOND_LEGGINGS)));
+        this.setSlot(EnumItemSlot.c, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(Material.DIAMOND_BOOTS)));
     }
 
     @Override
