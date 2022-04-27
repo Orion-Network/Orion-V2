@@ -18,7 +18,7 @@ public abstract class SampleBossMob extends SampleMob {
 
     @Override
     public void spawn() {
-        Bukkit.broadcastMessage(ChatColor.RED + "Boss " + ChatColor.YELLOW + getName() + ChatColor.RED + " a été invoqué!");
+        Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été invoqué!");
         super.spawn();
     }
 

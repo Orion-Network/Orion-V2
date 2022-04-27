@@ -28,9 +28,6 @@ public class RepulsionSpell extends Spell implements LocationSpell {
     @Override
     public void launchFromLocation(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, Location location) {
         location.getWorld().getNearbyEntities(location, 5, 5, 5).forEach(entity -> {
-            if(entity instanceof Player)
-                if(!Utils.canPvp(entity))
-                    return;
             entity.setVelocity(entity.getLocation().toVector().subtract(location.toVector()).normalize().multiply(5));
         });
     }

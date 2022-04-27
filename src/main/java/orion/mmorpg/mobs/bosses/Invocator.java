@@ -2,12 +2,15 @@ package orion.mmorpg.mobs.bosses;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityInsentient;
+import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
+import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.DragonFireball;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.mobs.list.CryptSkeleton;
 import orion.mmorpg.mobs.samples.SampleBossMob;
@@ -40,10 +43,11 @@ public class Invocator extends SampleBossMob {
                 new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-4,0,-4))
 
         );
-        this.bP.a(0, pathfinderGoalSummon);
-        this.bP.a(1, new PathfinderGoalCastSpell(new RepulsionSpell(), this.getBukkitEntity().getLocation(), 120));
+         this.bP.a(0,new PathfinderGoalFireballAttack(this));
+        this.bP.a(1, pathfinderGoalSummon);
+        this.bP.a(2, new PathfinderGoalCastSpell(new RepulsionSpell(), this.getBukkitEntity().getLocation(), 120));
         this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
-        this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, true));
+        this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
 
     }
 
@@ -52,6 +56,30 @@ public class Invocator extends SampleBossMob {
         super.die(damagesource);
         for(SampleMob mob : pathfinderGoalSummon.getSummons())
             mob.die();
+    }
+
+    private class PathfinderGoalFireballAttack extends PathfinderGoal { // TODO: Add delay between each fireball
+        private final EntityInsentient invocator;
+        private long lastFireball = System.currentTimeMillis();
+        public PathfinderGoalFireballAttack(EntityInsentient invocator) {
+            this.invocator = invocator;
+        }
+
+        @Override
+        public boolean a() {
+            return this.invocator.getGoalTarget() != null && this.invocator.getGoalTarget().isAlive() && System.currentTimeMillis() - lastFireball > 1000;
+        }
+
+        @Override
+        public void e() {
+            EntityLiving target = this.invocator.getGoalTarget();
+            if( (this.invocator.e(target) < 32) && this.invocator.hasLineOfSight(target)) {
+                DragonFireball fireball =  target.getBukkitEntity().getWorld().spawn(invocator.getBukkitEntity().getLocation(), DragonFireball.class);
+                fireball.setDirection(target.getBukkitEntity().getLocation().subtract(invocator.getBukkitEntity().getLocation()).toVector().normalize());
+
+            }
+            lastFireball = System.currentTimeMillis();
+        }
     }
 
     private class PathfinderGoalSummon extends PathfinderGoal {
