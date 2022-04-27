@@ -8,10 +8,14 @@ import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.mobs.list.CryptSkeleton;
 import orion.mmorpg.mobs.samples.SampleBossMob;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
 import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.players.abilities.LocationSpell;
+import orion.mmorpg.players.abilities.Spell;
+import orion.mmorpg.players.abilities.spells.RepulsionSpell;
 import orion.mmorpg.utils.Stats;
 
 import java.lang.reflect.InvocationTargetException;
@@ -37,7 +41,8 @@ public class Invocator extends SampleBossMob {
 
         );
         this.bP.a(0, pathfinderGoalSummon);
-        this.bQ.a(1, new PathfinderGoalHurtByTarget(this, new Class[0]));
+        this.bP.a(1, new PathfinderGoalCastSpell(new RepulsionSpell(), this.getBukkitEntity().getLocation(), 120));
+        this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
         this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, true));
 
     }
@@ -87,6 +92,30 @@ public class Invocator extends SampleBossMob {
 
         public SampleHostileMob[] getSummons() {
             return summons;
+        }
+    }
+
+    private class PathfinderGoalCastSpell extends PathfinderGoal {
+        private Spell spell;
+        private Location location;
+        private long delay;
+        private long lastIteration;
+        public PathfinderGoalCastSpell(Spell spell, Location location, long delay) {
+            this.spell = spell;
+            this.location = location;
+            this.delay = delay;
+            this.lastIteration = System.currentTimeMillis() + delay * 1000;
+        }
+
+        @Override
+        public boolean a() {
+            return System.currentTimeMillis() - lastIteration > 60 * 1000;
+        }
+
+        @Override
+        public void c() {
+            ((LocationSpell)spell).launchFromLocation(Mmorpg.INSTANCE, null, null, location);
+            lastIteration = System.currentTimeMillis();
         }
     }
 }

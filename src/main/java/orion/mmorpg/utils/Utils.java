@@ -1,5 +1,11 @@
 package orion.mmorpg.utils;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -84,5 +90,16 @@ public class Utils {
                     ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
                     ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n");
         return totalDamage;
+    }
+
+    public static boolean canPvp(Entity entity) {
+        RegionManager manager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(entity.getWorld()));
+        for(ProtectedRegion region : manager.getApplicableRegions(BukkitAdapter.asBlockVector(entity.getLocation()))) {
+            if(region.getFlag(Flags.PVP).equals(StateFlag.State.DENY)) {
+                return false;
+            } else
+                return true;
+        }
+        return false;
     }
 }
