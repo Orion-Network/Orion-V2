@@ -26,7 +26,6 @@ import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.sample.BasicRangedWeapon;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.LocationSpell;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Stats;
@@ -88,7 +87,7 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             orionPlayer.onHitByEntity(e);
-            float reduction = 1 + (orionPlayer.getStats().getDefence() / (orionPlayer.getStats().getDefence() + 100));
+            float reduction = Utils.calculateDamageReduction(orionPlayer.getStats().getDefence());
             orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
 
             if (orionPlayer.getHealth() <= 0)
@@ -188,8 +187,7 @@ public class PlayerStatsListener implements Listener {
                 location.setDirection(p.getEyeLocation().getDirection());
                 try {
                     Spell s = (Spell) SpellList.valueOf(e.getEntity().getMetadata("spell").get(0).asString()).getSpellClass().getConstructors()[0].newInstance();
-                    if (s instanceof LocationSpell)
-                        ((LocationSpell) s).launchFromLocation(mmorpg, p, orionPlayer, location);
+                    s.launch(mmorpg, location);
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }

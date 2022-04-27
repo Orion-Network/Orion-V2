@@ -16,7 +16,14 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onServerStart(ServerListPingEvent event) {
-        event.setMotd(ChatColor.GRAY + "Mmorpg " + ChatColor.GREEN + "v" + mmorpg.getDescription().getVersion());
+        event.setMotd(
+                "                       " +
+                ChatColor.GRAY + "play.orionrpg.fr" +
+                "   " +
+                ChatColor.GREEN + "v" + mmorpg.getDescription().getVersion() +
+                "                     " +
+                "Minecraft Open World RPG"
+        );
     }
 
     @EventHandler

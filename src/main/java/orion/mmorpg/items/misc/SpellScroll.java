@@ -32,7 +32,7 @@ public class SpellScroll extends BasicConsumableItem {
         }
         try {
             Spell s = (Spell) SpellList.valueOf(spell).getSpellClass().getConstructors()[0].newInstance();
-            s.launch(mmorpg, e.getPlayer(), data);
+            s.launch(mmorpg, e.getPlayer());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();

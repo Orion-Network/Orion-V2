@@ -11,7 +11,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 
@@ -22,11 +21,11 @@ public class GoatHunger extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
+    public void launch(Mmorpg mmorpg, Location location) {
         Effect goatHungerEffect = new GoatHungerEffect(Mmorpg.effectManager);
-        RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
-        if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == player) return;
-        goatHungerEffect.setLocation(player.getEyeLocation());
+        RayTraceResult rayTraceResult = getCaster().getWorld().rayTraceEntities(((Player)getCaster()).getEyeLocation().add(((Player)getCaster()).getEyeLocation().getDirection().normalize()), ((Player)getCaster()).getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
+        if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == getCaster()) return;
+        goatHungerEffect.setLocation(((Player)getCaster()).getEyeLocation());
         goatHungerEffect.setTargetEntity(rayTraceResult.getHitEntity());
         goatHungerEffect.start();
     }

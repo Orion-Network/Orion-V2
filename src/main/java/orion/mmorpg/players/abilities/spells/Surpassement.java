@@ -1,5 +1,6 @@
 package orion.mmorpg.players.abilities.spells;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -19,8 +20,9 @@ public class Surpassement extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.getSupportMap().put(new BoostedMode(), (1000 * 60) + System.currentTimeMillis());
+    public void launch(Mmorpg mmorpg, Location Location) {
+        if(getOrionCaster() != null)
+            getOrionCaster().getSupportMap().put(new BoostedMode(), (1000 * 60) + System.currentTimeMillis());
     }
 
     class BoostedMode extends Support {

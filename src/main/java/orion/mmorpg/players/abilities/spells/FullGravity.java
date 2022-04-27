@@ -8,23 +8,16 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.effects.ZoneSpellEffect;
-import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.LocationSpell;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 
-public class FullGravity extends Spell implements LocationSpell {
+public class FullGravity extends Spell{
     public FullGravity() {
         super("FULL_GRAVITY", 15, Element.BLACK, 60 * 1000);
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        launchFromLocation(mmorpg, player, orionPlayer, player.getLocation());
-    }
-
-    @Override
-    public void launchFromLocation(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, Location location) {
+    public void launch(Mmorpg mmorpg, Location location) {
         ZoneSpellEffect zoneSpellEffect = new ZoneSpellEffect(Mmorpg.effectManager);
         zoneSpellEffect.particle = Particle.SMOKE_NORMAL;
         zoneSpellEffect.duration = 15 * 1000;

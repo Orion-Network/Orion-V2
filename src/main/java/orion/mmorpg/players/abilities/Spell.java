@@ -2,6 +2,8 @@ package orion.mmorpg.players.abilities;
 
 import de.slikey.effectlib.EffectType;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
@@ -22,6 +24,10 @@ public abstract class Spell {
     public boolean canceled = false;
     private final EffectType type = EffectType.INSTANT;
 
+    private Entity caster;
+    private OrionPlayer orionCaster;
+    private Entity target;
+    private OrionPlayer orionTarget;
 
     public Spell(String internal_id, int level, Element element, long cooldown) {
         this.internal_id = internal_id;
@@ -31,6 +37,8 @@ public abstract class Spell {
     }
 
     public boolean beforeLaunch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, boolean needSpell) {
+        this.caster = player;
+        this.orionCaster = orionPlayer;
         this.canceled = false;
         if (needSpell) {
             if (!orionPlayer.getSpells().containsKey(internal_id)) {
@@ -55,12 +63,15 @@ public abstract class Spell {
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
         orionPlayer.onLaunchSpell(player, orionPlayer, this);
         orionPlayer.getCooldownSpells().put(internal_id, System.currentTimeMillis() + cooldown);
-        launch(mmorpg, player, orionPlayer);
+        launch(mmorpg, caster.getLocation());
         return true;
     }
-
+    public void launch(Mmorpg mmorpg, Entity caster) {
+        this.setCaster(caster);
+        launch(mmorpg, caster.getLocation());
+    }
     //TODO Change to a boolean to check if spell has been launched
-    public abstract void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer);
+    public abstract void launch(Mmorpg mmorpg, Location location);
 
     public String getInternal_id() {
         return internal_id;
@@ -96,5 +107,41 @@ public abstract class Spell {
 
     public boolean isCanceled() {
         return canceled;
+    }
+
+    public Entity getCaster() {
+        return caster;
+    }
+
+    public void setCaster(Entity caster) {
+        this.caster = caster;
+        if(caster instanceof Player)
+            this.orionCaster = Mmorpg.INSTANCE.getPlayerManager().getPlayer(caster.getUniqueId());
+    }
+
+    public OrionPlayer getOrionCaster() {
+        return orionCaster;
+    }
+
+    public void setOrionCaster(OrionPlayer orionCaster) {
+        this.orionCaster = orionCaster;
+    }
+
+    public Entity getTarget() {
+        return target;
+    }
+
+    public void setTarget(Entity target) {
+        this.target = target;
+        if(target instanceof Player)
+            this.orionTarget = Mmorpg.INSTANCE.getPlayerManager().getPlayer(target.getUniqueId());
+    }
+
+    public OrionPlayer getOrionTarget() {
+        return orionTarget;
+    }
+
+    public void setOrionTarget(OrionPlayer orionTarget) {
+        this.orionTarget = orionTarget;
     }
 }

@@ -16,7 +16,6 @@ import orion.mmorpg.mobs.list.CryptSkeleton;
 import orion.mmorpg.mobs.samples.SampleBossMob;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
 import orion.mmorpg.mobs.samples.SampleMob;
-import orion.mmorpg.players.abilities.LocationSpell;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.spells.RepulsionSpell;
 import orion.mmorpg.utils.Stats;
@@ -142,7 +141,7 @@ public class Invocator extends SampleBossMob {
 
         @Override
         public void c() {
-            ((LocationSpell)spell).launchFromLocation(Mmorpg.INSTANCE, null, null, location);
+            spell.launch(Mmorpg.INSTANCE, location);
             lastIteration = System.currentTimeMillis();
         }
     }

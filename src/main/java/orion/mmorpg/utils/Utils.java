@@ -92,6 +92,10 @@ public class Utils {
         return totalDamage;
     }
 
+    public static float calculateDamageReduction(float defence) {
+        return 1 + (defence / (defence + 100));
+    }
+
     public static boolean canPvp(Entity entity) {
         RegionManager manager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(entity.getWorld()));
         for(ProtectedRegion region : manager.getApplicableRegions(BukkitAdapter.asBlockVector(entity.getLocation()))) {

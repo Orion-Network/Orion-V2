@@ -25,7 +25,7 @@ public class StarSet {
     public static class StarsetLeggings extends BasicArmorItem {
         public StarsetLeggings() {
             super(Material.LEVER, "Starset Leggings", "STARSET_LEGGINGS", 0, "for", Rarity.UNOBTAINABLE, ArmorType.LEGGINGS,
-                    new Stats.Builder().withIntel(100).withLuck(100).withVitality(100).build());
+                    new Stats.Builder().withDefence(100).withIntel(100).withLuck(100).withVitality(100).build());
         }
     }
 

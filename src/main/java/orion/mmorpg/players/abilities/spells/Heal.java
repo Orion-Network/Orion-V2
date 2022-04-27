@@ -1,5 +1,6 @@
 package orion.mmorpg.players.abilities.spells;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
@@ -12,7 +13,11 @@ public class Heal extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer) {
-        orionPlayer.heal(orionPlayer.getStats().getVitality() / 10);
+    public void launch(Mmorpg mmorpg, Location location) {
+        if(getCaster() instanceof Player) {
+            Player player = (Player) getCaster();
+            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
+            orionPlayer.heal(orionPlayer.getStats().getVitality() / 10);
+        }
     }
 }
