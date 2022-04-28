@@ -9,17 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: "11"
-        - name: Build
-          - run: mvn clean package
-          - run: mkdir staging && cp target/*.jar staging
-        - name: Deploy to Artifacts
-          - uses: actions/artifact-upload@v3
-            with:
-              name: "{{ github.event.head_commit.id }}"
-              path: staging
-              target-directory: "{{ github.event.head_commit.id }}"
-              version: "{{ github.event.head_commit.id }}"
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build Maven
+        run: mvn --batch-mode --update-snapshots verify
+      - name: Deploy Maven
+        run: mkdir staging && cp target/*.jar staging
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: staging
