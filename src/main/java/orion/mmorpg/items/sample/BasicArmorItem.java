@@ -16,6 +16,7 @@ import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class BasicArmorItem extends BasicItem {
     public final ArmorType ARMORTYPE;
@@ -40,6 +41,7 @@ public abstract class BasicArmorItem extends BasicItem {
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING, ARMORTYPE.name());
+        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("no_stack"), PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }

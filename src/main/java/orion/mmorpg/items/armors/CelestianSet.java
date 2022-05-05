@@ -22,7 +22,7 @@ public class CelestianSet {
 
         @Override
         public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
-            if (data.getRace() != Race.CELESTIAN) {
+            if (data.getRace() != Race.CELESTIAL) {
                 Utils.sendInfoMessage(p, "Vous devez être célestien pour équiper la couronne");
                 return false;
             }

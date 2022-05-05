@@ -186,6 +186,7 @@ public class MenuGui extends ChestGui {
                             e.setCurrentItem(null);
                         }
                     }
+                    orionPlayer.updateHealthbar();
                 }
             }
         });
@@ -225,7 +226,6 @@ public class MenuGui extends ChestGui {
                 PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
                     return;
-                Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
                 if (container.get(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                     orionPlayer.getEquipements()[3] = null;
                     Utils.sendInfoMessage(p, "You removed an helmet");
@@ -289,6 +289,7 @@ public class MenuGui extends ChestGui {
                     getMenuPane();
                     getArmorPane().addItem(RING_PLACEHOLDER, 0, slot);
                 }
+                orionPlayer.updateHealthbar();
             }
         });
         this.update();

@@ -16,8 +16,6 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 import xyz.upperlevel.spigot.book.BookUtil;
 
-import java.util.stream.Collectors;
-
 public class PlayerChatListener implements Listener {
 
     static Player player;
@@ -67,7 +65,7 @@ public class PlayerChatListener implements Listener {
                 description.addExtra(ChatColor.GRAY + "Level : " + ChatColor.YELLOW + stats.getLevel());
                 description.addExtra(ChatColor.GRAY + "\nClasse : " + ChatColor.YELLOW + stats.getRace().name());
                 description.addExtra(ChatColor.GRAY + "\nSupport : " + ChatColor.YELLOW + (stats.getSupport() != null ? stats.getSupport().getName() : "Aucun"));
-                description.addExtra(stats.getStats().statsAsLore().stream().collect(Collectors.joining()));
+                stats.getStats().statsAsLore().forEach(description::addExtra);
 
                 base.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(description).create()));
                 return base;

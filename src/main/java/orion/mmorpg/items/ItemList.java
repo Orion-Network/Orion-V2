@@ -6,10 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import orion.mmorpg.items.armors.CelestianSet;
-import orion.mmorpg.items.armors.KnightSet;
-import orion.mmorpg.items.armors.StarSet;
-import orion.mmorpg.items.armors.StartingSet;
+import orion.mmorpg.items.armors.*;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
 import orion.mmorpg.items.minecraft.Wheat;
@@ -17,6 +14,7 @@ import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.items.weapons.*;
+import orion.mmorpg.items.weapons.arrows.CommonArrow;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
 import orion.mmorpg.items.weapons.arrows.TransmissionArrow;
 import orion.mmorpg.utils.Rarity;
@@ -31,7 +29,9 @@ public enum ItemList {
     ADMIN_SWORD(new AdminSword(), BasicMeleeWeapon.class),
     ASPECT_OF_JAIRI(new AspectOfJairi(), BasicMeleeWeapon.class),
     BAHTON(new BahTon(), BasicMagicWeapon.class),
+    FEUTON(new FeuTon(), BasicMagicWeapon.class),
     ARCANE(new ArcAne(), BasicRangedWeapon.class),
+    REINFORCED_BOW(new ReinforcedBow(), BasicRangedWeapon.class),
     HOUYI_BOW(new HouYi(), BasicRangedWeapon.class),
     MURAMASA(new Muramasa(), BasicMeleeWeapon.class),
     //Armor Items
@@ -43,6 +43,18 @@ public enum ItemList {
     KNIGHT_CHESTPLATE(new KnightSet.KnightChestplate(), BasicArmorItem.class),
     KNIGHT_LEGGINGS(new KnightSet.KnightLeggings(), BasicArmorItem.class),
     KNIGHT_BOOTS(new KnightSet.KnightBoots(), BasicArmorItem.class),
+    FUR_HELMET(new FurSet.FurHelmet(), BasicArmorItem.class),
+    FUR_CHESTPLATE(new FurSet.FurChestplate(), BasicArmorItem.class),
+    FUR_LEGGINGS(new FurSet.FurLeggings(), BasicArmorItem.class),
+    FUR_BOOTS(new FurSet.FurBoots(), BasicArmorItem.class),
+    NECRO_RING(new NecroSet.NecroRing(), BasicArmorItem.class),
+    NECRO_BELT(new NecroSet.NecroBelt(), BasicArmorItem.class),
+    WHITE_WALKER_HELMET(new WhiteWalkerSet.WhiteWalkerHelmet(), BasicArmorItem.class),
+    WHITE_WALKER_CHESTPLATE(new WhiteWalkerSet.WhiteWalkerChestplate(), BasicArmorItem.class),
+    WHITE_WALKER_LEGGINGS(new WhiteWalkerSet.WhiteWalkerLeggings(), BasicArmorItem.class),
+    WHITE_WALKER_BOOTS(new WhiteWalkerSet.WhiteWalkerBoots(), BasicArmorItem.class),
+    WHITE_WALKER_RING(new WhiteWalkerSet.WhiteWalkerRing(), BasicArmorItem.class),
+    WHITE_WALKER_BELT(new WhiteWalkerSet.WhiteWalkerBelt(), BasicArmorItem.class),
     CELESTIAN_CROWN(new CelestianSet.CelestianCrown(), BasicArmorItem.class),
     CELESTIAN_WINGS(new CelestianSet.CelestianWings(), BasicArmorItem.class),
     CELESTIAN_RING(new CelestianSet.CelestianRing(), BasicArmorItem.class),
@@ -52,6 +64,7 @@ public enum ItemList {
     STARSET_LEGGINGS(new StarSet.StarsetLeggings(), BasicArmorItem.class),
     STARSET_BOOTS(new StarSet.StarsetBoots(), BasicArmorItem.class),
     //Arrows
+    COMMON_ARROW(new CommonArrow(), BasicArrow.class),
     GRAVITY_ARROW(new GravityArrow(), BasicArrow.class),
     TRANSMISSION_ARROW(new TransmissionArrow(), BasicArrow.class),
     //GUI Items
@@ -97,8 +110,13 @@ public enum ItemList {
     DRY_WHEAT(BasicItem.generateBasicItem(Material.WHEAT, "Blé Sec", "DRY_WHEAT", 1, null, Rarity.COMMON), BasicItem.class),
     WHEAT_SEEDS(BasicItem.generateBasicItem(Material.WHEAT_SEEDS, "Graines", "WHEAT_SEEDS", 1, null, Rarity.COMMON), BasicItem.class),
     SHEEP_LAMB(BasicItem.generateBasicItem(Material.MUTTON, "Lambeau de Mouton", "SHEEP_LAMB", 1, null, Rarity.COMMON), BasicItem.class),
+    ROTTEN_FLESH(BasicItem.generateBasicItem(Material.ROTTEN_FLESH, "Chair Pourrie", "ROTTEN_FLESH", 1, null, Rarity.COMMON), BasicItem.class),
+    ZOMBIE_HEAD(BasicItem.generateBasicItem(Material.ZOMBIE_HEAD, "Tête de Zombie", "ZOMBIE_HEAD", 1, null, Rarity.COMMON), BasicItem.class),
+    DAMAGED_BONE(BasicItem.generateBasicItem(Material.BONE, "Os Endommagé", "DAMAGED_BONE", 1, null, Rarity.COMMON), BasicItem.class),
+    SKELETON_SKULL(BasicItem.generateBasicItem(Material.SKELETON_SKULL, "Crâne de Skeleton", "SKELETON_SKULL", 1, null, Rarity.COMMON), BasicItem.class),
     NORDIC_WOLF_FUR(BasicItem.generateBasicItem(Material.LEATHER, "Fourrure de Loup Nordique", "NORDIC_WOLF_FUR", 1, null, Rarity.COMMON), BasicItem.class),
     NORDIC_WOLF_BONE(BasicItem.generateBasicItem(Material.BONE, "Os de Loup Nordique", "NORDIC_WOLF_BONE", 1, null, Rarity.COMMON), BasicItem.class),
+    WHITE_WALKER_SOUL(BasicItem.generateBasicItem(Material.SOUL_SAND, "Âme de Marcheur Blanc", "WHITE_WALKER_SOUL", 1, null, Rarity.RARE), BasicItem.class),
     ;
 
     BasicItem item;

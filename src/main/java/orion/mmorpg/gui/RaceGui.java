@@ -16,7 +16,7 @@ public class RaceGui extends ChestGui {
 
     Player p;
     OrionPlayer orionPlayer;
-    List<Race> excludedRaces = Arrays.asList(Race.CELESTIAN);
+    List<Race> excludedRaces = Arrays.asList(Race.CELESTIAL);
     int rows = (int) Math.ceil(Race.values().length / 9);
     OutlinePane racePane = new OutlinePane(0, 0, 9, 1);
 

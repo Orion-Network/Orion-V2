@@ -15,6 +15,7 @@ public enum Mobs {
     CRYPT_SKELETON(CryptSkeleton.class),
     GUARDIAN(Guardian.class),
     NORDIC_WOLF(NordicWolf.class),
+    WHITE_WALKER(WhiteWalker.class),
 
     //Pet Mobs
     FUNNY_WOLF(FunnyWolf.class),

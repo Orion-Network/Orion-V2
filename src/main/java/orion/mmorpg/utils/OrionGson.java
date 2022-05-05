@@ -72,7 +72,6 @@ public class OrionGson {
             return items;
         }
 
-        //TODO Correct save and load of equipements
         @Override
         public ItemStack[] deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonArray = jsonElement.getAsJsonObject();

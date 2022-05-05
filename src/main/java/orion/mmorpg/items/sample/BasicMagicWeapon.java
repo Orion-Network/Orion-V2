@@ -19,6 +19,8 @@ import orion.mmorpg.utils.Utils;
 
 public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
 
+    public Particle particle = Particle.GLOW;
+
     public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, STATS, DAMAGE);
     }
@@ -48,7 +50,7 @@ public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
         }
         OrionPlayer data = Mmorpg.INSTANCE.getPlayerManager().getPlayer(caster.getUniqueId());
         Vector dir = caster.getEyeLocation().getDirection().normalize();
-        AttackEffect effect = new AttackEffect(Mmorpg.effectManager, dir.multiply(0.5), caster, data, getDAMAGE());
+        AttackEffect effect = new AttackEffect(Mmorpg.effectManager, dir.multiply(0.5), caster, data, getDAMAGE(), particle);
         effect.setLocation(caster.getEyeLocation());
         effect.start();
     }
@@ -59,10 +61,10 @@ public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
         OrionPlayer casterData;
         float damage;
 
-        public AttackEffect(EffectManager effectManager, Vector v, Player caster, OrionPlayer casterData, float damage) {
+        public AttackEffect(EffectManager effectManager, Vector v, Player caster, OrionPlayer casterData, float damage, Particle particle) {
             super(effectManager);
             this.v = v;
-            this.particle = Particle.GLOW;
+            this.particle = particle;
             this.caster = caster;
             this.casterData = casterData;
             this.damage = damage;

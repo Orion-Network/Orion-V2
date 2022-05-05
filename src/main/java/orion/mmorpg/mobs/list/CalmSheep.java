@@ -10,7 +10,6 @@ import orion.mmorpg.utils.Stats;
 public class CalmSheep extends SamplePassiveMob {
     public CalmSheep(String uuid, Location location) {
         super("Mouton Calme", 1, EntityTypes.ax, uuid, location, new Stats.Builder().withVitality(20).withSpeed(4).build());
-        this.getRewards().setItemNumber(2);
-        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LAMB.getProcessedItem(1), 1, 1));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LAMB.getProcessedItem(1), 40));
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalAvoidTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
 import net.minecraft.world.entity.player.EntityHuman;
@@ -45,6 +46,7 @@ public class Invocator extends SampleBossMob {
          this.bP.a(0,new PathfinderGoalFireballAttack(this));
         this.bP.a(1, pathfinderGoalSummon);
         this.bP.a(2, new PathfinderGoalCastSpell(new RepulsionSpell(), this.getBukkitEntity().getLocation(), 120));
+        this.bP.a(3, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 3.0F, 0.8D, 0.33D));
         this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
         this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
 
@@ -57,7 +59,7 @@ public class Invocator extends SampleBossMob {
             mob.die();
     }
 
-    private class PathfinderGoalFireballAttack extends PathfinderGoal { // TODO: Add delay between each fireball
+    private class PathfinderGoalFireballAttack extends PathfinderGoal {
         private final EntityInsentient invocator;
         private long lastFireball = System.currentTimeMillis();
         public PathfinderGoalFireballAttack(EntityInsentient invocator) {
@@ -66,14 +68,14 @@ public class Invocator extends SampleBossMob {
 
         @Override
         public boolean a() {
-            return this.invocator.getGoalTarget() != null && this.invocator.getGoalTarget().isAlive() && System.currentTimeMillis() - lastFireball > 1000;
+            return this.invocator.getGoalTarget() != null && this.invocator.getGoalTarget().isAlive() && System.currentTimeMillis() - lastFireball > 3000;
         }
 
         @Override
         public void e() {
             EntityLiving target = this.invocator.getGoalTarget();
             if( (this.invocator.e(target) < 32) && this.invocator.hasLineOfSight(target)) {
-                DragonFireball fireball =  target.getBukkitEntity().getWorld().spawn(invocator.getBukkitEntity().getLocation(), DragonFireball.class);
+                DragonFireball fireball =  target.getBukkitEntity().getWorld().spawn(invocator.getBukkitEntity().getLocation().add(0, 2.5, 0), DragonFireball.class);
                 fireball.setDirection(target.getBukkitEntity().getLocation().subtract(invocator.getBukkitEntity().getLocation()).toVector().normalize());
 
             }
@@ -98,7 +100,7 @@ public class Invocator extends SampleBossMob {
         @Override
         public boolean a() {
             boolean summonAlive = Arrays.stream(summons).anyMatch(summon -> summon.isAlive());
-            return System.currentTimeMillis() - lastIteration > 60 * 1000 && !summonAlive;
+            return System.currentTimeMillis() - lastIteration > 300 * 1000 && !summonAlive;
         }
 
         @Override

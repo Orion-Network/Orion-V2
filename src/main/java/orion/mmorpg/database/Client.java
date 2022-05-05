@@ -38,6 +38,7 @@ public class Client {
     public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
     public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");
     public MongoCollection<Document> mobCollection = orionDatabase.getCollection("mobs");
+    public MongoCollection<Document> jobsCollection = orionDatabase.getCollection("jobs");
 
     public boolean hasPlayer(UUID uuid) {
         Document doc = playerCollection.find(eq("uuid", uuid.toString())).first();

@@ -18,7 +18,7 @@ public class CelestialSerum extends BasicConsumableItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         super.onUseItem(mmorpg, data, e);
-        Race race = Race.CELESTIAN;
+        Race race = Race.CELESTIAL;
         new AcceptGui("Devenir " + race.getName(), e.getPlayer(), data, () -> {
             data.setRace(race);
             for (String s : race.spellList)

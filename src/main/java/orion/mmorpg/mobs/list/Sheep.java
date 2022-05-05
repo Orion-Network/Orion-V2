@@ -10,6 +10,6 @@ import orion.mmorpg.utils.Stats;
 public class Sheep extends SampleNeutralMob {
     public Sheep(String uuid, Location location) {
         super("Mouton", 2, EntityTypes.ax, uuid, location, new Stats.Builder().withVitality(30).withStrength(2).withSpeed(4).build());
-        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LAMB.getProcessedItem(1), 1, 1));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LAMB.getProcessedItem(1), 80));
     }
 }

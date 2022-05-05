@@ -149,7 +149,7 @@ public class Stats {
         INTELLIGENCE("࿇", ChatColor.of("#00ACEE"), Float.MAX_VALUE),
         DEFENCE("🛡", ChatColor.of("#884DA7"), Float.MAX_VALUE),
         SPEED("࿓", ChatColor.of("#207125"), 1000),
-        LUCK("☘", ChatColor.of("#FFA500"), Float.MAX_VALUE);
+        LUCK("☘", ChatColor.of("#FFA500"), 500);
 
         String character;
         ChatColor color;

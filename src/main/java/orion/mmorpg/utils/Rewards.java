@@ -1,70 +1,27 @@
 package orion.mmorpg.utils;
 
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Random;
 
 public class Rewards extends ArrayList<Rewards.Reward> {
     double exp = 0;
-    int itemNumber = 1;
-    boolean isRandom = true;
-    boolean dropBadLuckDust = false;
 
     public ArrayList<ItemStack> generateRewards() {
+        return generateRewards(0);
+    }
+
+    public ArrayList<ItemStack> generateRewards(float luck) {
         ArrayList<ItemStack> rewards = new ArrayList<>();
+        Random random = new Random();
         if(this.isEmpty()) return rewards;
-        if(isRandom) {
-            LinkedHashMap<Reward, Integer> doubles = new LinkedHashMap<>();
-            for (int i = 0; i < itemNumber; i++) {
-                Random rand = new Random();
-                Reward r = this.get(rand.nextInt(this.size()));
-                if(doubles.containsKey(r)) {
-                    if(doubles.get(r) < r.getChanceToGetMultiple()) {
-                        rewards.add(r.getItem());
-                        doubles.replace(r, (doubles.get(r)+1));
-                    } else {
-                        if(dropBadLuckDust)
-                            rewards.add(badLuckDust());
-                    }
-                } else {
-                    rewards.add(r.getItem());
-                    doubles.put(r, 1);
-                }
+        for(Reward reward : this) {
+            if(random.nextInt(reward.maxChance + 1) <= reward.getChance() * (luck == 0 ? 1 : (1 + luck/Stats.StatsInfo.LUCK.getCap()))) {
+                rewards.add(reward.getItem());
             }
-            return rewards;
-        } else {
-            return (ArrayList<ItemStack>) Collections.singletonList(this.get(0).getItem());
         }
-    }
-
-    public int getItemNumber() {
-        return itemNumber;
-    }
-
-    public void setItemNumber(int itemNumber) {
-        this.itemNumber = itemNumber;
-    }
-
-    public boolean isRandom() {
-        return isRandom;
-    }
-
-    public void setRandom(boolean random) {
-        isRandom = random;
-    }
-
-    public boolean isDropBadLuckDust() {
-        return dropBadLuckDust;
-    }
-
-    public void setDropBadLuckDust(boolean dropBadLuckDust) {
-        this.dropBadLuckDust = dropBadLuckDust;
+        return rewards;
     }
 
     public double getExp() {
@@ -78,12 +35,11 @@ public class Rewards extends ArrayList<Rewards.Reward> {
     public static class Reward {
         ItemStack item;
         int chance;
-        int chanceToGetMultiple;
+        int maxChance = 100;
 
-        public Reward(ItemStack item, int chance, int chanceToGetMultiple) {
+        public Reward(ItemStack item, int chance) {
             this.item = item;
             this.chance = chance;
-            this.chanceToGetMultiple = chanceToGetMultiple;
         }
 
         public ItemStack getItem() {
@@ -94,17 +50,13 @@ public class Rewards extends ArrayList<Rewards.Reward> {
             return chance;
         }
 
-        public int getChanceToGetMultiple() {
-            return chanceToGetMultiple;
+        public int getMaxChance() {
+            return maxChance;
         }
-    }
 
-    public ItemStack badLuckDust() {
-        ItemStack badLuck = new ItemStack(Material.GUNPOWDER);
-        ItemMeta meta = badLuck.getItemMeta();
-        meta.setDisplayName(ChatColor.GRAY + "Poudre de malchance");
-        badLuck.setItemMeta(meta);
-        return badLuck;
+        public void setMaxChance(int maxChance) {
+            this.maxChance = maxChance;
+        }
     }
 
 }

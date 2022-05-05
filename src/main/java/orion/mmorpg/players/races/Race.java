@@ -12,16 +12,19 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public enum Race {
-    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL", "BOOSTED_MODE"}, null, null, (p, op) -> {
+    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new String[]{"HEAL"}, null, null,
+            new LinkedHashMap<Integer, String>() {
+                {
+                    put(5, "BOOSTED_MODE");
+                }
+            },(p, op) -> {
         p.getInventory().addItem(ItemList.MINECRAFT_WOODEN_SWORD.getProcessedItem(1), ItemList.STARTING_CHESTPLATE.getProcessedItem(1));
     }),
-    CELESTIAN("Celestian", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null);
+    CELESTIAL("Célestien", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
 
     public String name;
     public Stats stats;
@@ -29,20 +32,10 @@ public enum Race {
     public String[] spellList;
     public ArrayList<spec> species;
     public Support support = null;
+    public Map<Integer, String> learningSpells;
     BiConsumer<Player, OrionPlayer> onRaceSelected;
 
-    Race(String name, Stats stats, ItemStack itemStack) {
-        this.name = name;
-        this.stats = stats;
-        this.itemStack = itemStack;
-        this.spellList = new String[0];
-        this.species = new ArrayList<>();
-        this.onRaceSelected = (p, op) -> {
-            Utils.sendDebugMessage(p, "Race selected !");
-        };
-    }
-
-    Race(String name, Stats stats, ItemStack itemStack, @Nullable String[] spellList, @Nullable List<spec> species, @Nullable Support support, @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
+    Race(String name, Stats stats, ItemStack itemStack, @Nullable String[] spellList, @Nullable List<spec> species, @Nullable Support support, @Nullable Map<Integer, String> learningSpells, @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
         this.name = name;
         this.stats = stats;
         this.itemStack = itemStack;
@@ -54,6 +47,10 @@ public enum Race {
         if (species != null)
             this.species.addAll(species);
         this.support = support;
+
+        if(learningSpells != null)
+            this.learningSpells = learningSpells;
+
         if (onRaceSelected != null)
             this.onRaceSelected = onRaceSelected;
         else
@@ -84,6 +81,10 @@ public enum Race {
 
     public Support getSupport() {
         return support;
+    }
+
+    public Map<Integer, String> getLearningSpells() {
+        return learningSpells;
     }
 
     public BiConsumer<Player, OrionPlayer> getOnRaceSelected() {

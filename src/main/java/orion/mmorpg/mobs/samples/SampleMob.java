@@ -153,7 +153,7 @@ public abstract class SampleMob extends EntityCreature {
     }
 
     public MobData getMobData() {
-        return new MobData(this.getClass(), uuid, this.getSpawnLocation(), 5*1000, this.getEntityType());
+        return new MobData(this.getClass(), uuid, this.getSpawnLocation(), 60*1000, this.getEntityType());
     }
 
     public String getUuid() {

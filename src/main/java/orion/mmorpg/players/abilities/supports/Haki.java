@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Haki extends Support implements SpecialsSupport {
     public Haki() {
-        super("ItoItoNoMi", Rarity.LEGENDARY, "Créer de controler les fils");
+        super("Haki", Rarity.LEGENDARY, "Créer de controller votre corp et votre aura.");
     }
 
     @Override

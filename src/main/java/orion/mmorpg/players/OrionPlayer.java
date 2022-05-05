@@ -1,11 +1,13 @@
 package orion.mmorpg.players;
 
 import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.effect.SphereEffect;
 import fr.mrmicky.fastboard.FastBoard;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
@@ -48,7 +50,6 @@ public class OrionPlayer {
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
     public SlotType[] slotTypes;
     String[] selectedSpells;
-    //TODO Add leveling system
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
     private Stats baseStats;
@@ -175,8 +176,8 @@ public class OrionPlayer {
     }
 
     public void updateHealthbar() {
-        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.stats.getVitality());
-        double healthValue = this.getHealth() / this.stats.getVitality();
+        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().getVitality());
+        double healthValue = this.getHealth() / this.getStats().getVitality();
         if(healthValue > 1)
             this.healthBar.setProgress(1);
         else if (healthValue < 0)
@@ -424,17 +425,11 @@ public class OrionPlayer {
         this.party = p;
     }
 
-    public void levelUp(Player p, int level) {
-        this.setLevel(level);
-        Utils.sendInfoMessage(p, "Bravo, vous êtes monté de niveau !");
-    }
-
     public void heal(double health) {
         this.setHealth(this.getHealth() + health < this.getStats().getVitality() ? this.getHealth() + health : this.getStats().getVitality());
         this.updateHealthbar();
     }
 
-    //TODO Respawn
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
@@ -450,6 +445,19 @@ public class OrionPlayer {
         if(this.getExp() >= this.getExpToNextLevel()) {
             this.setExp(this.getExp() - this.getExpToNextLevel());
             this.setLevel(this.getLevel() + 1);
+            SphereEffect e = new SphereEffect(Mmorpg.effectManager);
+            e.particle = Particle.FIREWORKS_SPARK;
+            e.duration = 700;
+            e.radius = 1;
+            e.radiusIncrease = 0.3;
+            e.setLocation(p.getLocation());
+            e.start();
+            if(this.getRace().getLearningSpells().containsKey(this.getLevel())) {
+                String spell_id = this.getRace().getLearningSpells().get(this.getLevel());
+                SpellList.learnSpell(this, spell_id);
+                Utils.sendInfoMessage(p, "Vous avez appris le sort " +
+                        SpellList.valueOf(spell_id).getName());
+            }
             Utils.sendInfoMessage(p, "You have leveled up to level " + this.getLevel() + " !");
             if(this.getLevel() % 3 == 0 && this.getLevel() > this.getStatsPoints()) {
                 this.setStatsPoints(this.getStatsPoints() + 3);

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public abstract class BasicItem extends ItemStack {//TODO Consommable
+public abstract class BasicItem extends ItemStack {
     protected final Material MATERIAL;
     protected final String NAME;
     protected final String INTERNAL_ID;

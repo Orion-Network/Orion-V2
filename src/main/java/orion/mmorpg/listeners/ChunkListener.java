@@ -23,13 +23,12 @@ public class ChunkListener implements Listener {
     }
 
     @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {//TODO Chunk is loaded, is in chunk but not found in chunk manager
+    public void onChunkLoad(ChunkLoadEvent event) {
         if(mmorpg.getChunkManager().containChunk(event.getChunk())) {
             for(SampleMob.MobData mobData : mmorpg.getChunkManager().getChunk(event.getChunk())) {
                 try {
                     SampleMob mob = mobData.generateMob();
                     mob.spawn();
-                    System.out.println("Spawning entity: " + mob.getClass().getName());
                 } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

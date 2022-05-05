@@ -9,9 +9,8 @@ import orion.mmorpg.utils.Stats;
 
 public class NordicWolf extends SampleHostileMob {
     public NordicWolf(String uuid, Location location) {
-        super("Loup Nordique", 15, EntityTypes.bc, uuid, location, new Stats.Builder().withVitality(200).withStrength(23).withDefence(4).withSpeed(6).build());
-        this.getRewards().setItemNumber(2);
-        this.getRewards().add(new Rewards.Reward(ItemList.NORDIC_WOLF_FUR.getProcessedItem(1), 1, 2));
-        this.getRewards().add(new Rewards.Reward(ItemList.NORDIC_WOLF_BONE.getProcessedItem(1), 1, 1));
+        super("Loup Nordique", 13, EntityTypes.bc, uuid, location, new Stats.Builder().withVitality(150).withStrength(17).withDefence(4).withSpeed(5).build());
+        this.getRewards().add(new Rewards.Reward(ItemList.NORDIC_WOLF_FUR.getProcessedItem(1), 70));
+        this.getRewards().add(new Rewards.Reward(ItemList.NORDIC_WOLF_BONE.getProcessedItem(1), 30));
     }
 }
