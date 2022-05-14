@@ -29,6 +29,7 @@ import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.parties.Party;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
@@ -42,9 +43,10 @@ public class OrionPlayer {
     private final Stats stats;
     private final LinkedHashSet<String> portalStones;
     transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
-    transient LinkedHashMap<String, Spell> spells = new LinkedHashMap<>();
+    //TODO Change to Map with Spell, Knowledge
+    transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     ItemStack[] quiver;
-    transient LinkedHashMap<String, Long> cooldownSpells;
+    transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
     transient LinkedHashMap<Support, Long> supportMap;
     transient Party party;
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
@@ -134,7 +136,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, Set<String> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -148,7 +150,7 @@ public class OrionPlayer {
         this.exp = exp;
         this.mana = mana;
         this.portalStones = portalStones;
-        spells.forEach(spellID -> SpellList.learnSpell(this, spellID));
+        spells.forEach((spellClass, knowledge) -> getKnownSpells().put(spellClass, knowledge));
         this.support = support;
         this.race = race;
 
@@ -348,11 +350,11 @@ public class OrionPlayer {
         this.healthBar = healthBar;
     }
 
-    public LinkedHashMap<String, Spell> getSpells() {
-        return spells;
+    public LinkedHashMap<Class<? extends Spell>, Knowledge> getKnownSpells() {
+        return knownSpells;
     }
 
-    public LinkedHashMap<String, Long> getCooldownSpells() {
+    public LinkedHashMap<Class<? extends Spell>, Long> getCooldownSpells() {
         return cooldownSpells;
     }
 
@@ -453,10 +455,9 @@ public class OrionPlayer {
             e.setLocation(p.getLocation());
             e.start();
             if(this.getRace().getLearningSpells().containsKey(this.getLevel())) {
-                String spell_id = this.getRace().getLearningSpells().get(this.getLevel());
-                SpellList.learnSpell(this, spell_id);
-                Utils.sendInfoMessage(p, "Vous avez appris le sort " +
-                        SpellList.valueOf(spell_id).getName());
+                Class<? extends Spell> spellClass = this.getRace().getLearningSpells().get(this.getLevel());
+                SpellList.learnSpell(this, spellClass, 100);
+                Utils.sendInfoMessage(p, "Vous avez appris le sort ");
             }
             Utils.sendInfoMessage(p, "You have leveled up to level " + this.getLevel() + " !");
             if(this.getLevel() % 3 == 0 && this.getLevel() > this.getStatsPoints()) {

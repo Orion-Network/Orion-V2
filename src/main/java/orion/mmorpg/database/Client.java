@@ -11,9 +11,11 @@ import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 
 import java.io.IOException;
@@ -21,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -29,7 +30,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class Client {
     static Type portalStoneType = new TypeToken<LinkedHashSet<String>>() {
     }.getType();
-    static Type spellSetType = new TypeToken<Set<String>>() {
+    static Type spellSetType = new TypeToken<LinkedHashMap<Class<? extends Spell>, Knowledge>>() {
     }.getType();
     static Type quiverMapType = new TypeToken<LinkedHashMap<ItemStack, Integer>>() {
     }.getType();
@@ -63,7 +64,9 @@ public class Client {
         //document.put("equipements", Mmorpg.getOrionGson().getGSON().toJson(BukkitSerialization.itemStackArrayToBase64(player.getEquipements())));
         document.put("equipements", Mmorpg.getOrionGson().getGSON().toJson(player.getEquipements()));
 
-        document.put("spells", Mmorpg.getOrionGson().getGSON().toJson(player.getSpells().keySet()));
+        Document spells = new Document();
+        player.getKnownSpells().forEach((spell, knowledge) -> spells.put(spell.getName(), Mmorpg.getOrionGson().getGSON().toJson(knowledge)));
+        document.put("spells", spells);
         document.put("selectedSpells", Mmorpg.getOrionGson().getGSON().toJson(player.getSelectedSpells()));
         document.put("quiver", Mmorpg.getOrionGson().getGSON().toJson(player.getQuiver()));
         document.put("slotTypes", Mmorpg.getOrionGson().getGSON().toJson(player.getSlotTypes()));
@@ -101,7 +104,17 @@ public class Client {
         LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
         ItemStack[] equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"), ItemStack[].class);
 
-        Set<String> spells = Mmorpg.getOrionGson().GSON.fromJson(document.getString("spells"), spellSetType);
+        LinkedHashMap<Class<? extends Spell>, Knowledge> spells = new LinkedHashMap<>();
+        Document object = document.get("spells", Document.class);
+
+        object.forEach((key, value) -> {
+            try {
+                spells.put((Class<? extends Spell>) Class.forName(key), Mmorpg.getOrionGson().GSON.fromJson(value.toString(), Knowledge.class));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
         String[] selectedSpells;
         if (document.containsKey("selectedSpells"))
             selectedSpells = Mmorpg.getOrionGson().GSON.fromJson((String) document.get("selectedSpells"), String[].class);

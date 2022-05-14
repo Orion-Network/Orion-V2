@@ -12,7 +12,6 @@ import orion.mmorpg.items.ItemList;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class OrionGson {
@@ -24,6 +23,7 @@ public class OrionGson {
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
         builder.registerTypeAdapter(ItemStack[].class, new ItemStackArrayAdapter());
         builder.registerTypeAdapter(Location.class, new LocationAdapter());
+        builder.registerTypeAdapter(Knowledge.class, new KnowledgeAdapter());
         GSON = builder.create();
     }
 
@@ -31,7 +31,7 @@ public class OrionGson {
         return GSON;
     }
 
-    static class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {
+    static final class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {
 
         @Override
         public JsonElement serialize(ItemStack itemStack, Type type, JsonSerializationContext jsonSerializationContext) {
@@ -55,7 +55,7 @@ public class OrionGson {
         }
     }
 
-    static class ItemStackArrayAdapter implements JsonSerializer<ItemStack[]>, JsonDeserializer<ItemStack[]> {
+    static final class ItemStackArrayAdapter implements JsonSerializer<ItemStack[]>, JsonDeserializer<ItemStack[]> {
 
         ItemStackAdapter itemStackAdapter = new ItemStackAdapter();
 
@@ -68,39 +68,34 @@ public class OrionGson {
                 else
                     items.addProperty(String.valueOf(i), "null");
             }
-            System.out.println(items);
             return items;
         }
 
         @Override
         public ItemStack[] deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonArray = jsonElement.getAsJsonObject();
-            System.out.println("Size : " + jsonArray.size());
             ItemStack[] items = new ItemStack[jsonArray.size()];
 
             for (int i = 0; i < jsonArray.size(); i++) {
-                System.out.println("Debug : " + jsonArray.get(String.valueOf(i)) + " " + jsonArray.get(String.valueOf(i)).getClass());
                 if (jsonArray.get(String.valueOf(i)) == null) {
                     items[i] = null;
-                    System.out.println("Test");
                 } else {
                     ItemStack item = itemStackAdapter.deserialize(jsonArray.get(String.valueOf(i)), null, null);
                     items[i] = item;
                 }
             }
-            System.out.println(Arrays.toString(items));
             return items;
         }
     }
 
-    class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime> {
+    static final class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime> {
 
         public JsonElement serialize(LocalDateTime localDateTime, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(localDateTime.toInstant(ZoneOffset.UTC).getEpochSecond()); // "yyyy-mm-dd"
         }
     }
 
-    private class LocationAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
+    private final static class LocationAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
 
         @Override
         public JsonElement serialize(Location location, Type type, JsonSerializationContext jsonSerializationContext) {
@@ -118,4 +113,21 @@ public class OrionGson {
             return new Location(Bukkit.getWorld(jsonObject.get("world").getAsString()), jsonObject.get("x").getAsDouble(), jsonObject.get("y").getAsDouble(), jsonObject.get("z").getAsDouble());
         }
     }
+
+    private final static class KnowledgeAdapter implements JsonSerializer<Knowledge>, JsonDeserializer<Knowledge> {
+
+        @Override
+        public JsonElement serialize(Knowledge knowledge, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("knowledge", knowledge.getKnowledge());
+            return jsonObject;
+        }
+
+        @Override
+        public Knowledge deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            return new Knowledge(jsonObject.get("knowledge").getAsInt());
+        }
+    }
+
 }

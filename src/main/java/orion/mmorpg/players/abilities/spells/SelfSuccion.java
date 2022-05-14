@@ -6,6 +6,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.supports.SuccionSanguine;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class SelfSuccion extends Spell {
     public SelfSuccion() {
@@ -13,7 +14,7 @@ public class SelfSuccion extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() instanceof Player) {
             double damage = getOrionCaster().getHealth() / 2;
             ((Player)getOrionCaster()).damage(damage);

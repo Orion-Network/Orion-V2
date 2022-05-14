@@ -40,6 +40,14 @@ public class Stats {
         setLuck(builder.luck);
     }
 
+    public float getPower() {
+        return strength + vitality + intel + defence;
+    }
+
+    public float getSubPower() {
+        return luck + speed + critical_chance + critical_damage + attack_speed;
+    }
+
     /**
      * Generate an array list of every stats with there value, color and sigil
      *

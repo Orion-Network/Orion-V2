@@ -21,6 +21,8 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class GrimoryItem extends BasicItem {
     public GrimoryItem() {
         super(Material.BOOK, "Grimory", "GRIMORY", 1, "A grimory containing all your spells", Rarity.RARE);
@@ -44,14 +46,19 @@ public class GrimoryItem extends BasicItem {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         int slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
         if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            Spell spell = data.getSpells().get(data.getSelectedSpells()[slot]);
-            Utils.sendDebugMessage(e.getPlayer(), "slot : " + slot + "Spell : " + data.getSelectedSpells()[slot] + " in spell : " + data.getSpells().get(data.getSelectedSpells()[slot]));
-            if (spell != null) {
-                boolean canLaunch = spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
-                if (!canLaunch && data.getCooldownSpells().get(spell.getInternal_id()) > System.currentTimeMillis())
-                    e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getInternal_id()) - System.currentTimeMillis()) / 1000) + "s restantes."));
-            } else
-                Utils.sendInfoMessage(e.getPlayer(), "Le sort n'existe pas");
+            Spell spell;
+            if(data.getSelectedSpells()[slot] == null)
+                return;
+            try {
+                spell = (Spell) Class.forName(data.getSelectedSpells()[slot]).getConstructor().newInstance();
+            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Utils.sendDebugMessage(e.getPlayer(), "slot : " + slot + "Spell : " + data.getSelectedSpells()[slot] + " in spell : ");
+            boolean canLaunch = spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
+            if (!canLaunch && data.getCooldownSpells().containsKey(spell.getClass()) && data.getCooldownSpells().get(spell.getClass()) > System.currentTimeMillis())
+                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getClass()) - System.currentTimeMillis()) / 1000) + "s restantes."));
         } else {
             if (e.getPlayer().isSneaking())
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());
@@ -66,7 +73,14 @@ public class GrimoryItem extends BasicItem {
                 slots[slot] = ChatColor.GREEN + "" + (slot + 1) + ChatColor.WHITE;
                 e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.join(slots, " ")));
                 if (data.getSelectedSpells()[slot] != null) {
-                    SpellList spell = SpellList.valueOf(data.getSelectedSpells()[slot]);
+                    SpellList spell = null;
+                    for(SpellList s : SpellList.values()) {
+                        if(s.getSpellClass().getName().equals(data.getSelectedSpells()[slot])) {
+                            spell = s;
+                        }
+                    }
+                    if(spell == null)
+                        return;
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " : " + spell.getName());
                 } else {
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME);

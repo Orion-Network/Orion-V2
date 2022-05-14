@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Utils;
 
 public class RepulsionSpell extends Spell {
@@ -14,7 +15,7 @@ public class RepulsionSpell extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         location.getWorld().getNearbyEntities(location, 5, 5, 5).forEach(entity -> {
             if(getCaster() != null && getCaster() instanceof Player)
                 if(entity instanceof Player)

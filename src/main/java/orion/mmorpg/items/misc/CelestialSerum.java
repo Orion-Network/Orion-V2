@@ -6,7 +6,6 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.AcceptGui;
 import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Rarity;
 
@@ -21,8 +20,6 @@ public class CelestialSerum extends BasicConsumableItem {
         Race race = Race.CELESTIAL;
         new AcceptGui("Devenir " + race.getName(), e.getPlayer(), data, () -> {
             data.setRace(race);
-            for (String s : race.spellList)
-                SpellList.learnSpell(data, s);
             race.getOnRaceSelected().accept(e.getPlayer(), data);
         }, "Vous êtes devenu un(e) " + race.getName());
     }

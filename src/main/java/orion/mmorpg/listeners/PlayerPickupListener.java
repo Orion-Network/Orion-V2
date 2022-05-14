@@ -36,7 +36,7 @@ public class PlayerPickupListener implements Listener {
                         ItemList item = ItemList.valueOf(internal_id);
                         ItemStack itemStack = item.getProcessedItem(e.getItem().getItemStack().getAmount());
                         if(item.getItem().getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))
-                            itemStack = ((MasterScrollItem)item.getItem()).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING));
+                            itemStack = ((MasterScrollItem)item.getItem()).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING), e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("knowledge"), PersistentDataType.INTEGER));
                         else if(item.getItem().getINTERNAL_ID().endsWith("SPELL_SCROLL"))
                             itemStack = ((SpellScroll)item.getItem()).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING));
                         e.getItem().setItemStack(itemStack);

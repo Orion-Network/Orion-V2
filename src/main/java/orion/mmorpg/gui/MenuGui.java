@@ -14,9 +14,11 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicArmorItem;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
+import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 import xyz.upperlevel.spigot.book.BookUtil;
@@ -342,7 +344,8 @@ public class MenuGui extends ChestGui {
         menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
             new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
         }), 3, 1);
-        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,2);
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, "Ouvre le menu des sorts", Rarity.COMMON).generateItem(null, 1),e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
+        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
 
         return menuPane;
     }

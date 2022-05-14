@@ -11,6 +11,7 @@ import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -32,7 +33,8 @@ public class SpellScroll extends BasicConsumableItem {
         }
         try {
             Spell s = (Spell) SpellList.valueOf(spell).getSpellClass().getConstructors()[0].newInstance();
-            s.launch(mmorpg, e.getPlayer());
+            s.setKnowledge(new Knowledge(100));
+            s.launch(mmorpg, e.getPlayer(), new Knowledge(100));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();

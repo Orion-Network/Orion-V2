@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 
 public class GrimoryGui extends ChestGui {
@@ -29,8 +30,14 @@ public class GrimoryGui extends ChestGui {
         for (String spell : orionPlayer.getSelectedSpells()) {
             if (spell == null)
                 spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.getProcessedItem(1)));
-            else
-                spellPane.addItem(new GuiItem(SpellList.valueOf(spell).getItem()));
+            else //TODO Correct item
+            {
+                try {
+                    spellPane.addItem(new GuiItem(SpellList.getByClass((Class<? extends Spell>) Class.forName(spell)).getItem()));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         spellPane.setOnClick(e -> {
@@ -59,9 +66,9 @@ public class GrimoryGui extends ChestGui {
         }
 
         public OutlinePane getSpellList() {
-            for (String spell : orionPlayer.getSpells().keySet()) {
-                spellList.addItem(new GuiItem(SpellList.valueOf(spell).getItem(), e -> {
-                    orionPlayer.getSelectedSpells()[clickedSlot] = spell;
+            for (Class<? extends Spell> spell : orionPlayer.getKnownSpells().keySet()) {
+                spellList.addItem(new GuiItem(SpellList.getByClass(spell).getItem(), e -> {
+                    orionPlayer.getSelectedSpells()[clickedSlot] = spell.getName();
                     player.closeInventory();
                     e.setCancelled(true);
                 }));

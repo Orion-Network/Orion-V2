@@ -7,6 +7,7 @@ import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class InstantTransmission extends Spell {
     public InstantTransmission() {
@@ -14,7 +15,7 @@ public class InstantTransmission extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() != null && getCaster() instanceof Player) {
             Player player = (Player) getCaster();
             Vector v = player.getEyeLocation().getDirection().normalize().multiply(8);

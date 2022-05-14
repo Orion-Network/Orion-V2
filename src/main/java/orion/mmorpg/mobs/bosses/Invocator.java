@@ -19,6 +19,7 @@ import orion.mmorpg.mobs.samples.SampleHostileMob;
 import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.spells.RepulsionSpell;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 
 import java.lang.reflect.InvocationTargetException;
@@ -143,7 +144,7 @@ public class Invocator extends SampleBossMob {
 
         @Override
         public void c() {
-            spell.launch(Mmorpg.INSTANCE, location);
+            spell.launch(Mmorpg.INSTANCE, location, new Knowledge(200));
             lastIteration = System.currentTimeMillis();
         }
     }

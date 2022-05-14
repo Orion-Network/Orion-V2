@@ -6,6 +6,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class Heal extends Spell {
     public Heal() {
@@ -13,7 +14,7 @@ public class Heal extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() instanceof Player) {
             Player player = (Player) getCaster();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());

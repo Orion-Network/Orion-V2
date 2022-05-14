@@ -28,6 +28,7 @@ import orion.mmorpg.items.sample.BasicRangedWeapon;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
@@ -187,7 +188,7 @@ public class PlayerStatsListener implements Listener {
                 location.setDirection(p.getEyeLocation().getDirection());
                 try {
                     Spell s = (Spell) SpellList.valueOf(e.getEntity().getMetadata("spell").get(0).asString()).getSpellClass().getConstructors()[0].newInstance();
-                    s.launch(mmorpg, location);
+                    s.launch(mmorpg, location, new Knowledge(200));
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }

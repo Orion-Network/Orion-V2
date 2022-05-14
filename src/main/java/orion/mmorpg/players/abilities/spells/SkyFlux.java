@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class SkyFlux extends Spell {
 
@@ -19,7 +20,7 @@ public class SkyFlux extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location Location) {
+    public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
         if(getCaster() == null || !(getCaster() instanceof Player)) return;
         Player player = (Player) getCaster();
         RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, 2);

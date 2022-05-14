@@ -85,8 +85,10 @@ public abstract class BasicItem extends ItemStack {
 
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR))
-            if (spell != null)
+            if (spell != null) {
+                spell.setCaster(e.getPlayer());
                 spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
+            }
     }
 
     public void onHitWithItem(EntityDamageByEntityEvent e) {

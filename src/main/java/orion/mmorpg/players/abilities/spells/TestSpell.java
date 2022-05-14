@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class TestSpell extends Spell {
     public TestSpell() {
@@ -11,6 +12,6 @@ public class TestSpell extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location Location) {
+    public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
     }
 }

@@ -13,6 +13,7 @@ import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class GoatHunger extends Spell {
 
@@ -21,7 +22,7 @@ public class GoatHunger extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         Effect goatHungerEffect = new GoatHungerEffect(Mmorpg.effectManager);
         RayTraceResult rayTraceResult = getCaster().getWorld().rayTraceEntities(((Player)getCaster()).getEyeLocation().add(((Player)getCaster()).getEyeLocation().getDirection().normalize()), ((Player)getCaster()).getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
         if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == getCaster()) return;

@@ -6,9 +6,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.spells.*;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Rarity;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,12 +38,11 @@ public enum SpellList {
         this.lore = lore;
     }
 
-    public static void learnSpell(OrionPlayer player, String internal_id) {
-        try {
-            player.getSpells().put(internal_id, (Spell) SpellList.valueOf(internal_id).spellClass.getConstructors()[0].newInstance());
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public static void learnSpell(OrionPlayer player, Class<? extends Spell> spellClass, int knowledge) {
+        if(player.getKnownSpells().containsKey(spellClass))
+            player.getKnownSpells().put(spellClass, new Knowledge(knowledge));
+        else
+            player.getKnownSpells().get(spellClass).addKnowledge(knowledge);
     }
 
     public ItemStack getItem() {
@@ -53,6 +52,15 @@ public enum SpellList {
         meta.setLore(getLore());
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static SpellList getByClass(Class<? extends Spell> spellClass) {
+        for (SpellList spell : values()) {
+            if (spell.getSpellClass().equals(spellClass)) {
+                return spell;
+            }
+        }
+        return null;
     }
 
     public Class<? extends Spell> getSpellClass() {

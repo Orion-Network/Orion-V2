@@ -51,7 +51,7 @@ public class DataCommand implements TabExecutor {
                             builder.append(item.getItemMeta().getDisplayName());
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
-                    builder.append("\n" + data.getSpells().keySet() + "\n");
+                    builder.append("\n" + data.getKnownSpells().keySet() + "\n");
                     for (Support s : data.getSupportMap().keySet())
                         builder.append(s.getName());
                     sender.sendMessage(builder.toString());

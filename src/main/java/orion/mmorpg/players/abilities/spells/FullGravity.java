@@ -10,6 +10,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.effects.ZoneSpellEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 
 public class FullGravity extends Spell{
     public FullGravity() {
@@ -17,7 +18,7 @@ public class FullGravity extends Spell{
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location location) {
+    public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         ZoneSpellEffect zoneSpellEffect = new ZoneSpellEffect(Mmorpg.effectManager);
         zoneSpellEffect.particle = Particle.SMOKE_NORMAL;
         zoneSpellEffect.duration = 15 * 1000;

@@ -25,7 +25,7 @@ public class ItemCommand implements TabExecutor {
             if (args[0].equalsIgnoreCase("give")) {
                 if (args.length > 2) {
                     if (args[2].equalsIgnoreCase("master_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
                         return true;
                     } else if(args[2].equalsIgnoreCase("spell_scroll")) {
                         Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
@@ -36,10 +36,10 @@ public class ItemCommand implements TabExecutor {
                 } else {
                     if (sender instanceof Player) {
                         if (args[2].equalsIgnoreCase("master_scroll")) {
-                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2]));
+                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2], Integer.parseInt(args[3])));
                             return true;
                         } else if(args[2].equalsIgnoreCase("spell_scroll")) {
-                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
                             return true;
                         }
                         ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).getProcessedItem(1));

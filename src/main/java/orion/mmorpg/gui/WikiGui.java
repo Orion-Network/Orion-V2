@@ -48,7 +48,7 @@ public class WikiGui extends ChestGui {
             populateList.add(new GuiItem(s.getItem(), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.spell")) return;
                 OrionPlayer p = mmorpg.getPlayerManager().getPlayer(event.getWhoClicked().getUniqueId());
-                SpellList.learnSpell(p, s.name());
+                SpellList.learnSpell(p, s.getSpellClass(), 200);
                 Utils.sendInfoMessage(event.getWhoClicked(), "Apprentissage du sort : " + s.getName());
             }));
         }

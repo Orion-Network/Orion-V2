@@ -11,6 +11,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -20,7 +21,7 @@ public class Surpassement extends Spell {
     }
 
     @Override
-    public void launch(Mmorpg mmorpg, Location Location) {
+    public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
         if(getOrionCaster() != null)
             getOrionCaster().getSupportMap().put(new BoostedMode(), (1000 * 60) + System.currentTimeMillis());
     }
