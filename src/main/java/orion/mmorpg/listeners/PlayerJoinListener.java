@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.utils.Utils;
 
 import java.io.IOException;
@@ -40,6 +41,8 @@ public class PlayerJoinListener implements Listener {
                 player.kickPlayer("Error in loading");
             }
         }
+
+        player.teleport(PortalStone.CAMPEMENT_STONE.getLocation());
 
         OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(player);
 

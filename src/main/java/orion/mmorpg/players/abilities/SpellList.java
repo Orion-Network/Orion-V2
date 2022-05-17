@@ -39,7 +39,7 @@ public enum SpellList {
     }
 
     public static void learnSpell(OrionPlayer player, Class<? extends Spell> spellClass, int knowledge) {
-        if(player.getKnownSpells().containsKey(spellClass))
+        if(!player.getKnownSpells().containsKey(spellClass))
             player.getKnownSpells().put(spellClass, new Knowledge(knowledge));
         else
             player.getKnownSpells().get(spellClass).addKnowledge(knowledge);

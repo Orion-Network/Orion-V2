@@ -88,6 +88,7 @@ public class OrionPlayer {
         this.level = level;
         this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
+        portalStones.add(PortalStone.CAMPEMENT_STONE.getId());
         portalStones.add(PortalStone.ARENA_SPAWN_STONE.getId());
         portalStones.add(PortalStone.ARENA_STONE.getId());
 
