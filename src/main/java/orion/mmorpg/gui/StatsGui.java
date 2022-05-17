@@ -19,7 +19,7 @@ public class StatsGui extends ChestGui {
     Player p;
     OrionPlayer orionPlayer;
 
-    public StatsGui(Player p, OrionPlayer orionPlayer) { //TODO Finish implementation
+    public StatsGui(Player p, OrionPlayer orionPlayer) {
         super(1, ChatColor.YELLOW + "Stats");
         this.p = p;
         this.orionPlayer = orionPlayer;

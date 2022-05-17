@@ -24,6 +24,8 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+        if(e.getSlot() == -999)
+            return;
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(Objects.requireNonNull(e.getWhoClicked()).getUniqueId());
         if(!e.getInventory().getType().equals(InventoryType.CRAFTING)) return;
         e.getInventory().setItem(0, ItemList.MENU_ITEM.getProcessedItem(1));

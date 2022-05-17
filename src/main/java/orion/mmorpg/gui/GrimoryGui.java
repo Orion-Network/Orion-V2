@@ -30,7 +30,7 @@ public class GrimoryGui extends ChestGui {
         for (String spell : orionPlayer.getSelectedSpells()) {
             if (spell == null)
                 spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.getProcessedItem(1)));
-            else //TODO Correct item
+            else
             {
                 try {
                     spellPane.addItem(new GuiItem(SpellList.getByClass((Class<? extends Spell>) Class.forName(spell)).getItem()));

@@ -35,7 +35,6 @@ public class SpellGui extends ChestGui {
             ArrayList<String> lore = new ArrayList<>();
             lore.addAll(sp.getLore());
             lore.addAll(knowledge.getKnowledgeLore());
-            //TODO knowledge not displayed
             ItemStack item = BasicItem.generateTemplateBasicItem(material, sp.getRarity().getChatColor() + sp.getName(), 1, String.join("\n", lore), sp.getRarity()).generateItem(null, 1);
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setLore(lore);

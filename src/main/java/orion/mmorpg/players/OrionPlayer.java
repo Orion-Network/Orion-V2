@@ -43,7 +43,6 @@ public class OrionPlayer {
     private final Stats stats;
     private final LinkedHashSet<String> portalStones;
     transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
-    //TODO Change to Map with Spell, Knowledge
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     ItemStack[] quiver;
     transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
