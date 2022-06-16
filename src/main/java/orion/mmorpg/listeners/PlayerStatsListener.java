@@ -183,16 +183,26 @@ public class PlayerStatsListener implements Listener {
         if (e.getEntity().hasMetadata("spell")) {
             if (e.getEntity().getShooter() instanceof Player) {
                 Player p = (Player) e.getEntity().getShooter();
-                OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
                 Location location = (e.getHitBlock() != null ? e.getHitBlock().getLocation().clone().add(0, 1.1, 0) : e.getHitEntity().getLocation().clone().add(0, 0.1, 0));
                 location.setDirection(p.getEyeLocation().getDirection());
                 try {
                     Spell s = (Spell) SpellList.valueOf(e.getEntity().getMetadata("spell").get(0).asString()).getSpellClass().getConstructors()[0].newInstance();
+                    s.setCaster(p);
                     s.launch(mmorpg, location, new Knowledge(200));
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             }
+        }
+
+        if(e.getEntity().getShooter() instanceof Player) {
+            Player p = (Player) e.getEntity().getShooter();
+            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
+            if(e.getHitEntity() != null && e.getEntity() instanceof LivingEntity) {
+                LivingEntity entity = (LivingEntity) e.getHitEntity();
+                orionPlayer.updateMobHealthBar(entity.getHealth(), entity.getMaxHealth(), entity.getName());
+            }
+
         }
         e.getEntity().remove();
     }

@@ -189,6 +189,7 @@ public class OrionPlayer {
     }
 
     public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
+        /*
         if (mobHealth <= 0) {
             this.mobHealthBar.setVisible(false);
             this.mobHealthBar.setProgress(1);
@@ -196,7 +197,7 @@ public class OrionPlayer {
             this.mobHealthBar.setVisible(true);
             this.mobHealthBar.setTitle(title);
             this.mobHealthBar.setProgress(mobHealth / maxHealth < 1 ? mobHealth / maxHealth : 1);
-        }
+        }*/
     }
 
     public Infos getInfos() {

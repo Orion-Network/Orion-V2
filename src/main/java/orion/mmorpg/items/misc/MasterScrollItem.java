@@ -1,5 +1,6 @@
 package orion.mmorpg.items.misc;
 
+import orion.mmorpg.config.AssociationConfig;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 public class MasterScrollItem extends BasicConsumableItem {
 
     public MasterScrollItem() {
-        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", 1, "Un parchemin pouvant vous apprendre des sorts", Rarity.SUPERRARE);
+        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", AssociationConfig.getModel("misc/paper/master_scroll"), "Un parchemin pouvant vous apprendre des sorts", Rarity.SUPERRARE);
     }
 
     @Override

@@ -2,6 +2,7 @@ package orion.mmorpg.mobs.samples;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,11 +13,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeMapBase;
 import net.minecraft.world.entity.ai.attributes.AttributeModifiable;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.player.EntityHuman;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.attribute.CraftAttributeMap;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -49,6 +56,7 @@ public abstract class SampleMob extends EntityCreature {
     String uuid;
     Location spawnLocation;
     Stats stats;
+    public KeyedBossBar keyedBossBar;
     private boolean respawn = true;
     public ChatColor color = ChatColor.YELLOW;
     private Rewards rewards = new Rewards();
@@ -93,6 +101,15 @@ public abstract class SampleMob extends EntityCreature {
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         this.setCustomName(new ChatMessage(generateName()));
+        float progress = (this.getHealth()-f) / this.getMaxHealth();
+        this.keyedBossBar.setProgress((progress > 1 ? 1 : (progress < 0 ? 0 : progress)));
+        if(damagesource.getEntity() instanceof EntityPlayer) {
+            Player player = ((CraftPlayer) damagesource.getEntity().getBukkitEntity()).getPlayer();
+            if(!this.keyedBossBar.getPlayers().contains(player)) {
+                this.keyedBossBar.addPlayer(player);
+                System.out.println("In");
+            }
+        }
         return super.damageEntity(damagesource, f);
     }
 
@@ -107,6 +124,12 @@ public abstract class SampleMob extends EntityCreature {
 
     public void spawn() {
         this.setCustomName(new ChatMessage(generateName()));
+        if(Bukkit.getBossBar(NamespacedKey.minecraft(uuid)) != null)
+            this.keyedBossBar = Bukkit.getBossBar(NamespacedKey.minecraft(uuid));
+        else
+            this.keyedBossBar = Bukkit.createBossBar(NamespacedKey.minecraft(uuid), name, BarColor.PURPLE, BarStyle.SEGMENTED_10);
+
+        this.keyedBossBar.setVisible(true);
 
         ((CraftWorld)this.getSpawnLocation().getWorld()).getHandle().addEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
@@ -126,6 +149,8 @@ public abstract class SampleMob extends EntityCreature {
             OrionPlayer orionplayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
             orionplayer.addExperience(player, rewards.getExp());
         }
+        this.keyedBossBar.setVisible(false);
+        this.keyedBossBar.removeAll();
     }
 
     @Override
@@ -133,7 +158,17 @@ public abstract class SampleMob extends EntityCreature {
         this.drops = rewards.generateRewards();
     }
 
+
     protected abstract void generatePathfinder();
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.keyedBossBar.getPlayers().forEach(player -> {
+            if(this.h(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 100*100)
+                this.keyedBossBar.removePlayer(player);
+        });
+    }
 
     @Override
     public String getName() {

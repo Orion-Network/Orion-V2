@@ -1,5 +1,6 @@
 package orion.mmorpg.commands;
 
+import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -26,6 +27,8 @@ public class AdminCommand implements TabExecutor {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId());
             if(args[0].equalsIgnoreCase("setlevel")) {
                 orionPlayer.setLevel(Integer.parseInt(args[1]));
+            } else if(args[0].equalsIgnoreCase("test")) {
+                System.out.println(AssociationConfig.getFileConfiguration().getInt("item.gui/accept_button_placeholder"));
             }
         }
         return false;

@@ -1,5 +1,6 @@
 package orion.mmorpg;
 
+import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,7 +26,7 @@ public final class Mmorpg extends JavaPlugin {
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
     public final FileConfiguration config = this.getConfig();
-    Client mongoClient = new Client();
+    Client mongoClient = new Client(this);
     PlayerManager playerManager;
     PartyManager partyManager;
     MobManager mobManager;
@@ -58,6 +59,8 @@ public final class Mmorpg extends JavaPlugin {
         saveConfig();
 
         setDebug(config.getBoolean("misc.debugging"));
+
+        AssociationConfig.setup(this);
 
         playerManager = new PlayerManager(this);
         chunkManager = new ChunkManager(this);
@@ -110,7 +113,7 @@ public final class Mmorpg extends JavaPlugin {
     }
 
     /**
-     * Save config when plugin is disabled
+     * Save orion.mmorpg.config when plugin is disabled
      */
     @Override
     public void onDisable() {

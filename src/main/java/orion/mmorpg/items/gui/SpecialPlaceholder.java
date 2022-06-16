@@ -1,23 +1,24 @@
 package orion.mmorpg.items.gui;
 
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.sample.BasicGuiItem;
 
 public class SpecialPlaceholder {
     public static class FirstSpecialPlaceholder extends BasicGuiItem {
         public FirstSpecialPlaceholder() {
-            super("First Special", "FIRST_SPECIAL_PLACEHOLDER", 1);
+            super("First Special", "FIRST_SPECIAL_PLACEHOLDER", AssociationConfig.getModel("gui/usable_placeholder"));
         }
     }
 
     public static class SecondSpecialPlaceholder extends BasicGuiItem {
         public SecondSpecialPlaceholder() {
-            super("Second Special", "SECOND_SPECIAL_PLACEHOLDER", 1);
+            super("Second Special", "SECOND_SPECIAL_PLACEHOLDER", AssociationConfig.getModel("gui/usable_placeholder"));
         }
     }
 
     public static class ThirdSpecialPlaceholder extends BasicGuiItem {
         public ThirdSpecialPlaceholder() {
-            super("Third Special", "THIRD_SPECIAL_PLACEHOLDER", 1);
+            super("Third Special", "THIRD_SPECIAL_PLACEHOLDER", AssociationConfig.getModel("gui/usable_placeholder"));
         }
     }
 }

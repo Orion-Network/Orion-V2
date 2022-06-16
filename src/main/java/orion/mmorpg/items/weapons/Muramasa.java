@@ -1,5 +1,6 @@
 package orion.mmorpg.items.weapons;
 
+import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +18,7 @@ import orion.mmorpg.utils.Utils;
 
 public class Muramasa extends BasicMeleeWeapon {
     public Muramasa() {
-        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", 3, "Une épée légendaire dégageant une aura maléfique.", Rarity.SUPERRARE, new Stats.Builder().withStrength(7).withSpeed(5).withCritical_chance(20).withCritical_damage(10).build(), 15);
+        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", AssociationConfig.getModel("weapon/sword/legacy_sword"), "Une épée légendaire dégageant une aura maléfique.", Rarity.SUPERRARE, new Stats.Builder().withStrength(7).withSpeed(5).withCritical_chance(20).withCritical_damage(10).build(), 15);
     }
 
     @Override

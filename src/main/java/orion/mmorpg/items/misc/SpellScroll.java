@@ -1,5 +1,6 @@
 package orion.mmorpg.items.misc;
 
+import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class SpellScroll extends BasicConsumableItem {
     public SpellScroll() {
-        super(Material.PAPER, "Parchemin de Sort", "SPELL_SCROLL", 2, "Un parchemin permettant de lancer un sort sans le connaitre", Rarity.RARE);
+        super(Material.PAPER, "Parchemin de Sort", "SPELL_SCROLL", AssociationConfig.getModel("misc/paper/spell_scroll"), "Un parchemin permettant de lancer un sort sans le connaitre", Rarity.RARE);
     }
 
     @Override

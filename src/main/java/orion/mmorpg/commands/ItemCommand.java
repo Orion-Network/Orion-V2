@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +14,7 @@ import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.MasterScrollItem;
 import orion.mmorpg.items.misc.SpellScroll;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Utils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -31,7 +34,10 @@ public class ItemCommand implements TabExecutor {
                         Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                         return true;
                     }
-
+                    if(!EnumUtils.isValidEnum(ItemList.class, args[2].toUpperCase())) {
+                        Utils.sendErrorMessage((Entity) sender, "L'item n'existe pas.");
+                        return false;
+                    }
                     Bukkit.getPlayer(args[1]).getInventory().addItem(ItemList.valueOf(args[2]).getProcessedItem(1));
                 } else {
                     if (sender instanceof Player) {

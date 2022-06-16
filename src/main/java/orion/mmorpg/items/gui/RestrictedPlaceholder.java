@@ -1,5 +1,6 @@
 package orion.mmorpg.items.gui;
 
+import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.ChatColor;
 import orion.mmorpg.items.sample.BasicGuiItem;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class RestrictedPlaceholder extends BasicGuiItem {
     public RestrictedPlaceholder() {
-        super("Slot Restraint", "RESTRICTED_PLACEHOLDER", 14);
+        super("Slot Restraint", "RESTRICTED_PLACEHOLDER",  AssociationConfig.getModel("gui/unusable_placeholder"));
     }
 
     @Override

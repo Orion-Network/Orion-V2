@@ -24,6 +24,8 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        if(mmorpg.getMongoClient().hasPlayer(e.getPlayer().getUniqueId()))
+            return;
         if (mmorpg.getMongoClient().hasPlayer(player.getUniqueId())) {
             try {
                 OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
@@ -55,7 +57,5 @@ public class PlayerJoinListener implements Listener {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         if(player.getPet() != null)
             player.getPet().setRemoved(Entity.RemovalReason.a);
-        mmorpg.getMongoClient().savePlayer(player);
-        mmorpg.getPlayerManager().getPlayersMap().remove(player.getUniqueId());
     }
 }

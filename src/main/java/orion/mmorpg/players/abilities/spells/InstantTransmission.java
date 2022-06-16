@@ -26,6 +26,13 @@ public class InstantTransmission extends Spell {
         endEffect.duration = 500;
         if(getCaster() != null && getCaster() instanceof Player) {
             Player player = (Player) getCaster();
+            if(location != player.getLocation()) {
+                startEffect.setLocation(getCaster().getLocation());
+                startEffect.start();
+                player.teleport(location);
+                endEffect.setLocation(location);
+                endEffect.start();
+            }
 
             Vector v = player.getEyeLocation().getDirection().normalize().multiply(8);
             Location l = player.getLocation().add(v);

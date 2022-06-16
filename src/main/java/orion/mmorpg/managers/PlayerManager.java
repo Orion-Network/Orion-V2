@@ -1,5 +1,6 @@
 package orion.mmorpg.managers;
 
+import org.bukkit.Bukkit;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 
@@ -12,6 +13,18 @@ public class PlayerManager extends AbstractManager {
     public PlayerManager(Mmorpg mmorpg) {
         super(mmorpg);
         this.playersMap = new LinkedHashMap<>();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Saving Players");
+                playersMap.forEach((uuid, player) -> {
+                    mmorpg.getMongoClient().savePlayer(player);
+                    if(!Bukkit.getPlayer(uuid).isOnline())
+                        playersMap.remove(player);
+                });
+            }
+        }, 1L, 5000* 20);
     }
 
     public boolean addPlayer(UUID uuid, OrionPlayer orionPlayer) {
@@ -30,4 +43,5 @@ public class PlayerManager extends AbstractManager {
     public LinkedHashMap<UUID, OrionPlayer> getPlayersMap() {
         return playersMap;
     }
+
 }

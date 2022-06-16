@@ -10,4 +10,6 @@ public class TransmissionArrow extends BasicArrow {
         super(Material.TIPPED_ARROW, "Flèche de Transmission", "TRANSMISSION_ARROW", 1, null, Rarity.LEGENDARY, 7);
         this.spell = new InstantTransmission();
     }
+
+
 }

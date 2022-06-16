@@ -3,8 +3,8 @@ services:
     image: mongo:4.4
     container_name: "mongo"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: azerty123
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: azerty123
     volumes:
       - ./db:/data/db
   mmorpg:

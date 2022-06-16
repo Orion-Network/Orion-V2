@@ -1,5 +1,6 @@
 package orion.mmorpg.items.gui;
 
+import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.ChatColor;
 import orion.mmorpg.items.sample.BasicGuiItem;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class UnusablePlaceholder extends BasicGuiItem {
     public UnusablePlaceholder() {
-        super("Slot Libre", "UNUSABLE_PLACEHOLDER", 11);
+        super("Slot Libre", "UNUSABLE_PLACEHOLDER", AssociationConfig.getModel("gui/unusable_placeholder"));
     }
 
     @Override

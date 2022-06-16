@@ -1,5 +1,6 @@
 package orion.mmorpg.items.gui;
 
+import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.ChatColor;
 import orion.mmorpg.items.sample.BasicGuiItem;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class UsablePlaceholder extends BasicGuiItem {
     public UsablePlaceholder() {
-        super("Slot Raccourcis", "USABLE_PLACEHOLDER", 12);
+        super("Slot Raccourcis", "USABLE_PLACEHOLDER", AssociationConfig.getModel("gui/usable_placeholder"));
     }
 
     @Override

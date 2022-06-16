@@ -77,7 +77,7 @@ public class Invocator extends SampleBossMob {
             EntityLiving target = this.invocator.getGoalTarget();
             if( (this.invocator.e(target) < 32) && this.invocator.hasLineOfSight(target)) {
                 DragonFireball fireball =  target.getBukkitEntity().getWorld().spawn(invocator.getBukkitEntity().getLocation().add(0, 2.5, 0), DragonFireball.class);
-                fireball.setDirection(target.getBukkitEntity().getLocation().subtract(invocator.getBukkitEntity().getLocation()).toVector().normalize());
+                fireball.setDirection(target.getBukkitEntity().getLocation().subtract(fireball.getLocation()).toVector().normalize());
 
             }
             lastFireball = System.currentTimeMillis();

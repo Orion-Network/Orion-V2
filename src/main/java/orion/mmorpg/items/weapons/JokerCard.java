@@ -1,5 +1,6 @@
 package orion.mmorpg.items.weapons;
 
+import orion.mmorpg.config.AssociationConfig;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
@@ -16,7 +17,7 @@ public class JokerCard extends BasicMeleeWeapon {
     final String[] card = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Valet", "Reine", "Roi", "Joker"};
 
     public JokerCard() {
-        super(Material.IRON_SWORD, "Carte Joker", "JOKER_CARD", 1, "Une arme intrigante multipliant ses dégâts selon la carte tirée", Rarity.RARE, new Stats(15, 10, 0, 0, 0, 0, 0, 0, 0), 7);
+        super(Material.IRON_SWORD, "Carte Joker", "JOKER_CARD", AssociationConfig.getModel("weapon/card/01"), "Une arme intrigante multipliant ses dégâts selon la carte tirée", Rarity.RARE, new Stats(15, 10, 0, 0, 0, 0, 0, 0, 0), 7);
     }
 
     @Override

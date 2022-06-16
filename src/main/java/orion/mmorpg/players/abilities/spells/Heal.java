@@ -1,6 +1,8 @@
 package orion.mmorpg.players.abilities.spells;
 
+import de.slikey.effectlib.effect.CylinderEffect;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
@@ -18,6 +20,13 @@ public class Heal extends Spell {
         if(getCaster() instanceof Player) {
             Player player = (Player) getCaster();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
+
+            CylinderEffect cylinderEffect = new CylinderEffect(Mmorpg.effectManager);
+            cylinderEffect.radius = 2;
+            cylinderEffect.particle = Particle.HEART;
+            cylinderEffect.duration = 50;
+            cylinderEffect.setLocation(location);
+            cylinderEffect.start();
             orionPlayer.heal(orionPlayer.getStats().getVitality() / 10);
         }
     }

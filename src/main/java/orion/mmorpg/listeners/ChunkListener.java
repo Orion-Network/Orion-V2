@@ -44,6 +44,7 @@ public class ChunkListener implements Listener {
             net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
             if(nmsEntity instanceof SampleMob) {
                 mobs.add(((SampleMob) nmsEntity).getMobData());
+                ((SampleMob)nmsEntity).keyedBossBar.setVisible(false);
             }
             nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.a);
         }

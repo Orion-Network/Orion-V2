@@ -34,12 +34,21 @@ public class Client {
     }.getType();
     static Type quiverMapType = new TypeToken<LinkedHashMap<ItemStack, Integer>>() {
     }.getType();
-    String uri = "mongodb://admin:azerty123@mongo/?authSource=orion";
-    public MongoClient mongoClient = MongoClients.create(uri);
-    public MongoDatabase orionDatabase = mongoClient.getDatabase("orion");
-    public MongoCollection<Document> playerCollection = orionDatabase.getCollection("players");
-    public MongoCollection<Document> mobCollection = orionDatabase.getCollection("mobs");
-    public MongoCollection<Document> jobsCollection = orionDatabase.getCollection("jobs");
+    String uri;
+    public MongoClient mongoClient;
+    public MongoDatabase orionDatabase;
+    public MongoCollection<Document> playerCollection;
+    public MongoCollection<Document> mobCollection;
+    public MongoCollection<Document> jobsCollection;
+
+    public Client(Mmorpg mmorpg) {
+        uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@mongo/?authSource=admin";
+        this.mongoClient = MongoClients.create(uri);
+        orionDatabase = mongoClient.getDatabase("orion");
+        playerCollection = orionDatabase.getCollection("players");
+        mobCollection = orionDatabase.getCollection("mobs");
+        jobsCollection = orionDatabase.getCollection("jobs");
+    }
 
     public boolean hasPlayer(UUID uuid) {
         Document doc = playerCollection.find(eq("uuid", uuid.toString())).first();
