@@ -39,7 +39,10 @@ public class PlayerStatsListener implements Listener {
 
     public PlayerStatsListener(Mmorpg mmorpg) {
         this.mmorpg = mmorpg;
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, () -> mmorpg.getPlayerManager().getPlayersMap().values().forEach(OrionPlayer::onTick), 0, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, () -> mmorpg.getPlayerManager().getPlayersMap().values().forEach(player -> {
+            if(Bukkit.getPlayer(player.getUniqueId()) == null) return;
+            player.onTick();
+        }), 0, 20);
     }
 
     @EventHandler

@@ -1,15 +1,14 @@
 package orion.mmorpg.items.weapons;
 
-import orion.mmorpg.config.AssociationConfig;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
-import orion.mmorpg.utils.Utils;
 
 import java.util.Random;
 
@@ -24,7 +23,6 @@ public class JokerCard extends BasicMeleeWeapon {
     public void onHitWithItem(EntityDamageByEntityEvent e) {
         int r = new Random().nextInt(14) + 1;
         float multiplier = (1 + ((float) r / 10));
-        Utils.sendInfoMessage(e.getDamager(), "bDamage : " + e.getDamage() + " Multiplier : " + multiplier + " tDamage : " + e.getDamage() * multiplier);
         e.setDamage(e.getDamage() * multiplier);
         ((Player) e.getDamager()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(card[r - 1]));
         super.onHitWithItem(e);

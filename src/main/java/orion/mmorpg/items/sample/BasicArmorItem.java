@@ -73,6 +73,14 @@ public abstract class BasicArmorItem extends BasicItem {
 
     }
 
+    public ArmorType getARMORTYPE() {
+        return ARMORTYPE;
+    }
+
+    public Stats getSTATS() {
+        return STATS;
+    }
+
     public enum ArmorType {
         HELMET, CHESTPLATE, LEGGINGS, BOOTS, WINGS, BELT, RING
     }

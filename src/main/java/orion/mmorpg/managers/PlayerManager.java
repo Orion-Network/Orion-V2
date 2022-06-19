@@ -18,13 +18,9 @@ public class PlayerManager extends AbstractManager {
             @Override
             public void run() {
                 System.out.println("Saving Players");
-                playersMap.forEach((uuid, player) -> {
-                    mmorpg.getMongoClient().savePlayer(player);
-                    if(!Bukkit.getPlayer(uuid).isOnline())
-                        playersMap.remove(player);
-                });
+                savePlayers();
             }
-        }, 1L, 5000* 20);
+        }, 1L, 300* 20);
     }
 
     public boolean addPlayer(UUID uuid, OrionPlayer orionPlayer) {
@@ -42,6 +38,14 @@ public class PlayerManager extends AbstractManager {
 
     public LinkedHashMap<UUID, OrionPlayer> getPlayersMap() {
         return playersMap;
+    }
+
+    public void savePlayers() {
+        playersMap.forEach((uuid, player) -> {
+            mmorpg.getMongoClient().savePlayer(player);
+            if(Bukkit.getPlayer(uuid) == null)
+                playersMap.remove(player);
+        });
     }
 
 }

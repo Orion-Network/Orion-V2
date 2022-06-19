@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if(mmorpg.getMongoClient().hasPlayer(e.getPlayer().getUniqueId()))
+        if(mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId()))
             return;
         if (mmorpg.getMongoClient().hasPlayer(player.getUniqueId())) {
             try {
