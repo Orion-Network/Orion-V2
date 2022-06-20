@@ -42,6 +42,11 @@ public class AssociationConfig {
     }
 
     public static int getModel(String identifier) {
-        return fileConfiguration.getInt("item."+identifier);
+        if(fileConfiguration.contains("item."+identifier))
+            return fileConfiguration.getInt("item."+identifier);
+        else {
+            System.out.println("Model not found for " + identifier);
+            return 0;
+        }
     }
 }
