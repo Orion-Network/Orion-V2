@@ -22,15 +22,14 @@ public interface SpecialsSupport {
             player.getEnderChest().addItem(player.getInventory().getItem(6));
             player.getInventory().setItem(6, null);
         }
-        else {
-            orionPlayer.getSlotTypes()[8] = OrionPlayer.SlotType.RESTRICTED_SLOT;
-            orionPlayer.getSlotTypes()[7] = OrionPlayer.SlotType.RESTRICTED_SLOT;
-            orionPlayer.getSlotTypes()[6] = OrionPlayer.SlotType.RESTRICTED_SLOT;
 
-            player.getInventory().setItem(6, ItemList.FIRST_SPECIAL_PLACEHOLDER.getProcessedItem(1));
-            player.getInventory().setItem(7, ItemList.SECOND_SPECIAL_PLACEHOLDER.getProcessedItem(1));
-            player.getInventory().setItem(8, ItemList.THIRD_SPECIAL_PLACEHOLDER.getProcessedItem(1));
-        }
+        orionPlayer.getSlotTypes()[8] = OrionPlayer.SlotType.RESTRICTED_SLOT;
+        orionPlayer.getSlotTypes()[7] = OrionPlayer.SlotType.RESTRICTED_SLOT;
+        orionPlayer.getSlotTypes()[6] = OrionPlayer.SlotType.RESTRICTED_SLOT;
+
+        player.getInventory().setItem(6, ItemList.FIRST_SPECIAL_PLACEHOLDER.getProcessedItem(1));
+        player.getInventory().setItem(7, ItemList.SECOND_SPECIAL_PLACEHOLDER.getProcessedItem(1));
+        player.getInventory().setItem(8, ItemList.THIRD_SPECIAL_PLACEHOLDER.getProcessedItem(1));
     }
 
     default void removeItems(Player player, OrionPlayer orionPlayer) {

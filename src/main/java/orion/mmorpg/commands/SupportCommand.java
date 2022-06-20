@@ -43,7 +43,7 @@ public class SupportCommand implements TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> tab = new ArrayList<>();
         for(SupportList supportList : SupportList.values()) {
-            if(supportList.getSupport().getSimpleName().startsWith(strings[0].toUpperCase())) {
+            if(supportList.getSupport().getName().startsWith(strings[0].toUpperCase())) {
                 tab.add(supportList.getSupport().getSimpleName());
             }
         }
