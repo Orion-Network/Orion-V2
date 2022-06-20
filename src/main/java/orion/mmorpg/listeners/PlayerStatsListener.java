@@ -80,8 +80,8 @@ public class PlayerStatsListener implements Listener {
                 }
             }
         }
-        if (e.getDamager() instanceof Arrow) {
-            Arrow entity = (Arrow) e.getDamager();
+        if (e.getDamager() instanceof Arrow || e.getDamager() instanceof DragonFireball ||e.getDamager() instanceof Fireball) {
+            Projectile entity = (Projectile) e.getDamager();
             if (entity.hasMetadata("damage")) {
                 e.setDamage(entity.getMetadata("damage").get(0).asFloat());
             }

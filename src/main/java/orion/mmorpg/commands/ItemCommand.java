@@ -12,8 +12,10 @@ import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.misc.MasterScrollItem;
+import orion.mmorpg.items.misc.MythicalScroll;
 import orion.mmorpg.items.misc.SpellScroll;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.players.abilities.SupportList;
 import orion.mmorpg.utils.Utils;
 
 import java.util.Arrays;
@@ -33,6 +35,9 @@ public class ItemCommand implements TabExecutor {
                     } else if(args[2].equalsIgnoreCase("spell_scroll")) {
                         Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                         return true;
+                    }else if(args[2].equalsIgnoreCase("mythical_scroll")) {
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                        return true;
                     }
                     if(!EnumUtils.isValidEnum(ItemList.class, args[2].toUpperCase())) {
                         Utils.sendErrorMessage((Entity) sender, "L'item n'existe pas.");
@@ -46,6 +51,10 @@ public class ItemCommand implements TabExecutor {
                             return true;
                         } else if(args[2].equalsIgnoreCase("spell_scroll")) {
                             Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
+                            return true;
+                        } else if(args[2].equalsIgnoreCase("mythical_scroll")) {
+                            System.out.println("test");
+                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                             return true;
                         }
                         ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).getProcessedItem(1));
@@ -82,6 +91,13 @@ public class ItemCommand implements TabExecutor {
                 for (SpellList spell : SpellList.values())
                     if (spell.name().startsWith(args[args.length - 1].toUpperCase()))
                         tab.add(spell.name());
+                return tab;
+            }
+
+            if(args[2].equalsIgnoreCase("mythical_scroll")) {
+                for(SupportList support : SupportList.values())
+                    if(support.name().startsWith(args[args.length -1].toUpperCase()))
+                        tab.add(support.name());
                 return tab;
             }
 

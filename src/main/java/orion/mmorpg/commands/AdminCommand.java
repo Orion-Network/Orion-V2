@@ -1,5 +1,6 @@
 package orion.mmorpg.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.command.Command;
@@ -34,6 +35,10 @@ public class AdminCommand implements TabExecutor {
             } else if(args[0].equalsIgnoreCase("save")) {
                 mmorpg.getPlayerManager().savePlayers();
                 Utils.sendInfoMessage((Entity) commandSender, "Saving players.");
+            } else if (args[0].equalsIgnoreCase("debug")) {
+                if(args[1].equalsIgnoreCase("bossbar")) {
+                    Bukkit.getBossBars().forEachRemaining(bossBar -> bossBar.removeAll());
+                }
             }
         }
         return false;

@@ -93,8 +93,9 @@ public enum ItemList {
     //MISC
     GIFT(new Gift(), BasicItem.class),
     GRIMORY(new GrimoryItem(), BasicItem.class),
-    MASTER_SCROLL(new MasterScrollItem(), BasicItem.class),
-    SPELL_SCROLL(new SpellScroll(), BasicItem.class),
+    MASTER_SCROLL(new MasterScrollItem(), BasicConsumableItem.class),
+    SPELL_SCROLL(new SpellScroll(), BasicConsumableItem.class),
+    MYTHICAL_SCROLL(new MythicalScroll(), BasicConsumableItem.class),
     INFINITE_FIREWORK(new InfiniteFirework(), BasicItem.class),
     CELESTIAL_SERUM(new CelestialSerum(), BasicItem.class),
     SOUL_SWITCHER(new SoulSwitcher(), BasicItem.class),
