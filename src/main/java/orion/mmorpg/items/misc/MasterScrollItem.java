@@ -32,8 +32,8 @@ public class MasterScrollItem extends BasicConsumableItem {
             Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
             return;
         }
-        Utils.sendInfoMessage(e.getPlayer(), "Vous avez appris le sort : " + SpellList.valueOf(spell).getName());
         int knowledge = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("knowledge"), PersistentDataType.INTEGER);
+        Utils.sendInfoMessage(e.getPlayer(), "Votre connaissance du sort " + SpellList.valueOf(spell).getName() + " a augmenté de " + knowledge);
         SpellList.learnSpell(data, SpellList.valueOf(spell).getSpellClass(), knowledge);
         super.onUseItem(mmorpg, data, e);
     }
@@ -45,7 +45,7 @@ public class MasterScrollItem extends BasicConsumableItem {
         meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING, spell_id);
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("knowledge"), PersistentDataType.INTEGER, knowledge);
-        meta.setLore(Arrays.asList(this.getLORE(), ChatColor.WHITE + "Experience du sort ajoutée : " + knowledge));
+        meta.setLore(Arrays.asList(ChatColor.WHITE + this.getLORE(), ChatColor.WHITE + "Experience du sort ajoutée : " + knowledge));
 
         i.setItemMeta(meta);
         return i;
