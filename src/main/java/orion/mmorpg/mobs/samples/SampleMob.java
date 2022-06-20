@@ -107,7 +107,6 @@ public abstract class SampleMob extends EntityCreature {
             Player player = ((CraftPlayer) damagesource.getEntity().getBukkitEntity()).getPlayer();
             if(!this.keyedBossBar.getPlayers().contains(player)) {
                 this.keyedBossBar.addPlayer(player);
-                System.out.println("In");
             }
         }
         return super.damageEntity(damagesource, f);

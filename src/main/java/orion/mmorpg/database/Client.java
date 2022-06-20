@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
@@ -111,7 +112,7 @@ public class Client {
         int mana = document.getInteger("mana");
 
         LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"), portalStoneType);
-        ItemStack[] equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"), ItemStack[].class);
+        Equipments equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"), Equipments.class);
 
         LinkedHashMap<Class<? extends Spell>, Knowledge> spells = new LinkedHashMap<>();
         Document object = document.get("spells", Document.class);

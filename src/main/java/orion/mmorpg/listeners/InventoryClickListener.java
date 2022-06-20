@@ -42,6 +42,8 @@ public class InventoryClickListener implements Listener {
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez déséquipé un cosmétique.");
             }
         }
+        if(player.getSlotTypes().length > e.getSlot())
+            return;
         if(player.getSlotTypes()[e.getSlot()] == OrionPlayer.SlotType.RESTRICTED_SLOT)
             e.setCancelled(true);
         if (e.isShiftClick())

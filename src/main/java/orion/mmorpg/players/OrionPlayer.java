@@ -58,7 +58,7 @@ public class OrionPlayer {
     private UUID uniqueId;
     private double health, exp;
     private int statsPoints, spentStatsPoint, level, mana;
-    private ItemStack[] equipements;
+    private Equipments equipements;
     transient private KeyedBossBar healthBar;
     transient FastBoard fastBoard;
     transient SamplePetMob pet;
@@ -80,7 +80,7 @@ public class OrionPlayer {
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
         this.pointStats = pointStats;
-        this.equipements = new ItemStack[7];
+        this.equipements = new Equipments();
         this.stats = calculateStats();
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
@@ -136,7 +136,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, ItemStack[] equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -211,14 +211,8 @@ public class OrionPlayer {
     public Stats calculateStats(Stats... stats) {
         if (stats.length == 0) {
             Stats playerStats = this.getBaseStats();
-            Stats[] armorStatsIter = new Stats[7];
-            int i = 0;
-            for (ItemStack equipement : equipements) {
-                if (equipement != null)
-                    armorStatsIter[i] = Mmorpg.getOrionGson().getGSON().fromJson(equipement.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
-                i++;
-            }
-            Stats armorStats = calculateStats(armorStatsIter);
+
+            Stats armorStats = equipements.getEquipmentStats();
             Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
             ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
             if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
@@ -319,11 +313,11 @@ public class OrionPlayer {
         this.getPortalStones().add(id);
     }
 
-    public ItemStack[] getEquipements() {
+    public Equipments getEquipements() {
         return equipements;
     }
 
-    public void setEquipements(ItemStack[] equipements) {
+    public void setEquipements(Equipments equipements) {
         this.equipements = equipements;
     }
 

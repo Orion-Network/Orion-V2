@@ -1,5 +1,6 @@
 package orion.mmorpg.commands;
 
+import org.bukkit.entity.Entity;
 import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
@@ -29,6 +31,9 @@ public class AdminCommand implements TabExecutor {
                 orionPlayer.setLevel(Integer.parseInt(args[1]));
             } else if(args[0].equalsIgnoreCase("test")) {
                 System.out.println(AssociationConfig.getFileConfiguration().getInt("item.gui/accept_button_placeholder"));
+            } else if(args[0].equalsIgnoreCase("save")) {
+                mmorpg.getPlayerManager().savePlayers();
+                Utils.sendInfoMessage((Entity) commandSender, "Saving players.");
             }
         }
         return false;

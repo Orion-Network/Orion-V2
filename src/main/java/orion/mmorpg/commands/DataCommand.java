@@ -7,10 +7,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Stats;
@@ -46,9 +46,9 @@ public class DataCommand implements TabExecutor {
                     for (String stat : data.getStats().statsAsLore())
                         builder.append(stat + "\n");
                     builder.append(data.getPortalStones() + "\n");
-                    for (ItemStack item : data.getEquipements())
+                    for (BasicArmorItem item : data.getEquipements().getEquipments().values())
                         if (item != null)
-                            builder.append(item.getItemMeta().getDisplayName());
+                            builder.append(item.getNAME());
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
                     builder.append("\n" + data.getKnownSpells().keySet() + "\n");
