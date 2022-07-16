@@ -166,4 +166,6 @@ public abstract class Spell {
     public void setKnowledge(Knowledge knowledge) {
         this.knowledge = knowledge;
     }
+
+
 }

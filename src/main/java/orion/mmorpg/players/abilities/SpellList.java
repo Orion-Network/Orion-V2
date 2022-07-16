@@ -21,7 +21,8 @@ public enum SpellList {
     INSTANT_TRANSMISSION(InstantTransmission.class, "Instant Transmission", Rarity.RARE, Material.ENDER_EYE, Arrays.asList(ChatColor.GRAY + "Vous téléporte de 8 blocks")),
     SELF_SUCCION(SelfSuccion.class, "Succion Personelle", Rarity.RARE, Material.IRON_SWORD, Arrays.asList(ChatColor.GRAY + "Divise votre vie par 2 et", ChatColor.GRAY + "Soigne votre partie de 10% des dégats subits", ChatColor.GRAY +  "Ou vous applique l'effet de Succion Sanguine si vous n'êtes dans aucune partie")),
     FULL_GRAVITY(FullGravity.class, "Full Gravity", Rarity.SUPERRARE, Material.ENDER_EYE, Arrays.asList(ChatColor.GRAY + "Augmente la gravité de façon démentielle empêchant tout saut")),
-    REPULSION(RepulsionSpell.class, "Repulsion", Rarity.MYTHIC, Material.TNT, Arrays.asList(ChatColor.GRAY + "Repousse tout les joueurs alentours"))
+    REPULSION(RepulsionSpell.class, "Repulsion", Rarity.MYTHIC, Material.TNT, Arrays.asList(ChatColor.GRAY + "Repousse tout les joueurs alentours")),
+    DARK_ROOM(DarkRoom.class, "Dark Room", Rarity.RARE, Material.BLACK_CANDLE, Arrays.asList("Plonge une zone dans l'obscurité")),
     ;
 
     Class<? extends Spell> spellClass;

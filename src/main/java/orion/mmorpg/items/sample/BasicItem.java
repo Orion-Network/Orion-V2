@@ -1,6 +1,5 @@
 package orion.mmorpg.items.sample;
 
-import com.sun.tools.javac.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,6 +18,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Rarity;
+import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -104,7 +104,7 @@ public abstract class BasicItem extends ItemStack {
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("type"), PersistentDataType.STRING, TYPE.toString());
         for(String id : DATA.keySet()) {
             Pair<PersistentDataType, Object> data = DATA.get(id);
-            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.fst, data.snd);
+            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
         }
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

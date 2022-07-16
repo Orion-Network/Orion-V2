@@ -33,6 +33,7 @@ import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -313,6 +314,11 @@ public class OrionPlayer {
         this.getPortalStones().add(id);
     }
 
+
+    public void removePortalStone(String id) {
+        this.getPortalStones().remove(id);
+    }
+
     public Equipments getEquipements() {
         return equipements;
     }
@@ -377,6 +383,18 @@ public class OrionPlayer {
 
     public Support getSupport() {
         return support;
+    }
+
+    public boolean setSupport(Class<? extends Support> supportClass) {
+        Support support;
+        try {
+            support = (Support) supportClass.getConstructors()[0].newInstance();
+            setSupport(support);
+            return true;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void setSupport(Support support) {

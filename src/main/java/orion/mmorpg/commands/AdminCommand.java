@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
@@ -38,6 +39,13 @@ public class AdminCommand implements TabExecutor {
             } else if (args[0].equalsIgnoreCase("debug")) {
                 if(args[1].equalsIgnoreCase("bossbar")) {
                     Bukkit.getBossBars().forEachRemaining(bossBar -> bossBar.removeAll());
+                }
+            }
+            else if (args[0].equalsIgnoreCase("editor")) {
+                if(args[1].equalsIgnoreCase("player")) {
+                    Player player = Bukkit.getPlayer(args[2]);
+                    OrionPlayer orionPlayer1 = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
+                    new PlayerEditor((Player) commandSender, mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId()), player, orionPlayer1);
                 }
             }
         }

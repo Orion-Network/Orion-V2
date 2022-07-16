@@ -1,5 +1,8 @@
 package orion.mmorpg.mobs.samples;
 
+import net.md_5.bungee.api.ChatColor;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
@@ -19,14 +22,18 @@ import orion.mmorpg.utils.Stats;
 import java.util.EnumSet;
 
 public abstract class SamplePetMob extends SampleMob {
+    Player owner;
     public SamplePetMob(String name, EntityTypes<? extends EntityCreature> entitytypes, String uuid, Location location) {
         super(name, -1, entitytypes, uuid, location, new Stats.Builder().withVitality(1).withSpeed(4).build());
+        this.setInvulnerable(true);
     }
 
     public void summonPet(Player player) {
         this.spawn();
+        this.owner = player;
         this.setGoalTarget(((CraftPlayer) player).getHandle(), EntityTargetEvent.TargetReason.CUSTOM, true);
         Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId()).setPet(this);
+        this.setCustomName(new ChatMessage(generateName()));
     }
 
     @Override
@@ -35,6 +42,23 @@ public abstract class SamplePetMob extends SampleMob {
         this.bP.a(1, new PathfinderGoalPet(this, 0.8D, 25));
         this.bP.a(2, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.bP.a(3, new PathfinderGoalRandomLookaround(this));
+    }
+
+    @Override
+    public void tick() {
+        if(!owner.isOnline())
+            this.setRemoved(RemovalReason.a);
+        super.tick();
+    }
+
+    @Override
+    public boolean damageEntity(DamageSource damagesource, float f) {
+        this.setCustomName(new ChatMessage(generateName()));
+        return true;
+    }
+
+    private String generateName() {
+        return color + name + ChatColor.YELLOW + " [ " + owner.getName() + "]";
     }
 
     private class PathfinderGoalPet extends PathfinderGoal {
@@ -64,12 +88,13 @@ public abstract class SamplePetMob extends SampleMob {
                 return false;
             } else if(!this.owner.isAlive()) {
                 return false;
-            } else if(!(this.petEntity.f(this.owner) > (this.distance * this.distance))) {
+            } else if(this.petEntity.f(this.owner) > (this.distance * this.distance)) {
                 petEntity.setPosition(this.owner.locX(), this.owner.locY(), this.owner.locZ());
                 return false;
             } else {
-                if(this.petEntity.f(this.owner) < 1)
+                if(this.petEntity.f(this.owner) > 1) {
                     return false;
+                }
                 this.targetX = this.owner.locX();
                 this.targetY = this.owner.locY();
                 this.targetZ = this.owner.locZ();
