@@ -23,8 +23,10 @@ import oshi.util.tuples.Pair;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class BasicItem extends ItemStack {
+
     protected final Material MATERIAL;
     protected final String NAME;
     protected final String INTERNAL_ID;
@@ -102,9 +104,10 @@ public abstract class BasicItem extends ItemStack {
         meta.setLore(generateLore(meta.getLore()));
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING, INTERNAL_ID);
         meta.getPersistentDataContainer().set(NamespacedKey.minecraft("type"), PersistentDataType.STRING, TYPE.toString());
+        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
         for(String id : DATA.keySet()) {
             Pair<PersistentDataType, Object> data = DATA.get(id);
-            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
+            meta.getPersistentDataContainer().set(NamespacedKey.fromString(id, Mmorpg.INSTANCE), data.getA(), data.getB());
         }
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

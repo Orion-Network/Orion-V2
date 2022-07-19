@@ -33,6 +33,8 @@ public class PlayerPickupListener implements Listener {
                 String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
                 if (Enums.getIfPresent(ItemList.class, internal_id).isPresent()) {
                     if (e.getEntity().hasPermission(ItemList.valueOf(internal_id).getItem().getPERMISSION())) {
+                        if(meta.getPersistentDataContainer().has(NamespacedKey.minecraft("uuid"), PersistentDataType.STRING))
+                            return;
                         ItemList item = ItemList.valueOf(internal_id);
                         ItemStack itemStack = item.getProcessedItem(e.getItem().getItemStack().getAmount());
                         if(item.getItem().getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))
