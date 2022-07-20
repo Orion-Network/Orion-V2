@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +17,7 @@ import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -33,7 +33,7 @@ public class GrimoryItem extends BasicItem {
         if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER, 0);
+        meta.getPersistentDataContainer().set(Namespaces.slot, PersistentDataType.INTEGER, 0);
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }
@@ -44,7 +44,7 @@ public class GrimoryItem extends BasicItem {
         ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        int slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
+        int slot = container.get(Namespaces.slot, PersistentDataType.INTEGER);
         if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Spell spell;
             if(data.getSelectedSpells()[slot] == null)
@@ -64,10 +64,10 @@ public class GrimoryItem extends BasicItem {
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());
             else {
                 if (slot == 8)
-                    container.set(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER, 0);
+                    container.set(Namespaces.slot, PersistentDataType.INTEGER, 0);
                 else
-                    container.set(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER, slot + 1);
-                slot = container.get(NamespacedKey.minecraft("slot"), PersistentDataType.INTEGER);
+                    container.set(Namespaces.slot, PersistentDataType.INTEGER, slot + 1);
+                slot = container.get(Namespaces.slot, PersistentDataType.INTEGER);
 
                 String[] slots = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
                 slots[slot] = ChatColor.GREEN + "" + (slot + 1) + ChatColor.WHITE;

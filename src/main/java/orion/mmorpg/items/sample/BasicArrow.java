@@ -2,10 +2,10 @@ package orion.mmorpg.items.sample;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public abstract class BasicArrow extends BasicItem {
             item = new ItemStack(MATERIAL);
         if (this.spell != null) {
             ItemMeta meta = item.getItemMeta();
-            meta.getPersistentDataContainer().set(NamespacedKey.minecraft("spell"), PersistentDataType.STRING, spell.getInternal_id());
-            meta.getPersistentDataContainer().set(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT, DAMAGE);
+            meta.getPersistentDataContainer().set(Namespaces.spell, PersistentDataType.STRING, spell.getInternal_id());
+            meta.getPersistentDataContainer().set(Namespaces.damage, PersistentDataType.FLOAT, DAMAGE);
             item.setItemMeta(meta);
         }
         return super.generateItem(item, amount);

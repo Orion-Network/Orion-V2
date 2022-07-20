@@ -2,7 +2,6 @@ package orion.mmorpg.items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -17,6 +16,7 @@ import orion.mmorpg.items.weapons.*;
 import orion.mmorpg.items.weapons.arrows.CommonArrow;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
 import orion.mmorpg.items.weapons.arrows.TransmissionArrow;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 
 public enum ItemList {
@@ -130,7 +130,7 @@ public enum ItemList {
 
     public static BasicItem getItemFromItemstack(ItemStack itemStack) {
         PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-        return valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+        return valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
     }
 
     public BasicItem getItem() {

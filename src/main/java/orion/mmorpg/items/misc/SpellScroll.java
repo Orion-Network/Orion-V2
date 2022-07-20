@@ -1,18 +1,18 @@
 package orion.mmorpg.items.misc;
 
-import orion.mmorpg.config.AssociationConfig;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Knowledge;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -25,7 +25,7 @@ public class SpellScroll extends BasicConsumableItem {
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING);
+        String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING);
         if (spell == null) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();
@@ -49,7 +49,7 @@ public class SpellScroll extends BasicConsumableItem {
         ItemStack i = generateItem(null, 1);
         ItemMeta meta = i.getItemMeta();
         meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING, spell_id);
+        meta.getPersistentDataContainer().set(Namespaces.spell_id, PersistentDataType.STRING, spell_id);
         i.setItemMeta(meta);
         return i;
     }

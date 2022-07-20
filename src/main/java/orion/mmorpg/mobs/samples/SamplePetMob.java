@@ -92,7 +92,7 @@ public abstract class SamplePetMob extends SampleMob {
                 petEntity.setPosition(this.owner.locX(), this.owner.locY(), this.owner.locZ());
                 return false;
             } else {
-                if(this.petEntity.f(this.owner) > 1) {
+                if(this.petEntity.f(this.owner) < 1) {
                     return false;
                 }
                 this.targetX = this.owner.locX();

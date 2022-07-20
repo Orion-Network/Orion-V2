@@ -2,7 +2,6 @@ package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -29,6 +28,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Knowledge;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
@@ -60,13 +60,13 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getDamager();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
-            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
-                if (container.has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
-                    e.setDamage(container.get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT));
+                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+                if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
+                    e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
                 item.onHitWithItem(e);
-                if (ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
+                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
                     orionPlayer.onHit(e, orionPlayer);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                     e.setDamage(totalDamage);
@@ -109,17 +109,17 @@ public class PlayerStatsListener implements Listener {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
-            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if (ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
-                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
+                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
                     float arrowDamage = 1;
-                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
-                        arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
+                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
+                        arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
                     MetadataValue damage = new FixedMetadataValue(mmorpg, Utils.calculateDamage(orionPlayer.getStats(), basicRangedWeapon.getDAMAGE() + arrowDamage));
                     e.getProjectile().setMetadata("damage", damage);
-                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("spell"), PersistentDataType.STRING)) {
-                        String spell = e.getConsumable().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell"), PersistentDataType.STRING);
+                    if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.spell, PersistentDataType.STRING)) {
+                        String spell = e.getConsumable().getItemMeta().getPersistentDataContainer().get(Namespaces.spell, PersistentDataType.STRING);
                         e.getProjectile().setMetadata("spell", new FixedMetadataValue(mmorpg, spell));
                     }
                     ((Arrow) e.getProjectile()).setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);

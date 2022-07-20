@@ -2,7 +2,6 @@ package orion.mmorpg.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -13,6 +12,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Stats;
 
 import java.util.ArrayList;
@@ -59,12 +59,12 @@ public class DataCommand implements TabExecutor {
             } else if (args[0].equalsIgnoreCase("item")) {
                 if (sender instanceof Player) {
                     ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
-                    String internal_id = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING);
-                    String type = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("type"), PersistentDataType.STRING);
-                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+                    String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
+                    String type = meta.getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
                     float damage = 0;
-                    if (meta.getPersistentDataContainer().has(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT))
-                        damage = meta.getPersistentDataContainer().get(NamespacedKey.minecraft("damage"), PersistentDataType.FLOAT);
+                    if (meta.getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
+                        damage = meta.getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
 
                     StringBuilder builder = new StringBuilder();
                     builder.append(ChatColor.GRAY + "INTERNAL_ID: " + ChatColor.YELLOW + internal_id + "\n");

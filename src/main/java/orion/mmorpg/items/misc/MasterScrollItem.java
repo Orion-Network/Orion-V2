@@ -1,17 +1,17 @@
 package orion.mmorpg.items.misc;
 
-import orion.mmorpg.config.AssociationConfig;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -25,14 +25,14 @@ public class MasterScrollItem extends BasicConsumableItem {
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING);
+        String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING);
         if (spell == null) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();
             Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
             return;
         }
-        int knowledge = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("knowledge"), PersistentDataType.INTEGER);
+        int knowledge = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.knowledge, PersistentDataType.INTEGER);
         Utils.sendInfoMessage(e.getPlayer(), "Votre connaissance du sort " + SpellList.valueOf(spell).getName() + " a augmenté de " + knowledge);
         SpellList.learnSpell(data, SpellList.valueOf(spell).getSpellClass(), knowledge);
         super.onUseItem(mmorpg, data, e);
@@ -43,8 +43,8 @@ public class MasterScrollItem extends BasicConsumableItem {
         ItemStack i = generateItem(null, 1);
         ItemMeta meta = i.getItemMeta();
         meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("spell_id"), PersistentDataType.STRING, spell_id);
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("knowledge"), PersistentDataType.INTEGER, knowledge);
+        meta.getPersistentDataContainer().set(Namespaces.spell_id, PersistentDataType.STRING, spell_id);
+        meta.getPersistentDataContainer().set(Namespaces.knowledge, PersistentDataType.INTEGER, knowledge);
         meta.setLore(Arrays.asList(ChatColor.WHITE + this.getLORE(), ChatColor.WHITE + "Experience du sort ajoutée : " + knowledge));
 
         i.setItemMeta(meta);

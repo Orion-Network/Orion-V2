@@ -3,7 +3,6 @@ package orion.mmorpg.utils;
 import com.google.gson.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -42,7 +41,7 @@ public class OrionGson {
                 return JsonNull.INSTANCE;
             JsonObject jsonObject = new JsonObject();
             ItemMeta meta = Objects.requireNonNull(Objects.requireNonNull(itemStack.getItemMeta()));
-            jsonObject.addProperty("internal_id", meta.getPersistentDataContainer().get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING));
+            jsonObject.addProperty("internal_id", meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING));
             jsonObject.addProperty("amount", itemStack.getAmount());
             return jsonObject;
         }

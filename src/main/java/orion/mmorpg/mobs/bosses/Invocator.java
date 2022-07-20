@@ -34,7 +34,6 @@ public class Invocator extends SampleBossMob {
     public Invocator(String uuid, Location location) {
         super("L'Invocateur", 30, EntityTypes.O, uuid, location, new Stats.Builder().withIntel(100).withDefence(20).withVitality(1000).withSpeed(4).build());
         this.getRewards().add(new Rewards.Reward(((MythicalScroll) ItemList.MYTHICAL_SCROLL.getItem()).generateScroll("HAKI"), 25));
-        this.getRewards().add(new Rewards.Reward(((MythicalScroll) ItemList.MYTHICAL_SCROLL.getItem()).generateScroll("HAKI"), 1));
     }
     PathfinderGoalSummon pathfinderGoalSummon;
     @Override

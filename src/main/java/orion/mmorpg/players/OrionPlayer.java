@@ -28,10 +28,7 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.parties.Party;
 import orion.mmorpg.players.races.Race;
-import orion.mmorpg.utils.Infos;
-import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.Stats;
-import orion.mmorpg.utils.Utils;
+import orion.mmorpg.utils.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
@@ -43,7 +40,7 @@ import java.util.*;
 public class OrionPlayer {
     private final Stats stats;
     private final LinkedHashSet<String> portalStones;
-    transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(NamespacedKey.minecraft("mobhealth"), "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
+    transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     ItemStack[] quiver;
     transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
@@ -95,7 +92,7 @@ public class OrionPlayer {
 
         this.mana = (int) this.stats.getIntel();
 
-        this.healthBar = Bukkit.createBossBar(NamespacedKey.minecraft("health"), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
@@ -155,7 +152,7 @@ public class OrionPlayer {
         this.support = support;
         this.race = race;
 
-        this.healthBar = Bukkit.createBossBar(NamespacedKey.minecraft("health"), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
         this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
@@ -216,8 +213,8 @@ public class OrionPlayer {
             Stats armorStats = equipements.getEquipmentStats();
             Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
             ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
-            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("stats"), PersistentDataType.STRING)) {
-                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("stats"), PersistentDataType.STRING), Stats.class);
+            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.stats, PersistentDataType.STRING)) {
+                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
             }
             return calculateStats(playerStats, armorStats, handStats, getPointStats());
         }

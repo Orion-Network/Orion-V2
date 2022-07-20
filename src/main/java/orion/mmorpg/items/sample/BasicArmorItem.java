@@ -1,7 +1,6 @@
 package orion.mmorpg.items.sample;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -10,13 +9,13 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class BasicArmorItem extends BasicItem {
     public final ArmorType ARMORTYPE;
@@ -39,9 +38,8 @@ public abstract class BasicArmorItem extends BasicItem {
         if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("stats"), PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("armor_type"), PersistentDataType.STRING, ARMORTYPE.name());
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("no_stack"), PersistentDataType.STRING, UUID.randomUUID().toString());
+        meta.getPersistentDataContainer().set(Namespaces.stats, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
+        meta.getPersistentDataContainer().set(Namespaces.armor_type, PersistentDataType.STRING, ARMORTYPE.name());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }

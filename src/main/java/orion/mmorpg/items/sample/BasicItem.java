@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
@@ -17,6 +18,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import oshi.util.tuples.Pair;
 
@@ -25,6 +27,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * A class to represent items as Rpg Item
+ */
 public abstract class BasicItem extends ItemStack {
 
     protected final Material MATERIAL;
@@ -37,6 +42,7 @@ public abstract class BasicItem extends ItemStack {
     protected final ItemType TYPE;
     protected Element ELEMENT = Element.PHYSIC;
     protected final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
+    protected PersistentDataContainer persistentDataContainer;
     protected Spell spell;
 
     protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
@@ -48,6 +54,7 @@ public abstract class BasicItem extends ItemStack {
         this.LORE = LORE;
         PERMISSION = "basic.item";
         this.TYPE = ItemType.ITEM;
+
     }
 
     protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, ItemType TYPE) {
@@ -102,12 +109,14 @@ public abstract class BasicItem extends ItemStack {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(RARITY.getChatColor() + NAME);
         meta.setLore(generateLore(meta.getLore()));
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING, INTERNAL_ID);
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("type"), PersistentDataType.STRING, TYPE.toString());
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
+
+
+        meta.getPersistentDataContainer().set(Namespaces.internal_id, PersistentDataType.STRING, INTERNAL_ID);
+        meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, TYPE.toString());
+        meta.getPersistentDataContainer().set(Namespaces.uuid, PersistentDataType.STRING, UUID.randomUUID().toString());
         for(String id : DATA.keySet()) {
             Pair<PersistentDataType, Object> data = DATA.get(id);
-            meta.getPersistentDataContainer().set(NamespacedKey.fromString(id, Mmorpg.INSTANCE), data.getA(), data.getB());
+            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
         }
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -189,4 +198,6 @@ public abstract class BasicItem extends ItemStack {
     public Spell getSpell() {
         return spell;
     }
+
+
 }

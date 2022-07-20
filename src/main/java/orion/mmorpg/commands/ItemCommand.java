@@ -53,7 +53,6 @@ public class ItemCommand implements TabExecutor {
                             Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
                             return true;
                         } else if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                            System.out.println("test");
                             Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
                             return true;
                         }

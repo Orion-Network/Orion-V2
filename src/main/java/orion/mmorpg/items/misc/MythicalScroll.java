@@ -1,7 +1,6 @@
 package orion.mmorpg.items.misc;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,6 +11,7 @@ import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.abilities.SupportList;
+import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
@@ -24,7 +24,7 @@ public class MythicalScroll extends BasicConsumableItem {
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        String support = e.getItem().getItemMeta().getPersistentDataContainer().get(NamespacedKey.minecraft("support"), PersistentDataType.STRING);
+        String support = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.support, PersistentDataType.STRING);
         if(support == null) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();
@@ -49,7 +49,7 @@ public class MythicalScroll extends BasicConsumableItem {
         ItemStack i = generateItem(null, 1);
         ItemMeta meta = i.getItemMeta();
         meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SupportList.valueOf(support_id));
-        meta.getPersistentDataContainer().set(NamespacedKey.minecraft("support"), PersistentDataType.STRING, support_id);
+        meta.getPersistentDataContainer().set(Namespaces.support, PersistentDataType.STRING, support_id);
         i.setItemMeta(meta);
         return i;
     }

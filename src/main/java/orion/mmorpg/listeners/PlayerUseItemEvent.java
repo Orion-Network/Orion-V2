@@ -1,6 +1,5 @@
 package orion.mmorpg.listeners;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -10,6 +9,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Namespaces;
 
 public class PlayerUseItemEvent implements Listener {
     Mmorpg mmorpg;
@@ -23,9 +23,9 @@ public class PlayerUseItemEvent implements Listener {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
         if (e.getItem() == null)
             return;
-        if (e.getItem().getItemMeta().getPersistentDataContainer().has(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)) {
+        if (e.getItem().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
             PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
-            BasicItem item = ItemList.valueOf(container.get(NamespacedKey.minecraft("internal_id"), PersistentDataType.STRING)).getItem();
+            BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
             item.onUseItem(mmorpg, player, e);
         }
     }
