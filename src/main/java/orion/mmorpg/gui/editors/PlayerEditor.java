@@ -2,9 +2,10 @@ package orion.mmorpg.gui.editors;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
+import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import net.wesjd.anvilgui.AnvilGUI;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
@@ -16,16 +17,15 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.PortalStone;
-import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.abilities.SupportList;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,6 +123,8 @@ public class PlayerEditor extends ChestGui {
         private Player targetPlayer;
         private OrionPlayer targetOwnerPlayer;
 
+        List<GuiItem> populateList = new LinkedList<>();
+
         public SpellEditor(Player ownerPlayer, OrionPlayer ownerOrionPlayer, Player targetPlayer, OrionPlayer targetOwnerPlayer) {
             super(3, "Editer les sorts du joueur");
             this.ownerPlayer = ownerPlayer;
@@ -131,27 +133,40 @@ public class PlayerEditor extends ChestGui {
             this.targetOwnerPlayer = targetOwnerPlayer;
 
             this.addPane(getSpellPane());
+            this.setOnGlobalClick(e -> e.setCancelled(true));
         }
 
-        private OutlinePane getSpellPane() {
-            OutlinePane pane = new OutlinePane(0,0, 8, 3);
-            targetOwnerPlayer.getKnownSpells().forEach((spellClass, knowledge) -> {
-                Spell spell = null;
-                try {
-                    spell = (Spell) spellClass.getConstructors()[0].newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                if(spell == null) return;
-                SpellList spellData = SpellList.valueOf(spell.getInternal_id());
-                pane.addItem(new GuiItem(spellData.getItem(), e -> {
-                    if(e.getClick().equals(ClickType.LEFT)) {
-
-                    } else if(e.getClick().equals(ClickType.RIGHT)) {
+        public PaginatedPane getSpellPane() {
+            PaginatedPane supportPane = new PaginatedPane(0, 0, 9, 5);
+            for (SpellList s : SpellList.values()) {
+                populateList.add(new GuiItem(s.getItem(), (event) -> {
+                    if(event.getClick().equals(ClickType.LEFT)) {
+                        new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE)
+                                .itemLeft(s.getItem())
+                                .title("Ajouter des points de savoir")
+                                .onComplete((player, response) -> {
+                                    if(!NumberUtils.isNumber(response))
+                                        return AnvilGUI.Response.text("Nombre Invalide");
+                                    if(!targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass()))
+                                        SpellList.learnSpell(targetOrionPlayer, s.getSpellClass(), 1);
+                                    targetOrionPlayer.getKnownSpells().get(s.getSpellClass()).setKnowledge(Integer.parseInt(response));
+                                    return AnvilGUI.Response.close();
+                                })
+                                .open(ownerPlayer);
+                    } else if(event.getClick().isRightClick()) {
+                        targetOrionPlayer.getKnownSpells().forEach((spellClass, knowledge) -> {
+                            if(targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass())) {
+                                targetOrionPlayer.getKnownSpells().remove(s.getSpellClass());
+                                return;
+                            }
+                        });
+                        Utils.sendInfoMessage(ownerPlayer, "Le joueur ne connais pas ce sort.");
+                        return;
                     }
                 }));
-            });
-            return pane;
+            }
+            supportPane.populateWithGuiItems(populateList);
+            return supportPane;
         }
     }
 }

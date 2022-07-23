@@ -26,6 +26,10 @@ public class Knowledge {
         return knowledge;
     }
 
+    public void setKnowledge(int knowledge) {
+        this.knowledge = knowledge;
+    }
+
     public void addKnowledge(int knowledge) {
         this.knowledge += knowledge;
     }
