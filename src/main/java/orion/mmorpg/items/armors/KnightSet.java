@@ -33,7 +33,7 @@ public class KnightSet {
 
     public static class KnightSword extends BasicMeleeWeapon {
         public KnightSword() {
-            super(Material.IRON_SWORD, "Epee de Chevalier", "KNIGHT_SWORD", 2, "Une épéee assez robuste mais lourde", Rarity.UNCOMMON, new Stats.Builder().withStrength(3).build(), 7);
+            super(Material.IRON_SWORD, "Epee de Chevalier", "KNIGHT_SWORD", 2, "Une épée assez robuste mais lourde", Rarity.UNCOMMON, new Stats.Builder().withStrength(3).build(), 7);
         }
     }
 
