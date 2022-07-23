@@ -13,6 +13,7 @@ import orion.mmorpg.utils.Stats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class BasicMeleeWeapon extends BasicItem {
     public final Stats STATS;
@@ -37,6 +38,7 @@ public abstract class BasicMeleeWeapon extends BasicItem {
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.stats, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
         meta.getPersistentDataContainer().set(Namespaces.damage, PersistentDataType.FLOAT, DAMAGE);
+        meta.getPersistentDataContainer().set(Namespaces.uuid, PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }

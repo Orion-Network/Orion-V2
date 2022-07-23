@@ -25,7 +25,6 @@ import oshi.util.tuples.Pair;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A class to represent items as Rpg Item
@@ -113,7 +112,6 @@ public abstract class BasicItem extends ItemStack {
 
         meta.getPersistentDataContainer().set(Namespaces.internal_id, PersistentDataType.STRING, INTERNAL_ID);
         meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, TYPE.toString());
-        meta.getPersistentDataContainer().set(Namespaces.uuid, PersistentDataType.STRING, UUID.randomUUID().toString());
         for(String id : DATA.keySet()) {
             Pair<PersistentDataType, Object> data = DATA.get(id);
             meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
