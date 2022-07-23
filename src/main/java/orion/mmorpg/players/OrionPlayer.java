@@ -6,7 +6,6 @@ import fr.mrmicky.fastboard.FastBoard;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -213,8 +212,8 @@ public class OrionPlayer {
             Stats armorStats = equipements.getEquipmentStats();
             Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
             ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
-            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.stats, PersistentDataType.STRING)) {
-                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
+            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.base_stats, PersistentDataType.STRING)) {
+                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.base_stats, PersistentDataType.STRING), Stats.class);
             }
             return calculateStats(playerStats, armorStats, handStats, getPointStats());
         }

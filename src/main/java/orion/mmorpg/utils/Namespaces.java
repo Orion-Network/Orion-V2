@@ -8,7 +8,7 @@ public final class Namespaces {
     public static final NamespacedKey
             internal_id = NamespacedKey.fromString("internal_id", plugin),
             uuid = NamespacedKey.fromString("uuid", plugin),
-            stats = NamespacedKey.fromString("stats", plugin),
+            base_stats = NamespacedKey.fromString("stats", plugin),
             type = NamespacedKey.fromString("type", plugin),
             slot = NamespacedKey.fromString("slot", plugin),
             armor_type = NamespacedKey.fromString("armor_type",  plugin),

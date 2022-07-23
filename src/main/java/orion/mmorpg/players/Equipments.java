@@ -37,15 +37,15 @@ public class Equipments {
     public Stats getEquipmentStats() {
         Stats stats = new Stats.Builder().build();
         equipments.values().forEach(item -> {
-            stats.setStrength(stats.getStrength() + item.getSTATS().getStrength());
-            stats.setCritical_chance(stats.getCritical_chance() + item.getSTATS().getCritical_chance());
-            stats.setCritical_damage(stats.getCritical_damage() + item.getSTATS().getCritical_damage());
-            stats.setAttack_speed(stats.getAttack_speed() + item.getSTATS().getAttack_speed());
-            stats.setVitality(stats.getVitality() + item.getSTATS().getVitality());
-            stats.setIntel(stats.getIntel() + item.getSTATS().getIntel());
-            stats.setDefence(stats.getDefence() + item.getSTATS().getDefence());
-            stats.setSpeed(stats.getSpeed() + item.getSTATS().getSpeed());
-            stats.setLuck(stats.getLuck() + item.getSTATS().getLuck());
+            stats.setStrength(stats.getStrength() + item.getBASE_STATS().getStrength());
+            stats.setCritical_chance(stats.getCritical_chance() + item.getBASE_STATS().getCritical_chance());
+            stats.setCritical_damage(stats.getCritical_damage() + item.getBASE_STATS().getCritical_damage());
+            stats.setAttack_speed(stats.getAttack_speed() + item.getBASE_STATS().getAttack_speed());
+            stats.setVitality(stats.getVitality() + item.getBASE_STATS().getVitality());
+            stats.setIntel(stats.getIntel() + item.getBASE_STATS().getIntel());
+            stats.setDefence(stats.getDefence() + item.getBASE_STATS().getDefence());
+            stats.setSpeed(stats.getSpeed() + item.getBASE_STATS().getSpeed());
+            stats.setLuck(stats.getLuck() + item.getBASE_STATS().getLuck());
         });
         return stats;
     }

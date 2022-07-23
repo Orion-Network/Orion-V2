@@ -18,14 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BasicArmorItem extends BasicItem {
+public abstract class BasicArmorItem extends BasicEquipmentItem {
     public final ArmorType ARMORTYPE;
-    public final Stats STATS;
 
     public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats STATS) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR);
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR, STATS);
         this.ARMORTYPE = ARMORTYPE;
-        this.STATS = STATS;
     }
 
     @Override
@@ -39,7 +37,6 @@ public abstract class BasicArmorItem extends BasicItem {
         if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(Namespaces.stats, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(STATS));
         meta.getPersistentDataContainer().set(Namespaces.armor_type, PersistentDataType.STRING, ARMORTYPE.name());
         meta.getPersistentDataContainer().set(Namespaces.uuid, PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
@@ -50,7 +47,7 @@ public abstract class BasicArmorItem extends BasicItem {
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
-        lore.addAll(STATS.statsAsLore());
+        lore.addAll(getBASE_STATS().statsAsLore());
 
         return super.generateLore(lore);
     }
@@ -75,10 +72,6 @@ public abstract class BasicArmorItem extends BasicItem {
 
     public ArmorType getARMORTYPE() {
         return ARMORTYPE;
-    }
-
-    public Stats getSTATS() {
-        return STATS;
     }
 
     public enum ArmorType {
