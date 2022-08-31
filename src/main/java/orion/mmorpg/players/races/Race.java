@@ -4,7 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.armors.StartingSet;
+import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
@@ -19,15 +20,15 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public enum Race {
-    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, "La race la plus populaire de ce monde malgré leurs faible magie", Rarity.COMMON).generateItem(null, 1), new ArrayList<>(Collections.singleton(Heal.class)), null, null,
+    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, Collections.singletonList("La race la plus populaire de ce monde malgré leurs faible magie"), Rarity.COMMON).generateItem(null, 1), new ArrayList<>(Collections.singleton(Heal.class)), null, null,
             new LinkedHashMap<Integer, Class<? extends Spell>>() {
                 {
                     put(5, Surpassement.class);
                 }
             },(p, op) -> {
-        p.getInventory().addItem(ItemList.MINECRAFT_WOODEN_SWORD.getProcessedItem(1), ItemList.STARTING_CHESTPLATE.getProcessedItem(1));
+        p.getInventory().addItem(new WoodenSword().generateItem(null, 1), new StartingSet.StartingChestplate().generateItem(null, 1));
     }),
-    CELESTIAL("Célestien", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, "Une race celeste ayant la capacitée de voler", Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
+    CELESTIAL("Célestien", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
 
     public String name;
     public Stats stats;

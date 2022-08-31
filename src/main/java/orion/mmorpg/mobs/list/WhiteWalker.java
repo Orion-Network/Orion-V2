@@ -6,9 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
-import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
 
 public class WhiteWalker extends SampleHostileMob {
@@ -21,7 +19,7 @@ public class WhiteWalker extends SampleHostileMob {
         this.setSlot(EnumItemSlot.a, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_SWORD)));
         this.setSlot(EnumItemSlot.b, CraftItemStack.asNMSCopy(new ItemStack(Material.SHIELD)));
 
-        Rewards.Reward r = new Rewards.Reward(ItemList.WHITE_WALKER_SOUL.getProcessedItem(1), 1);
-        this.getRewards().add(r);
+        //Rewards.Reward r = new Rewards.Reward(ItemList.WHITE_WALKER_SOUL.getProcessedItem(1), 1);
+        //this.getRewards().add(r);
     }
 }

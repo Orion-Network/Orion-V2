@@ -18,10 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BasicArmorItem extends BasicEquipmentItem {
+public class BasicArmorItem extends BasicEquipmentItem {
     public final ArmorType ARMORTYPE;
 
-    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats STATS) {
+    public BasicArmorItem(ItemStack item) {
+        super(item);
+        this.ARMORTYPE = ArmorType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.armor_type, PersistentDataType.STRING));
+    }
+
+    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats STATS) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR, STATS);
         this.ARMORTYPE = ARMORTYPE;
     }
@@ -47,7 +52,7 @@ public abstract class BasicArmorItem extends BasicEquipmentItem {
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
-        lore.addAll(getBASE_STATS().statsAsLore());
+        lore.addAll(getStats().statsAsLore());
 
         return super.generateLore(lore);
     }

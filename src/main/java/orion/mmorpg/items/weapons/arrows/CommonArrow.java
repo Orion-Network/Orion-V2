@@ -4,8 +4,10 @@ import org.bukkit.Material;
 import orion.mmorpg.items.sample.BasicArrow;
 import orion.mmorpg.utils.Rarity;
 
+import java.util.Collections;
+
 public class CommonArrow extends BasicArrow {
     public CommonArrow() {
-        super(Material.ARROW, "Flèche Commune", "COMMON_ARROW", 1, "Des flèches simple", Rarity.COMMON, 3);
+        super(Material.ARROW, "Flèche Commune", "COMMON_ARROW", 1, Collections.singletonList("Des flèches simple"), Rarity.COMMON, 3);
     }
 }

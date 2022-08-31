@@ -17,10 +17,11 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 
 public class SpellScroll extends BasicConsumableItem {
     public SpellScroll() {
-        super(Material.PAPER, "Parchemin de Sort", "SPELL_SCROLL", AssociationConfig.getModel("misc/paper/spell_scroll"), "Un parchemin permettant de lancer un sort sans le connaitre", Rarity.RARE);
+        super(Material.PAPER, "Parchemin de Sort", "SPELL_SCROLL", AssociationConfig.getModel("misc/paper/spell_scroll"), Collections.singletonList("Un parchemin permettant de lancer un sort sans le connaitre"), Rarity.RARE);
     }
 
     @Override

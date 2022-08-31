@@ -62,10 +62,10 @@ public class WikiGui extends ChestGui {
         for (ItemList item : ItemList.values()) {
             if (item.getItemClass() != BasicItem.class) continue;
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.getProcessedItem(1), (event) -> {
+            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.item")) return;
-                event.getWhoClicked().getInventory().addItem(item.getProcessedItem(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.getItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
             }));
         }
 
@@ -77,13 +77,14 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane weaponPane = new PaginatedPane(0, 0, 9, 5);
         for (ItemList item : ItemList.values()) {
-            if (item.getItemClass() != BasicMeleeWeapon.class && item.getItemClass() != BasicRangedWeapon.class && item.getItemClass() != BasicMagicWeapon.class)
+            if (!BasicMeleeWeapon.class.isAssignableFrom(item.getItemClass()) && !BasicMagicWeapon.class.isAssignableFrom(item.getItemClass()) && !BasicRangedWeapon.class.isAssignableFrom(item.getItemClass()))
                 continue;
+
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.getProcessedItem(1), (event) -> {
+            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.weapons")) return;
-                event.getWhoClicked().getInventory().addItem(item.getProcessedItem(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.getItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
             }));
         }
 
@@ -95,12 +96,12 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane armorPane = new PaginatedPane(0, 0, 9, 5);
         for (ItemList item : ItemList.values()) {
-            if (item.getItemClass() != BasicArmorItem.class) continue;
+            if (!BasicArmorItem.class.isAssignableFrom(item.getItemClass())) continue;
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.getProcessedItem(1), (event) -> {
+            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.armor")) return;
-                event.getWhoClicked().getInventory().addItem(item.getProcessedItem(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.getItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
             }));
         }
 
@@ -111,14 +112,14 @@ public class WikiGui extends ChestGui {
     public StaticPane getNavigationPane() {
         StaticPane navigationPane = new StaticPane(0, 5, 9, 1);
 
-        navigationPane.addItem(new GuiItem(ItemList.LEFT_BUTTON_PLACEHOLDER.getProcessedItem(1), e -> {
+        navigationPane.addItem(new GuiItem(ItemList.LEFT_BUTTON_PLACEHOLDER.generateItemStack(1), e -> {
             PaginatedPane currentPane = ((PaginatedPane) mainPane.getPanes(mainPane.getPage()));
             if (currentPane.getPage() > 0)
                 currentPane.setPage(currentPane.getPage() - 1);
             this.update();
         }), 0, 0);
 
-        navigationPane.addItem(new GuiItem(ItemList.RIGHT_BUTTON_PLACEHOLDER.getProcessedItem(1), e -> {
+        navigationPane.addItem(new GuiItem(ItemList.RIGHT_BUTTON_PLACEHOLDER.generateItemStack(1), e -> {
             PaginatedPane currentPane = ((PaginatedPane) mainPane.getPanes(mainPane.getPage()));
             if (currentPane.getPage() < currentPane.getPages() - 1)
                 currentPane.setPage(currentPane.getPage() + 1);

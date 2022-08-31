@@ -1,7 +1,7 @@
 package orion.mmorpg.players.abilities;
 
 import org.bukkit.entity.Player;
-import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.gui.SpecialPlaceholder;
 import orion.mmorpg.players.OrionPlayer;
 
 public interface SpecialsSupport {
@@ -27,9 +27,9 @@ public interface SpecialsSupport {
         orionPlayer.getSlotTypes()[7] = OrionPlayer.SlotType.RESTRICTED_SLOT;
         orionPlayer.getSlotTypes()[6] = OrionPlayer.SlotType.RESTRICTED_SLOT;
 
-        player.getInventory().setItem(6, ItemList.FIRST_SPECIAL_PLACEHOLDER.getProcessedItem(1));
-        player.getInventory().setItem(7, ItemList.SECOND_SPECIAL_PLACEHOLDER.getProcessedItem(1));
-        player.getInventory().setItem(8, ItemList.THIRD_SPECIAL_PLACEHOLDER.getProcessedItem(1));
+        player.getInventory().setItem(6, new SpecialPlaceholder.FirstSpecialPlaceholder().generateItem(null, 1));
+        player.getInventory().setItem(7, new SpecialPlaceholder.SecondSpecialPlaceholder().generateItem(null, 1));
+        player.getInventory().setItem(8, new SpecialPlaceholder.ThirdSpecialPlaceholder().generateItem(null, 1));
     }
 
     default void removeItems(Player player, OrionPlayer orionPlayer) {

@@ -10,10 +10,12 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.utils.Rarity;
 
+import java.util.Collections;
+
 public class EternalCompass extends BasicItem {
     private static Location location = PortalStone.ARENA_SPAWN_STONE.getLocation();
     public EternalCompass() {
-        super(Material.COMPASS, "Eternal Compass", "ETERNAL_COMPASS", 1, "Un compas magique", Rarity.RARE);
+        super(Material.COMPASS, "Eternal Compass", "ETERNAL_COMPASS", 1, Collections.singletonList("Un compas magique"), Rarity.RARE);
     }
 
     @Override

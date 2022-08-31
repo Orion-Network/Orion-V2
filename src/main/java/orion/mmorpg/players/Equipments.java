@@ -3,7 +3,8 @@ package orion.mmorpg.players;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import orion.mmorpg.items.ItemList;
+import org.bukkit.entity.Player;
+import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.utils.Stats;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 public class Equipments {
     private HashMap<EquipmentSlot, BasicArmorItem> equipments = new HashMap<>();
-
+    private Player owner;
 
     public boolean addEquipment(BasicArmorItem item) {
         EquipmentSlot slot = isSlotFree(item.getARMORTYPE());
@@ -24,6 +25,8 @@ public class Equipments {
     public boolean removeEquipment(EquipmentSlot slot) {
         if(!equipments.containsKey(slot))
             return false;
+        owner.getInventory().addItem(equipments.get(slot).generateItem(null, 1));
+        owner.updateInventory();
         equipments.remove(slot);
         return true;
     }
@@ -37,15 +40,15 @@ public class Equipments {
     public Stats getEquipmentStats() {
         Stats stats = new Stats.Builder().build();
         equipments.values().forEach(item -> {
-            stats.setStrength(stats.getStrength() + item.getBASE_STATS().getStrength());
-            stats.setCritical_chance(stats.getCritical_chance() + item.getBASE_STATS().getCritical_chance());
-            stats.setCritical_damage(stats.getCritical_damage() + item.getBASE_STATS().getCritical_damage());
-            stats.setAttack_speed(stats.getAttack_speed() + item.getBASE_STATS().getAttack_speed());
-            stats.setVitality(stats.getVitality() + item.getBASE_STATS().getVitality());
-            stats.setIntel(stats.getIntel() + item.getBASE_STATS().getIntel());
-            stats.setDefence(stats.getDefence() + item.getBASE_STATS().getDefence());
-            stats.setSpeed(stats.getSpeed() + item.getBASE_STATS().getSpeed());
-            stats.setLuck(stats.getLuck() + item.getBASE_STATS().getLuck());
+            stats.setStrength(stats.getStrength() + item.getStats().getStrength());
+            stats.setCritical_chance(stats.getCritical_chance() + item.getStats().getCritical_chance());
+            stats.setCritical_damage(stats.getCritical_damage() + item.getStats().getCritical_damage());
+            stats.setAttack_speed(stats.getAttack_speed() + item.getStats().getAttack_speed());
+            stats.setVitality(stats.getVitality() + item.getStats().getVitality());
+            stats.setIntel(stats.getIntel() + item.getStats().getIntel());
+            stats.setDefence(stats.getDefence() + item.getStats().getDefence());
+            stats.setSpeed(stats.getSpeed() + item.getStats().getSpeed());
+            stats.setLuck(stats.getLuck() + item.getStats().getLuck());
         });
         return stats;
     }
@@ -58,8 +61,8 @@ public class Equipments {
                 break;
             }
             case CHESTPLATE: {
-                if(!equipments.containsKey(EquipmentSlot.CHESTPLATE))
-                    return EquipmentSlot.CHESTPLATE;
+                if(!equipments.containsKey(EquipmentSlot.CHEST_PLATE))
+                    return EquipmentSlot.CHEST_PLATE;
                 break;
             }
             case LEGGINGS: {
@@ -94,37 +97,37 @@ public class Equipments {
         if(equipments.containsKey(EquipmentSlot.HELMET))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.HELMET).generateItem(null, 1)), 0, 0);
         else
-            pane.addItem(new GuiItem(ItemList.HELMET_PLACEHOLDER.getProcessedItem(0)), 0, 0);
+            pane.addItem(new GuiItem(new HelmetPlaceholderItem().generateItem(null, 1)), 0, 0);
 
-        if(equipments.containsKey(EquipmentSlot.CHESTPLATE))
-            pane.addItem(new GuiItem(equipments.get(EquipmentSlot.CHESTPLATE).generateItem(null, 1)), 1, 0);
+        if(equipments.containsKey(EquipmentSlot.CHEST_PLATE))
+            pane.addItem(new GuiItem(equipments.get(EquipmentSlot.CHEST_PLATE).generateItem(null, 1)), 1, 0);
         else
-            pane.addItem(new GuiItem(ItemList.CHESTPLATE_PLACEHOLDER.getProcessedItem(0)), 1, 0);
+            pane.addItem(new GuiItem(new ChestplatePlaceholderItem().generateItem(null, 1)), 1, 0);
 
         if(equipments.containsKey(EquipmentSlot.LEGGINGS))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.LEGGINGS).generateItem(null, 1)), 2, 0);
         else
-            pane.addItem(new GuiItem(ItemList.LEGGINGS_PLACEHOLDER.getProcessedItem(0)), 2, 0);
+            pane.addItem(new GuiItem(new LeggingsPlaceholderItem().generateItem(null, 1)), 2, 0);
 
         if(equipments.containsKey(EquipmentSlot.BOOTS))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.BOOTS).generateItem(null, 1)), 3, 0);
         else
-            pane.addItem(new GuiItem(ItemList.BOOTS_PLACEHOLDER.getProcessedItem(0)), 3, 0);
+            pane.addItem(new GuiItem(new BootsPlaceholder().generateItem(null, 1)), 3, 0);
 
         if(equipments.containsKey(EquipmentSlot.BELT))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.BELT).generateItem(null, 1)), 2, 2);
         else
-            pane.addItem(new GuiItem(ItemList.BELT_PLACEHOLDER.getProcessedItem(0)), 2, 2);
+            pane.addItem(new GuiItem(new BeltPlaceholder().generateItem(null, 1)), 2, 2);
 
         if(equipments.containsKey(EquipmentSlot.LEFT_RING))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.LEFT_RING).generateItem(null, 1)), 0, 1);
         else
-            pane.addItem(new GuiItem(ItemList.LEFT_BUTTON_PLACEHOLDER.getProcessedItem(0)), 0, 1);
+            pane.addItem(new GuiItem(new BeltPlaceholder().generateItem(null, 1)), 0, 1);
 
         if(equipments.containsKey(EquipmentSlot.RIGHT_RING))
             pane.addItem(new GuiItem(equipments.get(EquipmentSlot.RIGHT_RING).generateItem(null, 1)), 0, 2);
         else
-            pane.addItem(new GuiItem(ItemList.RIGHT_BUTTON_PLACEHOLDER.getProcessedItem(0)), 0, 2);
+            pane.addItem(new GuiItem(new RightButtonPlaceholder().generateItem(null, 1)), 0, 2);
 
         return pane;
     }
@@ -137,11 +140,19 @@ public class Equipments {
 
     public enum EquipmentSlot {
         HELMET,
-        CHESTPLATE,
+        CHEST_PLATE,
         LEGGINGS,
         BOOTS,
         LEFT_RING,
         RIGHT_RING,
         BELT
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 }

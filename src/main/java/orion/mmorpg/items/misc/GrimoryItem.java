@@ -22,10 +22,11 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 
 public class GrimoryItem extends BasicItem {
     public GrimoryItem() {
-        super(Material.BOOK, "Grimory", "GRIMORY", 1, "A grimory containing all your spells", Rarity.RARE);
+        super(Material.BOOK, "Grimory", "GRIMORY", 1, Collections.singletonList("A grimory containing all your spells"), Rarity.RARE);
     }
 
     @Override

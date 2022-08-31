@@ -15,12 +15,12 @@ import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class MasterScrollItem extends BasicConsumableItem {
 
     public MasterScrollItem() {
-        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", AssociationConfig.getModel("misc/paper/master_scroll"), "Un parchemin pouvant vous apprendre des sorts", Rarity.SUPERRARE);
+        super(Material.PAPER, "Parchemin", "MASTER_SCROLL", AssociationConfig.getModel("misc/paper/master_scroll"), Collections.singletonList("Un parchemin pouvant vous apprendre des sorts"), Rarity.SUPERRARE);
     }
 
     @Override
@@ -45,7 +45,8 @@ public class MasterScrollItem extends BasicConsumableItem {
         meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
         meta.getPersistentDataContainer().set(Namespaces.spell_id, PersistentDataType.STRING, spell_id);
         meta.getPersistentDataContainer().set(Namespaces.knowledge, PersistentDataType.INTEGER, knowledge);
-        meta.setLore(Arrays.asList(ChatColor.WHITE + this.getLORE(), ChatColor.WHITE + "Experience du sort ajoutée : " + knowledge));
+        this.getLORE().add(ChatColor.WHITE + "Experience du sort ajoutée : " + knowledge);
+        meta.setLore(this.getLORE());
 
         i.setItemMeta(meta);
         return i;

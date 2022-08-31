@@ -1,7 +1,6 @@
 package orion.mmorpg.listeners;
 
 import com.google.common.base.Enums;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +46,7 @@ public class PlayerPickupListener implements Listener {
                 e.getItem().remove();
                 Utils.sendErrorMessage(e.getEntity(), "Cet objet est sur liste noir");
             } else {
-                e.getItem().setItemStack(ItemList.valueOf(internal_id).getProcessedItem(item.getAmount()));
+                e.getItem().setItemStack(ItemList.getItemFromItemstack(item));
             }
             return;
         }
@@ -59,10 +58,10 @@ public class PlayerPickupListener implements Listener {
             return;
         }
 
-        if (player.hasPermission(ItemList.valueOf(internal_id).getItem().getPERMISSION())) {
+        if (player.hasPermission(ItemList.getItemFromItemstack(item).getPERMISSION())) {
 
-            BasicItem basicItem = ItemList.valueOf(internal_id).getItem();
-            ItemStack itemStack = ItemList.valueOf(internal_id).getProcessedItem(e.getItem().getItemStack().getAmount());
+            BasicItem basicItem = ItemList.getItemFromItemstack(item);
+            ItemStack itemStack = e.getItem().getItemStack();
             if(meta.getPersistentDataContainer().has(Namespaces.uuid, PersistentDataType.STRING)) {
                 itemStack.setItemMeta(item.getItemMeta());
                 return;

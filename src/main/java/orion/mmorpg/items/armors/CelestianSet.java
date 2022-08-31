@@ -13,11 +13,13 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
+import java.util.Collections;
+
 public class CelestianSet {
     public static class CelestianCrown extends BasicArmorItem {
 
         public CelestianCrown() {
-            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1, "Une couronne donnée au premier célestien", Rarity.HERO, ArmorType.HELMET, new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0));
+            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1, Collections.singletonList("Une couronne donnée au premier célestien"), Rarity.HERO, ArmorType.HELMET, new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0));
         }
 
         @Override

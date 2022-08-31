@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -11,10 +12,16 @@ import orion.mmorpg.utils.Rarity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicArrow extends BasicItem {
+public class BasicArrow extends BasicItem {
     public final float DAMAGE;
 
-    public BasicArrow(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, float DAMAGE) {
+    public BasicArrow(ItemStack item) {
+        super(item);
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        this.DAMAGE = container.get(Namespaces.damage, PersistentDataType.FLOAT);
+    }
+
+    public BasicArrow(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
         this.DAMAGE = DAMAGE;
     }

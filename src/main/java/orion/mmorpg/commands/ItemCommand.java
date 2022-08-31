@@ -30,45 +30,45 @@ public class ItemCommand implements TabExecutor {
             if (args[0].equalsIgnoreCase("give")) {
                 if (args.length > 2) {
                     if (args[2].equalsIgnoreCase("master_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).generateItem()).generateScroll(args[3], Integer.parseInt(args[4])));
                         return true;
                     } else if(args[2].equalsIgnoreCase("spell_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemList.valueOf(args[2].toUpperCase()).generateItem()).generateScroll(args[3]));
                         return true;
                     }else if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).generateItem()).generateScroll(args[3]));
                         return true;
                     }
                     if(!EnumUtils.isValidEnum(ItemList.class, args[2].toUpperCase())) {
                         Utils.sendErrorMessage((Entity) sender, "L'item n'existe pas.");
                         return false;
                     }
-                    Bukkit.getPlayer(args[1]).getInventory().addItem(ItemList.valueOf(args[2]).getProcessedItem(1));
+                    Bukkit.getPlayer(args[1]).getInventory().addItem(ItemList.valueOf(args[2]).generateItemStack(1));
                 } else {
                     if (sender instanceof Player) {
                         if (args[2].equalsIgnoreCase("master_scroll")) {
-                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).getItem()).generateScroll(args[2], Integer.parseInt(args[3])));
+                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[1].toUpperCase()).generateItem()).generateScroll(args[2], Integer.parseInt(args[3])));
                             return true;
                         } else if(args[2].equalsIgnoreCase("spell_scroll")) {
-                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3], Integer.parseInt(args[4])));
+                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemList.valueOf(args[2].toUpperCase()).generateItem()).generateScroll(args[3], Integer.parseInt(args[4])));
                             return true;
                         } else if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).getItem()).generateScroll(args[3]));
+                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemList.valueOf(args[2].toUpperCase()).generateItem()).generateScroll(args[3]));
                             return true;
                         }
-                        ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).getProcessedItem(1));
+                        ((Player) sender).getInventory().addItem(ItemList.valueOf(args[1]).generateItemStack(1));
                     }
                 }
             } else if (args[0].equalsIgnoreCase("drop")) {
                 if (sender instanceof Player) {
                     Player p = (Player) sender;
                     if (args[1].equalsIgnoreCase("gift")) {
-                        ItemStack gift = ((Gift) ItemList.GIFT.getItem()).generateGift(args[2], p.getDisplayName());
+                        ItemStack gift = ((Gift) ItemList.GIFT.generateItem()).generateGift(args[2], p.getDisplayName());
                         Item item = p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), gift);
                         item.setGlowing(true);
                         return true;
                     }
-                    p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), ItemList.valueOf(args[1]).getProcessedItem(1));
+                    p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), ItemList.valueOf(args[1]).generateItemStack(1));
                 }
             }
         }

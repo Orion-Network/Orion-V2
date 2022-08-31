@@ -29,7 +29,7 @@ public class GrimoryGui extends ChestGui {
     public OutlinePane getSpellPane() {
         for (String spell : orionPlayer.getSelectedSpells()) {
             if (spell == null)
-                spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.getProcessedItem(1)));
+                spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.generateItemStack(1)));
             else
             {
                 try {

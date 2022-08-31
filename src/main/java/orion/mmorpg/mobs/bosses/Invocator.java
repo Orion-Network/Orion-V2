@@ -14,8 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.metadata.FixedMetadataValue;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.misc.MythicalScroll;
 import orion.mmorpg.mobs.list.CryptSkeleton;
 import orion.mmorpg.mobs.samples.SampleBossMob;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
@@ -23,7 +21,6 @@ import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.spells.RepulsionSpell;
 import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
 
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +30,7 @@ import java.util.UUID;
 public class Invocator extends SampleBossMob {
     public Invocator(String uuid, Location location) {
         super("L'Invocateur", 30, EntityTypes.O, uuid, location, new Stats.Builder().withIntel(100).withDefence(20).withVitality(1000).withSpeed(4).build());
-        this.getRewards().add(new Rewards.Reward(((MythicalScroll) ItemList.MYTHICAL_SCROLL.getItem()).generateScroll("HAKI"), 25));
+        //this.getRewards().add(new Rewards.Reward(((MythicalScroll) ItemList.MYTHICAL_SCROLL.getItem()).generateScroll("HAKI"), 25));
     }
     PathfinderGoalSummon pathfinderGoalSummon;
     @Override

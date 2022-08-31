@@ -62,11 +62,12 @@ public class PlayerStatsListener implements Listener {
             p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+
                 if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
                     e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
                 item.onHitWithItem(e);
-                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
+                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
                     orionPlayer.onHit(e, orionPlayer);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                     e.setDamage(totalDamage);
@@ -112,7 +113,7 @@ public class PlayerStatsListener implements Listener {
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
-                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
                     float arrowDamage = 1;
                     if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
                         arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);

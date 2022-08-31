@@ -6,7 +6,7 @@ import orion.mmorpg.utils.Rarity;
 
 import java.util.List;
 
-public abstract class BasicGuiItem extends BasicItem {
+public class BasicGuiItem extends BasicItem {
     public BasicGuiItem(String NAME, String INTERNAL_ID, int MODEL_ID) {
         super(Material.CARROT_ON_A_STICK, NAME, INTERNAL_ID, MODEL_ID, null, Rarity.TRASH, ItemType.PLACEHOLDER, "item.display");
     }

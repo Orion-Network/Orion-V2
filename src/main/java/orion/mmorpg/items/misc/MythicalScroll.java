@@ -16,10 +16,11 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 
 public class MythicalScroll extends BasicConsumableItem {
     public MythicalScroll() {
-        super(Material.PAPER, "Parchemin Mythique", "MYTHICAL_SCROLL", AssociationConfig.getModel("misc/paper/scroll"), "Un parchemin pouvant vous offrir un immense pouvoir.", Rarity.MYTHIC);
+        super(Material.PAPER, "Parchemin Mythique", "MYTHICAL_SCROLL", AssociationConfig.getModel("misc/paper/scroll"), Collections.singletonList("Un parchemin pouvant vous offrir un immense pouvoir."), Rarity.MYTHIC);
     }
 
     @Override
