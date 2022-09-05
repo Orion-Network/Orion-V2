@@ -9,7 +9,10 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
+import orion.mmorpg.players.jobs.Jobs;
+import orion.mmorpg.players.jobs.Smithing;
 
+import javax.json.Json;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -34,6 +37,7 @@ public class OrionGson {
         builder.registerTypeAdapter(Knowledge.class, new KnowledgeAdapter());
         builder.registerTypeAdapter(Equipments.class, new EquipmentsAdapter());
         builder.registerTypeAdapterFactory(basicItemRuntimeTypeAdapterFactory);
+        builder.registerTypeAdapter(Jobs.class, new JobsAdapter());
         GSON = builder.create();
     }
 
@@ -187,6 +191,25 @@ public class OrionGson {
             if(object.has("right_ring"))
                 equipments.addEquipment(GSON.fromJson(object.get("right_ring").getAsString(), (Type) BasicItem.class));
             return equipments;
+        }
+    }
+
+    private static final class JobsAdapter implements JsonSerializer<Jobs>, JsonDeserializer<Jobs> {
+        @Override
+        public Jobs deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject object = jsonElement.getAsJsonObject();
+            JsonObject smitingObject = object.getAsJsonObject("smiting");
+            return new Jobs(new Smithing(smitingObject.get("level").getAsInt(), smitingObject.get("experience").getAsInt()));
+        }
+
+        @Override
+        public JsonElement serialize(Jobs jobs, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject object = new JsonObject();
+            JsonObject smitingObject = new JsonObject();
+            smitingObject.addProperty("level", jobs.getSmithing().getLevel());
+            smitingObject.addProperty("experience", jobs.getSmithing().getExperience());
+            object.add("smiting", smitingObject);
+            return object;
         }
     }
 

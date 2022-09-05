@@ -28,6 +28,7 @@ import orion.mmorpg.mobs.samples.SamplePetMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.parties.Party;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.*;
@@ -65,6 +66,8 @@ public class OrionPlayer {
 
     private Support support;
     private Race race;
+
+    private Jobs jobs;
 
     /**
      * Default Constructor of OrionPlayer class used on first logging.
@@ -119,6 +122,7 @@ public class OrionPlayer {
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
+        this.jobs = Jobs.getBaseJobs();
     }
 
     /**
@@ -137,7 +141,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -171,6 +175,7 @@ public class OrionPlayer {
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
+        this.jobs = jobs;
     }
 
     public static OrionPlayer generateSamplePlayer(Player p) {
@@ -444,6 +449,10 @@ public class OrionPlayer {
 
     public void setParty(Party p) {
         this.party = p;
+    }
+
+    public Jobs getJobs() {
+        return jobs;
     }
 
     public void heal(double health) {

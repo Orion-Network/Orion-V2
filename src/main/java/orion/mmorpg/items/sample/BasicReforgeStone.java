@@ -12,14 +12,16 @@ import java.util.List;
 
 public class BasicReforgeStone extends BasicItem {
     ItemReforge reforge;
+    int smithingLevelRequired;
     public BasicReforgeStone(ItemStack item) {
         super(item);
         this.reforge = ItemReforge.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.reforge, PersistentDataType.STRING));
     }
 
-    public BasicReforgeStone(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemReforge reforge) {
+    public BasicReforgeStone(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemReforge reforge, int smithingLevelRequired) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
         this.reforge = reforge;
+        this.smithingLevelRequired = smithingLevelRequired;
     }
 
     @Override
@@ -30,5 +32,9 @@ public class BasicReforgeStone extends BasicItem {
         meta.getPersistentDataContainer().set(Namespaces.reforge, PersistentDataType.STRING, reforge.name());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
+    }
+
+    public ItemReforge getReforge() {
+        return reforge;
     }
 }

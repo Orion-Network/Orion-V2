@@ -94,7 +94,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>\\wsl.localhost\docker-desktop-data\version-pack-data\community\docker\volumes\devcontainer_mmorpg\_data\plugins</outputDirectory>
+                            <outputDirectory>\\wsl.localhost\docker-desktop-data\data\docker\volumes\devcontainer_mmorpg\_data\plugins</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}/target/</directory>

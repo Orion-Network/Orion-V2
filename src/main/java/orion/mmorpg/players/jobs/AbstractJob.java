@@ -4,7 +4,7 @@ public abstract class AbstractJob {
     public int experience;
     public int level;
 
-    public AbstractJob(int experience, int level) {
+    public AbstractJob(int level, int experience) {
         this.experience = experience;
         this.level = level;
     }
