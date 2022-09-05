@@ -111,8 +111,10 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
+                Bukkit.broadcastMessage("1");
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
+                if (BasicRangedWeapon.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
+                    Bukkit.broadcastMessage("2");
                     BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
                     float arrowDamage = 1;
                     if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))

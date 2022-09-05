@@ -1,5 +1,6 @@
 package orion.mmorpg.items.weapons;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import orion.mmorpg.items.sample.BasicRangedWeapon;
@@ -16,6 +17,7 @@ public class HouYi extends BasicRangedWeapon {
     @Override
     public void onShootBow(EntityShootBowEvent e) {
         e.getProjectile().setVelocity(e.getProjectile().getVelocity().multiply(10));
+        Bukkit.broadcastMessage("test");
         super.onShootBow(e);
     }
 }
