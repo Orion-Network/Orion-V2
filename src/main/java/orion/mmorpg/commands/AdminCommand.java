@@ -34,7 +34,7 @@ public class AdminCommand implements TabExecutor {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId());
             if(args[0].equalsIgnoreCase("setlevel")) {
                 orionPlayer.setLevel(Integer.parseInt(args[1]));
-            } else if(args[0].equalsIgnoreCase("test")) {
+            } else if(args[0].equalsIgnoreCase("job")) {
                 if(player.getInventory().getItemInMainHand().getType().equals(Material.AIR))
                     return false;
                 ItemStack item = player.getInventory().getItemInMainHand();
@@ -56,6 +56,13 @@ public class AdminCommand implements TabExecutor {
                     OrionPlayer orionPlayer1 = mmorpg.getPlayerManager().getPlayer(targetPlayer.getUniqueId());
                     new PlayerEditor((Player) commandSender, mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId()), targetPlayer, orionPlayer1);
                 }
+            }
+            else if(args[0].equalsIgnoreCase("test")) {
+                mmorpg.getGuildManager().createGuild(args[1], orionPlayer);
+
+                mmorpg.getGuildManager().getGuildHashMap().forEach((key, value) -> {
+                    Bukkit.broadcastMessage(key + " " + value.toString());
+                });
             }
         }
         return false;

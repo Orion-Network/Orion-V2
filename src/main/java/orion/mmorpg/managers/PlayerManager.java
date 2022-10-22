@@ -14,12 +14,9 @@ public class PlayerManager extends AbstractManager {
         super(mmorpg);
         this.playersMap = new LinkedHashMap<>();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Saving Players");
-                savePlayers();
-            }
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, () -> {
+            System.out.println("Saving Players");
+            savePlayers();
         }, 1L, 300* 20);
     }
 

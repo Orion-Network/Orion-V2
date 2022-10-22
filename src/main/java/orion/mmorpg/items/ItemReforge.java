@@ -1,5 +1,6 @@
 package orion.mmorpg.items;
 
+import org.bukkit.Bukkit;
 import orion.mmorpg.items.sample.BasicEquipmentItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.utils.Stats;

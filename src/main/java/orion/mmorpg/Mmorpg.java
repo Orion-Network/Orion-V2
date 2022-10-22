@@ -28,6 +28,8 @@ public final class Mmorpg extends JavaPlugin {
     public final FileConfiguration config = this.getConfig();
     Client mongoClient = new Client(this);
     PlayerManager playerManager;
+
+    GuildManager guildManager;
     PartyManager partyManager;
     MobManager mobManager;
     ChunkManager chunkManager;
@@ -63,6 +65,7 @@ public final class Mmorpg extends JavaPlugin {
         AssociationConfig.setup(this);
 
         playerManager = new PlayerManager(this);
+        guildManager = new GuildManager(this);
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
@@ -129,6 +132,10 @@ public final class Mmorpg extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public GuildManager getGuildManager() {
+        return guildManager;
     }
 
     public ChunkManager getChunkManager() {

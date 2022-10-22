@@ -37,6 +37,7 @@ public enum ItemList {
     REINFORCED_BOW(ReinforcedBow.class),
     HOUYI_BOW(HouYi.class),
     MURAMASA(Muramasa.class),
+    THOUSANDS_WISDOM(ThousandWisdom.class),
     //Armor Items
     STARTING_HELMET(StartingSet.StartingBoots.class),
     STARTING_CHESTPLATE(StartingSet.StartingChestplate.class),
@@ -102,6 +103,7 @@ public enum ItemList {
     INFINITE_FIREWORK(InfiniteFirework.class),
     CELESTIAL_SERUM(CelestialSerum.class),
     SOUL_SWITCHER(SoulSwitcher.class),
+    GUILD_BOOK(GuildBook.class),
     TEST_ITEM(TestItem.class),
     MENU_ITEM(MenuItem.class),
     ETERNAL_COMPASS(EternalCompass.class),

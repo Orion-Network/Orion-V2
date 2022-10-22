@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.guils.Guild;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
@@ -16,6 +17,7 @@ import javax.json.Json;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OrionGson {
@@ -212,5 +214,29 @@ public class OrionGson {
             return object;
         }
     }
+
+    /*
+    private static final class GuildAdapter implements JsonSerializer<Guild>, JsonDeserializer<Guild> {
+        @Override
+        public Guild deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject object = jsonElement.getAsJsonObject();
+            Guild guild = new Guild(object.get("guildName").getAsString(),
+                    LocalDateTime.parse(object.get("creationDate").getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    GSON.fromJson("guildMembers", Ha)
+
+            );
+            return null;
+        }
+
+        @Override
+        public JsonElement serialize(Guild guild, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("guildName", guild.getGuildName());
+            jsonObject.addProperty("creationDate", guild.getCreationDate().toString());
+            jsonObject.addProperty("guildMembers", GSON.toJson(guild.getGuildMemberMap()));
+            jsonObject.addProperty("guildPermissions", GSON.toJson(guild.getGuildMapPermissions()));
+            return jsonObject;
+        }
+    }*/
 
 }
