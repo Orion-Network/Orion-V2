@@ -98,10 +98,7 @@ public class OrionPlayer {
 
         this.mana = (int) this.stats.getIntel();
 
-        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
-        this.healthBar.setProgress(1);
-        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.healthBar.setVisible(true);
+        initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -160,10 +157,7 @@ public class OrionPlayer {
         this.support = support;
         this.race = race;
 
-        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
-        this.healthBar.setProgress(1);
-        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.healthBar.setVisible(true);
+        initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -176,6 +170,13 @@ public class OrionPlayer {
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = jobs;
+    }
+
+    public void initHealthBar() {
+        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        this.healthBar.setProgress(1);
+        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        this.healthBar.setVisible(true);
     }
 
     public static OrionPlayer generateSamplePlayer(Player p) {

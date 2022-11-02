@@ -1,6 +1,8 @@
 package orion.mmorpg.listeners;
 
+import fr.mrmicky.fastboard.FastBoard;
 import net.minecraft.world.entity.Entity;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,8 +26,11 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if(mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId()))
+        if(mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId())) {
+            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+            orionPlayer.setFastBoard(new FastBoard(player));
             return;
+        }
         if (mmorpg.getMongoClient().hasPlayer(player.getUniqueId())) {
             try {
                 OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
@@ -55,6 +60,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerQuitEvent(PlayerQuitEvent event) {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        player.getFastBoard().delete();
         if(player.getPet() != null)
             player.getPet().setRemoved(Entity.RemovalReason.a);
     }

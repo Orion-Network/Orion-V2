@@ -62,7 +62,6 @@ public class OrionGson {
             if (!jsonElement.isJsonObject())
                 if (Objects.equals(jsonElement.getAsString(), "null"))
                     return null;
-            System.out.println(jsonElement);
             JsonObject object = jsonElement.getAsJsonObject();
             return ItemList.valueOf(object.get("internal_id").getAsString()).generateItemStack(object.get("amount").getAsInt());
         }

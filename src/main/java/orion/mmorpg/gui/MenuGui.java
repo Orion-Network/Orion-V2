@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class MenuGui extends ChestGui {
+    // TODO Re write equipping message in french and cosmetic message
     Player p;
     OrionPlayer orionPlayer;
     StaticPane armorPane = new StaticPane(0, 0, 3, 4);

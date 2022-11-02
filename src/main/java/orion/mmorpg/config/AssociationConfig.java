@@ -2,10 +2,12 @@ package orion.mmorpg.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.Mmorpg;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class AssociationConfig {
     private static File file;
@@ -45,7 +47,7 @@ public class AssociationConfig {
         if(fileConfiguration.contains("item."+identifier))
             return fileConfiguration.getInt("item."+identifier);
         else {
-            System.out.println("Model not found for " + identifier);
+            JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.WARNING, "Model not found for " + identifier);
             return 0;
         }
     }

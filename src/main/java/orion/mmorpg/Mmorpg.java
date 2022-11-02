@@ -1,5 +1,6 @@
 package orion.mmorpg;
 
+import org.bukkit.boss.BossBar;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import orion.mmorpg.utils.Utils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public final class Mmorpg extends JavaPlugin {
 
@@ -111,7 +113,6 @@ public final class Mmorpg extends JavaPlugin {
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
         }
-
         mobManager.loadMobs();
         Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
     }
@@ -122,7 +123,7 @@ public final class Mmorpg extends JavaPlugin {
     @Override
     public void onDisable() {
         for (OrionPlayer p : getPlayerManager().getPlayersMap().values()) {
-            System.out.println("Saving : " + p.getUniqueId().toString());
+            JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.FINE, "Saving : " + p.getUniqueId().toString());
             p.getHealthBar().removeAll();
             getMongoClient().savePlayer(p);
             getPlayerManager().getPlayersMap().remove(p.getUniqueId());

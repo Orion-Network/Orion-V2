@@ -9,6 +9,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
@@ -18,6 +19,7 @@ import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.Utils;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class AdminCommand implements TabExecutor {
 
