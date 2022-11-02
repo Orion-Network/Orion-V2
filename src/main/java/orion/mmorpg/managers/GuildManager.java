@@ -1,10 +1,9 @@
 package orion.mmorpg.managers;
 
-import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.guils.Guild;
-import orion.mmorpg.guils.GuildRank;
-import orion.mmorpg.guils.MemberState;
+import orion.mmorpg.guilds.Guild;
+import orion.mmorpg.guilds.GuildRank;
+import orion.mmorpg.guilds.MemberState;
 import orion.mmorpg.players.OrionPlayer;
 
 import java.util.HashMap;

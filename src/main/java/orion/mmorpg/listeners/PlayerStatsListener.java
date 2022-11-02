@@ -2,6 +2,7 @@ package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -51,6 +52,13 @@ public class PlayerStatsListener implements Listener {
         orionPlayer.onInteract(event);
         Player p = event.getPlayer();
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
+
+        if(event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
+                event.setCancelled(true);
+                orionPlayer.getJobs().getSmithing().getUpgradeGui().show(event.getPlayer());
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)

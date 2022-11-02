@@ -1,4 +1,4 @@
-package orion.mmorpg.guils;
+package orion.mmorpg.guilds;
 
 import orion.mmorpg.players.OrionPlayer;
 

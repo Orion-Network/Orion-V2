@@ -55,6 +55,7 @@ public final class Mmorpg extends JavaPlugin {
 
         config.addDefault("mongo.username", "root");
         config.addDefault("mongo.password", "");
+        config.addDefault("mongo.auth", "mongo");
         config.addDefault("misc.debugging", false);
 
         config.options().copyDefaults(true);

@@ -44,7 +44,7 @@ public class Client {
     public MongoCollection<Document> jobsCollection;
 
     public Client(Mmorpg mmorpg) {
-        uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@mongo/?authSource=admin";
+        uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@"+mmorpg.getConfig().getString("mongo.auth")+"/?authSource=admin";
         this.mongoClient = MongoClients.create(uri);
         orionDatabase = mongoClient.getDatabase("orion");
         playerCollection = orionDatabase.getCollection("players");

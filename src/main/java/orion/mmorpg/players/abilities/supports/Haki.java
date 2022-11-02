@@ -97,15 +97,12 @@ public class Haki extends Support implements SpecialsSupport {
                 }
             }
         });
-
-        Utils.sendInfoMessage(player, "Vous avez découvert un nouveau sort : " + getName());
     }
 
     @Override
     public void getSecondSpecial(Player player, OrionPlayer orionPlayer) {
-        this.isHakiOn = true;
+        this.isHakiOn = !isHakiOn;
         Utils.sendInfoMessage(player, "Vous avez " + (isHakiOn ? "activé" : "désactivé") + " vote Haki de l'armement");
-        return;
     }
 
     @Override

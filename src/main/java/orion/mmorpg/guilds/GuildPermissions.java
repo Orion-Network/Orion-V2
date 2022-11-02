@@ -1,4 +1,4 @@
-package orion.mmorpg.guils;
+package orion.mmorpg.guilds;
 
 public enum GuildPermissions {
     TELEPORT_TO_GUILD,

@@ -2,6 +2,7 @@ package orion.mmorpg.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -34,20 +35,12 @@ public class AdminCommand implements TabExecutor {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId());
             if(args[0].equalsIgnoreCase("setlevel")) {
                 orionPlayer.setLevel(Integer.parseInt(args[1]));
-            } else if(args[0].equalsIgnoreCase("job")) {
-                if(player.getInventory().getItemInMainHand().getType().equals(Material.AIR))
-                    return false;
-                ItemStack item = player.getInventory().getItemInMainHand();
-
-                Smithing smithing = new Smithing(0,0);
-                smithing.getUpgradeGui().show(player);
-
             } else if(args[0].equalsIgnoreCase("save")) {
                 mmorpg.getPlayerManager().savePlayers();
                 Utils.sendInfoMessage((Entity) commandSender, "Saving players.");
             } else if (args[0].equalsIgnoreCase("debug")) {
                 if(args[1].equalsIgnoreCase("bossbar")) {
-                    Bukkit.getBossBars().forEachRemaining(bossBar -> bossBar.removeAll());
+                    Bukkit.getBossBars().forEachRemaining(BossBar::removeAll);
                 }
             }
             else if (args[0].equalsIgnoreCase("editor")) {
