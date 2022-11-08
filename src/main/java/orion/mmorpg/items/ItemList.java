@@ -89,6 +89,7 @@ public enum ItemList {
     USABLE_PLACEHOLDER(UsablePlaceholder.class),
     RESTRICTED_PLACEHOLDER(RestrictedPlaceholder.class),
     SETTINGS_PLACEHOLDER(SettingsPlaceholder.class),
+    TBI_PLACEHOLDER(ToBeImplementedPlaceholder.class),
     FIRST_SPECIAL_PLACEHOLDER(SpecialPlaceholder.FirstSpecialPlaceholder.class),
     SECOND_SPECIAL_PLACEHOLDER(SpecialPlaceholder.SecondSpecialPlaceholder.class),
     THIRD_SPECIAL_PLACEHOLDER(SpecialPlaceholder.ThirdSpecialPlaceholder.class),

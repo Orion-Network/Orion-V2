@@ -66,7 +66,6 @@ public class MenuGui extends ChestGui {
                     if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onEquip(p, orionPlayer, item))
                         return;
                     BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());
-                    //Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
                     boolean isEquip = orionPlayer.getEquipements().addEquipment(armorItem);
                     if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                         if (!isEquip) {
