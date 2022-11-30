@@ -1,5 +1,7 @@
 package orion.mmorpg;
 
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.boss.BossBar;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
@@ -27,6 +29,7 @@ public final class Mmorpg extends JavaPlugin {
     public static boolean debug;
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
+    public static LuckPerms luckPerms;
     public final FileConfiguration config = this.getConfig();
     Client mongoClient = new Client(this);
     PlayerManager playerManager;
@@ -75,6 +78,7 @@ public final class Mmorpg extends JavaPlugin {
         mobManager = new MobManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
+        luckPerms = LuckPermsProvider.get();
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
@@ -150,6 +154,10 @@ public final class Mmorpg extends JavaPlugin {
 
     public MobManager getMobManager() {
         return mobManager;
+    }
+
+    public static LuckPerms getLuckPerms() {
+        return luckPerms;
     }
 
     public Client getMongoClient() {
