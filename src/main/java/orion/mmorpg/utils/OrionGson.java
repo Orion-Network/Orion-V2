@@ -7,8 +7,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.sample.BasicArmorItem;
+import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
+import orion.mmorpg.players.jobs.Jobs;
+import orion.mmorpg.players.jobs.Smithing;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
@@ -16,9 +18,16 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 
 public class OrionGson {
-    public Gson GSON;
+    public static Gson GSON;
 
     public OrionGson() {
+        RuntimeTypeAdapterFactory<BasicItem> basicItemRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(BasicItem.class, "typeofclazz")
+                .registerSubtype(BasicArmorItem.class, "Armor")
+                .registerSubtype(BasicArrow.class, "Arrow")
+                .registerSubtype(BasicConsumableItem.class, "Consumable")
+                .registerSubtype(BasicMagicWeapon.class, "MagicWeapon")
+                .registerSubtype(BasicMeleeWeapon.class, "MeleeWeapon")
+                .registerSubtype(BasicRangedWeapon.class, "RangedWeapon");
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
@@ -26,6 +35,8 @@ public class OrionGson {
         builder.registerTypeAdapter(Location.class, new LocationAdapter());
         builder.registerTypeAdapter(Knowledge.class, new KnowledgeAdapter());
         builder.registerTypeAdapter(Equipments.class, new EquipmentsAdapter());
+        builder.registerTypeAdapterFactory(basicItemRuntimeTypeAdapterFactory);
+        builder.registerTypeAdapter(Jobs.class, new JobsAdapter());
         GSON = builder.create();
     }
 
@@ -40,7 +51,7 @@ public class OrionGson {
             if (itemStack == null)
                 return JsonNull.INSTANCE;
             JsonObject jsonObject = new JsonObject();
-            ItemMeta meta = Objects.requireNonNull(Objects.requireNonNull(itemStack.getItemMeta()));
+            ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
             jsonObject.addProperty("internal_id", meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING));
             jsonObject.addProperty("amount", itemStack.getAmount());
             return jsonObject;
@@ -51,9 +62,8 @@ public class OrionGson {
             if (!jsonElement.isJsonObject())
                 if (Objects.equals(jsonElement.getAsString(), "null"))
                     return null;
-            System.out.println(jsonElement);
             JsonObject object = jsonElement.getAsJsonObject();
-            return ItemList.valueOf(object.get("internal_id").getAsString()).getProcessedItem(object.get("amount").getAsInt());
+            return ItemList.valueOf(object.get("internal_id").getAsString()).generateItemStack(object.get("amount").getAsInt());
         }
     }
 
@@ -137,26 +147,26 @@ public class OrionGson {
         public JsonElement serialize(Equipments equipments, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET) != null)
-                object.addProperty("helmet", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET).getINTERNAL_ID());
+                object.addProperty("helmet", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET), BasicItem.class));
 
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHESTPLATE) != null)
-                object.addProperty("chestplate", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHESTPLATE).getINTERNAL_ID());
+            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE) != null)
+                object.addProperty("chestplate", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE), BasicItem.class));
 
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS) != null)
-                object.addProperty("leggings", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS).getINTERNAL_ID());
+                object.addProperty("leggings",GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS), BasicItem.class));
 
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS) != null)
-                object.addProperty("boots", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS).getINTERNAL_ID());
+                object.addProperty("boots", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS), BasicItem.class));
 
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BELT) != null)
-                object.addProperty("belt", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BELT).getINTERNAL_ID());
+                object.addProperty("belt", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BELT), BasicItem.class));
 
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING) != null)
-                object.addProperty("left_ring", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING).getINTERNAL_ID());
+                object.addProperty("left_ring", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING), BasicItem.class));
 
             if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING) != null)
-                object.addProperty("right_ring", equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING).getINTERNAL_ID());
+                object.addProperty("right_ring", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING), BasicItem.class));
             return object;
         }
 
@@ -165,21 +175,64 @@ public class OrionGson {
             JsonObject object = jsonElement.getAsJsonObject();
             Equipments equipments = new Equipments();
             if(object.has("helmet"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("helmet").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("helmet").getAsString(), (Type) BasicItem.class));
             if(object.has("chestplate"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("chestplate").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("chestplate").getAsString(), (Type) BasicItem.class));
             if(object.has("leggings"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("leggings").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("leggings").getAsString(), (Type) BasicItem.class));
             if(object.has("boots"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("boots").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("boots").getAsString(), (Type) BasicItem.class));
             if(object.has("belt"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("belt").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("belt").getAsString(), (Type) BasicItem.class));
             if(object.has("left_ring"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("left_ring").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("left_ring").getAsString(), (Type) BasicItem.class));
             if(object.has("right_ring"))
-                equipments.addEquipment((BasicArmorItem) ItemList.valueOf(object.get("right_ring").getAsString()).getItem());
+                equipments.addEquipment(GSON.fromJson(object.get("right_ring").getAsString(), (Type) BasicItem.class));
             return equipments;
         }
     }
+
+    private static final class JobsAdapter implements JsonSerializer<Jobs>, JsonDeserializer<Jobs> {
+        @Override
+        public Jobs deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject object = jsonElement.getAsJsonObject();
+            JsonObject smitingObject = object.getAsJsonObject("smiting");
+            return new Jobs(new Smithing(smitingObject.get("level").getAsInt(), smitingObject.get("experience").getAsInt()));
+        }
+
+        @Override
+        public JsonElement serialize(Jobs jobs, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject object = new JsonObject();
+            JsonObject smitingObject = new JsonObject();
+            smitingObject.addProperty("level", jobs.getSmithing().getLevel());
+            smitingObject.addProperty("experience", jobs.getSmithing().getExperience());
+            object.add("smiting", smitingObject);
+            return object;
+        }
+    }
+
+    /*
+    private static final class GuildAdapter implements JsonSerializer<Guild>, JsonDeserializer<Guild> {
+        @Override
+        public Guild deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject object = jsonElement.getAsJsonObject();
+            Guild guild = new Guild(object.get("guildName").getAsString(),
+                    LocalDateTime.parse(object.get("creationDate").getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                    GSON.fromJson("guildMembers", Ha)
+
+            );
+            return null;
+        }
+
+        @Override
+        public JsonElement serialize(Guild guild, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("guildName", guild.getGuildName());
+            jsonObject.addProperty("creationDate", guild.getCreationDate().toString());
+            jsonObject.addProperty("guildMembers", GSON.toJson(guild.getGuildMemberMap()));
+            jsonObject.addProperty("guildPermissions", GSON.toJson(guild.getGuildMapPermissions()));
+            return jsonObject;
+        }
+    }*/
 
 }

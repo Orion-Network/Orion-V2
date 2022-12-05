@@ -25,7 +25,7 @@ public class PlayerUseItemEvent implements Listener {
             return;
         if (e.getItem().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
             PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
-            BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+            BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
             item.onUseItem(mmorpg, player, e);
         }
     }

@@ -6,11 +6,14 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Utils {
@@ -105,5 +108,9 @@ public class Utils {
                 return true;
         }
         return false;
+    }
+
+    public static String itemDisplayName(ItemStack item) {
+        return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(item.getType().name().replaceAll("_"," ")));
     }
 }

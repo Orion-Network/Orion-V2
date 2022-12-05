@@ -1,12 +1,17 @@
 package orion.mmorpg.items.armors;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
 public class StartingSet {
     public static class StartingHelmet extends BasicArmorItem {
+        public StartingHelmet(ItemStack item) {
+            super(item);
+        }
+
         public StartingHelmet() {
             super(Material.LEATHER_HELMET, "Starting Helmet", "STARTING_HELMET", 0, null, Rarity.COMMON, ArmorType.HELMET,
                     new Stats(0, 0, 0, 0, 2, 3, 1, 0, 0));

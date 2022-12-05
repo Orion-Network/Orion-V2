@@ -6,6 +6,7 @@ authors: [ NEXOmega ]
 description: A MMORPG Plugin for Orion Network
 libraries:
   - com.github.stefvanschie.inventoryframework:IF:0.10.0
+depend: [WorldGuard, WorldGuardEvents, LuckPerms]
 commands:
   data:
     permission: "orion.data.use"

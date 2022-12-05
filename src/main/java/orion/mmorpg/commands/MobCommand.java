@@ -53,9 +53,12 @@ public class MobCommand implements TabExecutor {
             } else {
                 Utils.sendInfoMessage((Entity) commandSender, "No mobs in this chunk");
             }
-        } else if (args[0].equalsIgnoreCase("remove")) {
-
-        } else if (args[0].equalsIgnoreCase("set")) {
+        } else if (args[0].equalsIgnoreCase("removeAll")) {
+            mmorpg.getMobManager().despawnMobs();
+        } else if(args[0].equalsIgnoreCase("spawnAll")) {
+            mmorpg.getMobManager().loadMobs();
+        }
+        else if (args[0].equalsIgnoreCase("set")) {
             SampleMob mob = summonMob(commandSender, args);
             if(mob != null) {
                 mmorpg.getMongoClient().saveMob(mob);
@@ -96,6 +99,6 @@ public class MobCommand implements TabExecutor {
         } else if(strings.length == 3) {
 
         }
-        return Arrays.asList("spawn", "list", "info", "remove", "set", "chunkMob", "chunks");
+        return Arrays.asList("spawn", "list", "info", "spawnAll" , "removeAll", "set", "chunkMob", "chunks");
     }
 }

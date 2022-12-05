@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.utils.GameState;
 
 public class ServerListener implements Listener {
     Mmorpg mmorpg;
@@ -16,6 +17,11 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onServerStart(ServerListPingEvent event) {
+        if(mmorpg.getGameState() == GameState.STARTING) {
+            event.setMotd(ChatColor.RED + "Server is starting, please wait, it can take up to 5 minutes.");
+        } else if(mmorpg.getGameState() == GameState.ENDING) {
+            event.setMotd(ChatColor.RED + "Server is shutting down, please wait.");
+        }
         event.setMotd(
                 "                       " +
                 ChatColor.GRAY + "play.orionrpg.fr" +

@@ -2,6 +2,7 @@ package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -51,6 +52,13 @@ public class PlayerStatsListener implements Listener {
         orionPlayer.onInteract(event);
         Player p = event.getPlayer();
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
+
+        if(event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
+                event.setCancelled(true);
+                orionPlayer.getJobs().getSmithing().getUpgradeGui().show(event.getPlayer());
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -62,11 +70,12 @@ public class PlayerStatsListener implements Listener {
             p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+
                 if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
                     e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
                 item.onHitWithItem(e);
-                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicMeleeWeapon.class)) {
+                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
                     orionPlayer.onHit(e, orionPlayer);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                     e.setDamage(totalDamage);
@@ -110,9 +119,11 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
+                Bukkit.broadcastMessage("1");
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().equals(BasicRangedWeapon.class)) {
-                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItem();
+                if (BasicRangedWeapon.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
+                    Bukkit.broadcastMessage("2");
+                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
                     float arrowDamage = 1;
                     if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
                         arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);

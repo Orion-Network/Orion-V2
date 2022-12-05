@@ -52,6 +52,7 @@ public class DataCommand implements TabExecutor {
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
                     builder.append("\n" + data.getKnownSpells().keySet() + "\n");
+                    builder.append("\n" + "Smithing : " + data.getJobs().getSmithing().getLevel() + " " + data.getJobs().getSmithing().getExperience());
                     for (Support s : data.getSupportMap().keySet())
                         builder.append(s.getName());
                     sender.sendMessage(builder.toString());
@@ -61,7 +62,7 @@ public class DataCommand implements TabExecutor {
                     ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
                     String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
                     String type = meta.getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING);
-                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(Namespaces.base_stats, PersistentDataType.STRING), Stats.class);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
                     float damage = 0;
                     if (meta.getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
                         damage = meta.getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
@@ -75,7 +76,7 @@ public class DataCommand implements TabExecutor {
                         builder.append(String.join("\n", stats.statsAsLore()));
                         builder.append("\n");
                     }
-
+                    builder.append(meta.getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING));
                     builder.append(ChatColor.GRAY + "Data: " + ChatColor.LIGHT_PURPLE + meta.getPersistentDataContainer().getKeys());
 
                     sender.sendMessage(builder.toString());

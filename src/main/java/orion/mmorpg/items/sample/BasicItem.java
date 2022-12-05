@@ -18,6 +18,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Element;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import oshi.util.tuples.Pair;
@@ -25,65 +26,58 @@ import oshi.util.tuples.Pair;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class to represent items as Rpg Item
  */
-public abstract class BasicItem extends ItemStack {
+public class BasicItem extends ItemStack {
 
     protected final Material MATERIAL;
     protected final String NAME;
     protected final String INTERNAL_ID;
     protected final int MODEL_ID;
-    protected final String LORE;
+    protected final List<String> LORE;
     protected final Rarity RARITY;
     protected final String PERMISSION;
-    protected final ItemType TYPE;
+    protected final ItemType ITEM_TYPE;
     protected Element ELEMENT = Element.PHYSIC;
     protected final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
     protected PersistentDataContainer persistentDataContainer;
     protected Spell spell;
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
-        this.MATERIAL = MATERIAL;
-        this.NAME = NAME;
-        this.INTERNAL_ID = INTERNAL_ID;
-        this.MODEL_ID = MODEL_ID;
-        this.RARITY = RARITY;
-        this.LORE = LORE;
-        PERMISSION = "basic.item";
-        this.TYPE = ItemType.ITEM;
-
+    protected BasicItem(ItemStack item) {
+        this(item.getType(), item.getItemMeta().getPersistentDataContainer().get(Namespaces.name, PersistentDataType.STRING), item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING), item.getItemMeta().getCustomModelData(), Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.lore, PersistentDataType.STRING), List.class), Rarity.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.rarity, PersistentDataType.STRING)), ItemType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING)));
     }
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, ItemType TYPE) {
-        this.MATERIAL = MATERIAL;
-        this.NAME = NAME;
-        this.INTERNAL_ID = INTERNAL_ID;
-        this.MODEL_ID = MODEL_ID;
-        this.RARITY = RARITY;
-        this.LORE = LORE;
-        PERMISSION = "basic.item";
-        this.TYPE = TYPE;
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+        this(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ITEM);
     }
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, ItemType TYPE, String PERMISSION) {
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE) {
+        this(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE, "basic.item");
+    }
+
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, String PERMISSION) {
         this.MATERIAL = MATERIAL;
         this.NAME = NAME;
         this.INTERNAL_ID = INTERNAL_ID;
         this.MODEL_ID = MODEL_ID;
         this.RARITY = RARITY;
-        this.LORE = LORE;
-        this.TYPE = TYPE;
+        if(LORE != null)
+            this.LORE = LORE.stream().map(a -> ChatColor.GRAY + a).collect(Collectors.toList());
+        else
+            this.LORE = null;
+        this.ITEM_TYPE = ITEM_TYPE;
         this.PERMISSION = PERMISSION;
     }
 
-    public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, String LORE, Rarity RARITY) {
+    public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {
         };
     }
 
-    public static BasicItem generateBasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY) {
+    public static BasicItem generateBasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY) {
         };
     }
@@ -95,7 +89,7 @@ public abstract class BasicItem extends ItemStack {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR))
             if (spell != null) {
                 spell.setCaster(e.getPlayer());
-                spell.beforeLaunch(mmorpg, e.getPlayer(), data, false);
+                spell.launch(mmorpg, e.getPlayer(), new Knowledge(100));
             }
     }
 
@@ -106,12 +100,14 @@ public abstract class BasicItem extends ItemStack {
         if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(RARITY.getChatColor() + NAME);
-        meta.setLore(generateLore(meta.getLore()));
+        meta.setDisplayName(generateDisplayName());
+        meta.setLore(generateLore(null));
 
-
+        meta.getPersistentDataContainer().set(Namespaces.name, PersistentDataType.STRING, NAME);
+        meta.getPersistentDataContainer().set(Namespaces.lore, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getLORE()));
+        meta.getPersistentDataContainer().set(Namespaces.rarity, PersistentDataType.STRING, RARITY.toString());
         meta.getPersistentDataContainer().set(Namespaces.internal_id, PersistentDataType.STRING, INTERNAL_ID);
-        meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, TYPE.toString());
+        meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, ITEM_TYPE.toString());
         for(String id : DATA.keySet()) {
             Pair<PersistentDataType, Object> data = DATA.get(id);
             meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
@@ -124,15 +120,16 @@ public abstract class BasicItem extends ItemStack {
         return item;
     }
 
+    public String generateDisplayName() {
+        return RARITY.getChatColor() + NAME;
+    }
+
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
+        if(LORE != null)
+            lore.addAll(LORE);
 
-        if (LORE != null) {
-            if (lore.size() != 0)
-                lore.add("\n");
-            lore.add(ChatColor.GRAY + LORE);
-        }
         if (this.spell != null) {
             if (lore.size() != 0)
                 lore.add("\n");
@@ -169,7 +166,7 @@ public abstract class BasicItem extends ItemStack {
         return MODEL_ID;
     }
 
-    public String getLORE() {
+    public List<String> getLORE() {
         return LORE;
     }
 
@@ -185,8 +182,8 @@ public abstract class BasicItem extends ItemStack {
         return PERMISSION;
     }
 
-    public ItemType getTYPE() {
-        return TYPE;
+    public ItemType getITEM_TYPE() {
+        return ITEM_TYPE;
     }
 
     public LinkedHashMap<String, Pair<PersistentDataType, Object>> getDATA() {
@@ -196,6 +193,4 @@ public abstract class BasicItem extends ItemStack {
     public Spell getSpell() {
         return spell;
     }
-
-
 }

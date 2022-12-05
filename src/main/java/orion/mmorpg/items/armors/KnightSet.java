@@ -6,6 +6,8 @@ import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
+import java.util.Collections;
+
 public class KnightSet {
     public static class KnightHelmet extends BasicArmorItem {
         public KnightHelmet() {
@@ -33,7 +35,7 @@ public class KnightSet {
 
     public static class KnightSword extends BasicMeleeWeapon {
         public KnightSword() {
-            super(Material.IRON_SWORD, "Epee de Chevalier", "KNIGHT_SWORD", 2, "Une épée assez robuste mais lourde", Rarity.UNCOMMON, new Stats.Builder().withStrength(3).build(), 7);
+            super(Material.IRON_SWORD, "Epee de Chevalier", "KNIGHT_SWORD", 2, Collections.singletonList("Une épée assez robuste mais lourde"), Rarity.UNCOMMON, new Stats.Builder().withStrength(3).build(), 7);
         }
     }
 

@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
@@ -17,15 +18,21 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
-public abstract class BasicMagicWeapon extends BasicMeleeWeapon {
+import java.util.List;
+
+public class BasicMagicWeapon extends BasicMeleeWeapon {
 
     public Particle particle = Particle.GLOW;
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
+    public BasicMagicWeapon(ItemStack item) {
+        super(item);
+    }
+
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, STATS, DAMAGE);
     }
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, String LORE, Rarity RARITY, String PERMISSION, Stats STATS, float DAMAGE) {
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats STATS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, PERMISSION, STATS, DAMAGE);
     }
 

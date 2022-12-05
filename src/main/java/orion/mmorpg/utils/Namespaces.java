@@ -7,8 +7,13 @@ public final class Namespaces {
     static Mmorpg plugin = Mmorpg.INSTANCE;
     public static final NamespacedKey
             internal_id = NamespacedKey.fromString("internal_id", plugin),
+            name = NamespacedKey.fromString("name", plugin),
+            lore = NamespacedKey.fromString("lore", plugin),
             uuid = NamespacedKey.fromString("uuid", plugin),
-            base_stats = NamespacedKey.fromString("stats", plugin),
+            rarity = NamespacedKey.fromString("rarity", plugin),
+            base_stats = NamespacedKey.fromString("base_stats", plugin),
+            stats = NamespacedKey.fromString("stats", plugin),
+            reforge = NamespacedKey.fromString("reforge", plugin),
             type = NamespacedKey.fromString("type", plugin),
             slot = NamespacedKey.fromString("slot", plugin),
             armor_type = NamespacedKey.fromString("armor_type",  plugin),
@@ -19,6 +24,7 @@ public final class Namespaces {
             spell_id = NamespacedKey.fromString("spell_id", plugin),
             knowledge = NamespacedKey.fromString("knowledge", plugin),
             mobhealth = NamespacedKey.fromString("mobhealth", plugin),
-            health = NamespacedKey.fromString("health", plugin)
+            health = NamespacedKey.fromString("health", plugin),
+            guild_name = NamespacedKey.fromString("guild_name", plugin)
             ;
 }

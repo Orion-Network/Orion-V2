@@ -23,18 +23,20 @@ import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 import xyz.upperlevel.spigot.book.BookUtil;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class MenuGui extends ChestGui {
+    // TODO Re write equipping message in french and cosmetic message
     Player p;
     OrionPlayer orionPlayer;
     StaticPane armorPane = new StaticPane(0, 0, 3, 4);
-    GuiItem HELMET_PLACEHOLDER = new GuiItem(ItemList.HELMET_PLACEHOLDER.getProcessedItem(1));
-    GuiItem CHESTPLATE_PLACEHOLDER = new GuiItem(ItemList.CHESTPLATE_PLACEHOLDER.getProcessedItem(1));
-    GuiItem LEGGINGS_PLACEHOLDER = new GuiItem(ItemList.LEGGINGS_PLACEHOLDER.getProcessedItem(1));
-    GuiItem BOOTS_PLACEHOLDER = new GuiItem(ItemList.BOOTS_PLACEHOLDER.getProcessedItem(1));
-    GuiItem RING_PLACEHOLDER = new GuiItem(ItemList.RING_PLACEHOLDER.getProcessedItem(1));
-    GuiItem BELT_PLACEHOLDER = new GuiItem(ItemList.BELT_PLACEHOLDER.getProcessedItem(1));
+    GuiItem HELMET_PLACEHOLDER = new GuiItem(ItemList.HELMET_PLACEHOLDER.generateItemStack(1));
+    GuiItem CHESTPLATE_PLACEHOLDER = new GuiItem(ItemList.CHESTPLATE_PLACEHOLDER.generateItemStack(1));
+    GuiItem LEGGINGS_PLACEHOLDER = new GuiItem(ItemList.LEGGINGS_PLACEHOLDER.generateItemStack(1));
+    GuiItem BOOTS_PLACEHOLDER = new GuiItem(ItemList.BOOTS_PLACEHOLDER.generateItemStack(1));
+    GuiItem RING_PLACEHOLDER = new GuiItem(ItemList.RING_PLACEHOLDER.generateItemStack(1));
+    GuiItem BELT_PLACEHOLDER = new GuiItem(ItemList.BELT_PLACEHOLDER.generateItemStack(1));
 
     StaticPane menuPane = new StaticPane(3, 0, 6, 4);
 
@@ -64,7 +66,6 @@ public class MenuGui extends ChestGui {
                     if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onEquip(p, orionPlayer, item))
                         return;
                     BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());
-                    //Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
                     boolean isEquip = orionPlayer.getEquipements().addEquipment(armorItem);
                     if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                         if (!isEquip) {
@@ -200,10 +201,10 @@ public class MenuGui extends ChestGui {
             else
                 armorPane.addItem(new GuiItem(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS).generateItem(null, 1)), 1, 2);
 
-            if(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.CHESTPLATE) == null)
+            if(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE) == null)
                 armorPane.addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
             else
-                armorPane.addItem(new GuiItem(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.CHESTPLATE).generateItem(null, 1)), 1, 1);
+                armorPane.addItem(new GuiItem(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE).generateItem(null, 1)), 1, 1);
 
             if(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET) == null)
                 armorPane.addItem(HELMET_PLACEHOLDER, 1, 0);
@@ -232,66 +233,64 @@ public class MenuGui extends ChestGui {
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
                     return;
                 BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());
-                if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
-                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.HELMET);
+                if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.HELMET)) {
+                    if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.HELMET))
+                        return;
                     Utils.sendInfoMessage(p, "You removed an helmet");
 
                     getArmorPane().removeItem(1, 0);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 0);
-                } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("CHESTPLATE")) {
-                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHESTPLATE);
+                } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.CHESTPLATE)) {
+                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHEST_PLATE);
                     Utils.sendInfoMessage(p, "You removed an chestplate");
 
                     getArmorPane().removeItem(1, 1);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
-                } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("LEGGINGS")) {
-                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEGGINGS);
+                } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.LEGGINGS)) {
+                    if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEGGINGS))
+                        return;
                     Utils.sendInfoMessage(p, "You removed an leggings");
 
                     getArmorPane().removeItem(1, 2);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(LEGGINGS_PLACEHOLDER, 1, 2);
-                } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("BOOTS")) {
+                } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.BOOTS)) {
                     orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.BOOTS);
                     Utils.sendInfoMessage(p, "You removed an boots");
 
                     getArmorPane().removeItem(1, 3);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 3);
-                } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("WINGS")) {
-                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHESTPLATE);
+                } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.WINGS)) {
+                    if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHEST_PLATE))
+                        return;
                     Utils.sendInfoMessage(p, "You removed an wings");
 
                     getArmorPane().removeItem(1, 1);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(CHESTPLATE_PLACEHOLDER, 1, 1);
-                } else if(container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("BELT")) {
-                    orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.BELT);
+                } else if(armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.BELT)) {
+                    if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.BELT))
+                        return;
                     Utils.sendInfoMessage(p, "You removed an belt");
 
                     getArmorPane().removeItem(2, 2);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(BELT_PLACEHOLDER, 2, 2);
-                } else if(container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("RING")) {
-                    System.out.println(e.getSlot());
+                } else if(armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.RING)) {
                     int slot = (e.getSlot() == 9 ? 1 : 2);
                     if(slot == 1)
-                        orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEFT_RING);
+                        if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEFT_RING))
+                            return;
                     else
-                        orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.RIGHT_RING);
+                        if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.RIGHT_RING))
+                            return;
 
                     Utils.sendInfoMessage(p, "You removed an ring");
 
                     getArmorPane().removeItem(0, slot);
-                    p.getInventory().addItem(item);
                     getMenuPane();
                     getArmorPane().addItem(RING_PLACEHOLDER, 0, slot);
                 }
@@ -338,18 +337,18 @@ public class MenuGui extends ChestGui {
             BookUtil.openPlayer(p, book);
         }), 1,0);
 
-        menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.getProcessedItem(1), e -> {
+        menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.generateItemStack(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
         }), 2, 1);
 
-        menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.getProcessedItem(1), e -> {
+        menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.generateItemStack(1), e -> {
             new WikiGui(Mmorpg.INSTANCE).show(p);
         }), 1, 1);
         menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
             new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
         }), 3, 1);
-        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, "Ouvre le menu des sorts", Rarity.COMMON).generateItem(null, 1),e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
-        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.getProcessedItem(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, Collections.singletonList("Ouvre le menu des sorts"), Rarity.COMMON).generateItem(null, 1), e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
+        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.generateItemStack(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
 
         return menuPane;
     }

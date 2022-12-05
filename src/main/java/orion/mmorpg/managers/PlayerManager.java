@@ -1,11 +1,13 @@
 package orion.mmorpg.managers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class PlayerManager extends AbstractManager {
     private final LinkedHashMap<UUID, OrionPlayer> playersMap;
@@ -14,12 +16,9 @@ public class PlayerManager extends AbstractManager {
         super(mmorpg);
         this.playersMap = new LinkedHashMap<>();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Saving Players");
-                savePlayers();
-            }
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, () -> {
+            JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.FINE, "Saving players");
+            savePlayers();
         }, 1L, 300* 20);
     }
 

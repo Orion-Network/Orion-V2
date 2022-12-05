@@ -1,5 +1,8 @@
 package orion.mmorpg;
 
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.boss.BossBar;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -12,22 +15,28 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public final class Mmorpg extends JavaPlugin {
 
     public static Mmorpg INSTANCE;
+    private GameState gameState = GameState.STARTING;
     public static boolean debug;
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
+    public static LuckPerms luckPerms;
     public final FileConfiguration config = this.getConfig();
     Client mongoClient = new Client(this);
     PlayerManager playerManager;
+
+    GuildManager guildManager;
     PartyManager partyManager;
     MobManager mobManager;
     ChunkManager chunkManager;
@@ -53,6 +62,7 @@ public final class Mmorpg extends JavaPlugin {
 
         config.addDefault("mongo.username", "root");
         config.addDefault("mongo.password", "");
+        config.addDefault("mongo.auth", "mongo");
         config.addDefault("misc.debugging", false);
 
         config.options().copyDefaults(true);
@@ -63,12 +73,14 @@ public final class Mmorpg extends JavaPlugin {
         AssociationConfig.setup(this);
 
         playerManager = new PlayerManager(this);
+        guildManager = new GuildManager(this);
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
         mobManager = new MobManager(this);
 
         PluginManager pm = Bukkit.getPluginManager();
+        luckPerms = LuckPermsProvider.get();
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
@@ -107,9 +119,10 @@ public final class Mmorpg extends JavaPlugin {
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
         }
-
         mobManager.loadMobs();
         Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
+
+        setGameState(GameState.RUNNING);
     }
 
     /**
@@ -118,7 +131,7 @@ public final class Mmorpg extends JavaPlugin {
     @Override
     public void onDisable() {
         for (OrionPlayer p : getPlayerManager().getPlayersMap().values()) {
-            System.out.println("Saving : " + p.getUniqueId().toString());
+            JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.FINE, "Saving : " + p.getUniqueId().toString());
             p.getHealthBar().removeAll();
             getMongoClient().savePlayer(p);
             getPlayerManager().getPlayersMap().remove(p.getUniqueId());
@@ -129,6 +142,10 @@ public final class Mmorpg extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public GuildManager getGuildManager() {
+        return guildManager;
     }
 
     public ChunkManager getChunkManager() {
@@ -143,7 +160,19 @@ public final class Mmorpg extends JavaPlugin {
         return mobManager;
     }
 
+    public static LuckPerms getLuckPerms() {
+        return luckPerms;
+    }
+
     public Client getMongoClient() {
         return mongoClient;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }

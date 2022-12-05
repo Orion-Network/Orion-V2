@@ -10,21 +10,25 @@ import org.bukkit.Particle;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
+import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.mobs.samples.SamplePetMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.parties.Party;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.*;
@@ -63,6 +67,8 @@ public class OrionPlayer {
     private Support support;
     private Race race;
 
+    private Jobs jobs;
+
     /**
      * Default Constructor of OrionPlayer class used on first logging.
      *
@@ -78,6 +84,7 @@ public class OrionPlayer {
         this.baseStats = baseStats;
         this.pointStats = pointStats;
         this.equipements = new Equipments();
+        equipements.setOwner(Bukkit.getPlayer(uniqueId));
         this.stats = calculateStats();
         this.health = stats.getVitality();
         this.statsPoints = statsPoints;
@@ -91,10 +98,7 @@ public class OrionPlayer {
 
         this.mana = (int) this.stats.getIntel();
 
-        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
-        this.healthBar.setProgress(1);
-        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.healthBar.setVisible(true);
+        initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -115,6 +119,7 @@ public class OrionPlayer {
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
+        this.jobs = Jobs.getBaseJobs();
     }
 
     /**
@@ -133,12 +138,13 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
         this.pointStats = pointStats;
         this.equipements = equipements;
+        equipements.setOwner(Bukkit.getPlayer(uniqueId));
         this.stats = calculateStats();
         this.health = health;
         this.statsPoints = statsPoints;
@@ -151,10 +157,7 @@ public class OrionPlayer {
         this.support = support;
         this.race = race;
 
-        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
-        this.healthBar.setProgress(1);
-        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.healthBar.setVisible(true);
+        initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -166,6 +169,14 @@ public class OrionPlayer {
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
+        this.jobs = jobs;
+    }
+
+    public void initHealthBar() {
+        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        this.healthBar.setProgress(1);
+        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        this.healthBar.setVisible(true);
     }
 
     public static OrionPlayer generateSamplePlayer(Player p) {
@@ -212,8 +223,13 @@ public class OrionPlayer {
             Stats armorStats = equipements.getEquipmentStats();
             Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
             ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
-            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.base_stats, PersistentDataType.STRING)) {
-                handStats = Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.base_stats, PersistentDataType.STRING), Stats.class);
+            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.stats, PersistentDataType.STRING)) {
+                PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+                handStats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
+                if(container.has(Namespaces.reforge, PersistentDataType.STRING) && EnumUtils.isValidEnum(ItemReforge.class, container.get(Namespaces.reforge, PersistentDataType.STRING))) {
+                    ItemReforge reforge = ItemReforge.valueOf(container.get(Namespaces.reforge, PersistentDataType.STRING));
+                    handStats = reforge.getFunction().apply(handStats);
+                }
             }
             return calculateStats(playerStats, armorStats, handStats, getPointStats());
         }
@@ -436,6 +452,10 @@ public class OrionPlayer {
         this.party = p;
     }
 
+    public Jobs getJobs() {
+        return jobs;
+    }
+
     public void heal(double health) {
         this.setHealth(this.getHealth() + health < this.getStats().getVitality() ? this.getHealth() + health : this.getStats().getVitality());
         this.updateHealthbar();
@@ -610,7 +630,7 @@ public class OrionPlayer {
     }
 
     public double getExpToNextLevel() {
-        return (Math.pow(this.getLevel(), 2) * 100) + 25;
+        return (Math.pow(this.getLevel(), 1.3) * 100) + 25;
     }
 
     public enum SlotType {

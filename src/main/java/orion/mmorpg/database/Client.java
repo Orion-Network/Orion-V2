@@ -14,6 +14,7 @@ import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Knowledge;
@@ -43,7 +44,7 @@ public class Client {
     public MongoCollection<Document> jobsCollection;
 
     public Client(Mmorpg mmorpg) {
-        uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@mongo/?authSource=admin";
+        uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@"+mmorpg.getConfig().getString("mongo.auth")+"/?authSource=admin";
         this.mongoClient = MongoClients.create(uri);
         orionDatabase = mongoClient.getDatabase("orion");
         playerCollection = orionDatabase.getCollection("players");
@@ -90,6 +91,11 @@ public class Client {
             document.put("race", player.getRace().toString());
         else
             document.put("race", null);
+
+        if(player.getJobs() != null)
+            document.put("jobs", Mmorpg.getOrionGson().getGSON().toJson(player.getJobs()));
+        else
+            document.put("jobs", null);
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -160,7 +166,13 @@ public class Client {
         else
             race = Race.valueOf(document.getString("race"));
 
-        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race);
+        Jobs jobs;
+        if(document.getString("jobs") == null)
+            jobs = null;
+        else
+            jobs = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("jobs"), Jobs.class);
+
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs);
     }
 
     public void saveMob(SampleMob mob) {

@@ -12,11 +12,13 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.supports.ProjectSoul;
 import orion.mmorpg.utils.Rarity;
 
+import java.util.Collections;
+
 public class SoulSwitcher extends BasicItem {
     Player p;
 
     public SoulSwitcher() {
-        super(Material.PHANTOM_MEMBRANE, "Soul Switcher", "SOUL_SWITCHER", 0, "Une prouesse technologique pouvant vous faire changer d'âme.", Rarity.MYTHIC);
+        super(Material.PHANTOM_MEMBRANE, "Soul Switcher", "SOUL_SWITCHER", 0, Collections.singletonList("Une prouesse technologique pouvant vous faire changer d'âme."), Rarity.MYTHIC);
     }
 
     @Override
