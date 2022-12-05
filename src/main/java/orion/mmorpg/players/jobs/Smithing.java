@@ -11,6 +11,7 @@ import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import org.apache.commons.lang.math.IEEE754rUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
@@ -32,6 +33,11 @@ public class Smithing extends AbstractJob {
     boolean validated = false;
     public ChestGui getUpgradeGui() {
         ChestGui gui = new ChestGui(3, "Menu d'amélioration");
+        gui.setOnBottomClick(e -> {
+            if(e.isShiftClick()) {
+                e.setCancelled(true);
+            }
+        });
         gui.setOnClose(e -> {
             if(gui.getInventory().getItem(10) != null)
                 e.getPlayer().getInventory().addItem(gui.getInventory().getItem(10));
@@ -58,7 +64,6 @@ public class Smithing extends AbstractJob {
                 validated = true;
                 gui.getInventory().getItem(10).setAmount(gui.getInventory().getItem(10).getAmount() - 1);
                 gui.getInventory().getItem(16).setAmount(gui.getInventory().getItem(16).getAmount() - 1);
-                //gui.getInventory().setItem(16, new ItemStack(Material.AIR));
             }
         }), 4, 2);
         guiPane.setOnClick(e -> {
