@@ -15,6 +15,7 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Utils;
 
@@ -26,6 +27,7 @@ import java.util.logging.Level;
 public final class Mmorpg extends JavaPlugin {
 
     public static Mmorpg INSTANCE;
+    private GameState gameState = GameState.STARTING;
     public static boolean debug;
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
@@ -119,6 +121,8 @@ public final class Mmorpg extends JavaPlugin {
         }
         mobManager.loadMobs();
         Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
+
+        setGameState(GameState.RUNNING);
     }
 
     /**
@@ -162,5 +166,13 @@ public final class Mmorpg extends JavaPlugin {
 
     public Client getMongoClient() {
         return mongoClient;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }

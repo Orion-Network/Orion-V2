@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.PortalStone;
+import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.Utils;
 
 import java.io.IOException;
@@ -25,6 +26,14 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void playerJoinEvent(PlayerJoinEvent e) {
+        if (mmorpg.getGameState() == GameState.STARTING) {
+            e.getPlayer().kickPlayer("Server is starting, please wait.");
+            return;
+        } else if (mmorpg.getGameState() == GameState.ENDING) {
+            e.getPlayer().kickPlayer("Server is shutting down, please wait.");
+            return;
+        }
+
         Player player = e.getPlayer();
         if(mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId())) {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
