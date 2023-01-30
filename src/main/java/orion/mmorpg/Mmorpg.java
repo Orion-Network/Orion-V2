@@ -33,7 +33,7 @@ public final class Mmorpg extends JavaPlugin {
     public static EffectManager effectManager;
     public static LuckPerms luckPerms;
     public final FileConfiguration config = this.getConfig();
-    Client mongoClient = new Client(this);
+    Client mongoClient;
     PlayerManager playerManager;
 
     GuildManager guildManager;
@@ -71,6 +71,8 @@ public final class Mmorpg extends JavaPlugin {
         setDebug(config.getBoolean("misc.debugging"));
 
         AssociationConfig.setup(this);
+
+        mongoClient = new Client(this);
 
         playerManager = new PlayerManager(this);
         guildManager = new GuildManager(this);
