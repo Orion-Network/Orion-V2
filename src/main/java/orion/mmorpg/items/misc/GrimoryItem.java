@@ -87,6 +87,7 @@ public class GrimoryItem extends BasicItem {
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME);
                 }
                 item.setItemMeta(meta);
+                e.getPlayer().updateInventory();
             }
         }
     }
