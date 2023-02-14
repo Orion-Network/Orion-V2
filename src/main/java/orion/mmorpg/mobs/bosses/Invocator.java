@@ -19,7 +19,7 @@ import orion.mmorpg.mobs.samples.SampleBossMob;
 import orion.mmorpg.mobs.samples.SampleHostileMob;
 import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.abilities.Spell;
-import orion.mmorpg.players.abilities.spells.RepulsionSpell;
+import orion.mmorpg.players.abilities.spells.Repulsion;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
 
@@ -48,7 +48,7 @@ public class Invocator extends SampleBossMob {
         );
          this.bP.a(0,new PathfinderGoalFireballAttack(this, this.getStats().getIntel()));
         this.bP.a(1, pathfinderGoalSummon);
-        this.bP.a(2, new PathfinderGoalCastSpell(new RepulsionSpell(), this.getBukkitEntity().getLocation(), 120));
+        this.bP.a(2, new PathfinderGoalCastSpell(new Repulsion(), this.getBukkitEntity().getLocation(), 120));
         this.bP.a(3, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 3.0F, 0.8D, 0.33D));
         this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
         this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));

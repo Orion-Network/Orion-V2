@@ -10,7 +10,10 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
 
 import java.util.Objects;
@@ -97,6 +100,14 @@ public class Utils {
 
     public static float calculateDamageReduction(float defence) {
         return 1 + (defence / (defence + 100));
+    }
+
+    public static LivingEntity getTargetInFront(LivingEntity entity, int range) {
+        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range, (e) -> (e instanceof LivingEntity && !e.isInvulnerable() && e != entity));
+        if (rayTraceResult != null) {
+            return (LivingEntity) rayTraceResult.getHitEntity();
+        }
+        return null;
     }
 
     public static boolean canPvp(Entity entity) {

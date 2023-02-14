@@ -148,7 +148,7 @@ public abstract class Spell {
     public void setTarget(Entity target) {
         this.target = target;
         if(target instanceof Player)
-            this.orionTarget = Mmorpg.INSTANCE.getPlayerManager().getPlayer(target.getUniqueId());
+            setOrionTarget(Mmorpg.INSTANCE.getPlayerManager().getPlayer(target.getUniqueId()));
     }
 
     public OrionPlayer getOrionTarget() {

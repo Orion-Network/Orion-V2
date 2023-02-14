@@ -11,9 +11,9 @@ import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Utils;
 
-public class RepulsionSpell extends Spell {
+public class Repulsion extends Spell {
 
-    public RepulsionSpell() {
+    public Repulsion() {
         super("REPULSION", 30, Element.ARCANE, 15*1000);
     }
 
