@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.models.NPC;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.Utils;
@@ -33,8 +34,7 @@ public class AdminCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(commandSender instanceof Player) {
-            Player player = (Player)commandSender;
+        if(commandSender instanceof Player player) {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId());
             if(args[0].equalsIgnoreCase("setlevel")) {
                 orionPlayer.setLevel(Integer.parseInt(args[1]));
@@ -54,11 +54,10 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                mmorpg.getGuildManager().createGuild(args[1], orionPlayer);
-
-                mmorpg.getGuildManager().getGuildHashMap().forEach((key, value) -> {
-                    Bukkit.broadcastMessage(key + " " + value.toString());
-                });
+                //Spawn npc
+                if(args[1].equalsIgnoreCase("npc")) {
+                    NPC.setup(player);
+                }
             }
         }
         return false;

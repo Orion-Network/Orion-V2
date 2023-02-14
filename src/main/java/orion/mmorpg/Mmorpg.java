@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
+import orion.mmorpg.events.RightClickNpcEvent;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.players.OrionPlayer;
@@ -92,6 +93,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerStatsListener(this), this);
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
+        pm.registerEvents(new NpcListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
