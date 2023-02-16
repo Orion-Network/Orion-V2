@@ -21,8 +21,15 @@ public enum SpellList {
     INSTANT_TRANSMISSION(InstantTransmission.class, "Instant Transmission", Rarity.RARE, Material.ENDER_EYE, Arrays.asList(ChatColor.GRAY + "Vous téléporte de 8 blocks")),
     SELF_SUCCION(SelfSuccion.class, "Succion Personelle", Rarity.RARE, Material.IRON_SWORD, Arrays.asList(ChatColor.GRAY + "Divise votre vie par 2 et", ChatColor.GRAY + "Soigne votre partie de 10% des dégats subits", ChatColor.GRAY +  "Ou vous applique l'effet de Succion Sanguine si vous n'êtes dans aucune partie")),
     FULL_GRAVITY(FullGravity.class, "Full Gravity", Rarity.SUPERRARE, Material.ENDER_EYE, Arrays.asList(ChatColor.GRAY + "Augmente la gravité de façon démentielle empêchant tout saut")),
-    REPULSION(RepulsionSpell.class, "Repulsion", Rarity.MYTHIC, Material.TNT, Arrays.asList(ChatColor.GRAY + "Repousse tout les joueurs alentours")),
+    REPULSION(Repulsion.class, "Repulsion", Rarity.MYTHIC, Material.TNT, Arrays.asList(ChatColor.GRAY + "Repousse tout les joueurs alentours")),
+    ATTRACTION(Attraction.class, "Attraction", Rarity.MYTHIC, Material.TNT, Arrays.asList(ChatColor.GRAY + "Attire tout les joueurs alentours")),
     DARK_ROOM(DarkRoom.class, "Dark Room", Rarity.RARE, Material.BLACK_CANDLE, Arrays.asList("Plonge une zone dans l'obscurité")),
+    BACK_TIME(BackTime.class, "Back Time", Rarity.HERO, Material.CLOCK, Arrays.asList(ChatColor.GRAY + "Vous téléporte à l'endroit où vous étiez il y a 15 secondes")),
+    SWITCH(Switch.class, "Switch", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Echangez de place avec une entitée en face de vous")),
+    CHANNEL_STRIKE(ChannelStrike.class, "Channel Strike", Rarity.RARE, Material.DIAMOND_SWORD, Arrays.asList(ChatColor.GRAY + "Inflict des dégats à une entitée en face de vous et a celle la plus proche jusqu'a 5 fois")),
+    MARK(Mark.class, "Mark", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Marque votre positon actuelle")),
+    RECALL(Recall.class, "Recall", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Vous téléporte à la position marquée")),
+    LEVITAE(Levitae.class, "Levitae", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Vous fait voler pendant 10 secondes")),
     ;
 
     Class<? extends Spell> spellClass;
