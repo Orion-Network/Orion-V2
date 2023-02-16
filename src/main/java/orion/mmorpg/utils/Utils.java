@@ -9,6 +9,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -129,6 +130,10 @@ public class Utils {
             }
         }
         return nearest;
+    }
+
+    public static String locationToReadableString(Location location) {
+        return "X : " + location.getBlockX() + " Y : " + location.getBlockY() + " Z : " + location.getBlockZ();
     }
 
     public static boolean canPvp(Entity entity) {

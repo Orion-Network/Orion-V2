@@ -2,6 +2,7 @@ package orion.mmorpg.players.parties;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
@@ -26,14 +27,16 @@ public class Party {
         Utils.sendInfoMessage(Bukkit.getPlayer(player), "Vous avez été à rejoindre la party");
     }
 
-    public void addPlayer(Player player, OrionPlayer data) {
+    public void addMember(Player player, OrionPlayer data) {
         players.add(data);
         data.setParty(this);
     }
 
-    public boolean removePlayer(OrionPlayer player) {
+    public void removeMember(OrionPlayer player) {
         players.remove(player);
-        return players.isEmpty();
+        player.setParty(null);
+        if(players.isEmpty())
+            Mmorpg.INSTANCE.getPartyManager().removeParty(this);
     }
 
     public Set<String> getInfos() {
@@ -50,7 +53,7 @@ public class Party {
         return uuid;
     }
 
-    public LinkedHashSet<OrionPlayer> getPlayers() {
+    public LinkedHashSet<OrionPlayer> getMembers() {
         return players;
     }
 

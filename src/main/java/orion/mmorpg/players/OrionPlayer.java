@@ -610,7 +610,7 @@ public class OrionPlayer {
 
         if(party != null) {
             board.add(ChatColor.YELLOW + "Groupe : ");
-            party.getPlayers().forEach(p -> board.add(Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + p.getHealth() + "/" + p.getStats().getVitality()));
+            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + (int)p.getHealth() + "/" + (int)p.getStats().getVitality()));
         }
         this.fastBoard.updateLines(board);
     }

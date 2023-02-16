@@ -30,7 +30,7 @@ public class PartyCommand implements TabExecutor {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId());
         if (args[0].equalsIgnoreCase("create")) {
             if (orionPlayer.getParty() == null)
-                mmorpg.getPartyManager().createParty().addPlayer((Player) sender, orionPlayer);
+                mmorpg.getPartyManager().createParty().addMember((Player) sender, orionPlayer);
             else
                 Utils.sendInfoMessage((Player) sender, "Vous devez quitter votre party avant d'en créer une.");
         } else if (args[0].equalsIgnoreCase("invite")) {
@@ -43,9 +43,7 @@ public class PartyCommand implements TabExecutor {
                 Utils.sendInfoMessage((Player) sender, "Vous êtes dans aucune party.");
         } else if (args[0].equalsIgnoreCase("leave")) {
             if (orionPlayer.getParty() != null) {
-                if (orionPlayer.getParty().removePlayer(orionPlayer))
-                    mmorpg.getPartyManager().removeParty(orionPlayer.getParty());
-                orionPlayer.setParty(null);
+                orionPlayer.getParty().removeMember(orionPlayer);
                 ((Player) sender).setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 Utils.sendInfoMessage((Player) sender, "Vous avez quitté la party");
             }
@@ -54,7 +52,7 @@ public class PartyCommand implements TabExecutor {
                 OrionPlayer targetPlayer = mmorpg.getPlayerManager().getPlayer(Bukkit.getPlayer(args[0]).getUniqueId());
                 if (targetPlayer.getParty() != null)
                     if (targetPlayer.getParty().getInvites().contains((Player) sender))
-                        targetPlayer.getParty().addPlayer((Player) sender, mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId()));
+                        targetPlayer.getParty().addMember((Player) sender, mmorpg.getPlayerManager().getPlayer(((Player) sender).getUniqueId()));
                     else
                         Utils.sendInfoMessage((Player) sender, "Vous n'avez mas été invité dans cette party.");
                 else

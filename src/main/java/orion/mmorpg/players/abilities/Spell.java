@@ -80,7 +80,7 @@ public abstract class Spell {
             }
             case PARTY -> {
                 if(orionPlayer.getParty() != null)
-                    orionPlayer.getParty().getPlayers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+                    orionPlayer.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
             }
         }
         if (this.targets.isEmpty()) {
