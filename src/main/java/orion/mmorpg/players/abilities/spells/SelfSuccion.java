@@ -19,7 +19,7 @@ public class SelfSuccion extends Spell {
             double damage = getOrionCaster().getHealth() / 2;
             ((Player)getOrionCaster()).damage(damage);
             if (getOrionCaster().getParty() != null)
-                getOrionCaster().getParty().getPlayers().forEach(p -> p.heal(damage / 10));
+                getOrionCaster().getParty().getMembers().forEach(p -> p.heal(damage / 10));
             else
                 getOrionCaster().getSupportMap().put(new SuccionSanguine(), (1000 * 15) + System.currentTimeMillis());
         }

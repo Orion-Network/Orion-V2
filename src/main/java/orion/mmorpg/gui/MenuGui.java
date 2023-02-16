@@ -300,7 +300,7 @@ public class MenuGui extends ChestGui {
         this.update();
         return armorPane;
     }
-
+//TODO Equipment GUI the two rings are removed at the same time
     public StaticPane getMenuPane() {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
@@ -332,9 +332,13 @@ public class MenuGui extends ChestGui {
                 Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode());
             }), 3, 0);
         }
-        ItemStack book = generateGuideBook();
-        menuPane.addItem(new GuiItem(book, e-> {
-            BookUtil.openPlayer(p, book);
+
+        //TODO Add item to open the party gui
+        menuPane.addItem(new GuiItem(ItemList.TBI_PLACEHOLDER.generateItemStack(1), e-> {
+            if(orionPlayer.getParty() != null)
+                new PartyGui( p, orionPlayer).show(p);
+            else
+                Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
         }), 1,0);
 
         menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.generateItemStack(1), e -> {
@@ -355,13 +359,5 @@ public class MenuGui extends ChestGui {
 
     public void show() {
         this.show(p);
-    }
-
-    private ItemStack generateGuideBook() {
-        return BookUtil.writtenBook().author("GameMaster").title(ChatColor.GREEN + "Guide").pages(
-                new BookUtil.PageBuilder()
-                        .add("Alpha 0.1")
-                        .build()
-        ).build();
     }
 }
