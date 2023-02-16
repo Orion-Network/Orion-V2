@@ -103,7 +103,13 @@ public class Utils {
     }
 
     public static LivingEntity getTargetInFront(LivingEntity entity, int range) {
-        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range, (e) -> (e instanceof LivingEntity && !e.isInvulnerable() && e != entity));
+        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range,
+                (e) -> (
+                        e instanceof LivingEntity
+                                && !e.isInvulnerable()
+                                && e != entity
+                )
+        );
         if (rayTraceResult != null) {
             return (LivingEntity) rayTraceResult.getHitEntity();
         }

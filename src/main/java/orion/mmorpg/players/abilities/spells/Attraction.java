@@ -26,7 +26,7 @@ public class Attraction extends Spell {
             sphereEffect.particle = Particle.FIREWORKS_SPARK;
             sphereEffect.color = Color.PURPLE;
             sphereEffect.duration = 200;
-            sphereEffect.radius = 1;
+            sphereEffect.radius = getRange();
             sphereEffect.radiusIncrease = -1;
             sphereEffect.setLocation(location);
             sphereEffect.start();

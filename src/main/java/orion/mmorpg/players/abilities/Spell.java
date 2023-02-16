@@ -126,6 +126,7 @@ public abstract class Spell {
         orionPlayer.getKnownSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));
         return true;
     }
+
     public void launch(Mmorpg mmorpg, Entity caster, Knowledge knowledge) {
         this.setCaster(caster);
         launch(mmorpg, caster.getLocation(), knowledge);
@@ -185,6 +186,14 @@ public abstract class Spell {
 
     public void setOrionCaster(OrionPlayer orionCaster) {
         this.orionCaster = orionCaster;
+    }
+
+    public TargetType getTargetType() {
+        return targetType;
+    }
+
+    public int getRange() {
+        return range;
     }
 
     public LinkedList<LivingEntity> getTargets() {
