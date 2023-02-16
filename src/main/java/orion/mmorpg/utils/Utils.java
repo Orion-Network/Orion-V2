@@ -103,11 +103,32 @@ public class Utils {
     }
 
     public static LivingEntity getTargetInFront(LivingEntity entity, int range) {
-        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range, (e) -> (e instanceof LivingEntity && !e.isInvulnerable() && e != entity));
+        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range,
+                (e) -> (
+                        e instanceof LivingEntity
+                                && !e.isInvulnerable()
+                                && e != entity
+                )
+        );
         if (rayTraceResult != null) {
             return (LivingEntity) rayTraceResult.getHitEntity();
         }
         return null;
+    }
+
+    public static LivingEntity getNearestEntity(LivingEntity entity, int range) {
+        LivingEntity nearest = null;
+        double distance = Double.MAX_VALUE;
+        for (Entity e : entity.getNearbyEntities(range, range, range)) {
+            if (e instanceof LivingEntity && e != entity) {
+                double d = e.getLocation().distance(entity.getLocation());
+                if (d < distance) {
+                    distance = d;
+                    nearest = (LivingEntity) e;
+                }
+            }
+        }
+        return nearest;
     }
 
     public static boolean canPvp(Entity entity) {

@@ -11,12 +11,12 @@ import orion.mmorpg.utils.Knowledge;
 
 public class Levitae extends Spell {
     public Levitae() {
-        super("LEVITAE", 10, Element.ARCANE, 30*1000);
+        super("LEVITAE", 10, Element.ARCANE, 30*1000, TargetType.SELF);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
-        ((LivingEntity) getCaster()).addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10*20, 0));
+        getTargets().getFirst().addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10*20, 0));
 
     }
 }

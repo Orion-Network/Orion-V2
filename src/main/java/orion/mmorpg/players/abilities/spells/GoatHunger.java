@@ -18,7 +18,7 @@ import orion.mmorpg.utils.Knowledge;
 public class GoatHunger extends Spell {
 
     public GoatHunger() {
-        super("GOAT_HUNGER", 0, Element.BLACK, 0);
+        super("GOAT_HUNGER", 0, Element.BLACK, 0, TargetType.TARGET);
     }
 
     @Override

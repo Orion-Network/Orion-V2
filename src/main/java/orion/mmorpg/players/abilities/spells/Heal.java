@@ -12,13 +12,13 @@ import orion.mmorpg.utils.Knowledge;
 
 public class Heal extends Spell {
     public Heal() {
-        super("HEAL", 1, Element.WHITE, 1000 * 60);
+        super("HEAL", 1, Element.WHITE, 1000 * 60, TargetType.SELF);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() instanceof Player) {
-            Player player = (Player) getCaster();
+            Player player = (Player) getTargets().getFirst();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
 
             CylinderEffect cylinderEffect = new CylinderEffect(Mmorpg.effectManager);

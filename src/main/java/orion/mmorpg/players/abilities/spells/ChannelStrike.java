@@ -23,7 +23,7 @@ public class ChannelStrike extends Spell {
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
 
         LivingEntity previousTarget = null;
-        LivingEntity target = Utils.getTargetInFront((LivingEntity) getCaster(), 20);
+        LivingEntity target = getTargets().getFirst();
         if(target == null)
             return;
 

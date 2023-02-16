@@ -4,6 +4,7 @@ import de.slikey.effectlib.EffectType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
@@ -11,6 +12,8 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Utils;
+
+import java.util.LinkedList;
 
 public abstract class Spell {
 
@@ -27,8 +30,9 @@ public abstract class Spell {
 
     private Entity caster;
     private OrionPlayer orionCaster;
-    private Entity target;
-    private OrionPlayer orionTarget;
+    private TargetType targetType = TargetType.SELF;
+    private int range = 20;
+    private final LinkedList<LivingEntity> targets = new LinkedList<>();
     private Knowledge knowledge;
 
     public Spell(String internal_id, int level, Element element, long cooldown) {
@@ -37,10 +41,52 @@ public abstract class Spell {
         this.element = element;
         this.cooldown = cooldown;
     }
+    public Spell(String internal_id, int level, Element element, long cooldown, TargetType targetType) {
+        this.internal_id = internal_id;
+        this.level = level;
+        this.element = element;
+        this.cooldown = cooldown;
+        this.targetType = targetType;
+    }
+
+    public Spell(String internal_id, int level, Element element, long cooldown, TargetType targetType, int range) {
+        this.internal_id = internal_id;
+        this.level = level;
+        this.element = element;
+        this.cooldown = cooldown;
+        this.targetType = targetType;
+        this.range = range;
+    }
 
     public boolean beforeLaunch(Mmorpg mmorpg, Player player, OrionPlayer orionPlayer, boolean needSpell) {
         this.caster = player;
         this.orionCaster = orionPlayer;
+        switch (targetType) {
+            case SELF -> this.targets.add(player);
+            case TARGET -> {
+                LivingEntity target = Utils.getTargetInFront(player, range);
+                if (target != null)
+                    this.targets.add(target);
+            }
+            case NEAREST -> {
+                LivingEntity nearest = Utils.getNearestEntity(player, range);
+                if (nearest != null)
+                    this.targets.add(nearest);
+            }
+            case NEAR -> {
+                for (Entity entity : player.getNearbyEntities(range, range, range))
+                    if (entity instanceof LivingEntity)
+                        this.targets.add((LivingEntity) entity);
+            }
+            case PARTY -> {
+                if(orionPlayer.getParty() != null)
+                    orionPlayer.getParty().getPlayers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+            }
+        }
+        if (this.targets.isEmpty()) {
+            Utils.sendInfoMessage(player, "Aucune cible trouvée.");
+            return false;
+        }
         this.canceled = false;
         Knowledge knowledge;
         if (needSpell) {
@@ -80,6 +126,7 @@ public abstract class Spell {
         orionPlayer.getKnownSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));
         return true;
     }
+
     public void launch(Mmorpg mmorpg, Entity caster, Knowledge knowledge) {
         this.setCaster(caster);
         launch(mmorpg, caster.getLocation(), knowledge);
@@ -141,22 +188,16 @@ public abstract class Spell {
         this.orionCaster = orionCaster;
     }
 
-    public Entity getTarget() {
-        return target;
+    public TargetType getTargetType() {
+        return targetType;
     }
 
-    public void setTarget(Entity target) {
-        this.target = target;
-        if(target instanceof Player)
-            setOrionTarget(Mmorpg.INSTANCE.getPlayerManager().getPlayer(target.getUniqueId()));
+    public int getRange() {
+        return range;
     }
 
-    public OrionPlayer getOrionTarget() {
-        return orionTarget;
-    }
-
-    public void setOrionTarget(OrionPlayer orionTarget) {
-        this.orionTarget = orionTarget;
+    public LinkedList<LivingEntity> getTargets() {
+        return targets;
     }
 
     public Knowledge getKnowledge() {
@@ -167,5 +208,7 @@ public abstract class Spell {
         this.knowledge = knowledge;
     }
 
-
+    public enum TargetType {
+        SELF, TARGET, NEAR, NEAREST, PARTY
+    }
 }
