@@ -3,6 +3,7 @@ package orion.mmorpg.players;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.sample.BasicArmorItem;
@@ -55,37 +56,31 @@ public class Equipments {
 
     private EquipmentSlot isSlotFree(BasicArmorItem.ArmorType armorType) {
         switch (armorType) {
-            case HELMET: {
-                if(!equipments.containsKey(EquipmentSlot.HELMET))
+            case HELMET -> {
+                if (!equipments.containsKey(EquipmentSlot.HELMET))
                     return EquipmentSlot.HELMET;
-                break;
             }
-            case CHESTPLATE: {
-                if(!equipments.containsKey(EquipmentSlot.CHEST_PLATE))
+            case CHESTPLATE -> {
+                if (!equipments.containsKey(EquipmentSlot.CHEST_PLATE))
                     return EquipmentSlot.CHEST_PLATE;
-                break;
             }
-            case LEGGINGS: {
-                if(!equipments.containsKey(EquipmentSlot.LEGGINGS))
+            case LEGGINGS -> {
+                if (!equipments.containsKey(EquipmentSlot.LEGGINGS))
                     return EquipmentSlot.LEGGINGS;
-                break;
             }
-            case BOOTS: {
-                if(!equipments.containsKey(EquipmentSlot.BOOTS))
+            case BOOTS -> {
+                if (!equipments.containsKey(EquipmentSlot.BOOTS))
                     return EquipmentSlot.BOOTS;
-                break;
             }
-            case BELT: {
-                if(!equipments.containsKey(EquipmentSlot.BELT))
+            case BELT -> {
+                if (!equipments.containsKey(EquipmentSlot.BELT))
                     return EquipmentSlot.BELT;
-                break;
             }
-            case RING: {
-                if(!equipments.containsKey(EquipmentSlot.LEFT_RING))
+            case RING -> {
+                if (!equipments.containsKey(EquipmentSlot.LEFT_RING))
                     return EquipmentSlot.LEFT_RING;
-                else if(!equipments.containsKey(EquipmentSlot.RIGHT_RING))
+                else if (!equipments.containsKey(EquipmentSlot.RIGHT_RING))
                     return EquipmentSlot.RIGHT_RING;
-                break;
             }
         }
         return null;
