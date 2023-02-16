@@ -18,6 +18,8 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -32,7 +34,6 @@ public class AdminCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(commandSender instanceof Player) {
-            //new AdminGui((Player) commandSender, mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId())).show((HumanEntity) commandSender);
             Player player = (Player)commandSender;
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(((Player) commandSender).getUniqueId());
             if(args[0].equalsIgnoreCase("setlevel")) {
@@ -65,7 +66,17 @@ public class AdminCommand implements TabExecutor {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return null;
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        ArrayList<String> completion = new ArrayList<>();
+        if(args[0].equalsIgnoreCase("setlevel")) {
+            return Arrays.asList("0", "5", "10", "15", "30");
+        } else if(args[0].equalsIgnoreCase("editor")) {
+            if(args[0].equalsIgnoreCase("player")) {
+                return null;
+            }
+            return Arrays.asList("player", "item");
+        }
+
+        return Arrays.asList("setlevel", "editor", "test", "debug", "save");
     }
 }

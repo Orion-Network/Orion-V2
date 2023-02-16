@@ -1,11 +1,13 @@
 package orion.mmorpg.listeners;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.BossKilledEvent;
 import orion.mmorpg.utils.GameState;
 
 public class ServerListener implements Listener {
@@ -43,5 +45,13 @@ public class ServerListener implements Listener {
         } else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.ACCEPTED) {
             event.getPlayer().sendMessage(ChatColor.GREEN + "Resource pack accepted.");
         }
+    }
+
+    @EventHandler
+    public void onBossKilled(BossKilledEvent event) {
+        if(event.getPlayer() != null)
+            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getName() + org.bukkit.ChatColor.RED + " a été vaincu par " + org.bukkit.ChatColor.YELLOW + event.getPlayer().getName());
+        else
+            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getName() + org.bukkit.ChatColor.RED + " a été vaincu");
     }
 }

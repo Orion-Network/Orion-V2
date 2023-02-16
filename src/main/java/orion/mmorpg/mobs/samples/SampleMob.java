@@ -28,6 +28,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.MobKilledEvent;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
@@ -140,16 +141,16 @@ public abstract class SampleMob extends EntityCreature {
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
+        this.keyedBossBar.setVisible(false);
+        this.keyedBossBar.removeAll();
         if(respawn)
             Mmorpg.INSTANCE.getMobManager().addMob(getMobData());
         if(damagesource.getEntity() == null) return;
-        if(damagesource.getEntity().getBukkitEntity() instanceof Player) {
-            Player player = (Player) damagesource.getEntity().getBukkitEntity();
+        if(damagesource.getEntity().getBukkitEntity() instanceof Player player) {
             OrionPlayer orionplayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
             orionplayer.addExperience(player, rewards.getExp());
+            Bukkit.getPluginManager().callEvent(new MobKilledEvent(this, player));
         }
-        this.keyedBossBar.setVisible(false);
-        this.keyedBossBar.removeAll();
     }
 
     @Override

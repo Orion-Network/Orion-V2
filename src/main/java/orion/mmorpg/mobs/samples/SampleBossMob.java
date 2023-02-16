@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import orion.mmorpg.events.BossKilledEvent;
 import orion.mmorpg.utils.Stats;
 
 public abstract class SampleBossMob extends SampleMob {
@@ -33,10 +34,7 @@ public abstract class SampleBossMob extends SampleMob {
     @Override
     public void die(DamageSource damagesource) {
         if(damagesource.getEntity() != null) {
-            if(lastHitBy != null)
-                Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été vaincu par " + ChatColor.YELLOW + lastHitBy.getName());
-            else
-                Bukkit.broadcastMessage(ChatColor.YELLOW + getName() + ChatColor.RED + " a été vaincu");
+            Bukkit.getServer().getPluginManager().callEvent(new BossKilledEvent(this, (Player) lastHitBy));
         }
         super.die(damagesource);
     }
