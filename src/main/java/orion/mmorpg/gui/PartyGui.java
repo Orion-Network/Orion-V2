@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
@@ -34,7 +35,7 @@ public class PartyGui extends ChestGui {
 
     private OutlinePane getPrimaryPane() {
         OutlinePane primaryPane = new OutlinePane(0, 0, 9, 1);
-        primaryPane.addItem(new GuiItem(new ItemStack(Material.PAPER), event -> {
+        primaryPane.addItem(new GuiItem(ItemList.TBI_PLACEHOLDER.generateItemStack(1), event -> {
             new AnvilGUI.Builder()
                     .onComplete((player, text) -> {
                         if (Bukkit.getPlayer(text) != null) {
@@ -46,6 +47,7 @@ public class PartyGui extends ChestGui {
                         }
                         return AnvilGUI.Response.close();
                     })
+                    .plugin(Mmorpg.INSTANCE)
                     .text("Nom du joueur")
                     .title("Ajouter un joueur")
                     .open(player);
