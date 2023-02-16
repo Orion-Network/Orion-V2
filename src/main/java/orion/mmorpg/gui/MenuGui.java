@@ -3,6 +3,7 @@ package orion.mmorpg.gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -281,14 +282,12 @@ public class MenuGui extends ChestGui {
                     getArmorPane().addItem(BELT_PLACEHOLDER, 2, 2);
                 } else if(armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.RING)) {
                     int slot = (e.getSlot() == 9 ? 1 : 2);
-                    if(slot == 1)
-                        if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEFT_RING))
+                    if(slot == 1) {
+                        if (!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEFT_RING))
                             return;
-                    else
-                        if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.RIGHT_RING))
-                            return;
-
-                    Utils.sendInfoMessage(p, "You removed an ring");
+                    } else if (!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.RIGHT_RING))
+                        return;
+                    Utils.sendInfoMessage(p, "You removed a ring");
 
                     getArmorPane().removeItem(0, slot);
                     getMenuPane();
