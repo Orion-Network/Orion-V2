@@ -110,6 +110,21 @@ public class Utils {
         return null;
     }
 
+    public static LivingEntity getNearestEntity(LivingEntity entity, int range) {
+        LivingEntity nearest = null;
+        double distance = Double.MAX_VALUE;
+        for (Entity e : entity.getNearbyEntities(range, range, range)) {
+            if (e instanceof LivingEntity && e != entity) {
+                double d = e.getLocation().distance(entity.getLocation());
+                if (d < distance) {
+                    distance = d;
+                    nearest = (LivingEntity) e;
+                }
+            }
+        }
+        return nearest;
+    }
+
     public static boolean canPvp(Entity entity) {
         RegionManager manager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(entity.getWorld()));
         for(ProtectedRegion region : manager.getApplicableRegions(BukkitAdapter.asBlockVector(entity.getLocation()))) {

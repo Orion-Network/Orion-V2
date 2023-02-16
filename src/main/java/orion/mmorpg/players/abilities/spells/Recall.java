@@ -17,11 +17,11 @@ public class Recall extends Spell {
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         assert Namespaces.mark_location != null;
-        if(getCaster().getPersistentDataContainer().has(Namespaces.mark_location, PersistentDataType.STRING)) {
-            String locationString = getCaster().getPersistentDataContainer().get(Namespaces.mark_location, PersistentDataType.STRING);
+        if(getTargets().getFirst().getPersistentDataContainer().has(Namespaces.mark_location, PersistentDataType.STRING)) {
+            String locationString = getTargets().getFirst().getPersistentDataContainer().get(Namespaces.mark_location, PersistentDataType.STRING);
             Location markLocation = Mmorpg.getOrionGson().getGSON().fromJson(locationString, Location.class);
-            getCaster().teleport(markLocation);
-            Utils.sendInfoMessage(getCaster(), "Teleportation reussie !");
+            getTargets().getFirst().teleport(markLocation);
+            Utils.sendInfoMessage(getTargets().getFirst(), "Teleportation reussie !");
         }
     }
 }

@@ -15,7 +15,7 @@ public class SelfSuccion extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
-        if(getCaster() instanceof Player) {
+        if(getTargets().getFirst() instanceof Player) {
             double damage = getOrionCaster().getHealth() / 2;
             ((Player)getOrionCaster()).damage(damage);
             if (getOrionCaster().getParty() != null)

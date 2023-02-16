@@ -16,18 +16,16 @@ import orion.mmorpg.utils.Knowledge;
 public class SkyFlux extends Spell {
 
     public SkyFlux() {
-        super("SKY_FLUX", 15, Element.EARTH, 0);
+        super("SKY_FLUX", 15, Element.EARTH, 0, TargetType.TARGET);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
         if(getCaster() == null || !(getCaster() instanceof Player)) return;
         Player player = (Player) getCaster();
-        RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getEyeLocation().getDirection().normalize()), player.getEyeLocation().getDirection().normalize(), 10, 2);
-        if (rayTraceResult.getHitEntity() == player) return;
         Effect lineEffect = new TestEffect(Mmorpg.effectManager, player.getEyeLocation().getDirection().normalize());
         lineEffect.setLocation(player.getEyeLocation());
-        lineEffect.setTargetEntity(rayTraceResult.getHitEntity());
+        lineEffect.setTargetEntity(getTargets().getFirst());
         lineEffect.start();
     }
 

@@ -14,16 +14,15 @@ import orion.mmorpg.utils.Utils;
 public class Repulsion extends Spell {
 
     public Repulsion() {
-        super("REPULSION", 30, Element.ARCANE, 15*1000);
+        super("REPULSION", 30, Element.ARCANE, 15*1000, TargetType.GLOBAL, 5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
-        location.getWorld().getNearbyEntities(location, 5, 5, 5).forEach(entity -> {
-            if(getCaster() != null && getCaster() instanceof Player)
-                if(entity instanceof Player)
-                    if(!Utils.canPvp(entity))
-                        return;
+        getTargets().forEach(entity -> {
+            if(entity instanceof Player)
+                if(!Utils.canPvp(entity))
+                    return;
             SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
             sphereEffect.particle = Particle.FIREWORKS_SPARK;
             sphereEffect.color = Color.PURPLE;

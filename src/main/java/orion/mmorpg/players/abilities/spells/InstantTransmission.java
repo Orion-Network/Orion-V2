@@ -46,8 +46,8 @@ public class InstantTransmission extends Spell {
                 endEffect.setLocation(l);
                 endEffect.start();
             }
-        } else if(getTarget() != null && getTarget() instanceof Player) {
-            Player player = (Player) getTarget();
+        } else if(getTargets().getFirst() != null && getTargets().getFirst() instanceof Player) {
+            Player player = (Player) getTargets().getFirst();
             player.teleport(location);
         }
     }

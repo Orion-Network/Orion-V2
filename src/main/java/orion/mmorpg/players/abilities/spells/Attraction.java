@@ -13,16 +13,15 @@ import orion.mmorpg.utils.Utils;
 
 public class Attraction extends Spell {
     public Attraction() {
-        super("ATTRACTION", 30, Element.ARCANE, 15*1000);
+        super("ATTRACTION", 30, Element.ARCANE, 15*1000, TargetType.GLOBAL, 5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
-        location.getWorld().getNearbyEntities(location, 5, 5, 5).forEach(entity -> {
-            if(getCaster() != null && getCaster() instanceof Player)
-                if(entity instanceof Player)
-                    if(!Utils.canPvp(entity))
-                        return;
+        getTargets().forEach(target -> {
+            if(target instanceof Player)
+                if(!Utils.canPvp(target))
+                    return;
             SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
             sphereEffect.particle = Particle.FIREWORKS_SPARK;
             sphereEffect.color = Color.PURPLE;
@@ -31,7 +30,7 @@ public class Attraction extends Spell {
             sphereEffect.radiusIncrease = -1;
             sphereEffect.setLocation(location);
             sphereEffect.start();
-            entity.setVelocity(entity.getLocation().toVector().subtract(location.toVector()).normalize().multiply(-5));
+            target.setVelocity(target.getLocation().toVector().subtract(location.toVector()).normalize().multiply(-5));
         });
     }
 }
