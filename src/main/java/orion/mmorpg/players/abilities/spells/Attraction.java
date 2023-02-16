@@ -13,7 +13,7 @@ import orion.mmorpg.utils.Utils;
 
 public class Attraction extends Spell {
     public Attraction() {
-        super("ATTRACTION", 30, Element.ARCANE, 15*1000, TargetType.GLOBAL, 5);
+        super("ATTRACTION", 30, Element.ARCANE, 15*1000, TargetType.NEAR, 5);
     }
 
     @Override

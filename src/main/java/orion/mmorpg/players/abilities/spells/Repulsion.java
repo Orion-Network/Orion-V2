@@ -14,7 +14,7 @@ import orion.mmorpg.utils.Utils;
 public class Repulsion extends Spell {
 
     public Repulsion() {
-        super("REPULSION", 30, Element.ARCANE, 15*1000, TargetType.GLOBAL, 5);
+        super("REPULSION", 30, Element.ARCANE, 15*1000, TargetType.NEAR, 5);
     }
 
     @Override

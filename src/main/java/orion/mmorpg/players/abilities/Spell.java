@@ -62,24 +62,26 @@ public abstract class Spell {
         this.caster = player;
         this.orionCaster = orionPlayer;
         switch (targetType) {
-            case SELF:
-                this.targets.add(player);
-                break;
-            case TARGET:
+            case SELF -> this.targets.add(player);
+            case TARGET -> {
                 LivingEntity target = Utils.getTargetInFront(player, range);
                 if (target != null)
                     this.targets.add(target);
-                break;
-            case NEAREST:
+            }
+            case NEAREST -> {
                 LivingEntity nearest = Utils.getNearestEntity(player, range);
                 if (nearest != null)
                     this.targets.add(nearest);
-                break;
-            case GLOBAL:
+            }
+            case NEAR -> {
                 for (Entity entity : player.getNearbyEntities(range, range, range))
                     if (entity instanceof LivingEntity)
                         this.targets.add((LivingEntity) entity);
-                break;
+            }
+            case PARTY -> {
+                if(orionPlayer.getParty() != null)
+                    orionPlayer.getParty().getPlayers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+            }
         }
         if (this.targets.isEmpty()) {
             Utils.sendInfoMessage(player, "Aucune cible trouvée.");
@@ -198,6 +200,6 @@ public abstract class Spell {
     }
 
     public enum TargetType {
-        SELF, TARGET, GLOBAL, NEAREST, GUILD, PARTY
+        SELF, TARGET, NEAR, NEAREST, PARTY
     }
 }
