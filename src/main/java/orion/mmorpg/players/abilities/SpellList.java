@@ -27,6 +27,9 @@ public enum SpellList {
     BACK_TIME(BackTime.class, "Back Time", Rarity.HERO, Material.CLOCK, Arrays.asList(ChatColor.GRAY + "Vous téléporte à l'endroit où vous étiez il y a 15 secondes")),
     SWITCH(Switch.class, "Switch", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Echangez de place avec une entitée en face de vous")),
     CHANNEL_STRIKE(ChannelStrike.class, "Channel Strike", Rarity.RARE, Material.DIAMOND_SWORD, Arrays.asList(ChatColor.GRAY + "Inflict des dégats à une entitée en face de vous et a celle la plus proche jusqu'a 5 fois")),
+    MARK(Mark.class, "Mark", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Marque votre positon actuelle")),
+    RECALL(Recall.class, "Recall", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Vous téléporte à la position marquée")),
+    LEVITAE(Levitae.class, "Levitae", Rarity.RARE, Material.ENDER_PEARL, Arrays.asList(ChatColor.GRAY + "Vous fait voler pendant 10 secondes")),
     ;
 
     Class<? extends Spell> spellClass;
