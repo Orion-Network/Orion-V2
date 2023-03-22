@@ -136,17 +136,6 @@ public class Utils {
         return "X : " + location.getBlockX() + " Y : " + location.getBlockY() + " Z : " + location.getBlockZ();
     }
 
-    public static boolean canPvp(Entity entity) {
-        RegionManager manager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(entity.getWorld()));
-        for(ProtectedRegion region : manager.getApplicableRegions(BukkitAdapter.asBlockVector(entity.getLocation()))) {
-            if(region.getFlag(Flags.PVP).equals(StateFlag.State.DENY)) {
-                return false;
-            } else
-                return true;
-        }
-        return false;
-    }
-
     public static String itemDisplayName(ItemStack item) {
         return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(item.getType().name().replaceAll("_"," ")));
     }

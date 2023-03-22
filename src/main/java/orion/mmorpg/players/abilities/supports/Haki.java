@@ -18,6 +18,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
+import orion.mmorpg.utils.WorldGuardUtils;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -111,7 +112,7 @@ public class Haki extends Support implements SpecialsSupport {
             Utils.sendInfoMessage(player, "Vous ne remplissez pas les conditions pour utiliser le haki des rois.");
             return;
         }
-        if(!Utils.canPvp(player))
+        if(!WorldGuardUtils.canPvp(player))
             return;
         player.getNearbyEntities(10*orionPlayer.getLevel(), 10*orionPlayer.getLevel(), 10*orionPlayer.getLevel()).forEach(entity -> {
             if(!(entity instanceof LivingEntity)) return;
@@ -119,7 +120,7 @@ public class Haki extends Support implements SpecialsSupport {
                 Player target = (Player) entity;
                 OrionPlayer targetPlayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(target.getUniqueId());
                 if(targetPlayer.getLevel() < orionPlayer.getLevel() - orionPlayer.getLevel()/2) {
-                    if(Utils.canPvp(target)) {
+                    if(WorldGuardUtils.canPvp(target)) {
                         targetPlayer.respawn();
                     }
                 }

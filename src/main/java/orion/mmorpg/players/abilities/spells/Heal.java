@@ -19,7 +19,6 @@ public class Heal extends Spell {
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() instanceof Player) {
-            //TODO Error Null target
             Player player = (Player) getTargets().getFirst();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
 

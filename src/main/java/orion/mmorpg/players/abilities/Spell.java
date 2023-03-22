@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.BeforeSpellCastEvent;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
@@ -87,7 +88,6 @@ public abstract class Spell {
             Utils.sendInfoMessage(player, "Aucune cible trouvée.");
             return false;
         }
-        this.canceled = false;
         Knowledge knowledge;
         if (needSpell) {
             if (!orionPlayer.getKnownSpells().containsKey(this.getClass())) {
@@ -114,11 +114,7 @@ public abstract class Spell {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
-        player.getNearbyEntities(5 * 10, 5 * 10, 5 * 10).forEach(e -> {
-            if (e instanceof Player)
-                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, player, (Player) e, SpellList.valueOf(internal_id), this, OnSpellSense.Target.GLOBAL));
-        });
-        if (this.isCanceled()) return false;
+        if(!checkIfSpellCastable()) return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
         orionPlayer.onLaunchSpell(player, orionPlayer, this);
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
@@ -158,10 +154,19 @@ public abstract class Spell {
             Utils.sendInfoMessage(caster, "Aucune cible trouvée.");
             return false;
         }
-        this.canceled = false;
-        if (this.isCanceled()) return false;
-        Utils.sendDebugMessage(caster, "Sort " + this.internal_id + " !");
+        if(!checkIfSpellCastable()) return false;
         launch(mmorpg, caster.getLocation(), knowledge);
+        return true;
+    }
+
+    private boolean checkIfSpellCastable() {
+        this.getCaster().getNearbyEntities(5 * 10, 5 * 10, 5 * 10).forEach(e -> {
+            if (e instanceof Player)
+                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, this.getCaster(), (Player) e, SpellList.valueOf(this.getInternal_id()), this, OnSpellSense.Target.GLOBAL));
+        });
+        Bukkit.getPluginManager().callEvent(new BeforeSpellCastEvent(this));
+        if (this.isCanceled()) return false;
+        Utils.sendDebugMessage(this.getCaster(), "Sort " + this.getInternal_id() + " !");
         return true;
     }
 

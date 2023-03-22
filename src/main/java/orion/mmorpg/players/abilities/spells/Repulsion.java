@@ -10,6 +10,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Utils;
+import orion.mmorpg.utils.WorldGuardUtils;
 
 public class Repulsion extends Spell {
 
@@ -21,7 +22,7 @@ public class Repulsion extends Spell {
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         getTargets().forEach(entity -> {
             if(entity instanceof Player)
-                if(!Utils.canPvp(entity))
+                if(!WorldGuardUtils.canPvp(entity))
                     return;
             SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
             sphereEffect.particle = Particle.FIREWORKS_SPARK;

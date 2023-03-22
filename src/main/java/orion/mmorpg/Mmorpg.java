@@ -1,5 +1,10 @@
 package orion.mmorpg;
 
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
+import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.boss.BossBar;
@@ -18,6 +23,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Utils;
+import orion.mmorpg.utils.WorldGuardUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -53,9 +59,21 @@ public final class Mmorpg extends JavaPlugin {
         return orionGson;
     }
 
-    /**
-     * Create default configuration or load it, initialize managers, register listeners and commands when plugin is enabled.
-     */
+    @Override
+    public void onLoad() {
+        FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
+        try {
+            registry.register(WorldGuardUtils.Flag.NO_SPELLS);
+        } catch (FlagConflictException e) {
+            Flag<?> existing = registry.get(WorldGuardUtils.Flag.NO_SPELLS.getName());
+            if (existing instanceof StateFlag) {
+                WorldGuardUtils.Flag.NO_SPELLS = (StateFlag) existing;
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -92,6 +110,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerStatsListener(this), this);
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
+        pm.registerEvents(new SpellListener(), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));

@@ -1,5 +1,6 @@
 package orion.mmorpg.events;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -8,12 +9,13 @@ import orion.mmorpg.players.abilities.SpellList;
 
 public class OnSpellSense extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-    Player sender, target;
+    Entity sender;
+    Player target;
     Spell s;
     SpellList type;
     Target targetType;
 
-    public OnSpellSense(boolean isAsync, Player sender, Player target, SpellList type, Spell s, Target targetType) {
+    public OnSpellSense(boolean isAsync, Entity sender, Player target, SpellList type, Spell s, Target targetType) {
         super(isAsync);
         this.sender = sender;
         this.target = target;
@@ -30,7 +32,7 @@ public class OnSpellSense extends Event {
         return HANDLERS;
     }
 
-    public Player getSender() {
+    public Entity getSender() {
         return sender;
     }
 
