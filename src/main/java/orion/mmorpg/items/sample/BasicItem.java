@@ -89,7 +89,7 @@ public class BasicItem extends ItemStack {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR))
             if (spell != null) {
                 spell.setCaster(e.getPlayer());
-                spell.launch(mmorpg, e.getPlayer(), new Knowledge(100));
+                spell.beforeLaunchFromItem(mmorpg, e.getPlayer(), new Knowledge(100));
             }
     }
 

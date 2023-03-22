@@ -25,7 +25,7 @@ public abstract class Spell {
     public boolean asynchronous = true;
     public int delay = 0;
     public int period = 1;
-    public boolean canceled = false;
+    private boolean canceled = false;
     private final EffectType type = EffectType.INSTANT;
 
     private Entity caster;
@@ -127,10 +127,44 @@ public abstract class Spell {
         return true;
     }
 
-    public void launch(Mmorpg mmorpg, Entity caster, Knowledge knowledge) {
-        this.setCaster(caster);
+    public boolean beforeLaunchFromItem(Mmorpg mmorpg, Entity caster, Knowledge knowledge) {
+        this.caster = caster;
+        this.knowledge = knowledge;
+        if(caster instanceof Player)
+            this.orionCaster = mmorpg.getPlayerManager().getPlayer(caster.getUniqueId());
+        switch (targetType) {
+            case SELF -> this.targets.add((LivingEntity) caster);
+            case TARGET -> {
+                LivingEntity target = Utils.getTargetInFront((LivingEntity) caster, range);
+                if (target != null)
+                    this.targets.add(target);
+            }
+            case NEAREST -> {
+                LivingEntity nearest = Utils.getNearestEntity((LivingEntity) caster, range);
+                if (nearest != null)
+                    this.targets.add(nearest);
+            }
+            case NEAR -> {
+                for (Entity entity : caster.getNearbyEntities(range, range, range))
+                    if (entity instanceof LivingEntity)
+                        this.targets.add((LivingEntity) entity);
+            }
+            case PARTY -> {
+                if(orionCaster != null && orionCaster.getParty() != null)
+                    orionCaster.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+            }
+        }
+        if (this.targets.isEmpty()) {
+            Utils.sendInfoMessage(caster, "Aucune cible trouvée.");
+            return false;
+        }
+        this.canceled = false;
+        if (this.isCanceled()) return false;
+        Utils.sendDebugMessage(caster, "Sort " + this.internal_id + " !");
         launch(mmorpg, caster.getLocation(), knowledge);
+        return true;
     }
+
     //TODO Change to a boolean to check if spell has been launched
     public abstract void launch(Mmorpg mmorpg, Location location, Knowledge knowledge);
 
@@ -164,6 +198,10 @@ public abstract class Spell {
 
     public EffectType getType() {
         return type;
+    }
+
+    public void setCanceled(boolean canceled) {
+        this.canceled = canceled;
     }
 
     public boolean isCanceled() {

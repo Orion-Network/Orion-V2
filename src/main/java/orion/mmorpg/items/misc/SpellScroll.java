@@ -36,7 +36,9 @@ public class SpellScroll extends BasicConsumableItem {
         try {
             Spell s = (Spell) SpellList.valueOf(spell).getSpellClass().getConstructors()[0].newInstance();
             s.setKnowledge(new Knowledge(100));
-            s.launch(mmorpg, e.getPlayer(), new Knowledge(100));
+            if(!s.beforeLaunchFromItem(mmorpg, e.getPlayer(), new Knowledge(100))) {
+                return;
+            }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();

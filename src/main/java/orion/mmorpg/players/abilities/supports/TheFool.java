@@ -44,7 +44,7 @@ public class TheFool extends Support {
 
     @Override
     public void onSpellSense(OnSpellSense e) {
-        e.getSpell().canceled = true;
+        e.getSpell().setCanceled(true);
         Utils.sendInfoMessage(e.getSender(), "Votre sort à été annulé");
     }
 

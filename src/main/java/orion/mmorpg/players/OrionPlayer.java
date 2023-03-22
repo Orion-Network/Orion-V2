@@ -603,12 +603,14 @@ public class OrionPlayer {
     private void updateFastboard() {
         board.clear();
         this.fastBoard.updateTitle("Statistiques");
+        board.add(" ");
         if(this.getRace() != null)
             board.add(ChatColor.WHITE + "Race : " + ChatColor.GOLD + this.getRace().getName());
         board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " (" + (int) ((getExp() / getExpToNextLevel())*100) + "%)" );
         board.add(ChatColor.YELLOW + "Quête : " + ChatColor.GRAY + " TBI ");
 
         if(party != null) {
+            board.add(" ");
             board.add(ChatColor.YELLOW + "Groupe : ");
             party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + (int)p.getHealth() + "/" + (int)p.getStats().getVitality()));
         }

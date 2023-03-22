@@ -1,6 +1,7 @@
 package orion.mmorpg.players.abilities.spells;
 
 import de.slikey.effectlib.effect.CylinderEffect;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ public class Heal extends Spell {
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         if(getCaster() instanceof Player) {
+            //TODO Error Null target
             Player player = (Player) getTargets().getFirst();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
 
