@@ -26,12 +26,7 @@ public class MasterScrollItem extends BasicConsumableItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING);
-        if (spell == null) {
-            e.getItem().setAmount(0);
-            e.getPlayer().updateInventory();
-            Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
-            return;
-        }
+        if(!checkScrollValidity(e, spell)) return;
         int knowledge = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.knowledge, PersistentDataType.INTEGER);
         Utils.sendInfoMessage(e.getPlayer(), "Votre connaissance du sort " + SpellList.valueOf(spell).getName() + " a augmenté de " + knowledge);
         SpellList.learnSpell(data, SpellList.valueOf(spell).getSpellClass(), knowledge);

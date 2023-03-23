@@ -7,7 +7,6 @@ import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import org.bukkit.boss.BossBar;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -25,7 +24,7 @@ import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Utils;
 import orion.mmorpg.utils.WorldGuardUtils;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -72,6 +71,8 @@ public final class Mmorpg extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
+        transferResourcesToPluginFolder();
     }
 
     @Override
@@ -159,6 +160,32 @@ public final class Mmorpg extends JavaPlugin {
         }
 
         getMobManager().despawnMobs();
+    }
+
+    private void transferResourcesToPluginFolder() {
+        File pluginFolder = this.getDataFolder();
+        if (!pluginFolder.exists()) {
+            pluginFolder.mkdir();
+        }
+        for (String fileName : new String[]{"pentagram.png","img/alchemy.png","img/alchemy_1.png","img/alchemy_2.png"}) {
+            File file = new File(pluginFolder, fileName);
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                    InputStream in = this.getClass().getResourceAsStream("/" + fileName);
+                    OutputStream out = new FileOutputStream(file);
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, length);
+                    }
+                    in.close();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public PlayerManager getPlayerManager() {

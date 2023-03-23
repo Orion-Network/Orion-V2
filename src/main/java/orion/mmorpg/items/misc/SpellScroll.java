@@ -27,12 +27,7 @@ public class SpellScroll extends BasicConsumableItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         String spell = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING);
-        if (spell == null) {
-            e.getItem().setAmount(0);
-            e.getPlayer().updateInventory();
-            Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
-            return;
-        }
+        if(!checkScrollValidity(e, spell)) return;
         try {
             Spell s = (Spell) SpellList.valueOf(spell).getSpellClass().getConstructors()[0].newInstance();
             s.setKnowledge(new Knowledge(100));
@@ -51,7 +46,7 @@ public class SpellScroll extends BasicConsumableItem {
         spell_id = spell_id.toUpperCase();
         ItemStack i = generateItem(null, 1);
         ItemMeta meta = i.getItemMeta();
-        meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
+        meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " : " + SpellList.valueOf(spell_id).getRarity().getChatColor() + SpellList.valueOf(spell_id).getName());
         meta.getPersistentDataContainer().set(Namespaces.spell_id, PersistentDataType.STRING, spell_id);
         i.setItemMeta(meta);
         return i;

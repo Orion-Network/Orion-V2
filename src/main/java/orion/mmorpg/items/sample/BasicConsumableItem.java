@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rarity;
+import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
@@ -23,5 +24,15 @@ public class BasicConsumableItem extends BasicItem{
         super.onUseItem(mmorpg, data, e);
         e.getItem().setAmount(e.getItem().getAmount() - 1);
         e.getPlayer().updateInventory();
+    }
+
+    protected boolean checkScrollValidity(PlayerInteractEvent event, String spell) {
+        if (spell == null) {
+            event.getItem().setAmount(0);
+            event.getPlayer().updateInventory();
+            Utils.sendErrorMessage(event.getPlayer(), "Parchemin invalide, suppression de l'item.");
+            return false;
+        }
+        return true;
     }
 }

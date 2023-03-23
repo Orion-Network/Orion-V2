@@ -1,27 +1,26 @@
 package orion.mmorpg.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.Utils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.Objects;
 
 public class AdminCommand implements TabExecutor {
 
@@ -54,11 +53,15 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                mmorpg.getGuildManager().createGuild(args[1], orionPlayer);
+                //test if img exist in resources folder
+                try {
+                    Image image = ImageIO.read(Objects.requireNonNull(mmorpg.getResource("img/alchemy_2.png")));
 
-                mmorpg.getGuildManager().getGuildHashMap().forEach((key, value) -> {
-                    Bukkit.broadcastMessage(key + " " + value.toString());
-                });
+                    Utils.sendInfoMessage((Entity) commandSender, "Image found.");
+                } catch (IOException e) {
+                    Utils.sendErrorMessage((Entity) commandSender, "Image not found.");
+                    throw new RuntimeException(e);
+                }
             }
         }
         return false;

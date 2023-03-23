@@ -27,7 +27,9 @@ public class ZoneSpellEffect extends ImageEffect {
 
     public enum BaseImage {
         PENTAGRAM("pentagram.png"),
-        ALCHEMY("alchemy_1.png"),
+        ALCHEMY("img/alchemy.png"),
+        ALCHEMY_1("img/alchemy_1.png"),
+        ALCHEMY_2("img/alchemy_2.png"),
         ;
 
         private final String imageName;
