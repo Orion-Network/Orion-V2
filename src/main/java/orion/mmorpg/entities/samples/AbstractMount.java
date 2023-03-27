@@ -2,7 +2,10 @@ package orion.mmorpg.entities.samples;
 
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.horse.EntityHorse;
+import net.minecraft.world.entity.animal.horse.EntityHorseAbstract;
 import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
@@ -29,8 +32,18 @@ public abstract class AbstractMount extends AbstractEntityBase {
 
     @Override
     protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
+        //check if the player is the owner
+        if(!entityhuman.getUniqueID().equals(owner.getUniqueId()))
+            return super.b(entityhuman, enumhand);
         entityhuman.startRiding(this);
         return super.b(entityhuman, enumhand);
+    }
+
+    @Override
+    public boolean damageEntity(DamageSource damagesource, float f) {
+        if(damagesource.equals(DamageSource.k))
+            return false;
+        return super.damageEntity(damagesource, f);
     }
 
     @Override

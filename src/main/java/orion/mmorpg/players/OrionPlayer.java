@@ -22,7 +22,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
+import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.entities.samples.AbstractPet;
@@ -65,6 +67,7 @@ public class OrionPlayer {
     transient FastBoard fastBoard;
     Set<Pets> tamedPets;
     transient AbstractPet pet;
+    Set<Mounts> tamedMounts;
     private Support support;
     private Race race;
 
@@ -108,6 +111,7 @@ public class OrionPlayer {
         selectedSpells = new String[9];
         quiver = new ItemStack[9];
         tamedPets = new LinkedHashSet<>();
+        tamedMounts = new LinkedHashSet<>();
 
         this.slotTypes = new SlotType[]{SlotType.FREE_SLOT,
                 SlotType.FREE_SLOT,
@@ -140,7 +144,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Pets> tamedPets) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -169,6 +173,7 @@ public class OrionPlayer {
         this.quiver = quiver;
         this.slotTypes = slotTypes;
         this.tamedPets = tamedPets;
+        this.tamedMounts = tamedMounts;
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
@@ -388,6 +393,10 @@ public class OrionPlayer {
 
     public Set<Pets> getTamedPets() {
         return tamedPets;
+    }
+
+    public Set<Mounts> getTamedMounts() {
+        return tamedMounts;
     }
 
     public AbstractPet getPet() {

@@ -20,20 +20,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.EntityType;
+import orion.mmorpg.entities.Pets;
 import orion.mmorpg.utils.Stats;
 
 import java.util.EnumSet;
 
 public abstract class AbstractPet extends AbstractEntityBase {
     Player owner;
-    Material material;
-    String description;
+    Pets pet;
 
-    public AbstractPet(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Player owner, Material material, String description) {
+    public AbstractPet(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Player owner, Pets pet) {
         super(entitytypes, uuid, name, spawnLocation, new Stats.Builder().withVitality(1).withSpeed(4).build());
         this.owner = owner;
-        this.material = material;
-        this.description = description;
+        this.pet = pet;
 
         this.setInvulnerable(true);
 
@@ -69,19 +68,15 @@ public abstract class AbstractPet extends AbstractEntityBase {
     }
 
     private String generateName() {
-        return name + ChatColor.YELLOW + " [ " + owner.getName() + "]";
+        return name + ChatColor.YELLOW + " [ " + owner.getName() + " ]";
     }
 
     public Player getOwner() {
         return owner;
     }
 
-    public Material getMaterial() {
-        return material;
-    }
-
-    public String getDescription() {
-        return description;
+    public Pets getPet() {
+        return pet;
     }
 
     private class PathfinderGoalPet extends PathfinderGoal {

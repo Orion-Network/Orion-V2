@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +17,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
@@ -219,8 +222,13 @@ public class PlayerStatsListener implements Listener {
     }
 
     @EventHandler
-    public void onClick(PlayerInteractEntityEvent event) {
-        // perhaps check if their hand is empty like with horses?
-        event.getRightClicked().addPassenger(event.getPlayer());
+    public void onDismount(EntityDismountEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if(((CraftEntity)event.getDismounted() ).getHandle() instanceof AbstractMount) {
+                Utils.sendInfoMessage(player, "You have dismounted your mount");
+                event.getDismounted().remove();
+            }
+        }
     }
 }

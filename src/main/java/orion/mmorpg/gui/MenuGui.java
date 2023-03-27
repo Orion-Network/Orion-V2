@@ -7,12 +7,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.Equipments;
@@ -231,6 +233,8 @@ public class MenuGui extends ChestGui {
             if (e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getType() != Material.CARROT_ON_A_STICK) {
                 ItemStack item = e.getCurrentItem();
                 PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+                if(ItemList.getItemFromItemstack(e.getCurrentItem()) == null || !ItemList.getItemFromItemstack(e.getCurrentItem()).getITEM_TYPE().equals(ItemType.ARMOR))
+                    return;
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
                     return;
                 BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());
@@ -296,10 +300,31 @@ public class MenuGui extends ChestGui {
                 orionPlayer.updateHealthbar();
             }
         });
-        armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.TBI_PLACEHOLDER.generateItemStack(1) : new ItemStack(orionPlayer.getPet().getMaterial())), e -> {
-            new PetGui(p, orionPlayer).show(p);
+        armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.TBI_PLACEHOLDER.generateItemStack(1) : orionPlayer.getPet().getPet().generateItemStack()), e -> {
+            if (e.getClick() == ClickType.LEFT)
+                new PetGui(p, orionPlayer).show(p);
+            else if(e.getClick() == ClickType.RIGHT) {
+                orionPlayer.setPet(null);
+                p.closeInventory();
+                Utils.sendInfoMessage(p, "You removed your pet");
+            }
             e.setCancelled(true);
         }), 0, 3);
+
+        armorPane.addItem(new GuiItem(new ItemStack(Material.SADDLE), e -> {
+            if (e.getClick() == ClickType.LEFT)
+                new MountGui(p, orionPlayer).show(p);
+            else if(e.getClick() == ClickType.RIGHT) {
+                if(p.isInsideVehicle()) {
+                    p.leaveVehicle();
+                    Utils.sendInfoMessage(p, "Vous avez quitté votre monture");
+                } else {
+                    Utils.sendErrorMessage(p, "Vous n'êtes pas sur une monture");
+                }
+                p.closeInventory();
+            }
+            e.setCancelled(true);
+        }), 2, 3);
         this.update();
         return armorPane;
     }

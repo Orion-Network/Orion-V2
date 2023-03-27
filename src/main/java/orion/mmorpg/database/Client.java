@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Mobs;
+import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractMob;
 import orion.mmorpg.players.Equipments;
@@ -97,10 +98,16 @@ public class Client {
         else
             document.put("jobs", null);
 
+        //Enum not saved
         if(player.getTamedPets() != null)
             document.put("pets", Mmorpg.getOrionGson().getGSON().toJson(player.getTamedPets()));
         else
             document.put("pets", null);
+
+        if(player.getTamedMounts() != null)
+            document.put("mounts", Mmorpg.getOrionGson().getGSON().toJson(player.getTamedMounts()));
+        else
+            document.put("mounts", null);
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -181,8 +188,14 @@ public class Client {
         if(document.getString("pets") == null)
             pets = new HashSet<>();
         else
-            pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Mobs>>(){}.getType());
-        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets);
+            pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Pets>>(){}.getType());
+
+        Set<Mounts> mounts;
+        if(document.getString("mounts") == null)
+            mounts = new HashSet<>();
+        else
+            mounts = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("mounts"), new TypeToken<Set<Mounts>>(){}.getType());
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts);
     }
 
     public void saveMob(AbstractMob mob) {
