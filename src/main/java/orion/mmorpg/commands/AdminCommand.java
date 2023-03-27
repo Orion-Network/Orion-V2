@@ -10,18 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.Pets;
 import orion.mmorpg.gui.editors.PlayerEditor;
-import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class AdminCommand implements TabExecutor {
 
@@ -54,7 +50,7 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                orionPlayer.getPets().add(Mobs.FUNFUNGU);
+                orionPlayer.getTamedPets().add(Pets.FUNFUNGU);
                 Utils.sendInfoMessage((Entity) commandSender, "Adding pet to player.");
             }
         }

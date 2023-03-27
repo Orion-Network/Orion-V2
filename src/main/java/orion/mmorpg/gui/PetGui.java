@@ -3,13 +3,10 @@ package orion.mmorpg.gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
-import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import orion.mmorpg.mobs.Mobs;
-import orion.mmorpg.mobs.samples.SamplePetMob;
+import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.players.OrionPlayer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,12 +21,12 @@ public class PetGui extends ChestGui {
         this.player = player;
         this.orionPlayer = orionPlayer;
         OutlinePane pane = new OutlinePane(0, 0, 9, 3);
-        orionPlayer.getPets().forEach(pet -> {
+        orionPlayer.getTamedPets().forEach(pet -> {
             pane.addItem(new GuiItem(new ItemStack(Material.LEATHER),e -> {
                 e.setCancelled(true);
                 try {
-                    SamplePetMob samplePetMob = (SamplePetMob) pet.getMobClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), player.getLocation());
-                    samplePetMob.summonPet(player);
+                    AbstractPet samplePetMob = (AbstractPet) pet.getClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), player.getLocation(), player);
+                    samplePetMob.spawn();
                 } catch (InstantiationException | IllegalAccessException |
                          InvocationTargetException ex) {
                     throw new RuntimeException(ex);

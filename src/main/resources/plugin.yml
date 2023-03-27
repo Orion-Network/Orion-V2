@@ -29,3 +29,9 @@ commands:
   support:
     permission: "orion.support.use"
     description: "Support Command"
+  pet:
+    permission: "orion.pet.use"
+    description: "Pet Command"
+  mount:
+    permission: "orion.mount.use"
+    description: "Mount Command"
