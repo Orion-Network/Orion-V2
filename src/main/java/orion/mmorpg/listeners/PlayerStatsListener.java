@@ -11,10 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -219,5 +216,11 @@ public class PlayerStatsListener implements Listener {
 
         }
         e.getEntity().remove();
+    }
+
+    @EventHandler
+    public void onClick(PlayerInteractEntityEvent event) {
+        // perhaps check if their hand is empty like with horses?
+        event.getRightClicked().addPassenger(event.getPlayer());
     }
 }

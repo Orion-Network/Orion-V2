@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
@@ -53,15 +54,8 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                //test if img exist in resources folder
-                try {
-                    Image image = ImageIO.read(Objects.requireNonNull(mmorpg.getResource("img/alchemy_2.png")));
-
-                    Utils.sendInfoMessage((Entity) commandSender, "Image found.");
-                } catch (IOException e) {
-                    Utils.sendErrorMessage((Entity) commandSender, "Image not found.");
-                    throw new RuntimeException(e);
-                }
+                orionPlayer.getPets().add(Mobs.FUNFUNGU);
+                Utils.sendInfoMessage((Entity) commandSender, "Adding pet to player.");
             }
         }
         return false;

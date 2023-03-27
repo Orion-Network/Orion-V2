@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemReforge;
+import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.mobs.samples.SamplePetMob;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -62,6 +63,7 @@ public class OrionPlayer {
     private Equipments equipements;
     transient private KeyedBossBar healthBar;
     transient FastBoard fastBoard;
+    Set<Mobs> pets;
     transient SamplePetMob pet;
 
     private Support support;
@@ -106,6 +108,7 @@ public class OrionPlayer {
         cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
         quiver = new ItemStack[9];
+        pets = new LinkedHashSet<>();
 
         this.slotTypes = new SlotType[]{SlotType.FREE_SLOT,
                 SlotType.FREE_SLOT,
@@ -138,7 +141,7 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs) {
+    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Mobs> pets) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.baseStats = baseStats;
@@ -166,6 +169,7 @@ public class OrionPlayer {
         this.selectedSpells = selectedSpells;
         this.quiver = quiver;
         this.slotTypes = slotTypes;
+        this.pets = pets;
 
         supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
@@ -381,6 +385,10 @@ public class OrionPlayer {
 
     public SlotType[] getSlotTypes() {
         return slotTypes;
+    }
+
+    public Set<Mobs> getPets() {
+        return pets;
     }
 
     public SamplePetMob getPet() {

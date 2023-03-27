@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
 import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -23,8 +24,12 @@ import java.util.EnumSet;
 
 public abstract class SamplePetMob extends SampleMob {
     Player owner;
-    public SamplePetMob(String name, EntityTypes<? extends EntityCreature> entitytypes, String uuid, Location location) {
+    Material material;
+    String description;
+    public SamplePetMob(String name, EntityTypes<? extends EntityCreature> entitytypes, String uuid, Location location,Material material, String description) {
         super(name, -1, entitytypes, uuid, location, new Stats.Builder().withVitality(1).withSpeed(4).build());
+        this.material = material;
+        this.description = description;
         this.setInvulnerable(true);
     }
 
@@ -59,6 +64,18 @@ public abstract class SamplePetMob extends SampleMob {
 
     private String generateName() {
         return color + name + ChatColor.YELLOW + " [ " + owner.getName() + "]";
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     private class PathfinderGoalPet extends PathfinderGoal {

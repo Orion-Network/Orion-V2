@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.mobs.Mobs;
 import orion.mmorpg.mobs.samples.SampleMob;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
@@ -23,9 +24,7 @@ import orion.mmorpg.utils.Stats;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.UUID;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -96,6 +95,11 @@ public class Client {
             document.put("jobs", Mmorpg.getOrionGson().getGSON().toJson(player.getJobs()));
         else
             document.put("jobs", null);
+
+        if(player.getPets() != null)
+            document.put("pets", Mmorpg.getOrionGson().getGSON().toJson(player.getPets()));
+        else
+            document.put("pets", null);
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -172,7 +176,12 @@ public class Client {
         else
             jobs = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("jobs"), Jobs.class);
 
-        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs);
+        Set<Mobs> pets;
+        if(document.getString("pets") == null)
+            pets = new HashSet<>();
+        else
+            pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Mobs>>(){}.getType());
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets);
     }
 
     public void saveMob(SampleMob mob) {

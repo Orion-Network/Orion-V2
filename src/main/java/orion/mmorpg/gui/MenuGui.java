@@ -296,10 +296,13 @@ public class MenuGui extends ChestGui {
                 orionPlayer.updateHealthbar();
             }
         });
+        armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.TBI_PLACEHOLDER.generateItemStack(1) : new ItemStack(orionPlayer.getPet().getMaterial())), e -> {
+            new PetGui(p, orionPlayer).show(p);
+            e.setCancelled(true);
+        }), 0, 3);
         this.update();
         return armorPane;
     }
-//TODO Equipment GUI the two rings are removed at the same time
     public StaticPane getMenuPane() {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 

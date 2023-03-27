@@ -33,14 +33,13 @@ public class MythicalScroll extends BasicConsumableItem {
             return;
         }
 
-        if(SupportList.valueOf(support.toUpperCase()) != null) {
-            try {
-                data.setSupport((Support) SupportList.valueOf(support.toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException error) {
-                e.getItem().setAmount(0);
-                e.getPlayer().updateInventory();
-                Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
-            }
+        SupportList.valueOf(support.toUpperCase());
+        try {
+            data.setSupport((Support) SupportList.valueOf(support.toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException error) {
+            e.getItem().setAmount(0);
+            e.getPlayer().updateInventory();
+            Utils.sendErrorMessage(e.getPlayer(), "Parchemin invalide, suppression de l'item.");
         }
         super.onUseItem(mmorpg, data, e);
     }

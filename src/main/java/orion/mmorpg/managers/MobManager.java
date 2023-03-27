@@ -1,9 +1,19 @@
 package orion.mmorpg.managers;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.FieldAccessException;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.horse.EntityHorseAbstract;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.mobs.samples.SampleMountMob;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -50,6 +60,8 @@ public class MobManager<T extends SampleMob> extends AbstractManager implements 
                 e.printStackTrace();
             }
         });
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(new MountPacketAdpater(mmorpg));
     }
 
     public void despawnMobs() {
@@ -80,5 +92,51 @@ public class MobManager<T extends SampleMob> extends AbstractManager implements 
 
     public HashMap<SampleMob.MobData, Long> getMobList() {
         return mobList;
+    }
+
+    private class MountPacketAdpater extends PacketAdapter {
+        public MountPacketAdpater(Plugin plugin) {
+            super(plugin, PacketType.Play.Client.STEER_VEHICLE);
+        }
+
+        @Override
+        public void onPacketReceiving(PacketEvent event) {
+                if(event.isCancelled()) return;
+                org.bukkit.entity.Entity vehicle = event.getPlayer().getVehicle();
+                if(vehicle == null) return;
+                SampleMountMob mob = ((CraftEntity) vehicle).getHandle() instanceof SampleMountMob ? (SampleMountMob) ((CraftEntity) vehicle).getHandle() : null;
+                if(mob == null) return;
+
+                float swSpeed, fwSpeed; // so we can access them outside of the scope of our try-catch block
+                boolean jumping;
+                try {
+                    swSpeed = event.getPacket().getFloat().read(0);
+                    fwSpeed = event.getPacket().getFloat().read(1);
+                    jumping = event.getPacket().getBooleans().read(0);
+
+                } catch (FieldAccessException ex){
+                    ex.printStackTrace();
+                    return; // if something goes wrong, we exit and don't do anything with the packet.
+                }
+
+                Location location = event.getPlayer().getLocation();
+                vehicle.setRotation(location.getYaw(), location.getPitch());
+                Vector forwardDir = location.getDirection().multiply(mob.getForwardMultiplier());
+                Vector sideways = forwardDir.clone().crossProduct(new Vector(0, -1, 0)).multiply(mob.getStrafeMultiplier());
+
+                Vector velocity = forwardDir.multiply(fwSpeed).add(sideways.multiply(swSpeed));
+                if(mob.getType().equals(SampleMountMob.MountType.LAND)) {
+                    if(vehicle.isOnGround() && mob.getJumpForce() + vehicle.getVelocity().getY() < mob.getJumpForce())
+                        velocity.setY(jumping ? mob.getJumpForce() : 0);
+                    else {
+                        velocity.multiply(0.2);
+                    }
+                    vehicle.setVelocity(vehicle.getVelocity().add(velocity));
+                } else if(mob.getType().equals(SampleMountMob.MountType.AIR)) {
+                    vehicle.setVelocity(velocity);
+                } else if(mob.getType().equals(SampleMountMob.MountType.WATER)) {
+                    vehicle.setVelocity(vehicle.getVelocity().add(velocity));
+                }
+        }
     }
 }
