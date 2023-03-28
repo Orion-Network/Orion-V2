@@ -41,6 +41,7 @@ public class MenuGui extends ChestGui {
     GuiItem RING_PLACEHOLDER = new GuiItem(ItemList.RING_PLACEHOLDER.generateItemStack(1));
     GuiItem BELT_PLACEHOLDER = new GuiItem(ItemList.BELT_PLACEHOLDER.generateItemStack(1));
 
+
     StaticPane menuPane = new StaticPane(3, 0, 6, 4);
 
     public MenuGui(Player p, OrionPlayer orionPlayer) {
@@ -300,7 +301,7 @@ public class MenuGui extends ChestGui {
                 orionPlayer.updateHealthbar();
             }
         });
-        armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.TBI_PLACEHOLDER.generateItemStack(1) : orionPlayer.getPet().getPet().generateItemStack()), e -> {
+        armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.PET_PLACEHOLDER.generateItemStack(1) : orionPlayer.getPet().getPet().generateItemStack()), e -> {
             if (e.getClick() == ClickType.LEFT)
                 new PetGui(p, orionPlayer).show(p);
             else if(e.getClick() == ClickType.RIGHT) {
@@ -311,7 +312,7 @@ public class MenuGui extends ChestGui {
             e.setCancelled(true);
         }), 0, 3);
 
-        armorPane.addItem(new GuiItem(new ItemStack(Material.SADDLE), e -> {
+        armorPane.addItem(new GuiItem(ItemList.MOUNT_PLACEHOLDER.generateItemStack(1), e -> {
             if (e.getClick() == ClickType.LEFT)
                 new MountGui(p, orionPlayer).show(p);
             else if(e.getClick() == ClickType.RIGHT) {
