@@ -9,8 +9,10 @@ import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.mobs.Mobs;
-import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.entities.Mobs;
+import orion.mmorpg.entities.Mounts;
+import orion.mmorpg.entities.Pets;
+import orion.mmorpg.entities.samples.AbstractMob;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
@@ -96,10 +98,16 @@ public class Client {
         else
             document.put("jobs", null);
 
-        if(player.getPets() != null)
-            document.put("pets", Mmorpg.getOrionGson().getGSON().toJson(player.getPets()));
+        //Enum not saved
+        if(player.getTamedPets() != null)
+            document.put("pets", Mmorpg.getOrionGson().getGSON().toJson(player.getTamedPets()));
         else
             document.put("pets", null);
+
+        if(player.getTamedMounts() != null)
+            document.put("mounts", Mmorpg.getOrionGson().getGSON().toJson(player.getTamedMounts()));
+        else
+            document.put("mounts", null);
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -176,15 +184,21 @@ public class Client {
         else
             jobs = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("jobs"), Jobs.class);
 
-        Set<Mobs> pets;
+        Set<Pets> pets;
         if(document.getString("pets") == null)
             pets = new HashSet<>();
         else
-            pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Mobs>>(){}.getType());
-        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets);
+            pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Pets>>(){}.getType());
+
+        Set<Mounts> mounts;
+        if(document.getString("mounts") == null)
+            mounts = new HashSet<>();
+        else
+            mounts = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("mounts"), new TypeToken<Set<Mounts>>(){}.getType());
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts);
     }
 
-    public void saveMob(SampleMob mob) {
+    public void saveMob(AbstractMob mob) {
         Document document = new Document();
 
         document.put("className", mob.getMobData().getMobClass().getName());
@@ -194,11 +208,11 @@ public class Client {
         mobCollection.insertOne(document);
     }
 
-    public SampleMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public AbstractMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Document doc = mobCollection.find(eq("uuid", uuid)).first();
 
         Location location = Mmorpg.getOrionGson().GSON.fromJson(doc.getString("location"), Location.class);
-        Class<? extends SampleMob> mobClass = (Class<? extends SampleMob>) Class.forName(doc.getString("className"));
+        Class<? extends AbstractMob> mobClass = (Class<? extends AbstractMob>) Class.forName(doc.getString("className"));
         String uuidMob = doc.getString("uuid");
 
         return mobClass.getConstructor(String.class, Location.class).newInstance(uuidMob, location);

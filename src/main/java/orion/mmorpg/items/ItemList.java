@@ -76,6 +76,8 @@ public enum ItemList {
     CHESTPLATE_PLACEHOLDER(ChestplatePlaceholderItem.class),
     LEGGINGS_PLACEHOLDER(LeggingsPlaceholderItem.class),
     BOOTS_PLACEHOLDER(BootsPlaceholder.class),
+    PET_PLACEHOLDER(PetPlaceholder.class),
+    MOUNT_PLACEHOLDER(MountPlaceholder.class),
     ACCEPT_BUTTON_PLACEHOLDER(AcceptButtonPlaceholder.class),
     REFUSE_BUTTON_PLACEHOLDER(RefuseButtonPlaceholder.class),
     UP_BUTTON_PLACEHOLDER(UpButtonPlaceholder.class),

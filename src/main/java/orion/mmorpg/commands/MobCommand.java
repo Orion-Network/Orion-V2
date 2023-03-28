@@ -9,10 +9,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.samples.AbstractEntityBase;
 import orion.mmorpg.managers.ChunkManager;
-import orion.mmorpg.mobs.Mobs;
-import orion.mmorpg.mobs.samples.SampleMob;
-import orion.mmorpg.mobs.samples.SamplePetMob;
+import orion.mmorpg.entities.Mobs;
+import orion.mmorpg.entities.samples.AbstractMob;
+import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +32,7 @@ public class MobCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(args[0].equalsIgnoreCase("spawn")) {
-            SampleMob mob = summonMob(commandSender, args);
+            AbstractMob mob = summonMob(commandSender, args);
             mob.setRespawn(false);
         } else if(args[0].equalsIgnoreCase("list")) {
             mmorpg.getMobManager().getMobs().forEach((uuid, mob) -> {
@@ -59,7 +60,7 @@ public class MobCommand implements TabExecutor {
             mmorpg.getMobManager().loadMobs();
         }
         else if (args[0].equalsIgnoreCase("set")) {
-            SampleMob mob = summonMob(commandSender, args);
+            AbstractMob mob = summonMob(commandSender, args);
             if(mob != null) {
                 mmorpg.getMongoClient().saveMob(mob);
             }
@@ -68,17 +69,12 @@ public class MobCommand implements TabExecutor {
         return false;
     }
 
-    private SampleMob summonMob(@NotNull CommandSender commandSender, @NotNull String[] args) {
+    private AbstractMob summonMob(@NotNull CommandSender commandSender, @NotNull String[] args) {
         Location location = null;
         if(commandSender instanceof org.bukkit.entity.Player)
             location = ((org.bukkit.entity.Player) commandSender).getLocation().clone();
-
         try {
-            final SampleMob mob = (SampleMob) Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), location);
-            if(mob instanceof SamplePetMob) {
-                ((SamplePetMob) mob).summonPet((Player) commandSender);
-                return mob;
-            }
+            final AbstractMob mob = (AbstractMob) Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), location);
             mob.spawn();
             return mob;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {

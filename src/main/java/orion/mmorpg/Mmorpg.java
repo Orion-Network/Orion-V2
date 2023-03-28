@@ -120,6 +120,8 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
         Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
         Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
+        Objects.requireNonNull(getCommand("pet")).setExecutor(new PetCommand(this));
+        Objects.requireNonNull(getCommand("mount")).setExecutor(new MountCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {

@@ -2,20 +2,20 @@ package orion.mmorpg.managers;
 
 import org.bukkit.Chunk;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.mobs.samples.SampleMob;
+import orion.mmorpg.entities.samples.AbstractMob;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class ChunkManager extends AbstractManager {
-    private LinkedHashMap<ChunkIdentifier, Set<SampleMob.MobData>> chunkMobs = new LinkedHashMap<>();
+    private LinkedHashMap<ChunkIdentifier, Set<AbstractMob.MobData>> chunkMobs = new LinkedHashMap<>();
 
 
     public ChunkManager(Mmorpg plugin) {
         super(plugin);
     }
 
-    public LinkedHashMap<ChunkIdentifier, Set<SampleMob.MobData>> getChunkMobs() {
+    public LinkedHashMap<ChunkIdentifier, Set<AbstractMob.MobData>> getChunkMobs() {
         return chunkMobs;
     }
 
@@ -28,7 +28,7 @@ public class ChunkManager extends AbstractManager {
         return false;
     }
 
-    public Set<SampleMob.MobData> getChunk(Chunk chunk) {
+    public Set<AbstractMob.MobData> getChunk(Chunk chunk) {
         for (ChunkIdentifier chunkIdentifier : chunkMobs.keySet()) {
             if (chunkIdentifier.equals(chunk)) {
                 return chunkMobs.get(chunkIdentifier);
@@ -37,7 +37,7 @@ public class ChunkManager extends AbstractManager {
         return null;
     }
 
-    public Set<SampleMob.MobData> getChunk(ChunkIdentifier chunk) {
+    public Set<AbstractMob.MobData> getChunk(ChunkIdentifier chunk) {
         return chunkMobs.get(chunk);
     }
 

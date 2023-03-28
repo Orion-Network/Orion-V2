@@ -4,15 +4,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import orion.mmorpg.mobs.samples.SampleBossMob;
+import orion.mmorpg.entities.samples.AbstractBoss;
 
 public class BossKilledEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private SampleBossMob boss;
+    private AbstractBoss boss;
     private Player player;
 
-    public BossKilledEvent(SampleBossMob boss, Player player) {
+    public BossKilledEvent(AbstractBoss boss, Player player) {
         this.boss = boss;
         this.player = player;
     }
@@ -26,7 +26,7 @@ public class BossKilledEvent extends Event {
         return HANDLERS;
     }
 
-    public SampleBossMob getBoss() {
+    public AbstractBoss getBoss() {
         return boss;
     }
 

@@ -16,6 +16,7 @@ import orion.mmorpg.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
 public class PlayerJoinListener implements Listener {
     Mmorpg mmorpg;
@@ -72,5 +73,9 @@ public class PlayerJoinListener implements Listener {
         player.getFastBoard().delete();
         if(player.getPet() != null)
             player.getPet().setRemoved(Entity.RemovalReason.a);
+        if(event.getPlayer().isInsideVehicle()) {
+            Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
+            event.getPlayer().leaveVehicle();
+        }
     }
 }
