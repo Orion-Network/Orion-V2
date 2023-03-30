@@ -3,19 +3,20 @@ package orion.mmorpg.entities.pathfinders;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.level.pathfinder.PathEntity;
-import orion.mmorpg.entities.samples.AbstractModeledMob;
+import orion.mmorpg.entities.samples.AbstractHostile;
+import orion.mmorpg.entities.samples.Modeled;
 
 import java.util.EnumSet;
 
-public class MeleeAnimationAttack extends PathfinderGoal {
+public class MeleeAnimationAttack<T extends AbstractHostile & Modeled> extends PathfinderGoal {
 
     private final String animation = "attack";
     private double lerpIn, lerpOut, speed, reach, distance;
-    AbstractModeledMob abstractModeledMob;
+    T abstractModeledMob;
 
     private PathEntity path;
 
-    public MeleeAnimationAttack(AbstractModeledMob abstractModeledMob, double lerpIn, double lerpOut, double speed, double reach, double distance) {
+    public  MeleeAnimationAttack(T abstractModeledMob, double lerpIn, double lerpOut, double speed, double reach, double distance) {
         this.abstractModeledMob = abstractModeledMob;
         this.lerpIn = lerpIn;
         this.lerpOut = lerpOut;

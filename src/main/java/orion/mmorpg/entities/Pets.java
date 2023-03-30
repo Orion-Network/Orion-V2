@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.entities.pets.FunFunGu;
 import orion.mmorpg.entities.pets.FunnyWolf;
+import orion.mmorpg.entities.pets.LilOtter;
 import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.utils.Rarity;
@@ -16,7 +17,9 @@ import java.util.UUID;
 
 public enum Pets {
     FUNFUNGU(FunFunGu.class, Material.PUFFERFISH, "A cute pufferfish"),
-    FUNNYWOLF(FunnyWolf.class, Material.WOLF_SPAWN_EGG, "A funny wolf");
+    FUNNYWOLF(FunnyWolf.class, Material.WOLF_SPAWN_EGG, "A funny wolf"),
+    LILOTTER(LilOtter.class, Material.TROPICAL_FISH, "A cute otter"),
+    ;
 
     Class<? extends AbstractPet> petClass;
     Material material;
