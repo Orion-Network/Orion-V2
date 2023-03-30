@@ -4,6 +4,7 @@ import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.EnumSet;

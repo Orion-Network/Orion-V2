@@ -2,10 +2,13 @@ package orion.mmorpg.items.sample;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.Mmorpg;
+import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 
@@ -24,6 +27,11 @@ public class BasicArrow extends BasicItem {
     public BasicArrow(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
         this.DAMAGE = DAMAGE;
+    }
+
+    @Override
+    public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
+        return;
     }
 
     @Override

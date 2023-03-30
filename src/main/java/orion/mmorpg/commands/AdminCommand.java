@@ -1,17 +1,28 @@
 package orion.mmorpg.commands;
 
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
+import com.ticxo.modelengine.api.animation.script.ScriptReader;
+import com.ticxo.modelengine.api.animation.script.ScriptReaderRegistry;
+import com.ticxo.modelengine.api.animation.state.ModelState;
+import com.ticxo.modelengine.api.entity.Dummy;
+import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.AnimationMode;
+import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.modelengine.OrionScriptReader;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
@@ -50,8 +61,9 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                orionPlayer.getTamedPets().add(Pets.FUNFUNGU);
-                Utils.sendInfoMessage((Entity) commandSender, "Adding pet to player.");
+                ScriptReaderRegistry registry = ModelEngineAPI.getScriptReaderRegistry();
+                Utils.sendInfoMessage((Entity) commandSender, registry.getKeys().toString());
+                Utils.sendInfoMessage((Entity) commandSender, registry.get("meg").toString());
             }
         }
         return false;

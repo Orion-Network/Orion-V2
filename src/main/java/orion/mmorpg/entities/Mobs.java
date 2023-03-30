@@ -13,6 +13,7 @@ public enum Mobs implements MobOperation {
     ANGRY_CHICKEN(AngryChicken.class),
     CALM_SHEEP(CalmSheep.class),
     SHEEP(Sheep.class),
+    SCARECROW(Scarecrow.class),
     MOUNTAIN_ZOMBIE(MountainZombie.class),
     CRYPT_SKELETON(CryptSkeleton.class),
     GUARDIAN(Guardian.class),
