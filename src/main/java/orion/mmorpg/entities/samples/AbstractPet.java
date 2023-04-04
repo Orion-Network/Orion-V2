@@ -2,6 +2,8 @@ package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.world.EnumHand;
+import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityInsentient;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -22,6 +25,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.utils.Stats;
+import orion.mmorpg.utils.Utils;
 
 import java.util.EnumSet;
 
@@ -55,6 +59,13 @@ public abstract class AbstractPet extends AbstractEntityBase {
     }
 
     @Override
+    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
+        //Play particle
+        ((Player) entityhuman.getBukkitEntity()).spawnParticle(Particle.VILLAGER_HAPPY, this.getBukkitEntity().getLocation(), 5, 0.5, 0.5, 0.5, 0.5);
+        return super.b(entityhuman, enumhand);
+    }
+
+    @Override
     public void tick() {
         if(!owner.isOnline())
             this.setRemoved(RemovalReason.a);
@@ -79,8 +90,9 @@ public abstract class AbstractPet extends AbstractEntityBase {
         return pet;
     }
 
-    private class PathfinderGoalPet extends PathfinderGoal {
-        private EntityInsentient petEntity;
+    //Make so the pet don't go in the player
+    private static class PathfinderGoalPet extends PathfinderGoal {
+        private final EntityInsentient petEntity;
         private EntityLiving owner;
 
         private final double speed;

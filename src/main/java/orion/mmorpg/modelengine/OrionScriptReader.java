@@ -19,7 +19,7 @@ public class OrionScriptReader implements ScriptReader {
     HashMap<String, Skill> scriptMap = new HashMap<>();
 
     public OrionScriptReader() {
-        scriptMap.put("test", new Skill() {
+        scriptMap.put("attack", new Skill() {
             @Override
             public void accept(IAnimationProperty property, HashMap<String, String> args) {
                 double damage = Double.parseDouble(args.get("damage"));

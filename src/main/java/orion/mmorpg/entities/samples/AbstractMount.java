@@ -1,5 +1,9 @@
 package orion.mmorpg.entities.samples;
 
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.mount.MountControllerRegistry;
+import com.ticxo.modelengine.api.mount.MountManager;
+import com.ticxo.modelengine.api.mount.controller.walking.WalkingMountController;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -13,9 +17,8 @@ import org.bukkit.entity.Player;
 import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.utils.Stats;
 
+//TODO See if mounts are compatible with custom models
 public abstract class AbstractMount extends AbstractEntityBase {
-
-
     double forwardMultiplier = 0.2, strafeMultiplier = 0.3, jumpForce = 0.5;
     final Player owner;
     final MountType type;
@@ -46,10 +49,16 @@ public abstract class AbstractMount extends AbstractEntityBase {
         return super.damageEntity(damagesource, f);
     }
 
+    //TODO handle dismount of modeled entity to prevent glitching
     @Override
     public void spawn() {
-        ((CraftPlayer) owner).getHandle().startRiding(this);
         super.spawn();
+        if(this instanceof Modeled) {
+            WalkingMountController controller = (WalkingMountController) ModelEngineAPI.getControllerRegistry().get("");
+            ((Modeled) this).getModeledEntity().getMountManager().setDriver(getOwner(), controller);
+        } else {
+            ((CraftPlayer) owner).getHandle().startRiding(this);
+        }
     }
 
     public double getForwardMultiplier() {
@@ -74,6 +83,10 @@ public abstract class AbstractMount extends AbstractEntityBase {
 
     public void setJumpForce(double jumpForce) {
         this.jumpForce = jumpForce;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     public MountType getType() {
