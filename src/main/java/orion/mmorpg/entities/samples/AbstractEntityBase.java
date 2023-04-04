@@ -91,6 +91,9 @@ public abstract class AbstractEntityBase extends EntityCreature {
 
     public void spawn() {
         ((CraftWorld)this.getSpawnLocation().getWorld()).getHandle().addEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
+
+        if(this instanceof Modeled)
+            ((Modeled) this).spawnModel();
     };
 
     public String getUuid() {

@@ -5,9 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.entities.mounts.FlyingFish;
+import orion.mmorpg.entities.mounts.Chief;
 import orion.mmorpg.entities.mounts.TestWolf;
 import orion.mmorpg.entities.samples.AbstractMount;
-import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.utils.Rarity;
 
@@ -18,7 +18,8 @@ import java.util.UUID;
 public enum Mounts {
 
     TEST_WOLF(TestWolf.class),
-    FLYING_FISH(FlyingFish.class)
+    FLYING_FISH(FlyingFish.class),
+    CHIEF(Chief.class)
     ;
 
     Class<? extends AbstractMount> mountClass;

@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import net.minecraft.world.entity.Entity;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.plugin.Plugin;
@@ -55,7 +56,10 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
                 Location location = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("location"), Location.class);
                 AbstractMob abstractMob = (AbstractMob) clazz.getDeclaredConstructors()[0].newInstance(document.getString("uuid"), location);
                 mobs.put(abstractMob.getUuid(), (T) abstractMob);
-                abstractMob.respawn(abstractMob.getUuid(), abstractMob.getSpawnLocation(), mmorpg.getChunkManager());
+
+                Bukkit.getScheduler().runTaskLater(mmorpg, () -> {
+                    abstractMob.respawn(abstractMob.getUuid(), abstractMob.getSpawnLocation(), mmorpg.getChunkManager());
+                }, 20);
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();

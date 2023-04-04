@@ -35,6 +35,8 @@ public class Invocator extends AbstractBoss {
     }
 
     PathfinderGoalSummon pathfinderGoalSummon;
+    //bP = goalSelector
+    //bQ = targetSelector
     @Override
     protected void generatePathfinder() {
          pathfinderGoalSummon = new PathfinderGoalSummon(this,

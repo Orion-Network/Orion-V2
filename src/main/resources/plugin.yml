@@ -7,6 +7,7 @@ description: A MMORPG Plugin for Orion Network
 libraries:
   - com.github.stefvanschie.inventoryframework:IF:0.10.0
 depend: [WorldGuard, WorldGuardEvents, LuckPerms]
+softdepend: [MythicMobs, ModelEngine]
 commands:
   data:
     permission: "orion.data.use"

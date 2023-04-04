@@ -5,6 +5,9 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import orion.mmorpg.config.AssociationConfig;
@@ -18,6 +21,8 @@ import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
+import orion.mmorpg.modelengine.OrionScriptReader;
+import orion.mmorpg.mythicsmob.MythicMobListener;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.OrionGson;
@@ -43,7 +48,10 @@ public final class Mmorpg extends JavaPlugin {
 
     GuildManager guildManager;
     PartyManager partyManager;
-    MobManager mobManager;
+    private MobManager mobManager;
+    private MythicMob mythicMob;
+    ModelEngineAPI modelEngineAPI;
+
     ChunkManager chunkManager;
 
     public static boolean isDebug() {
@@ -72,7 +80,7 @@ public final class Mmorpg extends JavaPlugin {
             }
         }
 
-        transferResourcesToPluginFolder();
+        //transferResourcesToPluginFolder();
     }
 
     @Override
@@ -91,6 +99,9 @@ public final class Mmorpg extends JavaPlugin {
 
         AssociationConfig.setup(this);
 
+        PluginManager pm = Bukkit.getPluginManager();
+        luckPerms = LuckPermsProvider.get();
+
         mongoClient = new Client(this);
 
         playerManager = new PlayerManager(this);
@@ -98,10 +109,24 @@ public final class Mmorpg extends JavaPlugin {
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
-        mobManager = new MobManager(this);
 
-        PluginManager pm = Bukkit.getPluginManager();
-        luckPerms = LuckPermsProvider.get();
+        if(Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
+            mobManager = new MobManager(this);
+            Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
+            getLogger().log(Level.INFO, "MythicMobs is not installed, enabling MobManager");
+        } else {
+            mythicMob = MythicBukkit.inst().getMobManager().getMythicMob("OrionMob").orElse(null);
+            pm.registerEvents(new MythicMobListener(this), this);
+            getLogger().log(Level.WARNING, "MythicMobs is installed, disabling MobManager");
+        }
+
+        if(Bukkit.getPluginManager().getPlugin("ModelEngine") == null) {
+            getLogger().log(Level.WARNING, "ModelEngine is not installed, disabling ModelEngineAPI");
+        } else {
+            modelEngineAPI = ModelEngineAPI.api;
+            ModelEngineAPI.getScriptReaderRegistry().register("orion", new OrionScriptReader());
+            getLogger().log(Level.INFO, "ModelEngine is installed, enabling ModelEngineAPI");
+        }
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
@@ -118,7 +143,6 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("item")).setExecutor(new ItemCommand());
         Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
-        Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
         Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
         Objects.requireNonNull(getCommand("pet")).setExecutor(new PetCommand(this));
         Objects.requireNonNull(getCommand("mount")).setExecutor(new MountCommand(this));
@@ -143,8 +167,10 @@ public final class Mmorpg extends JavaPlugin {
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
         }
-        mobManager.loadMobs();
-        Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
+        if(mobManager != null) {
+            mobManager.loadMobs();
+            Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
+        }
 
         setGameState(GameState.RUNNING);
     }
@@ -160,8 +186,8 @@ public final class Mmorpg extends JavaPlugin {
             getMongoClient().savePlayer(p);
             getPlayerManager().getPlayersMap().remove(p.getUniqueId());
         }
-
-        getMobManager().despawnMobs();
+        if(mobManager != null)
+            getMobManager().despawnMobs();
     }
 
     private void transferResourcesToPluginFolder() {
@@ -224,5 +250,13 @@ public final class Mmorpg extends JavaPlugin {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public MythicMob getMythicMob() {
+        return mythicMob;
+    }
+
+    public ModelEngineAPI getModelEngineAPI() {
+        return modelEngineAPI;
     }
 }
