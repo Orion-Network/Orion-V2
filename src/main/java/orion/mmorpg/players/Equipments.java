@@ -5,6 +5,8 @@ import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.util.Consumer;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.utils.Stats;
@@ -85,7 +87,9 @@ public class Equipments {
         }
         return null;
     }
+    private final Consumer<InventoryClickEvent> removeEquipment = event -> {
 
+    };
     public StaticPane getEquipmentPane(Gui gui) {
         StaticPane pane = new StaticPane(0,0,3,4);
 

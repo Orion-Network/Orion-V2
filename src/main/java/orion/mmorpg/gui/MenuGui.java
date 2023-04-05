@@ -233,9 +233,6 @@ public class MenuGui extends ChestGui {
         armorPane.setOnClick(e -> {
             if (e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getType() != Material.CARROT_ON_A_STICK) {
                 ItemStack item = e.getCurrentItem();
-                PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-                if(ItemList.getItemFromItemstack(e.getCurrentItem()) == null || !ItemList.getItemFromItemstack(e.getCurrentItem()).getITEM_TYPE().equals(ItemType.ARMOR))
-                    return;
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
                     return;
                 BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());
@@ -301,6 +298,7 @@ public class MenuGui extends ChestGui {
                 orionPlayer.updateHealthbar();
             }
         });
+
         armorPane.addItem(new GuiItem((orionPlayer.getPet() == null ? ItemList.PET_PLACEHOLDER.generateItemStack(1) : orionPlayer.getPet().getPet().generateItemStack()), e -> {
             if (e.getClick() == ClickType.LEFT)
                 new PetGui(p, orionPlayer).show(p);
@@ -326,6 +324,7 @@ public class MenuGui extends ChestGui {
             }
             e.setCancelled(true);
         }), 2, 3);
+
         this.update();
         return armorPane;
     }
