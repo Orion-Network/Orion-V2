@@ -27,6 +27,8 @@ public final class Namespaces {
             health = NamespacedKey.fromString("health", plugin),
             guild_name = NamespacedKey.fromString("guild_name", plugin),
 
-            mark_location = NamespacedKey.fromString("mark_location", plugin)
+            mark_location = NamespacedKey.fromString("mark_location", plugin),
+            tool_type = NamespacedKey.fromString("tool_type", plugin),
+            tool_power = NamespacedKey.fromString("tool_power", plugin)
             ;
 }

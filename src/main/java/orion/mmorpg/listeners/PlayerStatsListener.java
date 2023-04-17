@@ -28,6 +28,8 @@ import orion.mmorpg.items.sample.BasicRangedWeapon;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.players.jobs.JobType;
+import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Stats;
@@ -56,7 +58,7 @@ public class PlayerStatsListener implements Listener {
         if(event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if(event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
                 event.setCancelled(true);
-                orionPlayer.getJobs().getSmithing().getUpgradeGui().show(event.getPlayer());
+                ((Smithing)orionPlayer.getJobs().getJob(JobType.SMITHING)).getUpgradeGui().show(event.getPlayer());
             }
         }
     }

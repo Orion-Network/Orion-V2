@@ -7,26 +7,31 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Mobs;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractMob;
+import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Stats;
+import orion.mmorpg.world.Ressource;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -43,6 +48,7 @@ public class Client {
     public MongoCollection<Document> playerCollection;
     public MongoCollection<Document> mobCollection;
     public MongoCollection<Document> jobsCollection;
+    public MongoCollection<Document> ressourceCollection;
 
     public Client(Mmorpg mmorpg) {
         uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@"+mmorpg.getConfig().getString("mongo.auth")+"/?authSource=admin";
@@ -51,6 +57,7 @@ public class Client {
         playerCollection = orionDatabase.getCollection("players");
         mobCollection = orionDatabase.getCollection("mobs");
         jobsCollection = orionDatabase.getCollection("jobs");
+        ressourceCollection = orionDatabase.getCollection("ressources");
     }
 
     public boolean hasPlayer(UUID uuid) {
@@ -216,6 +223,45 @@ public class Client {
         String uuidMob = doc.getString("uuid");
 
         return mobClass.getConstructor(String.class, Location.class).newInstance(uuidMob, location);
+    }
+
+    public void saveRessource(Ressource ressource) {
+        Document document = new Document();
+
+        document.put("location", Mmorpg.getOrionGson().GSON.toJson(ressource.getLocation()));
+        document.put("material", ressource.getMaterial().name());
+        document.put("respawnTime", ressource.getRespawnTime());
+        document.put("jobType", ressource.getJobType().name());
+        document.put("jobLevel", ressource.getJobLevel());
+        document.put("toolType", ressource.getToolType().name());
+        document.put("toolPower", ressource.getToolPower());
+        document.put("drop", Mmorpg.getOrionGson().GSON.toJson(ressource.getDrop()));
+
+        ressourceCollection.insertOne(document);
+    }
+
+    public void saveRessources() {
+        ressourceCollection.deleteMany(new Document());
+        Mmorpg.INSTANCE.getRessourceManager().getRessources().forEach((location, ressource) -> saveRessource(ressource));
+    }
+
+    public HashMap<Location, Ressource> loadRessources() {
+        HashMap<Location, Ressource> ressources = new HashMap<>();
+
+        ressourceCollection.find().forEach((Consumer<? super Document>) document -> {
+            Location location = Mmorpg.getOrionGson().GSON.fromJson(document.getString("location"), Location.class);
+            Material material = Material.valueOf(document.getString("material"));
+            long respawnTime = document.getLong("respawnTime");
+            JobType jobType = JobType.valueOf(document.getString("jobType"));
+            int jobLevel = document.getInteger("jobLevel");
+            ToolType toolType = ToolType.valueOf(document.getString("toolType"));
+            int toolPower = document.getInteger("toolPower");
+            ItemStack drop = Mmorpg.getOrionGson().GSON.fromJson(document.getString("drop"), ItemStack.class);
+
+            ressources.put(location, new Ressource(location, material, respawnTime, jobType, jobLevel, toolType, toolPower, drop));
+        });
+
+        return ressources;
     }
 
     public MongoCollection<Document> getMobCollection() {

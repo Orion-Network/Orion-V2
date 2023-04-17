@@ -9,9 +9,12 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
+import orion.mmorpg.players.jobs.AbstractJob;
+import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.jobs.Smithing;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -196,17 +199,30 @@ public class OrionGson {
         @Override
         public Jobs deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject object = jsonElement.getAsJsonObject();
-            JsonObject smitingObject = object.getAsJsonObject("smiting");
-            return new Jobs(new Smithing(smitingObject.get("level").getAsInt(), smitingObject.get("experience").getAsInt()));
+            Jobs jobs = new Jobs();
+            object.entrySet().forEach(entry -> {
+                JsonObject jobObject = entry.getValue().getAsJsonObject();
+                JobType jobType = JobType.valueOf(entry.getKey().toUpperCase());
+                try {
+                    AbstractJob job = jobType.getJobClass().getDeclaredConstructor(int.class, int.class).newInstance(jobObject.get("level").getAsInt(), jobObject.get("experience").getAsInt());
+                    jobs.addJob(job);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            return jobs;
         }
 
         @Override
         public JsonElement serialize(Jobs jobs, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
-            JsonObject smitingObject = new JsonObject();
-            smitingObject.addProperty("level", jobs.getSmithing().getLevel());
-            smitingObject.addProperty("experience", jobs.getSmithing().getExperience());
-            object.add("smiting", smitingObject);
+            jobs.getJobs().forEach((job, jobData) -> {
+                JsonObject jobObject = new JsonObject();
+                jobObject.addProperty("level", jobData.getLevel());
+                jobObject.addProperty("experience", jobData.getExperience());
+                object.add(job.name().toLowerCase(), jobObject);
+            });
             return object;
         }
     }

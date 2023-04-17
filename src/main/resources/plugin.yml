@@ -36,3 +36,6 @@ commands:
   mount:
     permission: "orion.mount.use"
     description: "Mount Command"
+  ressource:
+    permission: "orion.ressource.use"
+    description: "Ressource Command"

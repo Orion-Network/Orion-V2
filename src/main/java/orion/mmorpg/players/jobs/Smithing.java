@@ -21,8 +21,12 @@ import orion.mmorpg.utils.Utils;
 
 public class Smithing extends AbstractJob {
 
+    public Smithing() {
+        super(JobType.SMITHING);
+    }
+
     public Smithing(int experience, int level) {
-        super(experience, level);
+        super(JobType.SMITHING, experience, level);
     }
 
     public ChestGui getGui() {
