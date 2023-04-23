@@ -6,10 +6,9 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import lombok.Getter;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -17,8 +16,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Utils {
     /**
@@ -138,5 +140,48 @@ public class Utils {
 
     public static String itemDisplayName(ItemStack item) {
         return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(item.getType().name().replaceAll("_"," ")));
+    }
+
+    public static List<String> enumAutocomplete(String input, Class<? extends Enum> enumClass) {
+        return Arrays.stream(enumClass.getEnumConstants())
+                .map(Enum::name)
+                .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public static class ChunkCoords {
+        @Getter
+        private final int x;
+        @Getter
+        private final int z;
+        @Getter
+        private final World world;
+
+        public ChunkCoords(Chunk chunk) {
+            this.x = chunk.getX();
+            this.z = chunk.getZ();
+            this.world = chunk.getWorld();
+        }
+
+        public ChunkCoords(int x, int z, World world) {
+            this.x = x;
+            this.z = z;
+            this.world = world;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChunkCoords that = (ChunkCoords) o;
+            return x == that.x &&
+                    z == that.z &&
+                    world.equals(that.world);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, z, world);
+        }
     }
 }

@@ -1,0 +1,69 @@
+package orion.mmorpg.items.sample;
+
+import lombok.Getter;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.items.ItemType;
+import orion.mmorpg.items.tools.ToolType;
+import orion.mmorpg.utils.Namespaces;
+import orion.mmorpg.utils.Rarity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BasicTool extends BasicItem {
+    @Getter
+    ToolType toolType;
+    @Getter
+    int toolPower;
+
+    public BasicTool(ItemStack item) {
+        super(item);
+        this.toolType = ToolType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.tool_type, PersistentDataType.STRING));
+        this.toolPower = item.getItemMeta().getPersistentDataContainer().get(Namespaces.tool_power, PersistentDataType.INTEGER);
+    }
+
+    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ToolType toolType, int toolPower) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
+        this.toolType = toolType;
+        this.toolPower = toolPower;
+    }
+
+    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, ToolType toolType, int toolPower) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE);
+        this.toolType = toolType;
+        this.toolPower = toolPower;
+    }
+
+    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, String PERMISSION, ToolType toolType, int toolPower) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE, PERMISSION);
+        this.toolType = toolType;
+        this.toolPower = toolPower;
+    }
+
+    @Override
+    public ItemStack generateItem(ItemStack item, int amount) {
+
+        if (item == null)
+            item = new ItemStack(MATERIAL);
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(Namespaces.tool_type, PersistentDataType.STRING, toolType.name());
+        meta.getPersistentDataContainer().set(Namespaces.tool_power, PersistentDataType.INTEGER, toolPower);
+        item.setItemMeta(meta);
+
+        return super.generateItem(item, amount);
+    }
+
+    @Override
+    public List<String> generateLore(List<String> lore) {
+        if (lore == null)
+            lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "Puissance : " + ChatColor.RED + toolPower);
+        lore.add(ChatColor.GRAY + "Type : " + ChatColor.RED + toolType.name());
+
+        return super.generateLore(lore);
+    }
+}

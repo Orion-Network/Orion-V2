@@ -6,5 +6,6 @@ public enum ItemType {
     MELEE_WEAPON,
     BOW,
     ARMOR,
+    TOOL,
     PLACEHOLDER
 }

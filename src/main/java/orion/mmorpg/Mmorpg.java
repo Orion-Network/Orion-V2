@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import orion.mmorpg.config.AssociationConfig;
@@ -53,6 +54,9 @@ public final class Mmorpg extends JavaPlugin {
     ModelEngineAPI modelEngineAPI;
 
     ChunkManager chunkManager;
+
+    @Getter
+    RessourceManager ressourceManager;
 
     public static boolean isDebug() {
         return debug;
@@ -109,6 +113,7 @@ public final class Mmorpg extends JavaPlugin {
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
+        ressourceManager = new RessourceManager(this);
 
         if(Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             mobManager = new MobManager(this);
@@ -137,6 +142,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
         pm.registerEvents(new SpellListener(), this);
+        pm.registerEvents(new WorldListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
@@ -146,6 +152,7 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
         Objects.requireNonNull(getCommand("pet")).setExecutor(new PetCommand(this));
         Objects.requireNonNull(getCommand("mount")).setExecutor(new MountCommand(this));
+        Objects.requireNonNull(getCommand("ressource")).setExecutor(new RessourceCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {

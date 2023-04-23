@@ -12,6 +12,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
+import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Stats;
 
@@ -52,7 +53,8 @@ public class DataCommand implements TabExecutor {
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
                     builder.append("\n" + data.getKnownSpells().keySet() + "\n");
-                    builder.append("\n" + "Smithing : " + data.getJobs().getSmithing().getLevel() + " " + data.getJobs().getSmithing().getExperience());
+                    builder.append("\n" + "Smithing : " + data.getJobs().getJob(JobType.SMITHING).getLevel() + " " + data.getJobs().getJob(JobType.SMITHING).getExperience());
+                    builder.append("\n" + "Mining : " + data.getJobs().getJob(JobType.MINING).getLevel() + " " + data.getJobs().getJob(JobType.MINING).getExperience());
                     for (Support s : data.getSupportMap().keySet())
                         builder.append(s.getName());
                     sender.sendMessage(builder.toString());

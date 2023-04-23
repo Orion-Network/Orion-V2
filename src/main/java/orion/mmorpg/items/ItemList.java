@@ -1,5 +1,6 @@
 package orion.mmorpg.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -13,7 +14,10 @@ import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.misc.drops.NordicWolfBone;
 import orion.mmorpg.items.misc.drops.NordicWolfFur;
 import orion.mmorpg.items.misc.reforge.StrongStone;
+import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.tools.MinerPickaxe;
+import orion.mmorpg.items.tools.Picky;
 import orion.mmorpg.items.weapons.*;
 import orion.mmorpg.items.weapons.arrows.CommonArrow;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
@@ -97,6 +101,7 @@ public enum ItemList {
     THIRD_SPECIAL_PLACEHOLDER(SpecialPlaceholder.ThirdSpecialPlaceholder.class),
     RING_PLACEHOLDER(RingPlaceholder.class),
     BELT_PLACEHOLDER(BeltPlaceholder.class),
+    JOB_PLACEHOLDER(JobPlaceholder.class),
     //MISC
     GIFT(Gift.class),
     GRIMORY(GrimoryItem.class),
@@ -114,7 +119,13 @@ public enum ItemList {
     NORDIC_WOLF_FUR(NordicWolfFur.class),
     NORDIC_WOLF_BONE(NordicWolfBone.class),
     //REFORGES
-    STRONG_STONE(StrongStone.class)
+    STRONG_STONE(StrongStone.class),
+    //TOOLS
+    MINER_PICKAXE(MinerPickaxe.class),
+    PICKY(Picky.class),
+
+    //RESSOURCES
+    BRONZE_INGOT(BronzeIngot.class),
     ;
 
     Class<?> itemClass;
@@ -127,7 +138,7 @@ public enum ItemList {
         PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
         if(container.has(Namespaces.internal_id, PersistentDataType.STRING) && EnumUtils.isValidEnum(ItemList.class,container.get(Namespaces.internal_id, PersistentDataType.STRING) )) {
             try {
-                return (BasicItem) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().getConstructor(ItemStack.class).newInstance(itemStack);
+                return (BasicItem) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().getDeclaredConstructor(ItemStack.class).newInstance(itemStack);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
             }
