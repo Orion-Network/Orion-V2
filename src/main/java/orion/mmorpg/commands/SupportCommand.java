@@ -10,6 +10,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.abilities.SupportList;
+import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -41,12 +42,6 @@ public class SupportCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        List<String> tab = new ArrayList<>();
-        for(SupportList supportList : SupportList.values()) {
-            if(supportList.getSupport().getName().startsWith(strings[0].toUpperCase())) {
-                tab.add(supportList.getSupport().getSimpleName());
-            }
-        }
-        return tab;
+        return Utils.enumAutocomplete(strings[0], SupportList.class);
     }
 }
