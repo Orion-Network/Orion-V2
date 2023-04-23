@@ -1,5 +1,6 @@
 package orion.mmorpg.commands;
 
+import jdk.jshell.execution.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -87,38 +88,19 @@ public class ItemCommand implements TabExecutor {
                 return tab;
             }
             if (args[2].equalsIgnoreCase("master_scroll") || args[2].equalsIgnoreCase("spell_scroll")) {
-                for (SpellList spell : SpellList.values())
-                    if (spell.name().startsWith(args[args.length - 1].toUpperCase()))
-                        tab.add(spell.name());
-                return tab;
+                return Utils.enumAutocomplete(args[args.length - 1], SpellList.class);
             }
 
             if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                for(SupportList support : SupportList.values())
-                    if(support.name().startsWith(args[args.length -1].toUpperCase()))
-                        tab.add(support.name());
-                return tab;
+                return Utils.enumAutocomplete(args[args.length - 1], SupportList.class);
             }
-
-            for (ItemList item : ItemList.values())
-                if (item.name().startsWith(args[args.length - 1].toUpperCase()))
-                    tab.add(item.name());
-
-            return tab;
+            return Utils.enumAutocomplete(args[args.length - 1], ItemList.class);
 
         } else if (args[0].equalsIgnoreCase("drop")) {
             if (args[1].equalsIgnoreCase("gift")) {
-                for (ItemList item : ItemList.values())
-                    if (item.name().startsWith(args[args.length - 1].toUpperCase()))
-                        tab.add(item.name());
-
-                return tab;
+                return Utils.enumAutocomplete(args[args.length - 1], ItemList.class);
             }
-            for (ItemList item : ItemList.values())
-                if (item.name().startsWith(args[args.length - 1].toUpperCase()))
-                    tab.add(item.name());
-
-            return tab;
+            return Utils.enumAutocomplete(args[args.length - 1], ItemList.class);
         }
         return Arrays.asList("give", "drop");
     }
