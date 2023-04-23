@@ -14,6 +14,7 @@ import orion.mmorpg.entities.Mobs;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractMob;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
@@ -24,6 +25,7 @@ import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Infos;
 import orion.mmorpg.utils.Knowledge;
+import orion.mmorpg.utils.OrionGson;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.world.Ressource;
 
@@ -228,37 +230,38 @@ public class Client {
     public void saveRessource(Ressource ressource) {
         Document document = new Document();
 
-        document.put("location", Mmorpg.getOrionGson().GSON.toJson(ressource.getLocation()));
+        document.put("location", OrionGson.GSON.toJson(ressource.getLocation()));
         document.put("material", ressource.getMaterial().name());
         document.put("respawnTime", ressource.getRespawnTime());
         document.put("jobType", ressource.getJobType().name());
         document.put("jobLevel", ressource.getJobLevel());
         document.put("toolType", ressource.getToolType().name());
         document.put("toolPower", ressource.getToolPower());
-        document.put("drop", Mmorpg.getOrionGson().GSON.toJson(ressource.getDrop()));
+        document.put("jobExp", ressource.getJobExp());
+        document.put("drop", OrionGson.GSON.toJson(ressource.getDrop(), ItemStack.class));
 
         ressourceCollection.insertOne(document);
     }
 
-    public void saveRessources() {
-        ressourceCollection.deleteMany(new Document());
-        Mmorpg.INSTANCE.getRessourceManager().getRessources().forEach((location, ressource) -> saveRessource(ressource));
+    public void deleteRessource(Ressource ressource) {
+        ressourceCollection.deleteOne(eq("location", OrionGson.GSON.toJson(ressource.getLocation())));
     }
 
     public HashMap<Location, Ressource> loadRessources() {
         HashMap<Location, Ressource> ressources = new HashMap<>();
 
         ressourceCollection.find().forEach((Consumer<? super Document>) document -> {
-            Location location = Mmorpg.getOrionGson().GSON.fromJson(document.getString("location"), Location.class);
+            Location location = OrionGson.GSON.fromJson(document.getString("location"), Location.class);
             Material material = Material.valueOf(document.getString("material"));
             long respawnTime = document.getLong("respawnTime");
             JobType jobType = JobType.valueOf(document.getString("jobType"));
             int jobLevel = document.getInteger("jobLevel");
             ToolType toolType = ToolType.valueOf(document.getString("toolType"));
             int toolPower = document.getInteger("toolPower");
-            ItemStack drop = Mmorpg.getOrionGson().GSON.fromJson(document.getString("drop"), ItemStack.class);
+            int jobExp = document.getInteger("jobExp");
+            ItemStack drop = OrionGson.GSON.fromJson(document.getString("drop"), ItemStack.class);
 
-            ressources.put(location, new Ressource(location, material, respawnTime, jobType, jobLevel, toolType, toolPower, drop));
+            ressources.put(location, new Ressource(location, material, respawnTime, jobType, jobLevel, toolType, toolPower, jobExp, drop));
         });
 
         return ressources;

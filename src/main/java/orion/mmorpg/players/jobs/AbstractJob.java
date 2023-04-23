@@ -1,6 +1,7 @@
 package orion.mmorpg.players.jobs;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 public abstract class AbstractJob {
 
@@ -23,7 +24,7 @@ public abstract class AbstractJob {
 
     public final void addExp(int experience) {
         this.experience += experience;
-        if(experience >= neededExperienceToLevelup()) {
+        if(this.experience >= neededExperienceToLevelup()) {
             this.experience = 0;
             this.level += 1;
         }

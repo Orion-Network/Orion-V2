@@ -25,11 +25,13 @@ public class Ressource {
     @Getter
     int toolPower;
     @Getter
+    int jobExp;
+    @Getter
     ItemStack drop;
 
     @Getter @Setter boolean isSpawned = false;
 
-    public Ressource(Location location, Material  material, long respawnTime, JobType jobType, int jobLevel, ToolType toolType, int toolPower, ItemStack drop) {
+    public Ressource(Location location, Material  material, long respawnTime, JobType jobType, int jobLevel, ToolType toolType, int toolPower, int jobExp, ItemStack drop) {
         this.location = location;
         this.material = material;
         this.respawnTime = respawnTime;
@@ -37,6 +39,7 @@ public class Ressource {
         this.jobLevel = jobLevel;
         this.toolType = toolType;
         this.toolPower = toolPower;
+        this.jobExp = jobExp;
         this.drop = drop;
     }
 

@@ -43,14 +43,13 @@ public class WorldListener implements Listener {
 
     @EventHandler
     public void onPlayerBreakRessource(BreakingRessourceEvent event) {
-        Bukkit.broadcastMessage("Ressource broken");
         if(!event.getRessource().getToolType().equals(event.getTool().getToolType())) {
             Utils.sendErrorMessage(event.getPlayer(), "Vous ne pouvez pas casser cette ressource avec cet outil");
         } else if(event.getTool().getToolPower() < event.getRessource().getToolPower()) {
             Utils.sendErrorMessage(event.getPlayer(), "Vous n'avez pas assez de puissance pour casser cette ressource");
         } else if(event.getOrionPlayer().getJobs().getJob(event.getRessource().getJobType()).getLevel() < event.getRessource().getJobLevel()) {
           Utils.sendInfoMessage(event.getPlayer(), "Vous n'avez pas le niveau requis pour casser cette ressource");
-        } else if(plugin.getRessourceManager().breakRessource(event.getRessource().getLocation())) {
+        } else if(plugin.getRessourceManager().breakRessource(event.getOrionPlayer(), event.getRessource().getLocation())) {
             event.getPlayer().getInventory().addItem(event.getRessource().getDrop());
             event.getRessource().getLocation().getBlock().setType(Material.AIR);
             Utils.sendInfoMessage(event.getPlayer(), "Vous avez cassé la ressource");

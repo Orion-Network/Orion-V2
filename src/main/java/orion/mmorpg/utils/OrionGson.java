@@ -30,7 +30,9 @@ public class OrionGson {
                 .registerSubtype(BasicConsumableItem.class, "Consumable")
                 .registerSubtype(BasicMagicWeapon.class, "MagicWeapon")
                 .registerSubtype(BasicMeleeWeapon.class, "MeleeWeapon")
-                .registerSubtype(BasicRangedWeapon.class, "RangedWeapon");
+                .registerSubtype(BasicRangedWeapon.class, "RangedWeapon")
+
+                ;
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());

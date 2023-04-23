@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.sample.BasicArmorItem;
@@ -231,6 +232,7 @@ public class MenuGui extends ChestGui {
                 armorPane.addItem(new GuiItem(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING).generateItem(null, 1)), 0, 2);
         }
         armorPane.setOnClick(e -> {
+            //TODO Crash when clicking on pet
             if (e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getType() != Material.CARROT_ON_A_STICK) {
                 ItemStack item = e.getCurrentItem();
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
@@ -342,7 +344,8 @@ public class MenuGui extends ChestGui {
         head.setItemMeta(headMeta);
 
         menuPane.addItem(new GuiItem(head, e->new StatsGui(p, orionPlayer).show(p)), 2, 0);
-        if (p.hasPermission("*")) {
+        menuPane.addItem(new GuiItem(ItemList.JOB_PLACEHOLDER.generateItemStack(1), e->new JobGui(p, orionPlayer).show(p)), 3, 0);
+        /*if (p.hasPermission("*")) {
             menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
                 if (orionPlayer.getPlayerMode() == Mode.PLAYER)
                     if (p.hasPermission("builder"))
@@ -358,10 +361,10 @@ public class MenuGui extends ChestGui {
                     orionPlayer.setPlayerMode(Mode.PLAYER);
                 Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode());
             }), 3, 0);
-        }
+        }*/
 
         //TODO Add item to open the party gui
-        menuPane.addItem(new GuiItem(ItemList.TBI_PLACEHOLDER.generateItemStack(1), e-> {
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Créer une équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
             if(orionPlayer.getParty() != null)
                 new PartyGui( p, orionPlayer).show(p);
             else

@@ -195,8 +195,6 @@ public final class Mmorpg extends JavaPlugin {
         }
         if(mobManager != null)
             getMobManager().despawnMobs();
-
-        getMongoClient().saveRessources();
     }
 
     private void transferResourcesToPluginFolder() {

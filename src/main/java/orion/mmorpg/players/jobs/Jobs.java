@@ -33,6 +33,7 @@ public class Jobs {
     }
 
     public void addJob(AbstractJob job) {
-        jobs.put(job.getJobType(), job);
+        if(!jobs.containsKey(job.getJobType()))
+            jobs.put(job.getJobType(), job);
     }
 }

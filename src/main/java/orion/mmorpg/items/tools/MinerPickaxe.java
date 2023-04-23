@@ -6,11 +6,6 @@ import orion.mmorpg.items.sample.BasicTool;
 import orion.mmorpg.utils.Rarity;
 
 public class MinerPickaxe extends BasicTool {
-
-    public MinerPickaxe(ItemStack item) {
-        super(item);
-    }
-
     public MinerPickaxe() {
         super(Material.IRON_PICKAXE, "Pioche du mineur", "MINER_PICKAXE", 0, null, Rarity.UNCOMMON, ToolType.PICKAXE, 1);
     }
