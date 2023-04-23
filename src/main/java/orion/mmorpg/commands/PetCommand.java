@@ -12,6 +12,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -76,21 +77,12 @@ public class PetCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(args.length == 1)
-            return List.of("spawn", "list", "tame");
         if(args.length > 1) {
-            if(args[1].equalsIgnoreCase("spawn")) {
-                List<String> list = new ArrayList<>();
-                for(Pets pet : Pets.values())
-                    list.add(pet.name());
-                return list;
-            } else if(args[1].equalsIgnoreCase("tame")) {
-                List<String> list = new ArrayList<>();
-                for(Pets pet : Pets.values())
-                    list.add(pet.name());
-                return list;
-            }
+            if(args[0].equalsIgnoreCase("spawn"))
+                return Utils.enumAutocomplete(args[1], Pets.class);
+            else if(args[0].equalsIgnoreCase("tame"))
+                return Utils.enumAutocomplete(args[1], Pets.class);
         }
-        return null;
+        return List.of("spawn", "list", "tame");
     }
 }
