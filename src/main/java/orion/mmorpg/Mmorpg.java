@@ -11,6 +11,7 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.boss.BossBar;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -195,6 +196,7 @@ public final class Mmorpg extends JavaPlugin {
         }
         if(mobManager != null)
             getMobManager().despawnMobs();
+        Bukkit.getBossBars().forEachRemaining(BossBar::removeAll);
     }
 
     private void transferResourcesToPluginFolder() {

@@ -63,7 +63,7 @@ public class RessourceCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        List<String> list = List.of("add", "list");
+        List<String> list = List.of("add", "list", "remove");
         if(strings.length == 1) {
             return list;
         } else if(strings.length >= 2) {
