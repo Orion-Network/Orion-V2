@@ -15,6 +15,7 @@ import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -73,15 +74,9 @@ public class MountCommand implements TabExecutor {
             return List.of("spawn", "list", "tame");
         if(args.length == 2) {
             if(args[0].equalsIgnoreCase("spawn")) {
-                List<String> list = new ArrayList<>();
-                for(Mounts mount : Mounts.values())
-                    list.add(mount.name());
-                return list;
+                return Utils.enumAutocomplete(args[1], Mounts.class);
             } else if(args[0].equalsIgnoreCase("tame")) {
-                List<String> list = new ArrayList<>();
-                for(Mounts mount : Mounts.values())
-                    list.add(mount.name());
-                return list;
+                return Utils.enumAutocomplete(args[1], Mounts.class);
             }
         }
         return null;

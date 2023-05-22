@@ -6,6 +6,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -102,7 +103,7 @@ public class OrionPlayer {
 
         this.mana = (int) this.stats.getIntel();
 
-        initHealthBar();
+        this.initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -163,7 +164,7 @@ public class OrionPlayer {
         this.support = support;
         this.race = race;
 
-        initHealthBar();
+        this.initHealthBar();
         this.mobHealthBar.setProgress(1);
         this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.mobHealthBar.setVisible(false);
@@ -181,9 +182,17 @@ public class OrionPlayer {
     }
 
     public void initHealthBar() {
-        this.healthBar = Bukkit.createBossBar(Namespaces.health, "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        //Check if bossbar exist
+        Bukkit.getBossBars().forEachRemaining(bossbar -> {
+            if (bossbar.getKey().getKey().equals(uniqueId.toString())) {
+                this.healthBar = bossbar;
+            }
+        });
+        if(healthBar == null)
+            this.healthBar = Bukkit.createBossBar(NamespacedKey.fromString(uniqueId.toString(), Mmorpg.INSTANCE), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
-        this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
+        if(!this.healthBar.getPlayers().contains(Bukkit.getPlayer(uniqueId)))
+            this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
     }
 

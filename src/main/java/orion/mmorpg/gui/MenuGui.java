@@ -232,9 +232,10 @@ public class MenuGui extends ChestGui {
                 armorPane.addItem(new GuiItem(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING).generateItem(null, 1)), 0, 2);
         }
         armorPane.setOnClick(e -> {
-            //TODO Crash when clicking on pet
             if (e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getType() != Material.CARROT_ON_A_STICK) {
                 ItemStack item = e.getCurrentItem();
+                if(!(ItemList.getItemFromItemstack(item) instanceof BasicArmorItem))
+                    return;
                 if (!((BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem())).onUnequip(p, orionPlayer, item))
                     return;
                 BasicArmorItem armorItem = (BasicArmorItem) ItemList.getItemFromItemstack(e.getCurrentItem());

@@ -63,7 +63,7 @@ public class RessourceCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        List<String> list = List.of("add", "list");
+        List<String> list = List.of("add", "list", "remove");
         if(strings.length == 1) {
             return list;
         } else if(strings.length >= 2) {
@@ -71,17 +71,17 @@ public class RessourceCommand implements TabExecutor {
                 if(strings.length == 2)
                     return List.of("respawnTime");
                 else if(strings.length == 3)
-                    return Stream.of(JobType.values()).map(Enum::name).filter(name -> name.startsWith(strings[2].toUpperCase())).toList();
+                    return Utils.enumAutocomplete(strings[2], JobType.class);
                 else if(strings.length == 4)
                     return List.of("jobLevel");
                 else if(strings.length == 5)
-                    return Stream.of(ToolType.values()).map(Enum::name).filter(name -> name.startsWith(strings[4].toUpperCase())).toList();
+                    return Utils.enumAutocomplete(strings[4], ToolType.class);
                 else if(strings.length == 6)
                     return List.of("toolLevel");
                 else if(strings.length == 7)
                     return List.of("jobExp");
                 else if(strings.length == 8)
-                    return Stream.of(ItemList.values()).map(Enum::name).filter(name -> name.startsWith(strings[7].toUpperCase())).toList();
+                    return Utils.enumAutocomplete(strings[7], ItemList.class);
                 else if(strings.length == 9)
                     return List.of("amount");
             }

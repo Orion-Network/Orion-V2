@@ -86,13 +86,11 @@ public class MobCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        List<String> tab = new ArrayList<>();
-        if(strings.length == 2) {
-            for (Mobs mob : Mobs.values()) {
-                tab.add(mob.name());
-            }
-            return tab;
-        } else if(strings.length == 3) {
+        if(strings.length > 1) {
+            if(strings[0].equalsIgnoreCase("spawn"))
+                return Utils.enumAutocomplete(strings[1], Mobs.class);
+            else if(strings[0].equalsIgnoreCase("set"))
+                return Utils.enumAutocomplete(strings[1], Mobs.class);
 
         }
         return Arrays.asList("spawn", "list", "info", "spawnAll" , "removeAll", "set", "chunkMob", "chunks");
