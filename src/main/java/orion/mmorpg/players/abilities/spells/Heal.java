@@ -10,6 +10,7 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
+import orion.mmorpg.utils.Stats;
 
 public class Heal extends Spell {
     public Heal() {
@@ -28,7 +29,7 @@ public class Heal extends Spell {
             cylinderEffect.duration = 50;
             cylinderEffect.setLocation(location);
             cylinderEffect.start();
-            orionPlayer.heal(orionPlayer.getStats().getVitality() / 10);
+            orionPlayer.heal(orionPlayer.getStats().get(Stats.StatsInfo.VITALITY) / 10);
         }
     }
 }

@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static orion.mmorpg.utils.Stats.StatsInfo.*;
+
 public class Utils {
     /**
      * Send info message to entity with good formatting.
@@ -69,9 +71,9 @@ public class Utils {
      * @return Computed damages
      */
     public static float calculateDamage(Stats playerStats, float damage) {
-        float strength = playerStats.getStrength();
-        float critical_chance = playerStats.getCritical_chance();
-        float critical_damage = playerStats.getCritical_damage();
+        float strength = playerStats.get(STRENGTH);
+        float critical_chance = playerStats.get(CRITICAL_CHANCE);
+        float critical_damage = playerStats.get(CRITICAL_DAMAGE);
 
         float totalDamage = (5 + damage) * (1 + (strength / 100));
         Random r = new Random();
@@ -98,7 +100,7 @@ public class Utils {
      * @return Computed magic damages
      */
     public static float calculateMagicDamage(Stats playerStats, float damage) {
-        float intel = playerStats.getIntel();
+        float intel = playerStats.get(INTELLIGENCE);
 
         float totalDamage = (5 + damage) * (1 + (intel / 50));
         if (Mmorpg.isDebug())

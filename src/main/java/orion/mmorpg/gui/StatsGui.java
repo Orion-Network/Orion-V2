@@ -47,6 +47,7 @@ public class StatsGui extends ChestGui {
         head.setItemMeta(headMeta);
 
         pane.addItem(new GuiItem(head), 0, 0);
+        /*
         pane.addItem(new GuiItem(BasicItem.generateBasicItem(Material.PAPER, ChatColor.WHITE + "Informations" ,"", 0, Collections.singletonList(ChatColor.WHITE + "Vous avez : " + (orionPlayer.getStatsPoints() - orionPlayer.getSpentStatsPoint()) + " Points de stats"), Rarity.COMMON).generateItem(null, 1)), 1, 0);
 
         pane.addItem(new GuiItem(BasicItem.generateBasicItem(Material.DIAMOND_SWORD, "Strength", "", 1, Collections.singletonList("Vous avez : " + orionPlayer.getPointStats().getStrength() + " Points de force"), Rarity.COMMON).generateItem(null, 1), e -> {
@@ -94,6 +95,8 @@ public class StatsGui extends ChestGui {
                 Utils.sendErrorMessage(p, "You don't have any stat points!");
             }
         }), 8, 0);
+        */
+
         return pane;
     }
 

@@ -43,7 +43,6 @@ public class DataCommand implements TabExecutor {
                     builder.append(ChatColor.GRAY + "Mana : " + ChatColor.YELLOW + data.getMana() + "\n");
                     builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW + (data.getSupport() == null ? "Aucun" : data.getSupport().getName()) + "\n");
                     builder.append(ChatColor.GRAY + "Race : " + ChatColor.YELLOW + data.getRace().getName() + "\n");
-                    builder.append(ChatColor.GRAY + "Level : " + ChatColor.YELLOW + data.getLevel() + ChatColor.GRAY + ", Stats Point : " + ChatColor.YELLOW + data.getStatsPoints() + "\n");
                     for (String stat : data.getStats().statsAsLore())
                         builder.append(stat + "\n");
                     builder.append(data.getPortalStones() + "\n");

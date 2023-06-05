@@ -9,10 +9,7 @@ import java.util.function.Function;
 
 public enum ItemReforge {
     NONE("", BasicEquipmentItem.class, start -> start),
-    STRONG("Forte", BasicMeleeWeapon.class, (start) -> {
-        start.setStrength(start.getStrength()+5);
-        return start;
-    })
+    STRONG("Forte", BasicMeleeWeapon.class, (start) -> start)
     ;
 
     String title;

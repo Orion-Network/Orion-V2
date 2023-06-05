@@ -22,6 +22,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.sample.BasicEquipmentItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicMeleeWeapon;
 import orion.mmorpg.items.sample.BasicRangedWeapon;
@@ -53,7 +54,7 @@ public class PlayerStatsListener implements Listener {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         orionPlayer.onInteract(event);
         Player p = event.getPlayer();
-        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
+        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
 
         if(event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if(event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
@@ -69,7 +70,7 @@ public class PlayerStatsListener implements Listener {
         if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().getAttack_speed() / 20);
+            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
@@ -86,7 +87,7 @@ public class PlayerStatsListener implements Listener {
                         orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
                     } else {
                         OrionPlayer target = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
-                        orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage, target.getStats().getVitality(), e.getEntity().getName());
+                        orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage, target.getStats().get(Stats.StatsInfo.VITALITY), e.getEntity().getName());
                     }
                 }
             }
@@ -102,7 +103,7 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
             orionPlayer.onHitByEntity(e);
-            float reduction = Utils.calculateDamageReduction(orionPlayer.getStats().getDefence());
+            float reduction = Utils.calculateDamageReduction(orionPlayer.getStats().get(Stats.StatsInfo.DEFENCE));
             orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
 
             if (orionPlayer.getHealth() <= 0)
@@ -110,7 +111,7 @@ public class PlayerStatsListener implements Listener {
             else
                 orionPlayer.updateHealthbar();
 
-            Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction + " health : " + orionPlayer.getHealth() + " / " + orionPlayer.getStats().getVitality());
+            Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction + " health : " + orionPlayer.getHealth() + " / " + orionPlayer.getStats().get(Stats.StatsInfo.VITALITY));
             e.setDamage(0);
         }
     }
@@ -121,10 +122,8 @@ public class PlayerStatsListener implements Listener {
             Player p = (Player) e.getEntity();
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
-                Bukkit.broadcastMessage("1");
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
                 if (BasicRangedWeapon.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
-                    Bukkit.broadcastMessage("2");
                     BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
                     float arrowDamage = 1;
                     if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
@@ -167,14 +166,26 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        float speed = (200 + orionPlayer.getStats().getSpeed()) / Stats.StatsInfo.SPEED.getCap();
+        float speed = (200 + orionPlayer.getStats().get(Stats.StatsInfo.SPEED)) / Stats.StatsInfo.SPEED.getCap();
         e.getPlayer().setWalkSpeed((speed > 1 ? 1 : (speed < -1 ? -1 : speed)));
     }
 
     @EventHandler
     public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
+
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
         orionPlayer.onSwitchSlot(e.getPlayer(), orionPlayer, e);
+
+        orionPlayer.getStats().removeModifiers("HAND");
+
+        if(e.getPlayer().getInventory().getItem(e.getNewSlot()) != null && e.getPlayer().getInventory().getItem(e.getNewSlot()).hasItemMeta()) {
+            PersistentDataContainer container = e.getPlayer().getInventory().getItem(e.getNewSlot()).getItemMeta().getPersistentDataContainer();
+            if(BasicEquipmentItem.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
+                BasicEquipmentItem basicEquipmentItem = (BasicEquipmentItem) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+                orionPlayer.getStats().addModifiers("HAND", basicEquipmentItem.getMODIFIERS());
+            }
+        }
+
         if(e.getPlayer().getInventory().getItem(e.getNewSlot()) == null) return;
         if(orionPlayer.getSlotTypes()[e.getNewSlot()] == OrionPlayer.SlotType.USE_SLOT) {
             Block block = e.getPlayer().getTargetBlock(null, 10);
@@ -182,6 +193,7 @@ public class PlayerStatsListener implements Listener {
             e.getPlayer().getInventory().setHeldItemSlot(e.getPreviousSlot());
             e.setCancelled(true);
         }
+
     }
 
     @EventHandler
