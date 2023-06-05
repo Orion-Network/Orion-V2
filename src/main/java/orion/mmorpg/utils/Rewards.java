@@ -30,7 +30,7 @@ public class Rewards extends ArrayList<Rewards.Reward> {
     }
 
     public ArrayList<Reward> generateRewards(OrionPlayer orionPlayer) {
-        int luck = (int) orionPlayer.getStats().getLuck();
+        int luck = (int) orionPlayer.getStats().get(Stats.StatsInfo.LUCK);
         ArrayList<Reward> rewards = new ArrayList<>();
         Random random = new Random();
         for(Reward reward : this) {

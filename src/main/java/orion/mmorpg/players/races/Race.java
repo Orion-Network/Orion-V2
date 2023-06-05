@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public enum Race {
-    HUMAN("Humain", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, Collections.singletonList("La race la plus populaire de ce monde malgré leurs faible magie"), Rarity.COMMON).generateItem(null, 1), new ArrayList<>(Collections.singleton(Heal.class)), null, null,
+    HUMAN("Humain", new Stats.Builder().build(), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, Collections.singletonList("La race la plus populaire de ce monde malgré leurs faible magie"), Rarity.COMMON).generateItem(null, 1), new ArrayList<>(Collections.singleton(Heal.class)), null, null,
             new LinkedHashMap<Integer, Class<? extends Spell>>() {
                 {
                     put(5, Surpassement.class);
@@ -28,7 +28,7 @@ public enum Race {
             },(p, op) -> {
         p.getInventory().addItem(new WoodenSword().generateItem(null, 1), new StartingSet.StartingChestplate().generateItem(null, 1));
     }),
-    CELESTIAL("Célestien", new Stats(1, 1, 1, 1, 1, 1, 1, 1, 1), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
+    CELESTIAL("Célestien", new Stats.Builder().build(), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
 
     public String name;
     public Stats stats;

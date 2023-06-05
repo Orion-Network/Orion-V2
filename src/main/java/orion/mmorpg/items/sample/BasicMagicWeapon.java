@@ -28,12 +28,12 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
         super(item);
     }
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, STATS, DAMAGE);
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, MODIFIERS, DAMAGE);
     }
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats STATS, float DAMAGE) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, PERMISSION, STATS, DAMAGE);
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, PERMISSION, MODIFIERS, DAMAGE);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
                     casterData.updateMobHealthBar(((LivingEntity) e).getHealth() - totalDamage, ((LivingEntity) e).getMaxHealth(), e.getName());
                 else {
                     OrionPlayer target = Mmorpg.INSTANCE.getPlayerManager().getPlayer(e.getUniqueId());
-                    casterData.updateMobHealthBar(target.getHealth(), target.getStats().getVitality(), e.getName());
+                    casterData.updateMobHealthBar(target.getHealth(), target.getStats().get(Stats.StatsInfo.VITALITY), e.getName());
                 }
                 this.cancel();
             });

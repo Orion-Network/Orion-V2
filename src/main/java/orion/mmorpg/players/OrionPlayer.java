@@ -11,23 +11,18 @@ import org.bukkit.Particle;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
-import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
-import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -45,7 +40,6 @@ import java.util.*;
  * A class representing a Player in Orion.
  */
 public class OrionPlayer {
-    private final Stats stats;
     private final LinkedHashSet<String> portalStones;
     transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
@@ -58,11 +52,10 @@ public class OrionPlayer {
     String[] selectedSpells;
     private Mode playerMode = Mode.PLAYER;
     private Infos infos;
-    private Stats baseStats;
-    private Stats pointStats;
+    private Stats stats;
     private UUID uniqueId;
     private double health, exp;
-    private int statsPoints, spentStatsPoint, level, mana;
+    private int level, mana;
     private Equipments equipements;
     transient private KeyedBossBar healthBar;
     transient FastBoard fastBoard;
@@ -78,22 +71,17 @@ public class OrionPlayer {
      * Default Constructor of OrionPlayer class used on first logging.
      *
      * @param infos       Infos of the new player {@link Infos}
-     * @param baseStats   Base stats of the new player {@link Stats}
+     * @param stats   Base stats of the new player {@link Stats}
      * @param uniqueId    UniqueId of the new player {@link Player#getUniqueId()}
-     * @param statsPoints Default stats point of new player
      * @param level       Level of the new player
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, int statsPoints, int spentStatsPoint, int level, double exp) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId,int level, double exp) {
         this.infos = infos;
         this.uniqueId = uniqueId;
-        this.baseStats = baseStats;
-        this.pointStats = pointStats;
+        this.stats = stats;
         this.equipements = new Equipments();
         equipements.setOwner(Bukkit.getPlayer(uniqueId));
-        this.stats = calculateStats();
-        this.health = stats.getVitality();
-        this.statsPoints = statsPoints;
-        this.spentStatsPoint = spentStatsPoint;
+        this.health = this.stats.get(Stats.StatsInfo.VITALITY);
         this.level = level;
         this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
@@ -101,7 +89,7 @@ public class OrionPlayer {
         portalStones.add(PortalStone.ARENA_SPAWN_STONE.getId());
         portalStones.add(PortalStone.ARENA_STONE.getId());
 
-        this.mana = (int) this.stats.getIntel();
+        this.mana = (int) this.stats.get(Stats.StatsInfo.INTELLIGENCE);
 
         this.initHealthBar();
         this.mobHealthBar.setProgress(1);
@@ -133,10 +121,9 @@ public class OrionPlayer {
      * Default Constructor of OrionPlayer class used on new logging retrieving data from Database.
      *
      * @param infos        Retrieved Infos of the player
-     * @param baseStats    Retrieved Stats of the player
+     * @param stats    Retrieved Stats of the player
      * @param uniqueId     Retrieved UniqueId of the player
      * @param health       Health before the player log out
-     * @param statsPoints  Retrieved Stats Points
      * @param level        Retrieved Level
      * @param mana         Retrieved mana
      * @param portalStones Retrieved Portal Stones
@@ -145,17 +132,13 @@ public class OrionPlayer {
      * @param support      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats baseStats, Stats pointStats, UUID uniqueId, double health, int statsPoints, int spentStatsPoint, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
         this.infos = infos;
         this.uniqueId = uniqueId;
-        this.baseStats = baseStats;
-        this.pointStats = pointStats;
+        this.stats = stats;
         this.equipements = equipements;
         equipements.setOwner(Bukkit.getPlayer(uniqueId));
-        this.stats = calculateStats();
         this.health = health;
-        this.statsPoints = statsPoints;
-        this.spentStatsPoint = spentStatsPoint;
         this.level = level;
         this.exp = exp;
         this.mana = mana;
@@ -198,13 +181,22 @@ public class OrionPlayer {
 
     public static OrionPlayer generateSamplePlayer(Player p) {
         Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
-        Stats stats = new Stats(1, 10, 50, 100, 20, 0, 0, 25, 0);
-        return new OrionPlayer(infos, stats, new Stats.Builder().build() , p.getUniqueId(), 0, 0, 0, 0);
+        Stats stats = new Stats.Builder().setBase(Stats.StatsInfo.STRENGTH, 1)
+                .setBase(Stats.StatsInfo.CRITICAL_CHANCE, 10)
+                .setBase(Stats.StatsInfo.CRITICAL_DAMAGE, 50)
+                .setBase(Stats.StatsInfo.ATTACK_SPEED, 100)
+                .setBase(Stats.StatsInfo.VITALITY, 20)
+                .setBase(Stats.StatsInfo.INTELLIGENCE, 0)
+                .setBase(Stats.StatsInfo.DEFENCE, 0)
+                .setBase(Stats.StatsInfo.SPEED, 25)
+                .setBase(Stats.StatsInfo.LUCK, 0)
+                .build();
+        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
     }
 
     public void updateHealthbar() {
-        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().getVitality());
-        double healthValue = this.getHealth() / this.getStats().getVitality();
+        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().get(Stats.StatsInfo.VITALITY));
+        double healthValue = this.getHealth() / this.getStats().get(Stats.StatsInfo.VITALITY);
         if(healthValue > 1)
             this.healthBar.setProgress(1);
         else if (healthValue < 0)
@@ -233,58 +225,12 @@ public class OrionPlayer {
         this.infos = infos;
     }
 
-    public Stats calculateStats(Stats... stats) {
-        if (stats.length == 0) {
-            Stats playerStats = this.getBaseStats();
-
-            Stats armorStats = equipements.getEquipmentStats();
-            Stats handStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0);
-            ItemStack item = Bukkit.getPlayer(this.getUniqueId()).getInventory().getItemInMainHand();
-            if (item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(Namespaces.stats, PersistentDataType.STRING)) {
-                PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-                handStats = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
-                if(container.has(Namespaces.reforge, PersistentDataType.STRING) && EnumUtils.isValidEnum(ItemReforge.class, container.get(Namespaces.reforge, PersistentDataType.STRING))) {
-                    ItemReforge reforge = ItemReforge.valueOf(container.get(Namespaces.reforge, PersistentDataType.STRING));
-                    handStats = reforge.getFunction().apply(handStats);
-                }
-            }
-            return calculateStats(playerStats, armorStats, handStats, getPointStats());
-        }
-        Stats.Builder builder = new Stats.Builder();
-        for (Stats stat : stats) {
-            if (stat == null)
-                continue;
-            builder.withStrength(builder.getStrength() + stat.getStrength());
-            builder.withCritical_chance(builder.getCritical_chance() + stat.getCritical_chance());
-            builder.withCritical_damage(builder.getCritical_damage() + stat.getCritical_damage());
-            builder.withAttack_speed(builder.getAttack_speed() + stat.getAttack_speed());
-            builder.withVitality(builder.getVitality() + stat.getVitality());
-            builder.withIntel(builder.getIntel() + stat.getIntel());
-            builder.withDefence(builder.getDefence() + stat.getDefence());
-            builder.withSpeed(builder.getSpeed() + stat.getSpeed());
-            builder.withLuck(builder.getLuck() + stat.getLuck());
-        }
-        return builder.build();
-    }
-
-    public Stats getBaseStats() {
-        return baseStats;
-    }
-
-    public void setBaseStats(Stats baseStats) {
-        this.baseStats = baseStats;
-    }
-
-    public Stats getPointStats() {
-        return pointStats;
-    }
-
-    public void setPointStats(Stats pointStats) {
-        this.pointStats = pointStats;
-    }
-
     public Stats getStats() {
-        return calculateStats();
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
     }
 
     public double getHealth() {
@@ -293,22 +239,6 @@ public class OrionPlayer {
 
     public void setHealth(double health) {
         this.health = health;
-    }
-
-    public int getStatsPoints() {
-        return statsPoints;
-    }
-
-    public void setStatsPoints(int statsPoints) {
-        this.statsPoints = statsPoints;
-    }
-
-    public int getSpentStatsPoint() {
-        return spentStatsPoint;
-    }
-
-    public void setSpentStatsPoint(int spentStatsPoint) {
-        this.spentStatsPoint = spentStatsPoint;
     }
 
     public int getLevel() {
@@ -482,7 +412,7 @@ public class OrionPlayer {
     }
 
     public void heal(double health) {
-        this.setHealth(this.getHealth() + health < this.getStats().getVitality() ? this.getHealth() + health : this.getStats().getVitality());
+        this.setHealth(this.getHealth() + health < this.getStats().get(Stats.StatsInfo.VITALITY) ? this.getHealth() + health : this.getStats().get(Stats.StatsInfo.VITALITY));
         this.updateHealthbar();
     }
 
@@ -490,7 +420,7 @@ public class OrionPlayer {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
         p.teleport(PortalStone.ARENA_SPAWN_STONE.getLocation());
-        setHealth(this.getStats().getVitality());
+        setHealth(this.getStats().get(Stats.StatsInfo.VITALITY));
         Utils.sendInfoMessage(p, "Vous êtes mort.");
         updateHealthbar();
         this.mobHealthBar.setVisible(false);
@@ -514,10 +444,6 @@ public class OrionPlayer {
                 Utils.sendInfoMessage(p, "Vous avez appris le sort ");
             }
             Utils.sendInfoMessage(p, "You have leveled up to level " + this.getLevel() + " !");
-            if(this.getLevel() % 3 == 0 && this.getLevel() > this.getStatsPoints()) {
-                this.setStatsPoints(this.getStatsPoints() + 3);
-                Utils.sendInfoMessage(p, "You have gained 3 stats points !");
-            }
         }
 
     }
@@ -610,8 +536,8 @@ public class OrionPlayer {
 
     public void onTick() {
         updateFastboard();
-        if (mana < this.getStats().getIntel() - this.getStats().getIntel() / 30)
-            mana += this.getStats().getIntel() / 30;
+        if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE) - this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30)
+            mana += this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30;
 
         if (this.getSupport() != null)
             this.getSupport().onTick();
@@ -637,7 +563,7 @@ public class OrionPlayer {
         if(party != null) {
             board.add(" ");
             board.add(ChatColor.YELLOW + "Groupe : ");
-            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + (int)p.getHealth() + "/" + (int)p.getStats().getVitality()));
+            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + (int)p.getHealth() + "/" + (int)p.getStats().get(Stats.StatsInfo.VITALITY)));
         }
         this.fastBoard.updateLines(board);
     }

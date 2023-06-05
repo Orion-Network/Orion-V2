@@ -11,6 +11,6 @@ import java.util.List;
 public class ThousandWisdom extends BasicMeleeWeapon {
     public ThousandWisdom() {
         super(Material.NETHERITE_SWORD, "Thousands Wisdom", "THOUSANDS_WISDOM", 0, Arrays.asList("Une épée imprégnée de magie","si seulement elle pouvait","lancer des sorts"), Rarity.MYTHIC,
-                new Stats.Builder().withIntel(100).withLuck(7).withVitality(50).build(), 0);
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.INTELLIGENCE, 100).add(Stats.StatsInfo.LUCK, 7).add(Stats.StatsInfo.VITALITY, 50).build(), 0);
     }
 }

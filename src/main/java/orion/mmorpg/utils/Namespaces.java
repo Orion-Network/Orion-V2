@@ -14,6 +14,7 @@ public final class Namespaces {
             rarity = NamespacedKey.fromString("rarity", plugin),
             base_stats = NamespacedKey.fromString("base_stats", plugin),
             stats = NamespacedKey.fromString("stats", plugin),
+            modifiers = NamespacedKey.fromString("modifiers", plugin),
             reforge = NamespacedKey.fromString("reforge", plugin),
             type = NamespacedKey.fromString("type", plugin),
             slot = NamespacedKey.fromString("slot", plugin),

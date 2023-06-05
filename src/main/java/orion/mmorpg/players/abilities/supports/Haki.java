@@ -17,6 +17,7 @@ import orion.mmorpg.players.abilities.SpecialsSupport;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Rarity;
+import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 import orion.mmorpg.utils.WorldGuardUtils;
 
@@ -108,7 +109,7 @@ public class Haki extends Support implements SpecialsSupport {
 
     @Override
     public void getThirdSpecial(Player player, OrionPlayer orionPlayer) {
-        if(orionPlayer.getLevel() < 100 && orionPlayer.getStats().getPower() < 400) {
+        if(orionPlayer.getLevel() < 100 && orionPlayer.getStats().get(Stats.StatsInfo.STRENGTH) < 400) {
             Utils.sendInfoMessage(player, "Vous ne remplissez pas les conditions pour utiliser le haki des rois.");
             return;
         }

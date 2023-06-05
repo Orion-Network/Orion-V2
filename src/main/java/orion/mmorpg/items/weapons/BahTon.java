@@ -10,6 +10,6 @@ import java.util.Collections;
 
 public class BahTon extends BasicMagicWeapon {
     public BahTon() {
-        super(Material.IRON_SHOVEL, "BahTon", "BAHTON", AssociationConfig.getModel("weapon/staff/brillant_staff"), Collections.singletonList("Un baton simple avec peu de magie"), Rarity.COMMON, new Stats.Builder().withIntel(2).build(), 5);
+        super(Material.IRON_SHOVEL, "BahTon", "BAHTON", AssociationConfig.getModel("weapon/staff/brillant_staff"), Collections.singletonList("Un baton simple avec peu de magie"), Rarity.COMMON, new Stats.Modifiers.Builder().add(Stats.StatsInfo.INTELLIGENCE, 2).build(), 5);
     }
 }
