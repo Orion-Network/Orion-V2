@@ -7,6 +7,8 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -20,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -52,6 +55,10 @@ public class Utils {
     public static void sendDebugMessage(Entity e, String message) {
         if (Mmorpg.isDebug())
             e.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + message);
+    }
+
+    public static void sendTooltipInfoMessage(Player player, String message) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + message));
     }
 
     /**
@@ -147,6 +154,10 @@ public class Utils {
                 .map(Enum::name)
                 .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
                 .collect(Collectors.toList());
+    }
+
+    public static int getRandomInt(int i, int i1) {
+        return ThreadLocalRandom.current().nextInt(i, i1 + 1);
     }
 
     public static class ChunkCoords {

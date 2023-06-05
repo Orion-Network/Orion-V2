@@ -52,6 +52,11 @@ public class PlayerPickupListener implements Listener {
         }
 
         String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
+        if(internal_id.equalsIgnoreCase("NULL_ITEM")) {
+            e.getItem().remove();
+            e.setCancelled(true);
+            return;
+        }
         if(!Enums.getIfPresent(ItemList.class, internal_id).isPresent()) {
             Utils.sendErrorMessage(player, "Objet non implémenté.");
             e.setCancelled(true);
@@ -66,6 +71,16 @@ public class PlayerPickupListener implements Listener {
                 itemStack.setItemMeta(item.getItemMeta());
                 return;
             }
+
+            if(meta.getPersistentDataContainer().has(Namespaces.player_item, PersistentDataType.STRING)) {
+                if(!meta.getPersistentDataContainer().get(Namespaces.player_item, PersistentDataType.STRING).equalsIgnoreCase(player.getUniqueId().toString())) {
+                    Utils.sendErrorMessage(player, "Cet objet ne vous appartient pas.");
+                    e.setCancelled(true);
+                    return;
+                }
+            }
+            meta.getPersistentDataContainer().remove(Namespaces.player_item);
+            itemStack.setItemMeta(meta);
 
             if(basicItem.getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))
                 itemStack = ((MasterScrollItem)basicItem).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING), e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(Namespaces.knowledge, PersistentDataType.INTEGER));

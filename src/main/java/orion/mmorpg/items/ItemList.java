@@ -1,6 +1,5 @@
 package orion.mmorpg.items;
 
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -14,10 +13,13 @@ import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.misc.drops.NordicWolfBone;
 import orion.mmorpg.items.misc.drops.NordicWolfFur;
 import orion.mmorpg.items.misc.reforge.StrongStone;
+import orion.mmorpg.items.money.BronzeCoin;
 import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.misc.NullItem;
 import orion.mmorpg.items.tools.MinerPickaxe;
 import orion.mmorpg.items.tools.Picky;
+import orion.mmorpg.items.tools.WoodenRod;
 import orion.mmorpg.items.weapons.*;
 import orion.mmorpg.items.weapons.arrows.CommonArrow;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
@@ -104,6 +106,7 @@ public enum ItemList {
     JOB_PLACEHOLDER(JobPlaceholder.class),
     //MISC
     GIFT(Gift.class),
+    NULL_ITEM(NullItem.class),
     GRIMORY(GrimoryItem.class),
     MASTER_SCROLL(MasterScrollItem.class),
     SPELL_SCROLL(SpellScroll.class),
@@ -123,9 +126,13 @@ public enum ItemList {
     //TOOLS
     MINER_PICKAXE(MinerPickaxe.class),
     PICKY(Picky.class),
+    WOODEN_ROD(WoodenRod.class),
 
     //RESSOURCES
     BRONZE_INGOT(BronzeIngot.class),
+
+    //CURRENCY
+    BRONZE_COIN(BronzeCoin.class),
     ;
 
     Class<?> itemClass;
