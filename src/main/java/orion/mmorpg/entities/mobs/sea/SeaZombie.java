@@ -6,6 +6,7 @@ import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
 import org.bukkit.Location;
+//TODO remove back to spawn pathfinder
 
 public class SeaZombie extends AbstractHostile {
     public SeaZombie(String uuid, Location spawnLocation) {

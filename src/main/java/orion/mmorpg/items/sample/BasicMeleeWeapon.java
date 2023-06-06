@@ -48,7 +48,7 @@ public class BasicMeleeWeapon extends BasicEquipmentItem {
         if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + DAMAGE);
-        lore.addAll(getMODIFIERS().getAsLore());
+        lore.addAll(getModifiers().getAsLore());
 
         return super.generateLore(lore);
     }

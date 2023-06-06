@@ -9,15 +9,15 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.items.ItemType;
+import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
 import java.util.List;
 
-public class BasicEquipmentItem extends BasicItem {
+public class BasicEquipmentItem extends BasicItem implements Modifiers {
     //TODO See for Reforge because removed function
-    @Getter
     private final Stats.Modifiers MODIFIERS;
     private ItemReforge reforge = ItemReforge.NONE;
 
@@ -44,7 +44,7 @@ public class BasicEquipmentItem extends BasicItem {
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.reforge, PersistentDataType.STRING, reforge.name());
-        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getMODIFIERS()));
+        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }
@@ -68,4 +68,7 @@ public class BasicEquipmentItem extends BasicItem {
     }
 
 
+    public Stats.Modifiers getModifiers() {
+        return MODIFIERS;
+    }
 }

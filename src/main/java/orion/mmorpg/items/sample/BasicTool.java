@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
+import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -17,12 +18,11 @@ import orion.mmorpg.utils.Stats;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicTool extends BasicItem {
+public class BasicTool extends BasicItem implements Modifiers {
     @Getter
     ToolType toolType;
     @Getter
     int toolPower;
-    @Getter
     Stats.Modifiers MODIFIERS;
 
     public BasicTool(ItemStack item) {
@@ -63,7 +63,7 @@ public class BasicTool extends BasicItem {
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.tool_type, PersistentDataType.STRING, toolType.name());
         meta.getPersistentDataContainer().set(Namespaces.tool_power, PersistentDataType.INTEGER, toolPower);
-        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getMODIFIERS()));
+        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
         item.setItemMeta(meta);
 
         return super.generateItem(item, amount);
@@ -75,8 +75,13 @@ public class BasicTool extends BasicItem {
             lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Puissance : " + ChatColor.RED + toolPower);
         lore.add(ChatColor.GRAY + "Type : " + ChatColor.RED + toolType.name());
-        lore.addAll(getMODIFIERS().getAsLore());
+        lore.addAll(getModifiers().getAsLore());
 
         return super.generateLore(lore);
+    }
+
+    @Override
+    public Stats.Modifiers getModifiers() {
+        return MODIFIERS;
     }
 }
