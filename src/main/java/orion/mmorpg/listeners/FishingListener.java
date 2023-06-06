@@ -69,6 +69,7 @@ public class FishingListener implements Listener {
             if(random <= player.getStats().get(Stats.StatsInfo.SEA_CREATURE_CHANCE)) {
                 Utils.sendInfoMessage(event.getPlayer(), "Vous avez attrapé un monstre marin !");
                 final AbstractMob mob = getRandomSeaCreature(player).getMob(UUID.randomUUID().toString(), event.getHook().getLocation());
+                mob.setRespawn(false);
                 mob.spawn();
                 Vector vector = event.getPlayer().getLocation().subtract(event.getHook().getLocation()).add(0,2,0).toVector().normalize().multiply(1.2);
                 mob.getBukkitEntity().setVelocity(vector);

@@ -1,5 +1,6 @@
 package orion.mmorpg.utils;
 
+import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -55,7 +56,7 @@ public class Stats {
             float value = get(stat);
             if (value == 0)
                 continue;
-            lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + " " + stat.getColor() + value);
+            lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + " " + stat.getColor() + value + stat.getSuffix());
         }
         return lore;
     }
@@ -78,13 +79,13 @@ public static class Modifiers {
                 float value = add.getOrDefault(stat, 0f);
                 if (value == 0)
                     continue;
-                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + " " + stat.getColor() + value);
+                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value > 0 ? "+":"-") + value);
             }
             for (StatsInfo stat : StatsInfo.values()) {
                 float value = multiply.getOrDefault(stat, 1f);
                 if (value == 1)
                     continue;
-                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + " " + stat.getColor() + value + "%");
+                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value > 0 ? "+":"-") + value + "%");
             }
             return lore;
         }
@@ -111,27 +112,30 @@ public static class Modifiers {
 }
 
     public enum StatsInfo {
-        STRENGTH("🗡", ChatColor.of("#F00020"), Float.MAX_VALUE),
-        CRITICAL_DAMAGE("☠ ", ChatColor.of("#FF6600"), Float.MAX_VALUE),
-        CRITICAL_CHANCE("☣ ", ChatColor.of("#FFD500"), 100),
-        ATTACK_SPEED("⚔", ChatColor.of("#3A9D23"), 400),
-        VITALITY("❤", ChatColor.of("#F9429E"), Float.MAX_VALUE),
-        INTELLIGENCE("࿇", ChatColor.of("#00ACEE"), Float.MAX_VALUE),
-        DEFENCE("🛡", ChatColor.of("#884DA7"), Float.MAX_VALUE),
-        SPEED("࿓", ChatColor.of("#207125"), 1000),
-        LUCK("☘", ChatColor.of("#FFA500"), 500),
-        MINING_SPEED("⛏", ChatColor.of("#FFD500"), 1000),
-        FISHING_SPEED("🎣", ChatColor.of("#FFD500"), 1000),
-        SEA_CREATURE_CHANCE("🐟", ChatColor.of("#FFD500"), 100),
+        STRENGTH("🗡", ChatColor.of("#F00020"),"", Float.MAX_VALUE),
+        CRITICAL_DAMAGE("☠", ChatColor.of("#FF6600"),"", Float.MAX_VALUE),
+        CRITICAL_CHANCE("☣", ChatColor.of("#FFD500"),"%", 100),
+        ATTACK_SPEED("⚔", ChatColor.of("#3A9D23"),"", 400),
+        VITALITY("❤", ChatColor.of("#F9429E"),"", Float.MAX_VALUE),
+        INTELLIGENCE("࿇", ChatColor.of("#00ACEE"),"", Float.MAX_VALUE),
+        DEFENCE("🛡", ChatColor.of("#884DA7"),"", Float.MAX_VALUE),
+        SPEED("࿓", ChatColor.of("#207125"),"", 1000),
+        LUCK("☘", ChatColor.of("#FFA500"), "", 500),
+        MINING_SPEED("⛏", ChatColor.of("#FFD500"), "", 1000),
+        FISHING_SPEED("🎣", ChatColor.of("#FFD500"),"", 1000),
+        SEA_CREATURE_CHANCE("♆", ChatColor.of("#FFD500"), "%", 100),
         ;
 
         String character;
         ChatColor color;
+        @Getter
+        private String suffix;
         float cap;
 
-        StatsInfo(String character, ChatColor color, float cap) {
+        StatsInfo(String character, ChatColor color, String suffix, float cap) {
             this.character = character;
             this.color = color;
+            this.suffix = suffix;
             this.cap = cap;
         }
 
