@@ -17,6 +17,7 @@ import orion.mmorpg.items.money.BronzeCoin;
 import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.misc.NullItem;
+import orion.mmorpg.items.tools.AdminRod;
 import orion.mmorpg.items.tools.MinerPickaxe;
 import orion.mmorpg.items.tools.Picky;
 import orion.mmorpg.items.tools.WoodenRod;
@@ -127,6 +128,7 @@ public enum ItemList {
     MINER_PICKAXE(MinerPickaxe.class),
     PICKY(Picky.class),
     WOODEN_ROD(WoodenRod.class),
+    ADMIN_ROD(AdminRod.class),
 
     //RESSOURCES
     BRONZE_INGOT(BronzeIngot.class),
