@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent items as Rpg Item
  */
+//TODO See if we can make modifies as interface
 public class BasicItem extends ItemStack {
 
     protected final Material MATERIAL;

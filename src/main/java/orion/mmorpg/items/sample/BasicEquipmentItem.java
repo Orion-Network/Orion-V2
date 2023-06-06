@@ -50,6 +50,11 @@ public class BasicEquipmentItem extends BasicItem {
     }
 
     @Override
+    public List<String> generateLore(List<String> lore) {
+        return super.generateLore(lore);
+    }
+
+    @Override
     public String generateDisplayName() {
         return getRARITY().getChatColor() + reforge.getTitle() + " " + NAME;
     }

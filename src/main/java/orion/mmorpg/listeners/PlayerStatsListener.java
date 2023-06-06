@@ -22,10 +22,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.sample.BasicEquipmentItem;
-import orion.mmorpg.items.sample.BasicItem;
-import orion.mmorpg.items.sample.BasicMeleeWeapon;
-import orion.mmorpg.items.sample.BasicRangedWeapon;
+import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -183,6 +180,9 @@ public class PlayerStatsListener implements Listener {
             if(BasicEquipmentItem.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
                 BasicEquipmentItem basicEquipmentItem = (BasicEquipmentItem) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
                 orionPlayer.getStats().addModifiers("HAND", basicEquipmentItem.getMODIFIERS());
+            } else if(BasicTool.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
+                BasicTool basicTool = (BasicTool) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+                orionPlayer.getStats().addModifiers("HAND", basicTool.getMODIFIERS());
             }
         }
 

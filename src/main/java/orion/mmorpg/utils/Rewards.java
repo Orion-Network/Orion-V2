@@ -19,7 +19,8 @@ public class Rewards extends ArrayList<Rewards.Reward> {
         ArrayList<ItemStack> items = new ArrayList<>();
         player.addExperience(Bukkit.getPlayer(player.getUniqueId()), exp);
         for(Reward reward : generateRewards(player)) {
-            items.add(reward.getItem());
+            if(reward.getItem() != null)
+                items.add(reward.getItem());
             for(JobType job : reward.getJobExp().keySet()) {
                 Player p = Bukkit.getPlayer(player.getUniqueId());
                 Utils.sendTooltipInfoMessage(p, "Vous avez gagné " + reward.getJobExp().get(job) + " points d'expérience en " + job.name());

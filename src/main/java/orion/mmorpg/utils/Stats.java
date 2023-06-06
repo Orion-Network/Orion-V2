@@ -28,12 +28,12 @@ public class Stats {
             value += modifiers.add.getOrDefault(stat, 0f);
             value *= modifiers.multiply.getOrDefault(stat, 1f);
         }
-        return value;
+        return Math.min(value, stat.getCap());
     }
 
     public void addModifiers(String id, Modifiers modifiers) {
         this.modifiers.put(id, modifiers);
-        Bukkit.getLogger().info("Added modifiers " + id);
+        Bukkit.getLogger().info("Added modifiers " + id + " " + modifiers.getAsLore());
     }
 
     public void removeModifiers(String id) {
@@ -61,8 +61,16 @@ public class Stats {
     }
 
 public static class Modifiers {
-        public HashMap<StatsInfo, Float> add = new HashMap<>();
-        public HashMap<StatsInfo, Float> multiply = new HashMap<>();
+        private HashMap<StatsInfo, Float> add = new HashMap<>();
+        private HashMap<StatsInfo, Float> multiply = new HashMap<>();
+
+        public void add(StatsInfo stat, float value) {
+            add.put(stat, add.getOrDefault(stat, 0f) + value);
+        }
+
+        public void multiply(StatsInfo stat, float value) {
+            multiply.put(stat, multiply.getOrDefault(stat, 1f) * value);
+        }
 
         public List<String> getAsLore() {
             List<String> lore = new LinkedList<>();
@@ -111,7 +119,10 @@ public static class Modifiers {
         INTELLIGENCE("࿇", ChatColor.of("#00ACEE"), Float.MAX_VALUE),
         DEFENCE("🛡", ChatColor.of("#884DA7"), Float.MAX_VALUE),
         SPEED("࿓", ChatColor.of("#207125"), 1000),
-        LUCK("☘", ChatColor.of("#FFA500"), 500)
+        LUCK("☘", ChatColor.of("#FFA500"), 500),
+        MINING_SPEED("⛏", ChatColor.of("#FFD500"), 1000),
+        FISHING_SPEED("🎣", ChatColor.of("#FFD500"), 1000),
+        SEA_CREATURE_CHANCE("🐟", ChatColor.of("#FFD500"), 100),
         ;
 
         String character;

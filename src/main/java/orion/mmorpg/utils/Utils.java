@@ -162,6 +162,10 @@ public class Utils {
         return ThreadLocalRandom.current().nextInt(i, i1 + 1);
     }
 
+    public static long getRandomLong(int i, long totalWeight) {
+        return ThreadLocalRandom.current().nextLong(i, totalWeight + 1);
+    }
+
     public static class ChunkCoords {
         @Getter
         private final int x;
