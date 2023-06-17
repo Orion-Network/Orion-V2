@@ -52,13 +52,13 @@ public class BasicArmorItem extends BasicEquipmentItem {
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
-        lore.addAll(getModifiers().getAsLore());
+        lore.addAll(getModifiersWithReforge().getAsLore());
 
         return super.generateLore(lore);
     }
 
     public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
-        data.getStats().addModifiers(getINTERNAL_ID(), getModifiers());
+        data.getStats().addModifiers(getINTERNAL_ID(), getModifiersWithReforge());
         onCosmeticEquip(p, data, item);
         return true;
     }

@@ -10,13 +10,14 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.Modifiers;
+import orion.mmorpg.items.Reforgeable;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
 import java.util.List;
 
-public class BasicEquipmentItem extends BasicItem implements Modifiers {
+public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgeable {
     //TODO See for Reforge because removed function
     private final Stats.Modifiers MODIFIERS;
     private ItemReforge reforge = ItemReforge.NONE;
@@ -25,7 +26,7 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers {
         super(item);
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         this.MODIFIERS = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.modifiers, PersistentDataType.STRING), Stats.Modifiers.class);
-        this.reforge = ItemReforge.valueOf(container.get(Namespaces.reforge, PersistentDataType.STRING));
+        setReforge(ItemReforge.valueOf(container.get(Namespaces.reforge, PersistentDataType.STRING)));
     }
 
     public BasicEquipmentItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType TYPE, Stats.Modifiers modifiers) {
@@ -67,8 +68,16 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers {
         this.reforge = reforge;
     }
 
-
     public Stats.Modifiers getModifiers() {
         return MODIFIERS;
     }
+
+    public Stats.Modifiers getModifiersWithReforge() {
+        return reforge.getFunction().apply(MODIFIERS);
+    }
+    /*
+    Reforge seem to Work only on BasicEquipement not Tools
+    And lore is glitchy item lore show good modifiers but menu duplicate the addition of the reforge
+    Test if damage are affected in duplicate or not
+     */
 }

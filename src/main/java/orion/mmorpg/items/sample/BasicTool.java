@@ -8,8 +8,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.Modifiers;
+import orion.mmorpg.items.Reforgeable;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -18,12 +20,11 @@ import orion.mmorpg.utils.Stats;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicTool extends BasicItem implements Modifiers {
+public class BasicTool extends BasicEquipmentItem {
     @Getter
     ToolType toolType;
     @Getter
     int toolPower;
-    Stats.Modifiers MODIFIERS;
 
     public BasicTool(ItemStack item) {
         super(item);
@@ -31,28 +32,13 @@ public class BasicTool extends BasicItem implements Modifiers {
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         this.toolType = ToolType.valueOf(container.get(Namespaces.tool_type, PersistentDataType.STRING));
         this.toolPower = container.get(Namespaces.tool_power, PersistentDataType.INTEGER);
-        this.MODIFIERS = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.modifiers, PersistentDataType.STRING), Stats.Modifiers.class);
     }
 
-    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ToolType toolType, int toolPower, Stats.Modifiers MODIFIERS) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
+    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers modifiers, ToolType toolType, int toolPower) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY,
+                ItemType.TOOL, modifiers);
         this.toolType = toolType;
         this.toolPower = toolPower;
-        this.MODIFIERS = MODIFIERS;
-    }
-
-    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, ToolType toolType, int toolPower, Stats.Modifiers MODIFIERS) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE);
-        this.toolType = toolType;
-        this.toolPower = toolPower;
-        this.MODIFIERS = MODIFIERS;
-    }
-
-    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, String PERMISSION, ToolType toolType, int toolPower, Stats.Modifiers MODIFIERS) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE, PERMISSION);
-        this.toolType = toolType;
-        this.toolPower = toolPower;
-        this.MODIFIERS = MODIFIERS;
     }
 
     @Override
@@ -75,13 +61,9 @@ public class BasicTool extends BasicItem implements Modifiers {
             lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Puissance : " + ChatColor.RED + toolPower);
         lore.add(ChatColor.GRAY + "Type : " + ChatColor.RED + toolType.name());
-        lore.addAll(getModifiers().getAsLore());
+        lore.addAll(getModifiersWithReforge().getAsLore());
 
         return super.generateLore(lore);
     }
 
-    @Override
-    public Stats.Modifiers getModifiers() {
-        return MODIFIERS;
-    }
 }

@@ -79,6 +79,7 @@ public class PlayerStatsListener implements Listener {
                 if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
                     orionPlayer.onHit(e, orionPlayer);
                     float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
+                    Utils.sendDebugMessage(p, "Total damage: " + totalDamage);
                     e.setDamage(totalDamage);
                     if (!(e.getEntity() instanceof Player)) {
                         LivingEntity entity = (LivingEntity) e.getEntity();
@@ -179,7 +180,7 @@ public class PlayerStatsListener implements Listener {
         if(e.getPlayer().getInventory().getItem(e.getNewSlot()) != null && e.getPlayer().getInventory().getItem(e.getNewSlot()).hasItemMeta()) {
             BasicItem basicItem = ItemList.getItemFromItemstack(e.getPlayer().getInventory().getItem(e.getNewSlot()));
             if(basicItem instanceof Modifiers) {
-                orionPlayer.getStats().addModifiers("HAND", ((Modifiers) basicItem).getModifiers());
+                orionPlayer.getStats().addModifiers("HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }
         }
 

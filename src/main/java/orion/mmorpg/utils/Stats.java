@@ -46,7 +46,7 @@ public class Stats {
         return this.modifiers.containsKey(id);
     }
     /**
-     * Generate an array list of every stats with there value, color and sigil
+     * Generate an array list of every stat with there value, color and sigill
      *
      * @return Generated list of stats
      */
@@ -61,6 +61,14 @@ public class Stats {
         return lore;
     }
 
+    public List<String> modifiersAsLore() {
+        List<String> lore = new LinkedList<>();
+        for (Modifiers modifiers : this.modifiers.values()) {
+            lore.addAll(modifiers.getAsLore());
+        }
+        return lore;
+    }
+
 public static class Modifiers {
         private HashMap<StatsInfo, Float> add = new HashMap<>();
         private HashMap<StatsInfo, Float> multiply = new HashMap<>();
@@ -71,6 +79,27 @@ public static class Modifiers {
 
         public void multiply(StatsInfo stat, float value) {
             multiply.put(stat, multiply.getOrDefault(stat, 1f) * value);
+        }
+
+        public float get(StatsInfo stat) {
+            return add.getOrDefault(stat, 0f) + multiply.getOrDefault(stat, 1f);
+        }
+
+        public float getAdd(StatsInfo stat) {
+            return add.getOrDefault(stat, 0f);
+        }
+
+        public float getMultiply(StatsInfo stat) {
+            return multiply.getOrDefault(stat, 1f);
+        }
+
+        public Modifiers combine(Modifiers modifiers) {
+            Modifiers newModifiers = new Modifiers();
+            for (StatsInfo stat : StatsInfo.values()) {
+                newModifiers.add(stat, getAdd(stat) + modifiers.getAdd(stat));
+                newModifiers.multiply(stat, getMultiply(stat) * modifiers.getMultiply(stat));
+            }
+            return newModifiers;
         }
 
         public List<String> getAsLore() {
