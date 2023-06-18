@@ -12,7 +12,9 @@ import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.misc.drops.NordicWolfBone;
 import orion.mmorpg.items.misc.drops.NordicWolfFur;
+import orion.mmorpg.items.misc.reforge.PolarizedStone;
 import orion.mmorpg.items.misc.reforge.StrongStone;
+import orion.mmorpg.items.misc.reforge.TastyStone;
 import orion.mmorpg.items.money.BronzeCoin;
 import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
@@ -124,6 +126,8 @@ public enum ItemList {
     NORDIC_WOLF_BONE(NordicWolfBone.class),
     //REFORGES
     STRONG_STONE(StrongStone.class),
+    POLARIZED_STONE(PolarizedStone.class),
+    TASTY_STONE(TastyStone.class),
     //TOOLS
     MINER_PICKAXE(MinerPickaxe.class),
     PICKY(Picky.class),

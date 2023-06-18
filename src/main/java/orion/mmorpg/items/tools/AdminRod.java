@@ -10,8 +10,8 @@ import java.util.List;
 public class AdminRod extends BasicTool {
 
     public AdminRod() {
-        super(Material.FISHING_ROD, "Admin Rod", "ADMIN_ROD", 0, null, Rarity.UNOBTAINABLE, ToolType.FISHING_ROD, 10,
-                new Stats.Modifiers.Builder().add(Stats.StatsInfo.FISHING_SPEED, 1000).add(Stats.StatsInfo.SEA_CREATURE_CHANCE, 100).build());
+        super(Material.FISHING_ROD, "Admin Rod", "ADMIN_ROD", 0, null, Rarity.UNOBTAINABLE,
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.FISHING_SPEED, 1000).add(Stats.StatsInfo.SEA_CREATURE_CHANCE, 100).build(), ToolType.FISHING_ROD, 10);
 
     }
 }

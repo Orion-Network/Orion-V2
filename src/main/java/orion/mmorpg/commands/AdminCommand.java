@@ -22,6 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.Reforgeable;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.modelengine.OrionScriptReader;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
@@ -61,9 +64,8 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                ScriptReaderRegistry registry = ModelEngineAPI.getScriptReaderRegistry();
-                Utils.sendInfoMessage((Entity) commandSender, registry.getKeys().toString());
-                Utils.sendInfoMessage((Entity) commandSender, registry.get("meg").toString());
+                BasicItem test = ItemList.getItemFromItemstack(player.getInventory().getItemInMainHand());
+                Bukkit.broadcastMessage(String.valueOf((test instanceof Reforgeable)));
             }
         }
         return false;
