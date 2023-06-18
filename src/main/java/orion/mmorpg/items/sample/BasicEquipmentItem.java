@@ -18,7 +18,6 @@ import orion.mmorpg.utils.Stats;
 import java.util.List;
 
 public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgeable {
-    //TODO See for Reforge because removed function
     private final Stats.Modifiers MODIFIERS;
     private ItemReforge reforge = ItemReforge.NONE;
 
