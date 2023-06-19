@@ -62,7 +62,6 @@ public class PlayerStatsListener implements Listener {
         }
     }
 
-    //TODO Remake this mess to divide it into multiple events
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerHitEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
