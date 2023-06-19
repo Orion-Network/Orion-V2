@@ -17,10 +17,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
+import orion.mmorpg.events.PlayerDamageEntityEvent;
+import orion.mmorpg.events.PlayerDamagedByEntityEvent;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.sample.*;
@@ -29,10 +32,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Smithing;
-import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.Namespaces;
-import orion.mmorpg.utils.Stats;
-import orion.mmorpg.utils.Utils;
+import orion.mmorpg.utils.*;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -50,7 +50,7 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
-        orionPlayer.onInteract(event);
+        orionPlayer.executeOEffect(event);
         Player p = event.getPlayer();
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
 
@@ -62,34 +62,13 @@ public class PlayerStatsListener implements Listener {
         }
     }
 
+    //TODO Remake this mess to divide it into multiple events
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerHitEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
         if (e.getDamager() instanceof Player) {
-            Player p = (Player) e.getDamager();
-            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
-            if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
-                PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
-
-                if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
-                    e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
-                item.onHitWithItem(e);
-                if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
-                    orionPlayer.onHit(e, orionPlayer);
-                    float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
-                    Utils.sendDebugMessage(p, "Total damage: " + totalDamage);
-                    e.setDamage(totalDamage);
-                    if (!(e.getEntity() instanceof Player)) {
-                        LivingEntity entity = (LivingEntity) e.getEntity();
-                        orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
-                    } else {
-                        OrionPlayer target = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
-                        orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage, target.getStats().get(Stats.StatsInfo.VITALITY), e.getEntity().getName());
-                    }
-                }
-            }
+            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getDamager().getUniqueId());
+            Bukkit.getPluginManager().callEvent(new PlayerDamageEntityEvent(e));
         }
         if (e.getDamager() instanceof Arrow || e.getDamager() instanceof DragonFireball ||e.getDamager() instanceof Fireball) {
             Projectile entity = (Projectile) e.getDamager();
@@ -99,20 +78,54 @@ public class PlayerStatsListener implements Listener {
         }
 
         if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            orionPlayer.onHitByEntity(e);
-            float reduction = Utils.calculateDamageReduction(orionPlayer.getStats().get(Stats.StatsInfo.DEFENCE));
-            orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
-
-            if (orionPlayer.getHealth() <= 0)
-                orionPlayer.onDie();
-            else
-                orionPlayer.updateHealthbar();
-
-            Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction + " health : " + orionPlayer.getHealth() + " / " + orionPlayer.getStats().get(Stats.StatsInfo.VITALITY));
-            e.setDamage(0);
+            Bukkit.getPluginManager().callEvent(new PlayerDamagedByEntityEvent(e));
         }
+    }
+
+    @EventHandler
+    public void playerDamageEntityEvent(PlayerDamageEntityEvent e) {
+        Player p = e.getPlayer();
+        OrionPlayer orionPlayer = e.getOrionPlayer();
+        orionPlayer.executeOEffect(e);
+        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
+        if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
+            PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
+            if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
+                e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
+            if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
+                float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
+                Utils.sendDebugMessage(p, "Total damage: " + totalDamage);
+                e.setDamage(totalDamage);
+                if (!(e.getTarget() instanceof Player)) {
+                    LivingEntity entity = (LivingEntity) e.getTarget();
+                    orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(), entity.getName());
+                } else {
+                    OrionPlayer target = mmorpg.getPlayerManager().getPlayer(e.getTarget().getUniqueId());
+                    orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage, target.getStats().get(Stats.StatsInfo.VITALITY), e.getTarget().getName());
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerDamagedByEntity(PlayerDamagedByEntityEvent e) {
+
+        Player p = e.getPlayer();
+        OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
+        orionPlayer.executeOEffect(e);
+
+        if(e.isCancelled()) return;
+        float reduction = Utils.calculateDamageReduction(orionPlayer.getStats().get(Stats.StatsInfo.DEFENCE));
+        orionPlayer.setHealth(orionPlayer.getHealth() - (e.getDamage() / reduction));
+
+        if (orionPlayer.getHealth() <= 0)
+            orionPlayer.respawn();
+        else
+            orionPlayer.updateHealthbar();
+
+        Utils.sendDebugMessage(p, "Base Damage : " + e.getDamage() + " Defense : " + reduction + " Calc. Damages : " + e.getDamage() / reduction + " health : " + orionPlayer.getHealth() + " / " + orionPlayer.getStats().get(Stats.StatsInfo.VITALITY));
+        e.setDamage(0);
+
     }
 
     @EventHandler
@@ -134,7 +147,7 @@ public class PlayerStatsListener implements Listener {
                         e.getProjectile().setMetadata("spell", new FixedMetadataValue(mmorpg, spell));
                     }
                     ((Arrow) e.getProjectile()).setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                    orionPlayer.onShootArrow(e);
+                    orionPlayer.executeOEffect(e);
                     basicRangedWeapon.onShootBow(e);
                 }
             }
@@ -143,7 +156,7 @@ public class PlayerStatsListener implements Listener {
 
     @EventHandler
     public void onSpellSense(OnSpellSense e) {
-        mmorpg.getPlayerManager().getPlayer(e.getTarget().getUniqueId()).onSpellSense(e);
+        OrionPlayer.getOrionPlayer(e.getTarget()).executeOEffect(e);
     }
 
     @EventHandler
@@ -173,7 +186,7 @@ public class PlayerStatsListener implements Listener {
     public void onPlayerSwitchSlot(PlayerItemHeldEvent e) {
 
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
-        orionPlayer.onSwitchSlot(e.getPlayer(), orionPlayer, e);
+        orionPlayer.executeOEffect(e);
 
         orionPlayer.getStats().removeModifiers("HAND");
 

@@ -41,7 +41,7 @@ public class DataCommand implements TabExecutor {
                     builder.append(ChatColor.GRAY + "Mode : " + ChatColor.YELLOW + data.getPlayerMode().name() + "\n");
                     builder.append(ChatColor.GRAY + "Health : " + ChatColor.YELLOW + data.getHealth() + "\n");
                     builder.append(ChatColor.GRAY + "Mana : " + ChatColor.YELLOW + data.getMana() + "\n");
-                    builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW + (data.getSupport() == null ? "Aucun" : data.getSupport().getName()) + "\n");
+                    builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW + (data.getMainSupport() == null ? "Aucun" : data.getMainSupport().getName()) + "\n");
                     builder.append(ChatColor.GRAY + "Race : " + ChatColor.YELLOW + data.getRace().getName() + "\n");
                     builder.append(data.getStats().modifiersAsLore()).append("\n");
                     for (String stat : data.getStats().statsAsLore())
@@ -55,8 +55,6 @@ public class DataCommand implements TabExecutor {
                     builder.append("\n" + data.getKnownSpells().keySet() + "\n");
                     builder.append("\n" + "Smithing : " + data.getJobs().getJob(JobType.SMITHING).getLevel() + " " + data.getJobs().getJob(JobType.SMITHING).getExperience());
                     builder.append("\n" + "Mining : " + data.getJobs().getJob(JobType.MINING).getLevel() + " " + data.getJobs().getJob(JobType.MINING).getExperience());
-                    for (Support s : data.getSupportMap().keySet())
-                        builder.append(s.getName());
                     sender.sendMessage(builder.toString());
                 }
             } else if (args[0].equalsIgnoreCase("item")) {

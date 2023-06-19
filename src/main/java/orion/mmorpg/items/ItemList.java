@@ -116,7 +116,6 @@ public enum ItemList {
     MYTHICAL_SCROLL(MythicalScroll.class),
     INFINITE_FIREWORK(InfiniteFirework.class),
     CELESTIAL_SERUM(CelestialSerum.class),
-    SOUL_SWITCHER(SoulSwitcher.class),
     GUILD_BOOK(GuildBook.class),
     TEST_ITEM(TestItem.class),
     MENU_ITEM(MenuItem.class),

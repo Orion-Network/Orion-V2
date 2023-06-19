@@ -35,7 +35,7 @@ public class MythicalScroll extends BasicConsumableItem {
 
         SupportList.valueOf(support.toUpperCase());
         try {
-            data.setSupport((Support) SupportList.valueOf(support.toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
+            data.setMainSupport((Support) SupportList.valueOf(support.toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException error) {
             e.getItem().setAmount(0);
             e.getPlayer().updateInventory();

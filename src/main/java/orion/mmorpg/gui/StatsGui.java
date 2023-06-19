@@ -8,12 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.utils.Rarity;
-import orion.mmorpg.utils.Utils;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
 public class StatsGui extends ChestGui {
@@ -40,8 +36,8 @@ public class StatsGui extends ChestGui {
         ItemMeta headMeta = head.getItemMeta();
         headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
         LinkedList<String> infos = new LinkedList<>();
-        if (orionPlayer.getSupport() != null)
-            infos.add(ChatColor.YELLOW + orionPlayer.getSupport().getName());
+        if (orionPlayer.getMainSupport() != null)
+            infos.add(ChatColor.YELLOW + orionPlayer.getMainSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);

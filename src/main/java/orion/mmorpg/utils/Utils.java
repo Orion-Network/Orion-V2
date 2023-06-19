@@ -86,6 +86,7 @@ public class Utils {
                     ChatColor.YELLOW + "Critical Damage: " + ChatColor.RED + critical_damage + "\n" +
                     ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
                     ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
+                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
                     ChatColor.YELLOW + "Is Critical : " + ChatColor.RED + (critical == 1) + "\n" +
                     ChatColor.YELLOW + "Critical Multiplier: " + ChatColor.RED + (1 + ((critical_damage * critical) / 100)) + "\n" +
                     ChatColor.YELLOW + "Total: " + ChatColor.RED + totalDamage * (1 + ((critical_damage * critical) / 100)));

@@ -51,7 +51,7 @@ public class GoatHunger extends Spell {
                 this.cancel();
                 if (getTargetEntity() instanceof Player) {
                     ((Player) getTargetEntity()).setWalkSpeed(0);
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId()).onDie(), 5 * 1000);
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId()).respawn(), 5 * 1000);
                 } else {
                     ((LivingEntity) getTargetEntity()).setAI(false);
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> {

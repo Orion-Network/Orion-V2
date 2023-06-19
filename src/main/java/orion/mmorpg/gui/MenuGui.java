@@ -3,7 +3,6 @@ package orion.mmorpg.gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,17 +14,14 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.Equipments;
-import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
-import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -336,8 +332,8 @@ public class MenuGui extends ChestGui {
         ItemMeta headMeta = head.getItemMeta();
         headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
         LinkedList<String> infos = new LinkedList<>();
-        if (orionPlayer.getSupport() != null)
-            infos.add(ChatColor.YELLOW + orionPlayer.getSupport().getName());
+        if (orionPlayer.getMainSupport() != null)
+            infos.add(ChatColor.YELLOW + orionPlayer.getMainSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
         infos.add(ChatColor.WHITE + "Appuyez pour ouvrir le menu des stats");
         headMeta.setLore(infos);
