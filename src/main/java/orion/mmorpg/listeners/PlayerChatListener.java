@@ -58,7 +58,7 @@ public class PlayerChatListener implements Listener {
                             .onHover(BookUtil.HoverAction.showItem(pl.getInventory().getItem(slot))).build();
                 }
             }
-            else if (var.equalsIgnoreCase("me")) {//TODO Colors don't work
+            else if (var.equalsIgnoreCase("me")) {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(ChatColor.GRAY + "Nom: " + ChatColor.WHITE + pl.getName() + "\n");

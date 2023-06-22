@@ -171,7 +171,6 @@ public abstract class Spell {
         return true;
     }
 
-    //TODO Change to a boolean to check if spell has been launched
     public abstract void launch(Mmorpg mmorpg, Location location, Knowledge knowledge);
 
     public String getInternal_id() {

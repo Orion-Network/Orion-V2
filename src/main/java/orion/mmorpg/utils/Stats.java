@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * A class to handle different Stats
  */
-//TODO Check saving and loading
 public class Stats {
     private HashMap<StatsInfo, Float> baseStats = new HashMap<>();
     private HashMap<String, Modifiers> modifiers = new HashMap<>();
