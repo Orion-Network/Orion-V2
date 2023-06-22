@@ -56,7 +56,7 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
 
     @Override
     public String generateDisplayName() {
-        return getRARITY().getChatColor() + reforge.getTitle() + " " + NAME;
+        return getRARITY().getChatColor() + (reforge == ItemReforge.NONE ? "" : reforge.getTitle() + " ") + NAME;
     }
 
     public ItemReforge getReforge() {
@@ -74,9 +74,4 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
     public Stats.Modifiers getModifiersWithReforge() {
         return reforge.getFunction().apply(MODIFIERS);
     }
-    /*
-    Reforge seem to Work only on BasicEquipement not Tools
-    And lore is glitchy item lore show good modifiers but menu duplicate the addition of the reforge
-    Test if damage are affected in duplicate or not
-     */
 }

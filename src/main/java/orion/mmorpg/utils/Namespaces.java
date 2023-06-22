@@ -16,6 +16,7 @@ public final class Namespaces {
             stats = NamespacedKey.fromString("stats", plugin),
             modifiers = NamespacedKey.fromString("modifiers", plugin),
             reforge = NamespacedKey.fromString("reforge", plugin),
+            smithingLevelRequired = NamespacedKey.fromString("smithing_level_required", plugin),
             type = NamespacedKey.fromString("type", plugin),
             slot = NamespacedKey.fromString("slot", plugin),
             armor_type = NamespacedKey.fromString("armor_type",  plugin),

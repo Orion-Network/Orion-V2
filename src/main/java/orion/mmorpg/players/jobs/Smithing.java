@@ -82,9 +82,16 @@ public class Smithing extends AbstractJob {
                     Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre un objet reforgeable");
                     e.setCancelled(true);
                 }
-                if(e.getSlot() == 16 && !BasicReforgeStone.class.isAssignableFrom(ItemList.getItemFromItemstack(e.getCursor()).getClass())) {
-                    Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre une reforge stone");
-                    e.setCancelled(true);
+                if(e.getSlot() == 16) {
+                    if( !BasicReforgeStone.class.isAssignableFrom(ItemList.getItemFromItemstack(e.getCursor()).getClass())) {
+                        Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre une reforge stone");
+                        e.setCancelled(true);
+                    }
+                    BasicReforgeStone reforgeStone = (BasicReforgeStone) ItemList.getItemFromItemstack(e.getCursor());
+                    if(reforgeStone.getSmithingLevelRequired() > this.getLevel()) {
+                        Utils.sendErrorMessage(e.getWhoClicked(), "Vous n'avez pas le niveau requis pour utiliser cette reforge stone");
+                        e.setCancelled(true);
+                    }
                 }
 
                 updateGui(gui);
