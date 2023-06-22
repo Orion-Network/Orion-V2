@@ -87,8 +87,8 @@ public class Client {
         document.put("quiver", Mmorpg.getOrionGson().getGSON().toJson(player.getQuiver()));
         document.put("slotTypes", Mmorpg.getOrionGson().getGSON().toJson(player.getSlotTypes()));
 
-        if (player.getSupport() != null)
-            document.put("support", player.getSupport().getClass().getName());
+        if (player.getMainSupport() != null)
+            document.put("support", player.getMainSupport().getClass().getName());
         else
             document.put("support", null);
 

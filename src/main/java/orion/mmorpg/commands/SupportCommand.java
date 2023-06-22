@@ -13,7 +13,6 @@ import orion.mmorpg.players.abilities.SupportList;
 import orion.mmorpg.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SupportCommand implements TabExecutor {
@@ -30,7 +29,7 @@ public class SupportCommand implements TabExecutor {
             OrionPlayer player1 = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
             if(SupportList.valueOf(args[0].toUpperCase()) != null) {
                 try {
-                    player1.setSupport((Support) SupportList.valueOf(args[0].toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
+                    player1.setMainSupport((Support) SupportList.valueOf(args[0].toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }

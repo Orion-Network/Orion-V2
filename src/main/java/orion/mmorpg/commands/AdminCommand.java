@@ -27,6 +27,7 @@ import orion.mmorpg.items.Reforgeable;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.modelengine.OrionScriptReader;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
@@ -64,8 +65,8 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                BasicItem test = ItemList.getItemFromItemstack(player.getInventory().getItemInMainHand());
-                Bukkit.broadcastMessage(String.valueOf((test instanceof Reforgeable)));
+                Invincibility invincibility = new Invincibility(10*1000);
+                orionPlayer.addEffect("invincibility", invincibility);
             }
         }
         return false;

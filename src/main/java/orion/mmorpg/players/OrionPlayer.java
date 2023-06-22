@@ -3,6 +3,8 @@ package orion.mmorpg.players;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.effect.SphereEffect;
 import fr.mrmicky.fastboard.FastBoard;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,18 +14,15 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
-import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.entities.samples.AbstractPet;
+import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
@@ -40,32 +39,67 @@ import java.util.*;
  * A class representing a Player in Orion.
  */
 public class OrionPlayer {
+    @Getter
     private final LinkedHashSet<String> portalStones;
     transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
+    @Getter
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
+    @Getter
     ItemStack[] quiver;
+    @Getter
     transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
-    transient LinkedHashMap<Support, Long> supportMap;
+    /**
+     * A map of all the effects of the player.
+     * <p>
+     *     The first key is the event name
+     *     The second key is a map of all the effects of the event
+     *      The key is the id of the effect
+     *      The value is the effect
+     */
+    @Getter
+    transient LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects;
+    @Getter@Setter
     transient Party party;
+    @Getter@Setter
     transient HashMap<String, Effect> effectHashMap = new HashMap<>();
+    @Getter
     public SlotType[] slotTypes;
+    @Getter
     String[] selectedSpells;
+    @Getter
     private Mode playerMode = Mode.PLAYER;
+    @Getter@Setter
     private Infos infos;
+    @Getter@Setter
     private Stats stats;
+    @Getter
     private UUID uniqueId;
+    @Getter@Setter
     private double health, exp;
+    @Getter@Setter
     private int level, mana;
+    @Getter@Setter
     private Equipments equipements;
+    @Getter
     transient private KeyedBossBar healthBar;
+    @Getter@Setter
     transient FastBoard fastBoard;
+    @Getter
     Set<Pets> tamedPets;
+    @Getter
     transient AbstractPet pet;
+    @Getter
     Set<Mounts> tamedMounts;
-    private Support support;
+    private Support mainSupport;
+    @Getter@Setter
     private Race race;
 
+    @Getter
     private Jobs jobs;
+
+    {
+        this.orionEffects = new LinkedHashMap<>();
+    }
 
     /**
      * Default Constructor of OrionPlayer class used on first logging.
@@ -112,7 +146,6 @@ public class OrionPlayer {
                 SlotType.FREE_SLOT,
                 SlotType.USE_SLOT};
 
-        supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = Jobs.getBaseJobs();
     }
@@ -129,10 +162,10 @@ public class OrionPlayer {
      * @param portalStones Retrieved Portal Stones
      * @param equipements  Retrieved Equipments
      * @param spells       Retrieved Spells
-     * @param support      Retrieved Support
+     * @param mainSupport      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support support, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;
@@ -144,7 +177,7 @@ public class OrionPlayer {
         this.mana = mana;
         this.portalStones = portalStones;
         spells.forEach((spellClass, knowledge) -> getKnownSpells().put(spellClass, knowledge));
-        this.support = support;
+        this.mainSupport = mainSupport;
         this.race = race;
 
         this.initHealthBar();
@@ -159,7 +192,6 @@ public class OrionPlayer {
         this.tamedPets = tamedPets;
         this.tamedMounts = tamedMounts;
 
-        supportMap = new LinkedHashMap<>();
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = jobs;
     }
@@ -217,57 +249,6 @@ public class OrionPlayer {
         }*/
     }
 
-    public Infos getInfos() {
-        return infos;
-    }
-
-    public void setInfos(Infos infos) {
-        this.infos = infos;
-    }
-
-    public Stats getStats() {
-        return stats;
-    }
-
-    public void setStats(Stats stats) {
-        this.stats = stats;
-    }
-
-    public double getHealth() {
-        return health;
-    }
-
-    public void setHealth(double health) {
-        this.health = health;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public double getExp() {
-        return exp;
-    }
-
-    public void setExp(double exp) {
-        this.exp = exp;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
-
-    public LinkedHashSet<String> getPortalStones() {
-        return portalStones;
-    }
 
     public void addPortalStone(String id) {
         this.getPortalStones().add(id);
@@ -278,69 +259,6 @@ public class OrionPlayer {
         this.getPortalStones().remove(id);
     }
 
-    public Equipments getEquipements() {
-        return equipements;
-    }
-
-    public void setEquipements(Equipments equipements) {
-        this.equipements = equipements;
-    }
-
-    public Mode getPlayerMode() {
-        return playerMode;
-    }
-
-    public void setPlayerMode(Mode playerMode) {
-        this.playerMode = playerMode;
-    }
-
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(UUID uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public KeyedBossBar getHealthBar() {
-        return healthBar;
-    }
-
-    public void setHealthBar(KeyedBossBar healthBar) {
-        this.healthBar = healthBar;
-    }
-
-    public LinkedHashMap<Class<? extends Spell>, Knowledge> getKnownSpells() {
-        return knownSpells;
-    }
-
-    public LinkedHashMap<Class<? extends Spell>, Long> getCooldownSpells() {
-        return cooldownSpells;
-    }
-
-    public String[] getSelectedSpells() {
-        return selectedSpells;
-    }
-
-    public ItemStack[] getQuiver() {
-        return quiver;
-    }
-
-    public SlotType[] getSlotTypes() {
-        return slotTypes;
-    }
-
-    public Set<Pets> getTamedPets() {
-        return tamedPets;
-    }
-
-    public Set<Mounts> getTamedMounts() {
-        return tamedMounts;
-    }
-
-    public AbstractPet getPet() {
-        return pet;
-    }
 
     public void setPet(AbstractPet pet) {
         if(this.pet != null)
@@ -348,15 +266,15 @@ public class OrionPlayer {
         this.pet = pet;
     }
 
-    public Support getSupport() {
-        return support;
+    public Support getMainSupport() {
+        return mainSupport;
     }
 
-    public boolean setSupport(Class<? extends Support> supportClass) {
+    public boolean setMainSupport(Class<? extends Support> supportClass) {
         Support support;
         try {
             support = (Support) supportClass.getConstructors()[0].newInstance();
-            setSupport(support);
+            setMainSupport(support);
             return true;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -364,51 +282,14 @@ public class OrionPlayer {
         return false;
     }
 
-    public void setSupport(Support support) {
-        if(this.support != null)
-            this.support.onDeselected(Bukkit.getPlayer(this.uniqueId), this);
-        this.support = support;
-        support.onSelected(Bukkit.getPlayer(this.getUniqueId()), this);
-    }
-
-    public Race getRace() {
-        return race;
-    }
-
-    public void setRace(Race race) {
-        this.race = race;
-    }
-
-    public LinkedHashMap<Support, Long> getSupportMap() {
-        return supportMap;
-    }
-
-    public HashMap<String, Effect> getEffectHashMap() {
-        return effectHashMap;
-    }
-
-    public void setEffectHashMap(HashMap<String, Effect> effectHashMap) {
-        this.effectHashMap = effectHashMap;
-    }
-
-    public FastBoard getFastBoard() {
-        return fastBoard;
-    }
-
-    public void setFastBoard(FastBoard fastBoard) {
-        this.fastBoard = fastBoard;
-    }
-
-    public Party getParty() {
-        return party;
-    }
-
-    public void setParty(Party p) {
-        this.party = p;
-    }
-
-    public Jobs getJobs() {
-        return jobs;
+    public void setMainSupport(Support mainSupport) {
+        if(this.mainSupport != null) {
+            this.mainSupport.removeEffects(this);
+        }
+        this.mainSupport = mainSupport;
+        if(this.mainSupport == null)
+            return;
+        mainSupport.applyEffects(this, -1);
     }
 
     public void heal(double health) {
@@ -448,106 +329,32 @@ public class OrionPlayer {
 
     }
 
-    public void onInteract(PlayerInteractEvent event) {
-        if (this.getSupport() != null)
-            this.getSupport().onInteract(event);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onInteract(event);
-        }
+    public void addEffect(String id, OEffect effect) {
+        if(!this.getOrionEffects().containsKey(effect.getEvent().getSimpleName()))
+            this.getOrionEffects().put(effect.getEvent().getSimpleName(), new LinkedHashMap<>());
+        this.getOrionEffects().get(effect.getEvent().getSimpleName()).put(id, effect);
     }
 
-    public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
-        if (this.getSupport() != null)
-            this.getSupport().onLaunchSpell(player, stats, s);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onLaunchSpell(player, stats, s);
-        }
+    public void removeEffect(String id, Class<? extends Event> event) {
+        if(!this.getOrionEffects().containsKey(event.getSimpleName()))
+            return;
+        this.getOrionEffects().get(event.getSimpleName()).remove(id);
     }
 
-    public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
-        if (this.getSupport() != null)
-            this.getSupport().onHit(event, stats);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else {
-                support.onHit(event, stats);
-            }
-        }
-    }
-
-    public void onShootArrow(EntityShootBowEvent event) {
-        if (this.getSupport() != null)
-            this.getSupport().onShootArrow(event);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onShootArrow(event);
-        }
-    }
-
-    public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
-        if (this.getSupport() != null)
-            this.getSupport().onHitByEntity(entityEvent);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onHitByEntity(entityEvent);
-        }
-    }
-
-    /*public void onHitBySpell(onHitBySpell e, Player player, PlayerStats stats, Entity caster, SpellType type, Spell s) {};*/
-    public void onSpellSense(OnSpellSense e) {
-        if (this.getSupport() != null)
-            this.getSupport().onSpellSense(e);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onSpellSense(e);
-        }
-    }
-
-    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
-        if (this.getSupport() != null)
-            this.getSupport().onSwitchSlot(player, stats, event);
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onSwitchSlot(player, stats, event);
-        }
+    public void executeOEffect(Event event) {
+        if(!this.getOrionEffects().containsKey(event.getClass().getSimpleName()))
+            return;
+        this.getOrionEffects().get(event.getEventName()).forEach((id, effect) -> {
+            boolean remove = effect.execute(event);
+            if(!remove)
+                this.getOrionEffects().get(event.getEventName()).remove(id);
+        });
     }
 
     public void onTick() {
         updateFastboard();
         if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE) - this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30)
             mana += this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30;
-
-        if (this.getSupport() != null)
-            this.getSupport().onTick();
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onTick();
-        }
     }
 
     ArrayList<String> board = new ArrayList<>();
@@ -568,20 +375,6 @@ public class OrionPlayer {
         this.fastBoard.updateLines(board);
     }
 
-    public void onDie() {
-        if (this.getSupport() != null)
-            this.getSupport().onDie();
-
-        for (Support support : supportMap.keySet()) {
-            if (supportMap.get(support) < System.currentTimeMillis())
-                supportMap.remove(support);
-            else
-                support.onDie();
-        }
-
-        respawn();
-    }
-
     public double getExpToNextLevel() {
         return (Math.pow(this.getLevel(), 1.3) * 100) + 25;
     }
@@ -590,5 +383,9 @@ public class OrionPlayer {
         FREE_SLOT,
         USE_SLOT,
         RESTRICTED_SLOT
+    }
+
+    public static OrionPlayer getOrionPlayer(Player player) {
+        return Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
     }
 }
