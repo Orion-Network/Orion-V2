@@ -107,13 +107,13 @@ public static class Modifiers {
                 float value = add.getOrDefault(stat, 0f);
                 if (value == 0)
                     continue;
-                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value > 0 ? "+":"-") + value);
+                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value >= 1 ? "+":"") + value);
             }
             for (StatsInfo stat : StatsInfo.values()) {
                 float value = multiply.getOrDefault(stat, 1f);
                 if (value == 1)
                     continue;
-                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value > 0 ? "+":"-") + value + "%");
+                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value >= 1 ? "+"+((value*100)-100):"-"+(100-(value*100)) ) + "%");
             }
             return lore;
         }

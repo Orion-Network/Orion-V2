@@ -46,6 +46,7 @@ public enum ItemList {
     REINFORCED_BOW(ReinforcedBow.class),
     HOUYI_BOW(HouYi.class),
     MURAMASA(Muramasa.class),
+    DRAGON_SLAYER(DragonSlayer.class),
     THOUSANDS_WISDOM(ThousandWisdom.class),
     //Armor Items
     STARTING_HELMET(StartingSet.StartingBoots.class),
