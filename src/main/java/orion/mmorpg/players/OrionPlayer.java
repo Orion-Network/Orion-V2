@@ -322,9 +322,9 @@ public class OrionPlayer {
             if(this.getRace().getLearningSpells().containsKey(this.getLevel())) {
                 Class<? extends Spell> spellClass = this.getRace().getLearningSpells().get(this.getLevel());
                 SpellList.learnSpell(this, spellClass, 100);
-                Utils.sendInfoMessage(p, "Vous avez appris le sort ");
+                Utils.sendInfoMessage(p, "Vous avez appris un nouveau sort !");
             }
-            Utils.sendInfoMessage(p, "You have leveled up to level " + this.getLevel() + " !");
+            Utils.sendInfoMessage(p, "Vous etes montes au niveau :  " + this.getLevel() + " !");
         }
 
     }
