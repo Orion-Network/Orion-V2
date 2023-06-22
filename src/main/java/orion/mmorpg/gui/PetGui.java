@@ -20,7 +20,6 @@ import java.util.UUID;
 public class PetGui extends ChestGui {
     Player player;
     OrionPlayer orionPlayer;
-    //Todo add good item visibility
     public PetGui(Player player, OrionPlayer orionPlayer) {
         super(3, "Menu des familiers");
         this.player = player;

@@ -1,5 +1,6 @@
 package orion.mmorpg.entities;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public enum Pets {
     }
 
     public ItemStack generateItemStack() {
-        return BasicItem.generateTemplateBasicItem(material, name(), 0, Collections.singletonList(description), Rarity.COMMON).generateItem(null, 1);
+        return BasicItem.generateTemplateBasicItem(material, ChatColor.YELLOW + name(), 0, Collections.singletonList(ChatColor.GRAY + description), Rarity.COMMON).generateItem(null, 1);
     }
 
     public boolean spawn(Player owner) {

@@ -3,6 +3,7 @@ package orion.mmorpg.gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,8 +22,10 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
+import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -359,13 +362,32 @@ public class MenuGui extends ChestGui {
             }), 3, 0);
         }*/
 
-        //TODO Add item to open the party gui
-        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Créer une équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
-            if(orionPlayer.getParty() != null)
-                new PartyGui( p, orionPlayer).show(p);
-            else
+        if(orionPlayer.getParty() != null) {
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "Cliquez pour ouvrir le menu d'équipe");
+            lore.add(ChatColor.GRAY + "Clique droit pour quitter l'équipe");
+            for(OrionPlayer member : orionPlayer.getParty().getMembers())
+                lore.add(ChatColor.YELLOW + Bukkit.getPlayer(member.getUniqueId()).getName() + " : "
+                        + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth()
+                        + ChatColor.YELLOW +  "/"
+                        + Stats.StatsInfo.VITALITY.getColor()  + member.getStats().get(Stats.StatsInfo.VITALITY) + " "
+                        + Stats.StatsInfo.VITALITY.getCharacter());
+
+            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), lore, Rarity.COMMON).generateItem(null, 1), e-> {
+                if(e.getClick().equals(ClickType.LEFT))
+                    new PartyGui( p, orionPlayer).show(p);
+                else if(e.getClick().equals(ClickType.RIGHT)) {
+                    orionPlayer.getParty().removeMember(orionPlayer);
+                    Utils.sendInfoMessage(p, "Vous avez quitté l'équipe");
+                }
+            }), 1,0);
+        } else {
+            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Cliquez pour ouvrir le menu d'équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
                 Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
-        }), 1,0);
+                new PartyGui( p, orionPlayer).show(p);
+            }), 1,0);
+        }
+
 
         menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.generateItemStack(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
