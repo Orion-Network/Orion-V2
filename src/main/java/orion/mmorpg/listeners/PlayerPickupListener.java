@@ -37,61 +37,17 @@ public class PlayerPickupListener implements Listener {
             return;
 
         ItemStack item = e.getItem().getItemStack();
-        ItemMeta meta = item.getItemMeta();
 
-        if(!meta.getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
-            String internal_id = "MINECRAFT_" + e.getItem().getItemStack().getType();
-            if (!Enums.getIfPresent(ItemList.class, internal_id).isPresent()) {
-                e.setCancelled(true);
-                e.getItem().remove();
-                Utils.sendErrorMessage(e.getEntity(), "Cet objet est sur liste noir");
-            } else {
-                e.getItem().setItemStack(ItemList.getItemFromItemstack(item));
-            }
-            return;
-        }
-
-        String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
-        if(internal_id.equalsIgnoreCase("NULL_ITEM")) {
+        if(!Utils.isItemValid(item, player))    {
+            e.setCancelled(true);
             e.getItem().remove();
-            e.setCancelled(true);
-            return;
-        }
-        if(!Enums.getIfPresent(ItemList.class, internal_id).isPresent()) {
-            Utils.sendErrorMessage(player, "Objet non implémenté.");
-            e.setCancelled(true);
+            Utils.sendErrorMessage(e.getEntity(), "Cet objet n'est pas valide");
             return;
         }
 
-        if (player.hasPermission(ItemList.getItemFromItemstack(item).getPERMISSION())) {
-
+        if(ItemList.isItem(item)) {
             BasicItem basicItem = ItemList.getItemFromItemstack(item);
-            ItemStack itemStack = e.getItem().getItemStack();
-            if(meta.getPersistentDataContainer().has(Namespaces.uuid, PersistentDataType.STRING)) {
-                itemStack.setItemMeta(item.getItemMeta());
-                return;
-            }
-
-            if(meta.getPersistentDataContainer().has(Namespaces.player_item, PersistentDataType.STRING)) {
-                if(!meta.getPersistentDataContainer().get(Namespaces.player_item, PersistentDataType.STRING).equalsIgnoreCase(player.getUniqueId().toString())) {
-                    Utils.sendErrorMessage(player, "Cet objet ne vous appartient pas.");
-                    e.setCancelled(true);
-                    return;
-                }
-            }
-            meta.getPersistentDataContainer().remove(Namespaces.player_item);
-            itemStack.setItemMeta(meta);
-
-            if(basicItem.getINTERNAL_ID().equalsIgnoreCase("MASTER_SCROLL"))
-                itemStack = ((MasterScrollItem)basicItem).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING), e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(Namespaces.knowledge, PersistentDataType.INTEGER));
-            else if(basicItem.getINTERNAL_ID().endsWith("SPELL_SCROLL"))
-                itemStack = ((SpellScroll)basicItem).generateScroll(e.getItem().getItemStack().getItemMeta().getPersistentDataContainer().get(Namespaces.spell_id, PersistentDataType.STRING));
-
-            e.getItem().setItemStack(itemStack);
-            basicItem.onPickupItem(e, itemStack);
-        } else {
-            Utils.sendErrorMessage(e.getEntity(), "Nous n'avez pas la permission d'utiliser cet objet");
-            e.setCancelled(true);
+            basicItem.onPickupItem(e,item);
         }
 
         ((Player) e.getEntity()).updateInventory();

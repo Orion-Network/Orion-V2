@@ -1,5 +1,6 @@
 package orion.mmorpg.utils;
 
+import com.google.common.base.Enums;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
@@ -15,8 +16,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.ItemType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -150,6 +155,22 @@ public class Utils {
 
     public static String itemDisplayName(ItemStack item) {
         return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(item.getType().name().replaceAll("_"," ")));
+    }
+
+    public static boolean isItemValid(ItemStack item, Player player) {
+        //Check if item can be converted to BasicItem
+        if (item == null || item.getType() == Material.AIR || !item.hasItemMeta()) return false;
+
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        String internal_id = container.get(Namespaces.internal_id, PersistentDataType.STRING);
+
+        if(ItemType.valueOf(container.get(Namespaces.type, PersistentDataType.STRING)) == ItemType.RESSOURCE) return true;
+
+        if(!Enums.getIfPresent(ItemList.class, internal_id).isPresent()) return false;
+
+        if(!player.hasPermission(ItemList.getItemFromItemstack(item).getPERMISSION())) return false;
+
+        return ItemList.isItem(item);
     }
 
     public static List<String> enumAutocomplete(String input, Class<? extends Enum> enumClass) {
