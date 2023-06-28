@@ -50,7 +50,8 @@ public class PlayerJoinListener implements Listener {
                 }
                 orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(player, "Data loaded !");
-                orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
+                if(orionPlayer.getMainSupport() != null)
+                    orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
                 if (orionPlayer.getRace() == null)
                     player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
                 return;

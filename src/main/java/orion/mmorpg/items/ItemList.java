@@ -76,6 +76,8 @@ public enum ItemList {
     STARSET_CHESTPLATE(StarSet.StarsetChestplate.class),
     STARSET_LEGGINGS(StarSet.StarsetLeggings.class),
     STARSET_BOOTS(StarSet.StarsetBoots.class),
+
+    CHICKEN_RING(AnimalSet.ChickenRing.class),
     //Arrows
     COMMON_ARROW(CommonArrow.class),
     GRAVITY_ARROW(GravityArrow.class),
