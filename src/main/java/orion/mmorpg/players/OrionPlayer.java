@@ -324,7 +324,7 @@ public class OrionPlayer {
                 SpellList.learnSpell(this, spellClass, 100);
                 Utils.sendInfoMessage(p, "Vous avez appris un nouveau sort !");
             }
-            Utils.sendInfoMessage(p, "Vous etes montes au niveau :  " + this.getLevel() + " !");
+            Utils.sendInfoMessage(p, "Vous etes montes au niveau : " + this.getLevel() + " !");
         }
 
     }
