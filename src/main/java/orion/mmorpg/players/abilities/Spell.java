@@ -8,7 +8,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.BeforeSpellCastEvent;
-import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
@@ -117,7 +116,7 @@ public abstract class Spell {
             }
         if(!checkIfSpellCastable()) return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
-        Bukkit.getPluginManager().callEvent(new OnLaunchSpell(player, orionPlayer, this));
+        orionPlayer.onLaunchSpell(player, orionPlayer, this);
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
         launch(mmorpg, caster.getLocation(), knowledge);
         orionPlayer.getKnownSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));

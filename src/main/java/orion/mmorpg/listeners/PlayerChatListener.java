@@ -4,8 +4,11 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,7 +67,7 @@ public class PlayerChatListener implements Listener {
                 stringBuilder.append(ChatColor.GRAY + "Nom: " + ChatColor.WHITE + pl.getName() + "\n");
                 stringBuilder.append(ChatColor.GRAY + "Niveau: " + ChatColor.WHITE + stats.getLevel() + "\n");
                 stringBuilder.append(ChatColor.GRAY + "Race:" + ChatColor.WHITE + stats.getRace().getName() + "\n");
-                stringBuilder.append(ChatColor.GRAY + "Support: " + ChatColor.WHITE + stats.getMainSupport().getName() + "\n");
+                stringBuilder.append(ChatColor.GRAY + "Support: " + ChatColor.WHITE + stats.getSupport().getName() + "\n");
                 stats.getStats().statsAsLore().forEach(s -> stringBuilder.append(ChatColor.GRAY + "\n" + ChatColor.stripColor(s)));
 
 

@@ -4,7 +4,6 @@ public enum ToolType {
     PICKAXE,
     AXE,
     SHOVEL,
-    HOE,
-    FISHING_ROD
+    HOE
     ;
 }

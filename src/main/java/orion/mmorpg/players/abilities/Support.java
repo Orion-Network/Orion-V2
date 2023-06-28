@@ -1,20 +1,15 @@
 package orion.mmorpg.players.abilities;
 
-import lombok.Getter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
-import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rarity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Support {
@@ -22,45 +17,76 @@ public abstract class Support {
     protected String name;
     protected Rarity rarity;
     protected String description;
-    Class<? extends Event>[] events;
-    @Getter
-    ArrayList<Class<? extends OEffect>> oEffects = new ArrayList<>();
     protected HashMap<String, Object> dataMap;
 
-    public Support(String name, Rarity rarity, String description, Class<? extends Event>[] events) {
+    public Support(String name, Rarity rarity, String description) {
         this.name = name;
         this.rarity = rarity;
         this.description = description;
         this.dataMap = new HashMap<>();
-        this.events = events;
     }
 
-    public Support(String name, Rarity rarity, String description, HashMap<String, Object> dataMap, Class<? extends Event>[] events) {
+    public Support(String name, Rarity rarity, String description, HashMap<String, Object> dataMap) {
         this.name = name;
         this.rarity = rarity;
         this.description = description;
         this.dataMap = dataMap;
-        this.events = events;
+
     }
 
-    public void applyEffects(OrionPlayer player, long duration) {
-        for(Class<? extends OEffect> oEffect : oEffects) {
-            try {
-                OEffect effect = oEffect.getConstructor(Long.class).newInstance(duration);
-                if(duration == -1)
-                    effect.setPermanent(true);
-                player.addEffect(this.getName(), effect);
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
+    public abstract void onInteract(PlayerInteractEvent event);
+
+    public abstract void onLaunchSpell(Player player, OrionPlayer stats, Spell s);
+
+    public abstract void onHit(EntityDamageByEntityEvent event, OrionPlayer stats);
+
+    public abstract void onShootArrow(EntityShootBowEvent event);
+
+    public abstract void onHitByEntity(EntityDamageByEntityEvent entityEvent);
+
+    //public void onHitBySpell(onHitBySpell e, Player player, OrionPlayer stats, Entity caster, Spell s) {};
+    public abstract void onSpellSense(OnSpellSense e);
+
+    public abstract void onTick();
+
+    public abstract void onDie();
+
+    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
+        if(this instanceof SpecialsSupport) {
+            switch (event.getNewSlot()) {
+                case 6:
+                    ((SpecialsSupport) this).getFirstSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
+                case 7:
+                    ((SpecialsSupport) this).getSecondSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
+                case 8:
+                    ((SpecialsSupport) this).getThirdSpecial(player, stats);
+                    event.setCancelled(true);
+                    event.getPlayer().getInventory().setHeldItemSlot(event.getPreviousSlot());
+                    break;
             }
         }
     }
 
-    public void removeEffects(OrionPlayer player) {
-        for(Class<? extends Event> event : events) {
-            player.removeEffect(this.getName(), event);
+    public void onDeselected(Player player, OrionPlayer orionPlayer) {
+        if(this instanceof SpecialsSupport) {
+            ((SpecialsSupport) this).removeItems(player, orionPlayer);
         }
     }
+
+    public void onSelected(Player player, OrionPlayer stats) {
+        if(this instanceof SpecialsSupport) {
+            ((SpecialsSupport) this).getItems(player, stats);
+        }
+    };
+
+    //TODO Implementing
+    public abstract void onSupportEnd(Player p, OrionPlayer stats);
 
     public String getName() {
         return name;

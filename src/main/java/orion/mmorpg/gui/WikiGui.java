@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WikiGui extends ChestGui {
-    final List<ItemList> hiddenItems = Arrays.asList(ItemList.TEST_ITEM, ItemList.ADMIN_SWORD, ItemList.STARSET_HELMET, ItemList.STARSET_CHESTPLATE, ItemList.STARSET_LEGGINGS, ItemList.STARSET_BOOTS, ItemList.GIFT, ItemList.INFINITE_FIREWORK, ItemList.CELESTIAL_SERUM);
+    final List<ItemList> hiddenItems = Arrays.asList(ItemList.TEST_ITEM, ItemList.ADMIN_SWORD, ItemList.STARSET_HELMET, ItemList.STARSET_CHESTPLATE, ItemList.STARSET_LEGGINGS, ItemList.STARSET_BOOTS, ItemList.GIFT, ItemList.SOUL_SWITCHER, ItemList.INFINITE_FIREWORK, ItemList.CELESTIAL_SERUM);
     final List<SpellList> hiddenSpells = Arrays.asList(SpellList.TEST_SPELL, SpellList.GOAT_HUNGER);
     PaginatedPane mainPane = new PaginatedPane(0, 0, 9, 5);
     List<GuiItem> populateList = new LinkedList<>();

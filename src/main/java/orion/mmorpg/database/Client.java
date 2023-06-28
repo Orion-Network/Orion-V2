@@ -10,9 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.Mobs;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractMob;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
@@ -68,10 +70,13 @@ public class Client {
     public void savePlayer(OrionPlayer player) {
         Document document = new Document();
         document.put("infos", Mmorpg.getOrionGson().getGSON().toJson(player.getInfos()));
-        document.put("stats", Mmorpg.getOrionGson().getGSON().toJson(player.getStats()));
+        document.put("stats", Mmorpg.getOrionGson().getGSON().toJson(player.getBaseStats()));
+        document.put("pointStats", Mmorpg.getOrionGson().getGSON().toJson(player.getPointStats()));
         document.put("uuid", player.getUniqueId().toString());
 
         document.put("health", player.getHealth());
+        document.put("statsPoint", player.getStatsPoints());
+        document.put("spentStatsPoint", player.getSpentStatsPoint());
         document.put("level", player.getLevel());
         document.put("exp", player.getExp());
         document.put("mana", player.getMana());
@@ -87,8 +92,8 @@ public class Client {
         document.put("quiver", Mmorpg.getOrionGson().getGSON().toJson(player.getQuiver()));
         document.put("slotTypes", Mmorpg.getOrionGson().getGSON().toJson(player.getSlotTypes()));
 
-        if (player.getMainSupport() != null)
-            document.put("support", player.getMainSupport().getClass().getName());
+        if (player.getSupport() != null)
+            document.put("support", player.getSupport().getClass().getName());
         else
             document.put("support", null);
 
@@ -124,8 +129,11 @@ public class Client {
 
         Infos info = Mmorpg.getOrionGson().GSON.fromJson(document.getString("infos"), Infos.class);
         Stats stats = Mmorpg.getOrionGson().GSON.fromJson(document.getString("stats"), Stats.class);
+        Stats pointStats = Mmorpg.getOrionGson().GSON.fromJson(document.getString("pointStats"), Stats.class);
 
         double health = document.getDouble("health");
+        int statsPoint = document.getInteger("statsPoint");
+        int spentStatsPoint = document.containsKey("spentStatsPoint") ? document.getInteger("spentStatsPoint") : 0;
         int level = document.getInteger("level");
         double exp = document.containsKey("exp") ? document.getDouble("exp") : 0;
         int mana = document.getInteger("mana");
@@ -196,7 +204,7 @@ public class Client {
             mounts = new HashSet<>();
         else
             mounts = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("mounts"), new TypeToken<Set<Mounts>>(){}.getType());
-        return new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts);
+        return new OrionPlayer(info, stats, pointStats, uniqueId, health, statsPoint, spentStatsPoint, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts);
     }
 
     public void saveMob(AbstractMob mob) {

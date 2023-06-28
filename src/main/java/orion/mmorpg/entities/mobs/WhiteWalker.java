@@ -13,7 +13,7 @@ import orion.mmorpg.utils.Stats;
 public class WhiteWalker extends AbstractHostile {
 
     public WhiteWalker(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
-        super(EntityTypes.aB, uuid, "Marcheur Blanc", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 200).setBase(Stats.StatsInfo.STRENGTH, 20).setBase(Stats.StatsInfo.DEFENCE, 7).setBase(Stats.StatsInfo.SPEED, 4).build(), 15);
+        super(EntityTypes.aB, uuid, "Marcheur Blanc", spawnLocation, new Stats.Builder().withVitality(200).withStrength(20).withDefence(7).withSpeed(4).build(), 15);
 
         this.setSlot(EnumItemSlot.f, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_HELMET)));
         this.setSlot(EnumItemSlot.e, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE)));

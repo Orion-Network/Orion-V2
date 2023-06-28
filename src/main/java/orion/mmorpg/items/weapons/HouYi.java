@@ -11,7 +11,7 @@ import java.util.Collections;
 
 public class HouYi extends BasicRangedWeapon {
     public HouYi() {
-        super(Material.BOW, "Arc d'Hou Yi", "HOUYI_BOW", 1, Collections.singletonList("Un arc divin pouvant éteindre les soleils"), Rarity.MYTHIC, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 20).build(), 75);
+        super(Material.BOW, "Arc d'Hou Yi", "HOUYI_BOW", 1, Collections.singletonList("Un arc divin pouvant éteindre les soleils"), Rarity.MYTHIC, new Stats.Builder().withStrength(20).build(), 75);
     }
 
     @Override

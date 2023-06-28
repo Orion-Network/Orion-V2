@@ -1,10 +1,10 @@
 package orion.mmorpg.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import orion.mmorpg.events.BeforeSpellCastEvent;
-import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.utils.Utils;
 import orion.mmorpg.utils.WorldGuardUtils;
 
@@ -17,11 +17,6 @@ public class SpellListener implements Listener {
             event.getSpell().setCanceled(true);
             Utils.sendInfoMessage(caster, "Vous ne pouvez pas envoyer de sorts dans cette zone.");
         }
-    }
-
-    @EventHandler
-    public void onLaunchSpell(OnLaunchSpell event) {
-        event.getStats().executeOEffect(event);
     }
 
 }

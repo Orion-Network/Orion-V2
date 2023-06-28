@@ -14,7 +14,7 @@ import orion.mmorpg.utils.Stats;
 
 public class Scarecrow extends AbstractHostile implements Modeled {
     public Scarecrow(String uuid,Location spawnLocation) {
-        super(EntityTypes.bc, uuid, "Scarecrow", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 30).setBase(Stats.StatsInfo.STRENGTH, 2).setBase(Stats.StatsInfo.SPEED, 4).build(), 2);
+        super(EntityTypes.bc, uuid, "Scarecrow", spawnLocation, new Stats.Builder().withVitality(30).withStrength(2).withSpeed(4).build(), 2);
     }
 
     ActiveModel model;

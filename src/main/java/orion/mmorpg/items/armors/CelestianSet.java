@@ -19,7 +19,7 @@ public class CelestianSet {
     public static class CelestianCrown extends BasicArmorItem {
 
         public CelestianCrown() {
-            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1, Collections.singletonList("Une couronne donnée au premier célestien"), Rarity.HERO, ArmorType.HELMET, new Stats.Modifiers());
+            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1, Collections.singletonList("Une couronne donnée au premier célestien"), Rarity.HERO, ArmorType.HELMET, new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0));
         }
 
         @Override
@@ -53,21 +53,21 @@ public class CelestianSet {
     public static class CelestianWings extends BasicArmorItem {
         public CelestianWings() {
             super(Material.ELYTRA, "Ailes Célestes", "CELESTIAN_WINGS", 0, null, Rarity.COMMON, ArmorType.WINGS,
-                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.VITALITY, 5).add(Stats.StatsInfo.DEFENCE, 2).build());
+                    new Stats(0, 0, 0, 0, 5, 0, 2, 0, 0));
         }
     }
 
     public static class CelestianRing extends BasicArmorItem {
         public CelestianRing() {
             super(Material.BLUE_DYE, "Anneau Céleste", "CELESTIAN_RING", 1, null, Rarity.COMMON, ArmorType.RING,
-                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.CRITICAL_CHANCE,5).add(Stats.StatsInfo.CRITICAL_DAMAGE, 3).build());
+                    new Stats.Builder().withCritical_chance(5).withCritical_damage(3).build());
         }
     }
 
     public static class CelestianBelt extends BasicArmorItem {
         public CelestianBelt() {
             super(Material.MAGENTA_DYE, "Ceinture Céleste", "CELESTIAN_BELT", 3, null, Rarity.COMMON, ArmorType.BELT,
-                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.SPEED, 20).build());
+                    new Stats.Builder().withSpeed(20).build());
         }
     }
 }

@@ -9,6 +9,6 @@ import orion.mmorpg.utils.Stats;
 public class AngryChicken extends AbstractHostile {
 
     public AngryChicken(String uuid, Location spawnLocation) {
-        super(EntityTypes.l, uuid, "Poulet énervé", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 20).setBase(Stats.StatsInfo.STRENGTH, 4).setBase(Stats.StatsInfo.SPEED, 4).build(), 3);
+        super(EntityTypes.l, uuid, "Poulet énervé", spawnLocation, new Stats.Builder().withVitality(20).withStrength(4).withSpeed(4).build(), 3);
     }
 }
