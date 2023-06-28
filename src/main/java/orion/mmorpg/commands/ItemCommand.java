@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ItemCommand implements TabExecutor {
+    //TODO Rework command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 1) {

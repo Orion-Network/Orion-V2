@@ -15,21 +15,23 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.Equipments;
+import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
-import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
+import xyz.upperlevel.spigot.book.BookUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
 public class MenuGui extends ChestGui {
+    // TODO Re write equipping message in french and cosmetic message
     Player p;
     OrionPlayer orionPlayer;
     StaticPane armorPane = new StaticPane(0, 0, 3, 4);
@@ -72,11 +74,11 @@ public class MenuGui extends ChestGui {
                     boolean isEquip = orionPlayer.getEquipements().addEquipment(armorItem);
                     if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("HELMET")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desequipez d'abord votre casque");
+                            Utils.sendErrorMessage(p, "Unequip helmet first");
                             return;
                         }
 
-                        Utils.sendInfoMessage(p, "Vous avez equipe un casque");
+                        Utils.sendInfoMessage(p, "You equipped an helmet");
 
                         getArmorPane().removeItem(1, 0);
                         getMenuPane();
@@ -85,7 +87,7 @@ public class MenuGui extends ChestGui {
                         e.setCurrentItem(null);
                     } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("CHESTPLATE")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desequipez d'abord votre plastron");
+                            Utils.sendErrorMessage(p, "Unequip chestplate first");
                             return;
                         }
 
@@ -107,11 +109,11 @@ public class MenuGui extends ChestGui {
                         e.setCurrentItem(null);
                     } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("LEGGINGS")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desequipez d'abord vos jambieres");
+                            Utils.sendErrorMessage(p, "Unequip leggings first");
                             return;
                         }
 
-                        Utils.sendInfoMessage(p, "Vous avez equipe des jambieres");
+                        Utils.sendInfoMessage(p, "You equipped an leggings");
 
                         getArmorPane().removeItem(1, 2);
                         getMenuPane();
@@ -120,11 +122,11 @@ public class MenuGui extends ChestGui {
                         e.setCurrentItem(null);
                     } else if (container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("BOOTS")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desepuippez d'abord vos bottes");
+                            Utils.sendErrorMessage(p, "Unequip boots first");
                             return;
                         }
 
-                        Utils.sendInfoMessage(p, "Vous avez equipe des bottes");
+                        Utils.sendInfoMessage(p, "You equipped a boots");
 
                         getArmorPane().removeItem(1, 3);
                         getMenuPane();
@@ -138,11 +140,11 @@ public class MenuGui extends ChestGui {
                         }
 
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desepuippez d'abord vos ailes");
+                            Utils.sendErrorMessage(p, "Unequip chestplate first");
                             return;
                         }
 
-                        Utils.sendInfoMessage(p, "Vous avez equipe des ailes");
+                        Utils.sendInfoMessage(p, "You equipped an Wings");
 
                         getArmorPane().removeItem(1, 1);
                         getMenuPane();
@@ -151,11 +153,11 @@ public class MenuGui extends ChestGui {
                         e.setCurrentItem(null);
                     } else if(container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("BELT")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Desepuippez d'abord votre ceinture");
+                            Utils.sendErrorMessage(p, "Unequip Belt first");
                             return;
                         }
 
-                        Utils.sendInfoMessage(p, "Vous avez equipe une ceinture");
+                        Utils.sendInfoMessage(p, "You equipped a Belt");
 
                         getArmorPane().removeItem(2, 2);
                         getMenuPane();
@@ -164,12 +166,12 @@ public class MenuGui extends ChestGui {
                         e.setCurrentItem(null);
                     } else if(container.get(Namespaces.armor_type, PersistentDataType.STRING).equalsIgnoreCase("RING")) {
                         if (!isEquip) {
-                            Utils.sendErrorMessage(p, "Vous ne pouvez pas equiper plus de deux bagues");
+                            Utils.sendErrorMessage(p, "You need to unequip first or second ring");
                             return;
                         }
 
                         if (orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING) == armorItem) {
-                            Utils.sendInfoMessage(p, "Vous avez equipe une bague");
+                            Utils.sendInfoMessage(p, "You equipped a Ring");
 
                             getArmorPane().removeItem(0, 1);
                             getMenuPane();
@@ -177,7 +179,7 @@ public class MenuGui extends ChestGui {
 
                             e.setCurrentItem(null);
                         } else if (orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING) == armorItem) {
-                            Utils.sendInfoMessage(p, "Vous avez equipe une bague");
+                            Utils.sendInfoMessage(p, "You equipped a Ring");
 
                             getArmorPane().removeItem(0, 2);
                             getMenuPane();
@@ -240,14 +242,14 @@ public class MenuGui extends ChestGui {
                 if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.HELMET)) {
                     if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.HELMET))
                         return;
-                    Utils.sendInfoMessage(p, "Vous avez enleve un casque");
+                    Utils.sendInfoMessage(p, "You removed an helmet");
 
                     getArmorPane().removeItem(1, 0);
                     getMenuPane();
                     getArmorPane().addItem(HELMET_PLACEHOLDER, 1, 0);
                 } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.CHESTPLATE)) {
                     orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHEST_PLATE);
-                    Utils.sendInfoMessage(p, "Vous avez enleve une plastron");
+                    Utils.sendInfoMessage(p, "You removed an chestplate");
 
                     getArmorPane().removeItem(1, 1);
                     getMenuPane();
@@ -255,14 +257,14 @@ public class MenuGui extends ChestGui {
                 } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.LEGGINGS)) {
                     if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.LEGGINGS))
                         return;
-                    Utils.sendInfoMessage(p, "Vous avez enleve un pantalon");
+                    Utils.sendInfoMessage(p, "You removed an leggings");
 
                     getArmorPane().removeItem(1, 2);
                     getMenuPane();
                     getArmorPane().addItem(LEGGINGS_PLACEHOLDER, 1, 2);
                 } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.BOOTS)) {
                     orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.BOOTS);
-                    Utils.sendInfoMessage(p, "Vous avez enleve des bottes");
+                    Utils.sendInfoMessage(p, "You removed an boots");
 
                     getArmorPane().removeItem(1, 3);
                     getMenuPane();
@@ -270,7 +272,7 @@ public class MenuGui extends ChestGui {
                 } else if (armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.WINGS)) {
                     if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.CHEST_PLATE))
                         return;
-                    Utils.sendInfoMessage(p, "Vous avez enleve des ailes");
+                    Utils.sendInfoMessage(p, "You removed an wings");
 
                     getArmorPane().removeItem(1, 1);
                     getMenuPane();
@@ -278,7 +280,7 @@ public class MenuGui extends ChestGui {
                 } else if(armorItem.getARMORTYPE().equals(BasicArmorItem.ArmorType.BELT)) {
                     if(!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.BELT))
                         return;
-                    Utils.sendInfoMessage(p, "Vous avez enleve une ceinture");
+                    Utils.sendInfoMessage(p, "You removed an belt");
 
                     getArmorPane().removeItem(2, 2);
                     getMenuPane();
@@ -290,7 +292,7 @@ public class MenuGui extends ChestGui {
                             return;
                     } else if (!orionPlayer.getEquipements().removeEquipment(Equipments.EquipmentSlot.RIGHT_RING))
                         return;
-                    Utils.sendInfoMessage(p, "Vous avez enleve une bague");
+                    Utils.sendInfoMessage(p, "You removed a ring");
 
                     getArmorPane().removeItem(0, slot);
                     getMenuPane();
@@ -306,7 +308,7 @@ public class MenuGui extends ChestGui {
             else if(e.getClick() == ClickType.RIGHT) {
                 orionPlayer.setPet(null);
                 p.closeInventory();
-                Utils.sendInfoMessage(p, "Vous avez enlevé votre pet");
+                Utils.sendInfoMessage(p, "You removed your pet");
             }
             e.setCancelled(true);
         }), 0, 3);
@@ -335,8 +337,8 @@ public class MenuGui extends ChestGui {
         ItemMeta headMeta = head.getItemMeta();
         headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
         LinkedList<String> infos = new LinkedList<>();
-        if (orionPlayer.getMainSupport() != null)
-            infos.add(ChatColor.YELLOW + orionPlayer.getMainSupport().getName());
+        if (orionPlayer.getSupport() != null)
+            infos.add(ChatColor.YELLOW + orionPlayer.getSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
         infos.add(ChatColor.WHITE + "Appuyez pour ouvrir le menu des stats");
         headMeta.setLore(infos);
@@ -362,32 +364,13 @@ public class MenuGui extends ChestGui {
             }), 3, 0);
         }*/
 
-        if(orionPlayer.getParty() != null) {
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Cliquez pour ouvrir le menu d'équipe");
-            lore.add(ChatColor.GRAY + "Clique droit pour quitter l'équipe");
-            for(OrionPlayer member : orionPlayer.getParty().getMembers())
-                lore.add(ChatColor.YELLOW + Bukkit.getPlayer(member.getUniqueId()).getName() + " : "
-                        + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth()
-                        + ChatColor.YELLOW +  "/"
-                        + Stats.StatsInfo.VITALITY.getColor()  + member.getStats().get(Stats.StatsInfo.VITALITY) + " "
-                        + Stats.StatsInfo.VITALITY.getCharacter());
-
-            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), lore, Rarity.COMMON).generateItem(null, 1), e-> {
-                if(e.getClick().equals(ClickType.LEFT))
-                    new PartyGui( p, orionPlayer).show(p);
-                else if(e.getClick().equals(ClickType.RIGHT)) {
-                    orionPlayer.getParty().removeMember(orionPlayer);
-                    Utils.sendInfoMessage(p, "Vous avez quitté l'équipe");
-                }
-            }), 1,0);
-        } else {
-            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Cliquez pour ouvrir le menu d'équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
-                Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
+        //TODO Add item to open the party gui
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Créer une équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
+            if(orionPlayer.getParty() != null)
                 new PartyGui( p, orionPlayer).show(p);
-            }), 1,0);
-        }
-
+            else
+                Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
+        }), 1,0);
 
         menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.generateItemStack(1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);

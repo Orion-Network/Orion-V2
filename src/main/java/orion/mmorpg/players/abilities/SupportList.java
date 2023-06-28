@@ -2,8 +2,11 @@ package orion.mmorpg.players.abilities;
 
 import orion.mmorpg.players.abilities.supports.*;
 
-//Change to have a list of Effects added to the player
 public enum SupportList {
+    HAKI(Haki.class),
+    PROJECT_SOUL(ProjectSoul.class),
+    SOLEIL(Soleil.class),
+    SUCCION_SANGUIN(SuccionSanguine.class),
     THE_FOOL(TheFool.class),
     ;
 

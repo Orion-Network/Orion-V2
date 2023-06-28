@@ -87,7 +87,7 @@ public class PlayerEditor extends ChestGui {
         }), 1,0);
 
         pane.addItem(new GuiItem(new ItemStack(Material.PAPER), event -> {
-            BasicItem item = BasicItem.generateTemplateBasicItem(Material.PAPER, (targetOrionPlayer.getMainSupport() != null ? "Support Actuel : " + targetOrionPlayer.getMainSupport().getName() : "Aucun support"), 3, null, (targetOrionPlayer.getMainSupport() != null ? targetOrionPlayer.getMainSupport().getRank() : Rarity.TRASH));
+            BasicItem item = BasicItem.generateTemplateBasicItem(Material.PAPER, (targetOrionPlayer.getSupport() != null ? "Support Actuel : " + targetOrionPlayer.getSupport().getName() : "Aucun support"), 3, null, (targetOrionPlayer.getSupport() != null ? targetOrionPlayer.getSupport().getRank() : Rarity.TRASH));
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
             ArrayList<String> lore = Arrays.stream(SupportList.values()).map(t -> ChatColor.GRAY + t.name()).collect(Collectors.toCollection(ArrayList::new));
@@ -101,11 +101,11 @@ public class PlayerEditor extends ChestGui {
                     .onComplete(((player, text) -> {
                         text = text.toUpperCase();
                         if(EnumUtils.isValidEnum(SupportList.class, text)) {
-                            targetOrionPlayer.setMainSupport(SupportList.valueOf(text).getSupport());
+                            targetOrionPlayer.setSupport(SupportList.valueOf(text).getSupport());
                             Utils.sendInfoMessage(ownerPlayer, "Support modifié");
                             return AnvilGUI.Response.close();
                         } else if(text.equalsIgnoreCase("null")) {
-                            targetOrionPlayer.setMainSupport((Support) null);
+                            targetOrionPlayer.setSupport((Support) null);
                             Utils.sendInfoMessage(ownerPlayer, "Support supprimé");
                             return AnvilGUI.Response.close();
                         }

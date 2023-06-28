@@ -1,40 +1,70 @@
 package orion.mmorpg.players.abilities.supports;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
-import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 public class TheFool extends Support {
-
     public TheFool() {
-        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.", (Class<? extends Event>[]) new Class[]{OnSpellSense.class});
-        this.getOEffects().add(SpellAnnulation.class);
+        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.");
     }
 
-    public static class SpellAnnulation extends OEffect {
+    @Override
+    public void onInteract(PlayerInteractEvent event) {
 
-            public SpellAnnulation(Long duration) {
-                super("Spell Annulation", "Annule les sorts", OnSpellSense.class, duration);
-            }
-
-            @Override
-            public void onEvent(Event event) {
-                OnSpellSense onLaunchSpell = (OnSpellSense) event;
-                onLaunchSpell.getSpell().setCanceled(true);
-                Utils.sendInfoMessage(onLaunchSpell.getSender(), "Votre sort a été annulé.");
-            }
     }
 
+    @Override
+    public void onLaunchSpell(Player player, OrionPlayer stats, Spell s) {
+
+    }
+
+    @Override
+    public void onHit(EntityDamageByEntityEvent event, OrionPlayer stats) {
+
+    }
+
+    @Override
+    public void onShootArrow(EntityShootBowEvent event) {
+
+    }
+
+    @Override
+    public void onHitByEntity(EntityDamageByEntityEvent entityEvent) {
+
+    }
+
+    @Override
+    public void onSpellSense(OnSpellSense e) {
+        e.getSpell().setCanceled(true);
+        Utils.sendInfoMessage(e.getSender(), "Votre sort à été annulé");
+    }
+
+    @Override
+    public void onTick() {
+
+    }
+
+    @Override
+    public void onDie() {
+
+    }
+
+    @Override
+    public void onSwitchSlot(Player player, OrionPlayer stats, PlayerItemHeldEvent event) {
+
+    }
+
+    @Override
+    public void onSupportEnd(Player p, OrionPlayer stats) {
+
+    }
 }

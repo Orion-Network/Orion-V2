@@ -5,7 +5,6 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import orion.mmorpg.entities.samples.AbstractHostile;
 import orion.mmorpg.entities.samples.Modeled;
-import orion.mmorpg.utils.Stats;
 
 import java.util.EnumSet;
 
@@ -55,7 +54,7 @@ public class MeleeAnimationAttack<T extends AbstractHostile & Modeled> extends P
     //Start pathfinding called when a() returns true
     @Override
     public void c() {
-        abstractModeledMob.getNavigation().a(path, abstractModeledMob.getStats().get(Stats.StatsInfo.SPEED)/10);
+        abstractModeledMob.getNavigation().a(path, abstractModeledMob.getStats().getSpeed()/10);
     }
 
     //Stop pathfinding called when b() returns false
@@ -76,7 +75,7 @@ public class MeleeAnimationAttack<T extends AbstractHostile & Modeled> extends P
             abstractModeledMob.getModeledEntity().getModel("kindletronsr").getAnimationHandler().playAnimation(animation, lerpIn, lerpOut, speed, false);
             //scarecrow.attackEntity(target);
         } else {
-            abstractModeledMob.getNavigation().a(target, abstractModeledMob.getStats().get(Stats.StatsInfo.SPEED)/10);
+            abstractModeledMob.getNavigation().a(target, abstractModeledMob.getStats().getSpeed()/10);
         }
     }
 }

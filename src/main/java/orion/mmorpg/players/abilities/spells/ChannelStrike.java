@@ -10,7 +10,6 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
 
 import java.awt.*;
@@ -32,7 +31,7 @@ public class ChannelStrike extends Spell {
         int max = 5;
 
         while(count < max) {
-            strike(target, (int) (getOrionCaster().getStats().get(Stats.StatsInfo.INTELLIGENCE)/10));
+            strike(target, (int) (getOrionCaster().getStats().getIntel()/10));
             //Draw LineEffect between previous and current target
             if(previousTarget != null) {
                 LineEffect lineEffect = new LineEffect(Mmorpg.effectManager);
