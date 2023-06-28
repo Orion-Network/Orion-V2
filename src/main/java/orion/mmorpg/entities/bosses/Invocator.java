@@ -31,10 +31,7 @@ import java.util.UUID;
 
 public class Invocator extends AbstractBoss {
     public Invocator(String uuid,Location spawnLocation) {
-        super(EntityTypes.O, uuid, "L'Invocateur", spawnLocation,  new Stats.Builder().setBase(Stats.StatsInfo.INTELLIGENCE, 100)
-                .setBase(Stats.StatsInfo.DEFENCE, 20)
-                .setBase(Stats.StatsInfo.VITALITY, 1000)
-                .setBase(Stats.StatsInfo.SPEED, 4).build(), 30);
+        super(EntityTypes.O, uuid, "L'Invocateur", spawnLocation,  new Stats.Builder().withIntel(100).withDefence(20).withVitality(1000).withSpeed(4).build(), 30);
     }
 
     PathfinderGoalSummon pathfinderGoalSummon;
@@ -53,7 +50,7 @@ public class Invocator extends AbstractBoss {
                 new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-4,0,-4))
 
         );
-         this.bP.a(0,new PathfinderGoalFireballAttack(this, this.getStats().get(Stats.StatsInfo.INTELLIGENCE)));
+         this.bP.a(0,new PathfinderGoalFireballAttack(this, this.getStats().getIntel()));
         this.bP.a(1, pathfinderGoalSummon);
         this.bP.a(2, new PathfinderGoalCastSpell(new Repulsion(), this.getBukkitEntity().getLocation(), 120));
         this.bP.a(3, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 3.0F, 0.8D, 0.33D));

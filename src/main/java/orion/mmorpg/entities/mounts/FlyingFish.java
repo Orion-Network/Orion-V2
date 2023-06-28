@@ -10,7 +10,7 @@ import orion.mmorpg.utils.Stats;
 public class FlyingFish extends AbstractMount {
 
     public FlyingFish(String uuid, Location spawnLocation, Player player) {
-        super(EntityTypes.aS, uuid, "FlyingFish", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.SPEED, 4).build(), player, MountType.AIR);
+        super(EntityTypes.aS, uuid, "FlyingFish", spawnLocation, new Stats.Builder().withSpeed(4).build(), player, MountType.AIR);
 
         this.setForwardMultiplier(2);
         this.setStrafeMultiplier(1.7);

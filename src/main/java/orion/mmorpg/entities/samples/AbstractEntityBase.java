@@ -74,12 +74,12 @@ public abstract class AbstractEntityBase extends EntityCreature {
     }
 
     private void generateAttribute() {
-        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.d, (a) -> {a.setValue(this.getStats().get(Stats.StatsInfo.SPEED)/10);}));
-        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.h, (a) -> {a.setValue(this.getStats().get(Stats.StatsInfo.ATTACK_SPEED));}));
+        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.d, (a) -> {a.setValue(this.getStats().getSpeed()/10);}));
+        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.h, (a) -> {a.setValue(this.getStats().getAttack_speed());}));
         this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.b, (a) -> {a.setValue(1.0);}));
         ;
-        this.getAttributeMap().a(GenericAttributes.a).setValue(this.getStats().get(Stats.StatsInfo.VITALITY));
-        this.getAttributeMap().a(GenericAttributes.f).setValue(this.getStats().get(Stats.StatsInfo.STRENGTH));
+        this.getAttributeMap().a(GenericAttributes.a).setValue(this.getStats().getVitality());
+        this.getAttributeMap().a(GenericAttributes.f).setValue(this.getStats().getStrength());
         this.setHealth(this.getMaxHealth());
     }
 

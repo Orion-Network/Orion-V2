@@ -27,8 +27,8 @@ public abstract class AbstractHostile extends AbstractMob {
         if(this instanceof Modeled)
             this.bP.a(1, new MeleeAnimationAttack(this, 0.25, 0.25, 3, 4, 10));
         else
-            this.bP.a(1, new PathfinderGoalMeleeAttack(this, getStats().get(Stats.StatsInfo.SPEED)/10, true));
-        this.bP.a(2, new MoveTowardsTargetIfRange(this, getStats().get(Stats.StatsInfo.SPEED)/10, 10, this.getSpawnLocation()));
+            this.bP.a(1, new PathfinderGoalMeleeAttack(this, getStats().getSpeed()/10, true));
+        this.bP.a(2, new MoveTowardsTargetIfRange(this, getStats().getSpeed()/10, 10, this.getSpawnLocation()));
 
         this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
         this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<EntityHuman>(this, EntityHuman.class, true));

@@ -13,7 +13,7 @@ import java.util.Collections;
 
 public class AspectOfJairi extends BasicMeleeWeapon {
     public AspectOfJairi() {
-        super(Material.IRON_SWORD, "Aspect of Jairi", "ASPECT_OF_JAIRI", 0, Collections.singletonList("Une épée intrigante d'un autre univers"), Rarity.RARE, new Stats.Modifiers(), 1);
+        super(Material.IRON_SWORD, "Aspect of Jairi", "ASPECT_OF_JAIRI", 0, Collections.singletonList("Une épée intrigante d'un autre univers"), Rarity.RARE, new Stats.Builder().build(), 1);
         this.spell = new InstantTransmission();
     }
 

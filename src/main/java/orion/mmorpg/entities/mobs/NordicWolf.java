@@ -11,7 +11,7 @@ import orion.mmorpg.utils.Stats;
 
 public class NordicWolf extends AbstractHostile {
     public NordicWolf(String uuid, Location spawnLocation) {
-        super(EntityTypes.bc, uuid, "Loup Nordique", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 150).setBase(Stats.StatsInfo.STRENGTH, 17).setBase(Stats.StatsInfo.DEFENCE, 4).setBase(Stats.StatsInfo.SPEED, 5).build(), 13);
+        super(EntityTypes.bc, uuid, "Loup Nordique", spawnLocation, new Stats.Builder().withVitality(150).withStrength(17).withDefence(4).withSpeed(5).build(), 13);
         this.getRewards().add(new Rewards.Reward(new NordicWolfFur().generateItem(null, 1), 70));
         this.getRewards().add(new Rewards.Reward(new NordicWolfBone().generateItem(null, 1), 30));
     }

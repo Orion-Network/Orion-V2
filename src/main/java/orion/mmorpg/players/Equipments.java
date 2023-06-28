@@ -40,6 +40,22 @@ public class Equipments {
         return null;
     }
 
+    public Stats getEquipmentStats() {
+        Stats stats = new Stats.Builder().build();
+        equipments.values().forEach(item -> {
+            stats.setStrength(stats.getStrength() + item.getStats().getStrength());
+            stats.setCritical_chance(stats.getCritical_chance() + item.getStats().getCritical_chance());
+            stats.setCritical_damage(stats.getCritical_damage() + item.getStats().getCritical_damage());
+            stats.setAttack_speed(stats.getAttack_speed() + item.getStats().getAttack_speed());
+            stats.setVitality(stats.getVitality() + item.getStats().getVitality());
+            stats.setIntel(stats.getIntel() + item.getStats().getIntel());
+            stats.setDefence(stats.getDefence() + item.getStats().getDefence());
+            stats.setSpeed(stats.getSpeed() + item.getStats().getSpeed());
+            stats.setLuck(stats.getLuck() + item.getStats().getLuck());
+        });
+        return stats;
+    }
+
     private EquipmentSlot isSlotFree(BasicArmorItem.ArmorType armorType) {
         switch (armorType) {
             case HELMET -> {

@@ -25,13 +25,13 @@ import orion.mmorpg.utils.Stats;
 public class Guardian extends AbstractMob implements IRangedEntity {
 
     public Guardian(String uuid, Location spawnLocation) {
-        super(EntityTypes.P, uuid, "Garde", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 100000).setBase(Stats.StatsInfo.STRENGTH,1000).setBase(Stats.StatsInfo.SPEED, 4).build(), 99);
+        super(EntityTypes.P, uuid, "Garde", spawnLocation, new Stats.Builder().withVitality(100000).withStrength(1000).withSpeed(4).build(), 99);
     }
 
     @Override
     protected void generatePathfinder() {
         this.bP.a(1, new PathfinderGoalArrowAttack(this, 1.25D, 20, 10.0F));
-        this.bP.a(2, new MoveTowardsTargetIfRange(this, getStats().get(Stats.StatsInfo.SPEED)/10, 10, this.getSpawnLocation()));
+        this.bP.a(2, new MoveTowardsTargetIfRange(this, getStats().getSpeed()/10, 10, this.getSpawnLocation()));
 
         this.bQ.a(1, new PathfinderGoalNearestAttackableTarget(this, AbstractMob.class, 10, true, false, (entityliving) -> entityliving instanceof AbstractHostile));
         this.bQ.a(2, new PathfinderGoalHurtByTarget(this, new Class[0]));
@@ -41,7 +41,7 @@ public class Guardian extends AbstractMob implements IRangedEntity {
     public void a(EntityLiving entityLiving, float v) {
         ItemStack itemstack = this.h(this.b(ProjectileHelper.a(this, Items.mg)));
         EntityArrow entityarrow = this.b(itemstack, f);
-        entityarrow.setDamage(entityarrow.getDamage() + this.getStats().get(Stats.StatsInfo.STRENGTH));
+        entityarrow.setDamage(entityarrow.getDamage() + this.getStats().getStrength());
         double d0 = entityLiving.locX() - this.locX();
         double d1 = entityLiving.e(0.3333333333333333D) - entityarrow.locY();
         double d2 = entityLiving.locZ() - this.locZ();
