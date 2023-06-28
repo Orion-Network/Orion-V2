@@ -1,6 +1,5 @@
 package orion.mmorpg.items;
 
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -13,11 +12,17 @@ import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
 import orion.mmorpg.items.misc.drops.NordicWolfBone;
 import orion.mmorpg.items.misc.drops.NordicWolfFur;
+import orion.mmorpg.items.misc.reforge.PolarizedStone;
 import orion.mmorpg.items.misc.reforge.StrongStone;
+import orion.mmorpg.items.misc.reforge.TastyStone;
+import orion.mmorpg.items.money.BronzeCoin;
 import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.misc.NullItem;
+import orion.mmorpg.items.tools.AdminRod;
 import orion.mmorpg.items.tools.MinerPickaxe;
 import orion.mmorpg.items.tools.Picky;
+import orion.mmorpg.items.tools.WoodenRod;
 import orion.mmorpg.items.weapons.*;
 import orion.mmorpg.items.weapons.arrows.CommonArrow;
 import orion.mmorpg.items.weapons.arrows.GravityArrow;
@@ -41,6 +46,7 @@ public enum ItemList {
     REINFORCED_BOW(ReinforcedBow.class),
     HOUYI_BOW(HouYi.class),
     MURAMASA(Muramasa.class),
+    DRAGON_SLAYER(DragonSlayer.class),
     THOUSANDS_WISDOM(ThousandWisdom.class),
     //Armor Items
     STARTING_HELMET(StartingSet.StartingBoots.class),
@@ -104,13 +110,13 @@ public enum ItemList {
     JOB_PLACEHOLDER(JobPlaceholder.class),
     //MISC
     GIFT(Gift.class),
+    NULL_ITEM(NullItem.class),
     GRIMORY(GrimoryItem.class),
     MASTER_SCROLL(MasterScrollItem.class),
     SPELL_SCROLL(SpellScroll.class),
     MYTHICAL_SCROLL(MythicalScroll.class),
     INFINITE_FIREWORK(InfiniteFirework.class),
     CELESTIAL_SERUM(CelestialSerum.class),
-    SOUL_SWITCHER(SoulSwitcher.class),
     GUILD_BOOK(GuildBook.class),
     TEST_ITEM(TestItem.class),
     MENU_ITEM(MenuItem.class),
@@ -120,12 +126,19 @@ public enum ItemList {
     NORDIC_WOLF_BONE(NordicWolfBone.class),
     //REFORGES
     STRONG_STONE(StrongStone.class),
+    POLARIZED_STONE(PolarizedStone.class),
+    TASTY_STONE(TastyStone.class),
     //TOOLS
     MINER_PICKAXE(MinerPickaxe.class),
     PICKY(Picky.class),
+    WOODEN_ROD(WoodenRod.class),
+    ADMIN_ROD(AdminRod.class),
 
     //RESSOURCES
     BRONZE_INGOT(BronzeIngot.class),
+
+    //CURRENCY
+    BRONZE_COIN(BronzeCoin.class),
     ;
 
     Class<?> itemClass;

@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.BeforeSpellCastEvent;
+import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Element;
@@ -116,7 +117,7 @@ public abstract class Spell {
             }
         if(!checkIfSpellCastable()) return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
-        orionPlayer.onLaunchSpell(player, orionPlayer, this);
+        Bukkit.getPluginManager().callEvent(new OnLaunchSpell(player, orionPlayer, this));
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
         launch(mmorpg, caster.getLocation(), knowledge);
         orionPlayer.getKnownSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));
@@ -170,7 +171,6 @@ public abstract class Spell {
         return true;
     }
 
-    //TODO Change to a boolean to check if spell has been launched
     public abstract void launch(Mmorpg mmorpg, Location location, Knowledge knowledge);
 
     public String getInternal_id() {

@@ -20,7 +20,7 @@ import java.util.Collections;
 
 public class Muramasa extends BasicMeleeWeapon {
     public Muramasa() {
-        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", AssociationConfig.getModel("weapon/sword/legacy_sword"), Collections.singletonList("Une épée légendaire dégageant une aura maléfique."), Rarity.SUPERRARE, new Stats.Builder().withStrength(7).withSpeed(5).withCritical_chance(20).withCritical_damage(10).build(), 15);
+        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", AssociationConfig.getModel("weapon/sword/legacy_sword"), Collections.singletonList("Une épée légendaire dégageant une aura maléfique."), Rarity.SUPERRARE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 7).add(Stats.StatsInfo.SPEED, 5).add(Stats.StatsInfo.CRITICAL_CHANCE, 20).add(Stats.StatsInfo.CRITICAL_DAMAGE, 10).build(), 15);
     }
 
     @Override

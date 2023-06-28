@@ -144,6 +144,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new ServerListener(this), this);
         pm.registerEvents(new SpellListener(), this);
         pm.registerEvents(new WorldListener(this), this);
+        pm.registerEvents(new FishingListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));

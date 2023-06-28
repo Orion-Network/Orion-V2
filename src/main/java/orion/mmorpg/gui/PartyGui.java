@@ -14,11 +14,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.config.AssociationConfig;
 import orion.mmorpg.items.ItemList;
+import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 public class PartyGui extends ChestGui {
@@ -35,7 +39,9 @@ public class PartyGui extends ChestGui {
 
     private OutlinePane getPrimaryPane() {
         OutlinePane primaryPane = new OutlinePane(0, 0, 9, 1);
-        primaryPane.addItem(new GuiItem(ItemList.TBI_PLACEHOLDER.generateItemStack(1), event -> {
+        BasicItem item = BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, ChatColor.YELLOW + "Ajouter un membre", AssociationConfig.getModel("gui/party_manager"),
+                Collections.singletonList(ChatColor.GRAY + "Cliquez pour ajouter un membre"), Rarity.COMMON);
+        primaryPane.addItem(new GuiItem(item.generateItem(null, 1), event -> {
             new AnvilGUI.Builder()
                     .onComplete((player, text) -> {
                         if (Bukkit.getPlayer(text) != null) {

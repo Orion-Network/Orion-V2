@@ -22,13 +22,13 @@ public class BasicMeleeWeapon extends BasicEquipmentItem {
         this.DAMAGE = item.getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
     }
 
-    public BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats STATS, float DAMAGE) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.MELEE_WEAPON, PERMISSION, STATS);
+    public BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.MELEE_WEAPON, PERMISSION, MODIFIERS);
         this.DAMAGE = DAMAGE;
     }
 
-    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats STATS, float DAMAGE) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.MELEE_WEAPON, STATS);
+    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.MELEE_WEAPON, MODIFIERS);
         this.DAMAGE = DAMAGE;
     }
 
@@ -48,7 +48,7 @@ public class BasicMeleeWeapon extends BasicEquipmentItem {
         if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + DAMAGE);
-        lore.addAll(getStats().statsAsLore());
+        lore.addAll(getModifiersWithReforge().getAsLore());
 
         return super.generateLore(lore);
     }

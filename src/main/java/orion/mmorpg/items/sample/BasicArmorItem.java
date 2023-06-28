@@ -26,8 +26,8 @@ public class BasicArmorItem extends BasicEquipmentItem {
         this.ARMORTYPE = ArmorType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.armor_type, PersistentDataType.STRING));
     }
 
-    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats STATS) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR, STATS);
+    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats.Modifiers modifiers) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR, modifiers);
         this.ARMORTYPE = ARMORTYPE;
     }
 
@@ -52,12 +52,13 @@ public class BasicArmorItem extends BasicEquipmentItem {
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
-        lore.addAll(getStats().statsAsLore());
+        lore.addAll(getModifiersWithReforge().getAsLore());
 
         return super.generateLore(lore);
     }
 
     public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
+        data.getStats().addModifiers(getINTERNAL_ID(), getModifiersWithReforge());
         onCosmeticEquip(p, data, item);
         return true;
     }
@@ -67,6 +68,7 @@ public class BasicArmorItem extends BasicEquipmentItem {
     }
 
     public boolean onUnequip(Player p, OrionPlayer data, ItemStack item) {
+        data.getStats().removeModifiers(getINTERNAL_ID());
         onCosmeticUnequip(p, data, item);
         return true;
     }

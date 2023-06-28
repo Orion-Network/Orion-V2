@@ -34,7 +34,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
     Pets pet;
 
     public AbstractPet(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Player owner, Pets pet) {
-        super(entitytypes, uuid, name, spawnLocation, new Stats.Builder().withVitality(1).withSpeed(4).build());
+        super(entitytypes, uuid, name, spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 1).setBase(Stats.StatsInfo.SPEED, 4).build());
         this.owner = owner;
         this.pet = pet;
 

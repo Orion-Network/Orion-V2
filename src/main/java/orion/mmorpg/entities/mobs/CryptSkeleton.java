@@ -9,6 +9,6 @@ import orion.mmorpg.utils.Stats;
 public class CryptSkeleton extends AbstractHostile {
 
     public CryptSkeleton(String uuid, Location spawnLocation) {
-        super(EntityTypes.aB, uuid, "Squelette de la Crypt", spawnLocation,  new Stats.Builder().withVitality(20).withStrength(8).withSpeed(6).build(), 7);
+        super(EntityTypes.aB, uuid, "Squelette de la Crypt", spawnLocation,  new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 20).setBase(Stats.StatsInfo.STRENGTH, 8).setBase(Stats.StatsInfo.SPEED, 8).build(), 7);
     }
 }

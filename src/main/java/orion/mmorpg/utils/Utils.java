@@ -7,6 +7,8 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -20,7 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+import static orion.mmorpg.utils.Stats.StatsInfo.*;
 
 public class Utils {
     /**
@@ -54,6 +59,10 @@ public class Utils {
             e.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + message);
     }
 
+    public static void sendTooltipInfoMessage(Player player, String message) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + message));
+    }
+
     /**
      * Compute damage to inflict based on Strength, Critical Chance, Critical Damages and default damage
      *
@@ -62,9 +71,9 @@ public class Utils {
      * @return Computed damages
      */
     public static float calculateDamage(Stats playerStats, float damage) {
-        float strength = playerStats.getStrength();
-        float critical_chance = playerStats.getCritical_chance();
-        float critical_damage = playerStats.getCritical_damage();
+        float strength = playerStats.get(STRENGTH);
+        float critical_chance = playerStats.get(CRITICAL_CHANCE);
+        float critical_damage = playerStats.get(CRITICAL_DAMAGE);
 
         float totalDamage = (5 + damage) * (1 + (strength / 100));
         Random r = new Random();
@@ -76,6 +85,7 @@ public class Utils {
                     ChatColor.YELLOW + "Critical Chance: " + ChatColor.RED + critical_chance + "\n" +
                     ChatColor.YELLOW + "Critical Damage: " + ChatColor.RED + critical_damage + "\n" +
                     ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
+                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
                     ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
                     ChatColor.YELLOW + "Is Critical : " + ChatColor.RED + (critical == 1) + "\n" +
                     ChatColor.YELLOW + "Critical Multiplier: " + ChatColor.RED + (1 + ((critical_damage * critical) / 100)) + "\n" +
@@ -91,7 +101,7 @@ public class Utils {
      * @return Computed magic damages
      */
     public static float calculateMagicDamage(Stats playerStats, float damage) {
-        float intel = playerStats.getIntel();
+        float intel = playerStats.get(INTELLIGENCE);
 
         float totalDamage = (5 + damage) * (1 + (intel / 50));
         if (Mmorpg.isDebug())
@@ -147,6 +157,14 @@ public class Utils {
                 .map(Enum::name)
                 .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
                 .collect(Collectors.toList());
+    }
+
+    public static int getRandomInt(int i, int i1) {
+        return ThreadLocalRandom.current().nextInt(i, i1 + 1);
+    }
+
+    public static long getRandomLong(int i, long totalWeight) {
+        return ThreadLocalRandom.current().nextLong(i, totalWeight + 1);
     }
 
     public static class ChunkCoords {

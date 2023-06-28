@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent items as Rpg Item
  */
-public class BasicItem extends ItemStack {
+public abstract class BasicItem extends ItemStack {
 
     protected final Material MATERIAL;
     protected final String NAME;
@@ -43,7 +43,6 @@ public class BasicItem extends ItemStack {
     protected final ItemType ITEM_TYPE;
     protected Element ELEMENT = Element.PHYSIC;
     protected final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
-    protected PersistentDataContainer persistentDataContainer;
     protected Spell spell;
 
     protected BasicItem(ItemStack item) {

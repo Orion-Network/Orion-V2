@@ -120,7 +120,11 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
 
     @Override
     protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {
-        this.drops = rewards.generateRewards();
+        OrionPlayer orionplayer;
+        if(damagesource.getEntity().getBukkitEntity() instanceof Player player) {
+            orionplayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
+            this.drops = rewards.award(orionplayer);
+        }
     }
 
     @Override

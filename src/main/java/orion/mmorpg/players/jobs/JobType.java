@@ -5,7 +5,9 @@ import org.bukkit.Material;
 
 public enum JobType {
     SMITHING(Smithing.class, Material.IRON_AXE, "⚒"),
-    MINING(Mining.class, Material.IRON_PICKAXE, "⛏");
+    MINING(Mining.class, Material.IRON_PICKAXE, "⛏"),
+    FISHING(Fishing.class, Material.FISHING_ROD, "🎣")
+    ;
 
     @Getter
     Class<? extends AbstractJob> jobClass;

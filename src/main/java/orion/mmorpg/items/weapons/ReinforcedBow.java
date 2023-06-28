@@ -9,6 +9,6 @@ import java.util.Collections;
 
 public class ReinforcedBow extends BasicRangedWeapon {
     public ReinforcedBow() {
-        super(Material.BOW, "Arc Renforcé", "REINFORCED_BOW", 2, Collections.singletonList("Un arc un peu plus solide que la moyenne"), Rarity.RARE, new Stats.Builder().withStrength(4).withSpeed(3).build(), 5);
+        super(Material.BOW, "Arc Renforcé", "REINFORCED_BOW", 2, Collections.singletonList("Un arc un peu plus solide que la moyenne"), Rarity.RARE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 4).add(Stats.StatsInfo.SPEED, 3).build(), 5);
     }
 }

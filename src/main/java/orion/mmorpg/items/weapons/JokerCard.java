@@ -17,7 +17,7 @@ public class JokerCard extends BasicMeleeWeapon {
     final String[] card = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Valet", "Reine", "Roi", "Joker"};
 
     public JokerCard() {
-        super(Material.IRON_SWORD, "Carte Joker", "JOKER_CARD", AssociationConfig.getModel("weapon/card/01"), Collections.singletonList("Une arme intrigante multipliant ses dégâts selon la carte tirée"), Rarity.RARE, new Stats(15, 10, 0, 0, 0, 0, 0, 0, 0), 7);
+        super(Material.IRON_SWORD, "Carte Joker", "JOKER_CARD", AssociationConfig.getModel("weapon/card/01"), Collections.singletonList("Une arme intrigante multipliant ses dégâts selon la carte tirée"), Rarity.RARE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 15).add(Stats.StatsInfo.CRITICAL_DAMAGE, 10).build(), 7);
     }
 
     @Override

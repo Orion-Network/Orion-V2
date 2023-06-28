@@ -10,6 +10,6 @@ import orion.mmorpg.utils.Stats;
 public class TestWolf extends AbstractMount {
 
     public TestWolf(String uuid,Location spawnLocation, Player player) {
-        super(EntityTypes.bc, uuid, "TestWolf", spawnLocation, new Stats.Builder().withSpeed(4).build(), player, MountType.LAND);
+        super(EntityTypes.bc, uuid, "TestWolf", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.SPEED, 4).build(), player, MountType.LAND);
     }
 }

@@ -30,7 +30,7 @@ public class ServerListener implements Listener {
                 "   " +
                 ChatColor.GREEN + "v" + mmorpg.getDescription().getVersion() +
                 "                     " +
-                "Minecraft Open World RPG"
+                        ChatColor.BOLD + "Minecraft Open World RPG"
         );
     }
 
