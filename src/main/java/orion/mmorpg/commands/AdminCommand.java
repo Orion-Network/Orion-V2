@@ -26,6 +26,7 @@ import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Reforgeable;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.modelengine.OrionScriptReader;
+import orion.mmorpg.models.NPC;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.utils.Utils;
@@ -65,8 +66,9 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                Invincibility invincibility = new Invincibility(10*1000);
-                orionPlayer.addEffect("invincibility", invincibility);
+                if(args[1].equalsIgnoreCase("npc")) {
+                    Mmorpg.INSTANCE.getNpcManager().setup(player);
+                }
             }
         }
         return false;

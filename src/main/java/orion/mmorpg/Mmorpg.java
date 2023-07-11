@@ -1,5 +1,7 @@
 package orion.mmorpg;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -24,6 +26,7 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.modelengine.OrionScriptReader;
+import orion.mmorpg.models.NPCManager;
 import orion.mmorpg.mythicsmob.MythicMobListener;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
@@ -58,6 +61,8 @@ public final class Mmorpg extends JavaPlugin {
 
     @Getter
     RessourceManager ressourceManager;
+    @Getter
+    NPCManager npcManager;
 
     public static boolean isDebug() {
         return debug;
@@ -115,6 +120,7 @@ public final class Mmorpg extends JavaPlugin {
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
         ressourceManager = new RessourceManager(this);
+        npcManager = new NPCManager(this);
 
         if(Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             mobManager = new MobManager(this);
