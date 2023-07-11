@@ -15,4 +15,46 @@ public class AnimalSet {
                             .build());
         }
     }
+
+    public static class ChickenBelt extends BasicArmorItem {
+
+        public ChickenBelt() {
+            super(Material.BLUE_DYE, "Ceinture de Poulet", "CHICKEN_BELT", 3, null, Rarity.RARE, ArmorType.BELT,
+                    new Stats.Modifiers.Builder()
+                            .add(Stats.StatsInfo.LUCK, 5)
+                            .add(Stats.StatsInfo.CRITICAL_CHANCE, 3)
+                            .build());
+        }
+    }
+
+    public static class SheepChestplate extends BasicArmorItem {
+        public SheepChestplate() {
+            super(Material.LEATHER_CHESTPLATE, "Plastron du Mouton", "SHEEP_HELMET", 0, null, Rarity.RARE, ArmorType.HELMET,
+                    new Stats.Modifiers.Builder()
+                            .add(Stats.StatsInfo.VITALITY, 7)
+                            .add(Stats.StatsInfo.DEFENCE, 4)
+                            .build());
+        }
+    }
+
+    public static class SheepLeggings extends BasicArmorItem {
+        public SheepLeggings() {
+            super(Material.LEATHER_LEGGINGS, "Jambières du Mouton", "SHEEP_LEGGINGS", 0, null, Rarity.RARE, ArmorType.LEGGINGS,
+                    new Stats.Modifiers.Builder()
+                            .add(Stats.StatsInfo.VITALITY, 6)
+                            .add(Stats.StatsInfo.DEFENCE, 2)
+                            .build());
+        }
+    }
+
+    public static class SheepBoots extends BasicArmorItem {
+        public SheepBoots() {
+            super(Material.LEATHER_BOOTS, "Bottes du Mouton", "SHEEP_BOOTS", 0, null, Rarity.RARE, ArmorType.BOOTS,
+                    new Stats.Modifiers.Builder()
+                            .add(Stats.StatsInfo.VITALITY, 3)
+                            .add(Stats.StatsInfo.DEFENCE, 1)
+                            .add(Stats.StatsInfo.SPEED, 5)
+                            .build());
+        }
+    }
 }

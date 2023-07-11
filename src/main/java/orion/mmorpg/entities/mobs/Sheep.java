@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import orion.mmorpg.entities.samples.AbstractNeutral;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Rewards;
@@ -17,6 +18,8 @@ public class Sheep extends AbstractNeutral {
 
         this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem(Material.WHITE_WOOL, "Laine abimée", 0, null, Rarity.COMMON).generateItem(null, 2), 65));
         this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem(Material.MUTTON, "Viande de mouton", 0, null, Rarity.COMMON).generateItem(null, 1), 35));
-
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_CHESTPLATE.generateItem(), 8));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LEGGINGS.generateItem(), 8));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_BOOTS.generateItem(), 8));
     }
 }
