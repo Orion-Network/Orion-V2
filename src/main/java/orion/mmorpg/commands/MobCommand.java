@@ -1,5 +1,6 @@
 package orion.mmorpg.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -74,11 +75,16 @@ public class MobCommand implements TabExecutor {
         if(commandSender instanceof org.bukkit.entity.Player)
             location = ((org.bukkit.entity.Player) commandSender).getLocation().clone();
         try {
-            final AbstractMob mob = (AbstractMob) Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructors()[0].newInstance(UUID.randomUUID().toString(), location);
+            Bukkit.broadcastMessage(args[1]);
+            Bukkit.broadcastMessage(Mobs.valueOf(args[1]).getMobClass().getSimpleName());
+            Bukkit.broadcastMessage(Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructor(String.class, Location.class).toString());
+            final AbstractMob mob = Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructor(String.class, Location.class).newInstance(UUID.randomUUID().toString(), location);
             mob.spawn();
             return mob;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }

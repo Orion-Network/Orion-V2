@@ -17,8 +17,6 @@ import orion.mmorpg.entities.samples.AbstractMount;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class MobManager<T extends AbstractMob> extends AbstractManager implements Runnable {
     HashMap<String, T> mobs = new HashMap<>();
@@ -71,7 +69,7 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
 
     public void despawnMobs() {
         for(T mob : mobs.values()) {
-            mob.setRemoved(Entity.RemovalReason.a);
+            mob.setRemoved(Entity.RemovalReason.UNLOADED_TO_CHUNK);
         }
     }
 
@@ -114,16 +112,16 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
                 Vector sideways = forwardDir.clone().crossProduct(new Vector(0, -1, 0)).multiply(mob.getStrafeMultiplier());
 
                 Vector velocity = forwardDir.multiply(fwSpeed).add(sideways.multiply(swSpeed));
-                if(mob.getType().equals(AbstractMount.MountType.LAND)) {
+                if(mob.getMountType().equals(AbstractMount.MountType.LAND)) {
                     if(vehicle.isOnGround() && mob.getJumpForce() + vehicle.getVelocity().getY() < mob.getJumpForce())
                         velocity.setY(jumping ? mob.getJumpForce() : 0);
                     else {
                         velocity.multiply(0.2);
                     }
                     vehicle.setVelocity(vehicle.getVelocity().add(velocity));
-                } else if(mob.getType().equals(AbstractMount.MountType.AIR)) {
+                } else if(mob.getMountType().equals(AbstractMount.MountType.AIR)) {
                     vehicle.setVelocity(velocity);
-                } else if(mob.getType().equals(AbstractMount.MountType.WATER)) {
+                } else if(mob.getMountType().equals(AbstractMount.MountType.WATER)) {
                     vehicle.setVelocity(vehicle.getVelocity().add(velocity));
                 }
         }

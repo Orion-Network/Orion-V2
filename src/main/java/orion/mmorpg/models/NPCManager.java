@@ -6,35 +6,36 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.WrappedEnumEntityUseAction;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
-import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerPlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.Mmorpg;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class NPCManager {
 
     @Getter
-    public HashMap<Integer, EntityPlayer> npcEntities = new HashMap<>();
+    public HashMap<Integer, ServerPlayer> npcEntities = new HashMap<>();
 
     Mmorpg plugin;
     public NPCManager(Mmorpg plugin) {
         this.plugin = plugin;
 
+        /*
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
@@ -54,40 +55,43 @@ public class NPCManager {
 
                 }
             }
-        });
+        });*/
     }
 
     public void setup(Player player) {
-        EntityPlayer craftPlayer = ((CraftPlayer) player).getHandle();
+        ServerPlayer craftPlayer = ((CraftPlayer) player).getHandle();
 
-        Property textures = (Property) craftPlayer.getProfile().getProperties().get("textures").toArray()[0];
+        Property textures = (Property) craftPlayer.getGameProfile().getProperties().get("textures").toArray()[0];
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), player.getName());
         gameProfile.getProperties().put("textures", new Property("textures", textures.getValue(), textures.getSignature()));
+        ServerLevel world = ((CraftWorld) player.getWorld()).getHandle();
 
-        EntityPlayer corpse = new EntityPlayer(
+        NPC corpse = new NPC(
                 ((CraftServer) Bukkit.getServer()).getServer(),
-                ((CraftWorld) player.getWorld()).getHandle(),
+                world,
                 gameProfile
         );
 
-        corpse.setPosition(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+        corpse.setPos(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 
         for(Player on : Bukkit.getOnlinePlayers()) {
-            PlayerConnection connection = ((CraftPlayer) on).getHandle().b;
+            ServerPlayerConnection connection = ((CraftPlayer) on).getHandle().connection;
 
-            connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.a, corpse));
-            connection.sendPacket(new PacketPlayOutNamedEntitySpawn(corpse));
+            connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, corpse));
+            connection.send(new ClientboundAddEntityPacket(corpse));
         }
 
         npcEntities.put(corpse.getId(), corpse);
+
+        corpse.getLevel().addEntity(corpse, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public void removeNPC(Integer id) {
-        EntityPlayer corpse = npcEntities.get(id);
+        ServerPlayer corpse = npcEntities.get(id);
         for(Player on : Bukkit.getOnlinePlayers()) {
-            PlayerConnection connection = ((CraftPlayer) on).getHandle().b;
+            ServerPlayerConnection connection = ((CraftPlayer) on).getHandle().connection;
 
-            connection.sendPacket(new PacketPlayOutEntityDestroy(corpse.getId()));
+            connection.send(new ClientboundRemoveEntitiesPacket(corpse.getId()));
         }
         npcEntities.remove(id);
     }

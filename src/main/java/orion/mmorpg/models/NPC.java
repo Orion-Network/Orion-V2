@@ -1,26 +1,53 @@
 package orion.mmorpg.models;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
-import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.server.network.PlayerConnection;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import orion.mmorpg.entities.pathfinders.NpcSayHello;
 
-import java.util.HashMap;
-import java.util.UUID;
+public class NPC extends ServerPlayer {
 
-public class NPC extends EntityPlayer {
+    GoalSelector goalSelector;
+    GoalSelector targetSelector;
 
-    public NPC(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile) {
+    public NPC(MinecraftServer minecraftserver, ServerLevel worldserver, GameProfile gameprofile) {
         super(minecraftserver, worldserver, gameprofile);
+        this.connection = new ServerGamePacketListenerImpl(minecraftserver, new Connection(PacketFlow.CLIENTBOUND), this);
+
+        this.goalSelector = new GoalSelector(worldserver.getProfilerSupplier());
+        this.targetSelector = new GoalSelector(worldserver.getProfilerSupplier());
+
+        generatePathfinder();
     }
+
+
+    protected void generatePathfinder() {
+        this.goalSelector.addGoal(0, new NpcSayHello(this));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        doTick();
+    }
+
+
+
+    @Override
+    public void doTick() {
+        super.doTick();
+        this.level.getProfiler().push("brain");
+        this.targetSelector.tick();
+        this.level.getProfiler().pop();
+        this.level.getProfiler().push("goalSelector");
+        this.goalSelector.tick();
+        this.level.getProfiler().pop();
+    }
+
+
 }

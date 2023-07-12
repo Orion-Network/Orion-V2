@@ -1,19 +1,18 @@
 package orion.mmorpg.events;
 
-import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import orion.mmorpg.models.NPC;
 
 public class RightClickNpcEvent extends Event {
     private final Player player;
-    private final EntityPlayer npc;
+    private final ServerPlayer npc;
 
     private static final HandlerList handlers = new HandlerList();
 
-    public RightClickNpcEvent(Player player, EntityPlayer npc) {
+    public RightClickNpcEvent(Player player, ServerPlayer npc) {
         this.player = player;
         this.npc = npc;
     }
@@ -22,7 +21,7 @@ public class RightClickNpcEvent extends Event {
         return player;
     }
 
-    public EntityPlayer getNpc() {
+    public ServerPlayer getNpc() {
         return npc;
     }
 

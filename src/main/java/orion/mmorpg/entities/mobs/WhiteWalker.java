@@ -1,8 +1,8 @@
 package orion.mmorpg.entities.mobs;
 
-import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
@@ -12,14 +12,14 @@ import orion.mmorpg.utils.Stats;
 
 public class WhiteWalker extends AbstractHostile {
 
-    public WhiteWalker(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
-        super(EntityTypes.aB, uuid, "Marcheur Blanc", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 200).setBase(Stats.StatsInfo.STRENGTH, 20).setBase(Stats.StatsInfo.DEFENCE, 7).setBase(Stats.StatsInfo.SPEED, 4).build(), 15);
+    public WhiteWalker(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
+        super(EntityType.SKELETON, uuid, "Marcheur Blanc", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 200).setBase(Stats.StatsInfo.STRENGTH, 20).setBase(Stats.StatsInfo.DEFENCE, 7).setBase(Stats.StatsInfo.SPEED, 4).build(), 15);
 
-        this.setSlot(EnumItemSlot.f, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_HELMET)));
-        this.setSlot(EnumItemSlot.e, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE)));
-        this.setSlot(EnumItemSlot.d, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_LEGGINGS)));
-        this.setSlot(EnumItemSlot.c, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
-        this.setSlot(EnumItemSlot.a, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_SWORD)));
-        this.setSlot(EnumItemSlot.b, CraftItemStack.asNMSCopy(new ItemStack(Material.SHIELD)));
+        this.setItemSlot(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_HELMET)));
+        this.setItemSlot(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE)));
+        this.setItemSlot(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_LEGGINGS)));
+        this.setItemSlot(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
+        this.setItemSlot(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_SWORD)));
+        this.setItemSlot(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(new ItemStack(Material.SHIELD)));
     }
 }
