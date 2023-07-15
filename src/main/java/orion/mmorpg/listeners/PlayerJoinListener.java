@@ -50,8 +50,7 @@ public class PlayerJoinListener implements Listener {
                 }
                 orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(player, "Data loaded !");
-                if(orionPlayer.getMainSupport() != null)
-                    orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
+                orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
                 if (orionPlayer.getRace() == null)
                     player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
                 return;
@@ -74,7 +73,7 @@ public class PlayerJoinListener implements Listener {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         player.getFastBoard().delete();
         if(player.getPet() != null)
-            player.getPet().setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
+            player.getPet().setRemoved(Entity.RemovalReason.a);
         if(event.getPlayer().isInsideVehicle()) {
             Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
             event.getPlayer().leaveVehicle();

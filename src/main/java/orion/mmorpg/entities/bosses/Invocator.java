@@ -1,19 +1,21 @@
 package orion.mmorpg.entities.bosses;
 
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EntityCreature;
+import net.minecraft.world.entity.EntityInsentient;
+import net.minecraft.world.entity.EntityLiving;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.ai.goal.PathfinderGoal;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalAvoidTarget;
+import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
+import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
+import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.metadata.FixedMetadataValue;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.entities.mobs.CryptSkeleton;
 import orion.mmorpg.entities.samples.AbstractBoss;
 import orion.mmorpg.entities.samples.AbstractHostile;
@@ -29,7 +31,7 @@ import java.util.UUID;
 
 public class Invocator extends AbstractBoss {
     public Invocator(String uuid,Location spawnLocation) {
-        super(EntityType.EVOKER, uuid, "L'Invocateur", spawnLocation,  new Stats.Builder().setBase(Stats.StatsInfo.INTELLIGENCE, 100)
+        super(EntityTypes.O, uuid, "L'Invocateur", spawnLocation,  new Stats.Builder().setBase(Stats.StatsInfo.INTELLIGENCE, 100)
                 .setBase(Stats.StatsInfo.DEFENCE, 20)
                 .setBase(Stats.StatsInfo.VITALITY, 1000)
                 .setBase(Stats.StatsInfo.SPEED, 4).build(), 30);
@@ -51,12 +53,12 @@ public class Invocator extends AbstractBoss {
                 new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-4,0,-4))
 
         );
-         this.goalSelector.addGoal(0,new PathfinderGoalFireballAttack(this, this.getStats().get(Stats.StatsInfo.INTELLIGENCE)));
-        this.goalSelector.addGoal(1, pathfinderGoalSummon);
-        this.goalSelector.addGoal(2, new PathfinderGoalCastSpell(new Repulsion(), this.getBukkitEntity().getLocation(), 120));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 3.0F, 0.8D, 0.33D));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+         this.bP.a(0,new PathfinderGoalFireballAttack(this, this.getStats().get(Stats.StatsInfo.INTELLIGENCE)));
+        this.bP.a(1, pathfinderGoalSummon);
+        this.bP.a(2, new PathfinderGoalCastSpell(new Repulsion(), this.getBukkitEntity().getLocation(), 120));
+        this.bP.a(3, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 3.0F, 0.8D, 0.33D));
+        this.bQ.a(1, new PathfinderGoalHurtByTarget(this));
+        this.bQ.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
 
     }
 
@@ -64,27 +66,27 @@ public class Invocator extends AbstractBoss {
     public void die(DamageSource damagesource) {
         super.die(damagesource);
         for(AbstractMob mob : pathfinderGoalSummon.getSummons())
-            mob.die(DamageSource.GENERIC);
+            mob.die();
     }
 
-    private class PathfinderGoalFireballAttack extends Goal {
-        private final PathfinderMob invocator;
+    private class PathfinderGoalFireballAttack extends PathfinderGoal {
+        private final EntityInsentient invocator;
         private final float damage;
         private long lastFireball = System.currentTimeMillis();
-        public PathfinderGoalFireballAttack(PathfinderMob invocator, float damage) {
+        public PathfinderGoalFireballAttack(EntityInsentient invocator, float damage) {
             this.invocator = invocator;
             this.damage = damage;
         }
 
         @Override
-        public boolean canUse() {
-            return this.invocator.getTarget() != null && this.invocator.getTarget().isAlive() && System.currentTimeMillis() - lastFireball > 3000;
+        public boolean a() {
+            return this.invocator.getGoalTarget() != null && this.invocator.getGoalTarget().isAlive() && System.currentTimeMillis() - lastFireball > 3000;
         }
 
         @Override
-        public void start() {
-            LivingEntity target = this.invocator.getTarget();
-            if( (this.invocator.distanceToSqr(target) < 32) && this.invocator.hasLineOfSight(target)) {
+        public void e() {
+            EntityLiving target = this.invocator.getGoalTarget();
+            if( (this.invocator.e(target) < 32) && this.invocator.hasLineOfSight(target)) {
                 DragonFireball fireball =  target.getBukkitEntity().getWorld().spawn(invocator.getBukkitEntity().getLocation().add(0, 2.5, 0), DragonFireball.class);
                 fireball.setMetadata("damage", new FixedMetadataValue(Mmorpg.INSTANCE, damage));
                 fireball.setDirection(target.getBukkitEntity().getLocation().subtract(fireball.getLocation()).toVector().normalize());
@@ -94,7 +96,7 @@ public class Invocator extends AbstractBoss {
         }
     }
 
-    private class PathfinderGoalSummon extends Goal {
+    private class PathfinderGoalSummon extends PathfinderGoal {
         private final AbstractMob mob;
         private long lastIteration = System.currentTimeMillis();
         private AbstractHostile[] summons;
@@ -109,14 +111,13 @@ public class Invocator extends AbstractBoss {
         }
 
         @Override
-        public boolean canUse() {
+        public boolean a() {
             boolean summonAlive = Arrays.stream(summons).anyMatch(summon -> summon.isAlive());
             return System.currentTimeMillis() - lastIteration > 300 * 1000 && !summonAlive;
         }
 
         @Override
-        public void start() {
-
+        public void c() {
             Bukkit.broadcastMessage("Summoning");
             for (int i = 0; i < summons.length; i++) {
                 try {
@@ -136,7 +137,7 @@ public class Invocator extends AbstractBoss {
         }
     }
 
-    private class PathfinderGoalCastSpell extends Goal {
+    private class PathfinderGoalCastSpell extends PathfinderGoal {
         private Spell spell;
         private Location location;
         private long delay;
@@ -149,12 +150,12 @@ public class Invocator extends AbstractBoss {
         }
 
         @Override
-        public boolean canUse() {
+        public boolean a() {
             return System.currentTimeMillis() - lastIteration > 60 * 1000;
         }
 
         @Override
-        public void start() {
+        public void c() {
             spell.launch(Mmorpg.INSTANCE, location, new Knowledge(200));
             lastIteration = System.currentTimeMillis();
         }

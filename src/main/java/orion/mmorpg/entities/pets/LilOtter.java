@@ -3,7 +3,8 @@ package orion.mmorpg.entities.pets;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityCreature;
+import net.minecraft.world.entity.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import orion.mmorpg.entities.Pets;
@@ -12,7 +13,7 @@ import orion.mmorpg.entities.samples.Modeled;
 
 public class LilOtter extends AbstractPet implements Modeled {
     public LilOtter(String uuid, Location spawnLocation, Player owner) {
-        super(EntityType.AXOLOTL, uuid, "Lil' Otter", spawnLocation, owner, Pets.LILOTTER);
+        super(EntityTypes.e, uuid, "Lil' Otter", spawnLocation, owner, Pets.LILOTTER);
     }
 
     ActiveModel model;

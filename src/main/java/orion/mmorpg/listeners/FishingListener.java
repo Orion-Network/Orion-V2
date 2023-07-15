@@ -1,7 +1,6 @@
 package orion.mmorpg.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
@@ -18,10 +17,12 @@ import orion.mmorpg.entities.mobs.sea.SeaZombie;
 import orion.mmorpg.entities.samples.AbstractMob;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.misc.Gift;
-import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.jobs.JobType;
-import orion.mmorpg.utils.*;
+import orion.mmorpg.utils.Namespaces;
+import orion.mmorpg.utils.Rewards;
+import orion.mmorpg.utils.Stats;
+import orion.mmorpg.utils.Utils;
 import oshi.util.tuples.Pair;
 
 import java.lang.reflect.Array;
@@ -36,7 +37,7 @@ public class FishingListener implements Listener {
 
     public FishingListener(Mmorpg plugin) {
         this.plugin = plugin;
-        Rewards.Reward reward = new Rewards.Reward(BasicItem.generateRessourceItem(Material.COPPER_INGOT, "Lingot de bronze", 0, null, Rarity.COMMON), 75);
+        Rewards.Reward reward = new Rewards.Reward(ItemList.BRONZE_INGOT.generateItemStack(1), 75);
         reward.getJobExp().put(JobType.FISHING, 10);
         reward.addRequiredJobExp(JobType.FISHING, 5);
         rewards.add(reward);

@@ -3,7 +3,7 @@ package orion.mmorpg.entities.mounts;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import orion.mmorpg.entities.samples.AbstractMount;
@@ -12,7 +12,7 @@ import orion.mmorpg.utils.Stats;
 
 public class Chief extends AbstractMount implements Modeled {
     public Chief(String uuid, Location spawnLocation, Player player) {
-        super(EntityType.TROPICAL_FISH, uuid, "TestWolf", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.SPEED, 4).build(), player, MountType.LAND);
+        super(EntityTypes.bc, uuid, "TestWolf", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.SPEED, 4).build(), player, MountType.LAND);
     }
 
 
