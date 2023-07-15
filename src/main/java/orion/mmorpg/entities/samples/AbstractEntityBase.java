@@ -1,16 +1,19 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EntityCreature;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.ai.attributes.AttributeBase;
+import net.minecraft.world.entity.ai.attributes.AttributeMapBase;
+import net.minecraft.world.entity.ai.attributes.AttributeModifiable;
+import net.minecraft.world.entity.ai.attributes.GenericAttributes;
+import net.minecraft.world.level.World;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.attribute.CraftAttributeMap;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.utils.Stats;
@@ -18,7 +21,7 @@ import orion.mmorpg.utils.Stats;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-public abstract class AbstractEntityBase extends PathfinderMob {
+public abstract class AbstractEntityBase extends EntityCreature {
     private static Field attributeField;
 
 
@@ -26,7 +29,7 @@ public abstract class AbstractEntityBase extends PathfinderMob {
     //We need this to register the new attribute to the pig
     static {
         try {
-            attributeField = AttributeMap.class.getDeclaredField("b");
+            attributeField = AttributeMapBase.class.getDeclaredField("b");
             attributeField.setAccessible(true);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -37,14 +40,14 @@ public abstract class AbstractEntityBase extends PathfinderMob {
 
     Stats stats;
 
-    protected AbstractEntityBase(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats) {
+    protected AbstractEntityBase(EntityTypes<? extends EntityCreature> entitytypes,String uuid, String name,  Location spawnLocation, Stats stats) {
         super(entitytypes, ((CraftWorld) spawnLocation.getWorld()).getHandle());
         this.uuid = uuid;
         this.name = name;
         this.spawnLocation = spawnLocation;
         this.stats = stats;
 
-        this.setPos(spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ());
+        this.setPosition(spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ());
         ((LivingEntity) this.getBukkitEntity()).setRemoveWhenFarAway(false);
         this.setCustomNameVisible(true);
 
@@ -63,27 +66,27 @@ public abstract class AbstractEntityBase extends PathfinderMob {
     }
 
     private void registerGenericAttribute(org.bukkit.entity.Entity entity, Attribute attribute) throws IllegalAccessException {
-        AttributeMap attributeMapBase = ((CraftLivingEntity)entity).getHandle().getAttributes();
-        Map<net.minecraft.world.entity.ai.attributes.Attribute, AttributeInstance> map = (Map<net.minecraft.world.entity.ai.attributes.Attribute, AttributeInstance>) attributeField.get(attributeMapBase);
-        net.minecraft.world.entity.ai.attributes.Attribute attributeBase = CraftAttributeMap.toMinecraft(attribute);
-        AttributeInstance attributeModifiable = new AttributeInstance(attributeBase, AttributeInstance::getAttribute);
+        AttributeMapBase attributeMapBase = ((CraftLivingEntity)entity).getHandle().getAttributeMap();
+        Map<AttributeBase, AttributeModifiable> map = (Map<AttributeBase, AttributeModifiable>) attributeField.get(attributeMapBase);
+        AttributeBase attributeBase = CraftAttributeMap.toMinecraft(attribute);
+        AttributeModifiable attributeModifiable = new AttributeModifiable(attributeBase, AttributeModifiable::getAttribute);
         map.put(attributeBase, attributeModifiable);
     }
 
     private void generateAttribute() {
-        this.getAttributes().getSyncableAttributes().add(new AttributeInstance(Attributes.MOVEMENT_SPEED, (a) -> {a.setBaseValue(this.getStats().get(Stats.StatsInfo.SPEED)/10);}));
-        this.getAttributes().getSyncableAttributes().add(new AttributeInstance(Attributes.ATTACK_SPEED, (a) -> {a.setBaseValue(this.getStats().get(Stats.StatsInfo.ATTACK_SPEED));}));
-        this.getAttributes().getSyncableAttributes().add(new AttributeInstance(Attributes.ARMOR, (a) -> {a.setBaseValue(1.0);}));
+        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.d, (a) -> {a.setValue(this.getStats().get(Stats.StatsInfo.SPEED)/10);}));
+        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.h, (a) -> {a.setValue(this.getStats().get(Stats.StatsInfo.ATTACK_SPEED));}));
+        this.getAttributeMap().b().add(new AttributeModifiable(GenericAttributes.b, (a) -> {a.setValue(1.0);}));
         ;
-        this.getAttributes().getInstance(Attributes.MAX_HEALTH).setBaseValue(this.getStats().get(Stats.StatsInfo.VITALITY));
-        this.getAttributes().getInstance(Attributes.ATTACK_DAMAGE).setBaseValue(this.getStats().get(Stats.StatsInfo.STRENGTH));
+        this.getAttributeMap().a(GenericAttributes.a).setValue(this.getStats().get(Stats.StatsInfo.VITALITY));
+        this.getAttributeMap().a(GenericAttributes.f).setValue(this.getStats().get(Stats.StatsInfo.STRENGTH));
         this.setHealth(this.getMaxHealth());
     }
 
     protected abstract void generatePathfinder();
 
     private String generateName() {
-        return ChatColor.YELLOW + /*this.getName()*/ "test" ;
+        return ChatColor.YELLOW + this.getName();
     }
 
     public void spawn() {
@@ -97,6 +100,10 @@ public abstract class AbstractEntityBase extends PathfinderMob {
         return uuid;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
 
     public Location getSpawnLocation() {
         return spawnLocation;

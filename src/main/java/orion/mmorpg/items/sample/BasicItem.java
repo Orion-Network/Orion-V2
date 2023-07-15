@@ -70,10 +70,7 @@ public abstract class BasicItem extends ItemStack {
         this.ITEM_TYPE = ITEM_TYPE;
         this.PERMISSION = PERMISSION;
     }
-    public static BasicItem generateRessourceItem(Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
-        return new BasicItem(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, ItemType.RESSOURCE) {
-        };
-    }
+
     public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {
         };

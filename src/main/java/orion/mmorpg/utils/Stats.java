@@ -113,7 +113,7 @@ public static class Modifiers {
                 float value = multiply.getOrDefault(stat, 1f);
                 if (value == 1)
                     continue;
-                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value >= 1 ? "+"+value:"-"+(100-(value*100)) ) + "%");
+                lore.add(stat.getColor() + stat.getCharacter() + " " + WordUtils.capitalizeFully(stat.name().replaceAll("_", " ")) + ": " + ChatColor.GRAY + (value >= 1 ? "+"+((value*100)-100):"-"+(100-(value*100)) ) + "%");
             }
             return lore;
         }
