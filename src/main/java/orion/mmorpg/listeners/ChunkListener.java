@@ -19,7 +19,6 @@ public class ChunkListener implements Listener {
 
     Mmorpg mmorpg;
 
-
     public ChunkListener(Mmorpg mmorpg) {
         this.mmorpg = mmorpg;
     }
@@ -48,7 +47,7 @@ public class ChunkListener implements Listener {
                 mobs.add(((AbstractMob) nmsEntity).getMobData());
                 ((AbstractMob)nmsEntity).keyedBossBar.setVisible(false);
             }
-            nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.a);
+            nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.UNLOADED_TO_CHUNK);
         }
         mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(event.getChunk().getX(), event.getChunk().getZ()), mobs);
     }

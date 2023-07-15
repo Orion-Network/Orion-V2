@@ -74,7 +74,7 @@ public class PlayerJoinListener implements Listener {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         player.getFastBoard().delete();
         if(player.getPet() != null)
-            player.getPet().setRemoved(Entity.RemovalReason.a);
+            player.getPet().setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
         if(event.getPlayer().isInsideVehicle()) {
             Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
             event.getPlayer().leaveVehicle();
