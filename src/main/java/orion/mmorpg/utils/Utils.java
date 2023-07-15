@@ -223,4 +223,17 @@ public class Utils {
             return Objects.hash(x, z, world);
         }
     }
+
+    /**
+     * Clamps the rotation angle to [-180, 180]
+     */
+    public static float clamp(float angle) {
+        while (angle < -180.0F) {
+            angle += 360.0F;
+        }
+        while (angle >= 180.0F) {
+            angle -= 360.0F;
+        }
+        return angle;
+    }
 }
