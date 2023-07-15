@@ -1,45 +1,28 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.EnumHand;
-import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.ai.attributes.AttributeBase;
-import net.minecraft.world.entity.ai.attributes.AttributeMapBase;
-import net.minecraft.world.entity.ai.attributes.AttributeModifiable;
-import net.minecraft.world.entity.ai.attributes.GenericAttributes;
-import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.attribute.CraftAttributeMap;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Respawnable;
 import orion.mmorpg.events.MobKilledEvent;
-import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractMob extends AbstractEntityBase implements Respawnable {
@@ -49,7 +32,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     public ChatColor color = ChatColor.YELLOW;
     private Rewards rewards = new Rewards();
 
-    public AbstractMob(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
+    public AbstractMob(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
         super(entitytypes, uuid, name, spawnLocation, stats);
         this.level = level;
 
@@ -57,17 +40,17 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
-        this.setCustomName(new ChatMessage(generateName()));
+    public boolean hurt(DamageSource damagesource, float f) {
+        this.setCustomName(new TextComponent(generateName()));
         float progress = (this.getHealth()-f) / this.getMaxHealth();
         this.keyedBossBar.setProgress((progress > 1 ? 1 : (progress < 0 ? 0 : progress)));
-        if(damagesource.getEntity() instanceof EntityPlayer) {
+        if(damagesource.getEntity() instanceof net.minecraft.world.entity.player.Player) {
             Player player = ((CraftPlayer) damagesource.getEntity().getBukkitEntity()).getPlayer();
             if(!this.keyedBossBar.getPlayers().contains(player)) {
                 this.keyedBossBar.addPlayer(player);
             }
         }
-        return super.damageEntity(damagesource, f);
+        return super.hurt(damagesource, f);
     }
 
     private String generateName() {
@@ -91,7 +74,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
 
     @Override
     public void spawn() {
-        this.setCustomName(new ChatMessage(generateName()));
+        this.setCustomName(new TextComponent(generateName()));
         if(Bukkit.getBossBar(NamespacedKey.minecraft(uuid)) != null)
             this.keyedBossBar = Bukkit.getBossBar(NamespacedKey.minecraft(uuid));
         else
@@ -119,7 +102,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     @Override
-    protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {
+    protected void dropCustomDeathLoot(DamageSource damagesource, int i, boolean flag) {
         OrionPlayer orionplayer;
         if(damagesource.getEntity().getBukkitEntity() instanceof Player player) {
             orionplayer = Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
@@ -131,15 +114,11 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     public void tick() {
         super.tick();
         this.keyedBossBar.getPlayers().forEach(player -> {
-            if(this.h(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 100*100)
+            if(this.distanceToSqr(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 100*100)
                 this.keyedBossBar.removePlayer(player);
         });
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
     public int getLevel() {
         return level;
@@ -154,7 +133,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     public MobData getMobData() {
-        return new MobData(this.getClass(), uuid, this.getSpawnLocation(), 60*1000, this.getEntityType());
+        return new MobData(this.getClass(), uuid, this.getSpawnLocation(), 60*1000, this.getType());
     }
 
     public String getUuid() {
@@ -180,11 +159,11 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
         private String uuid;
         private Class mobClass;
         private Location location;
-        private EntityTypes entityType;
+        private EntityType entityType;
         private int respawnTime;
 
 
-        public MobData(Class mobClass,String uuid, Location location, int respawnTime, EntityTypes entityType) {
+        public MobData(Class mobClass,String uuid, Location location, int respawnTime, EntityType entityType) {
             this.mobClass = mobClass;
             this.uuid = uuid;
             this.location = location;
@@ -204,7 +183,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
             return location;
         }
 
-        public EntityTypes getEntityType() {
+        public EntityType getEntityType() {
             return entityType;
         }
 

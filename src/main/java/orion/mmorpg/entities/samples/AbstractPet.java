@@ -1,31 +1,25 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.world.EnumHand;
-import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.EntityLiving;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.ai.goal.PathfinderGoal;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalFloat;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
-import net.minecraft.world.entity.decoration.EntityArmorStand;
-import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.utils.Stats;
-import orion.mmorpg.utils.Utils;
 
 import java.util.EnumSet;
 
@@ -33,7 +27,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
     Player owner;
     Pets pet;
 
-    public AbstractPet(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Player owner, Pets pet) {
+    public AbstractPet(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Player owner, Pets pet) {
         super(entitytypes, uuid, name, spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 1).setBase(Stats.StatsInfo.SPEED, 4).build());
         this.owner = owner;
         this.pet = pet;
@@ -42,7 +36,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
 
         this.setGoalTarget(((CraftPlayer) owner).getHandle(), EntityTargetEvent.TargetReason.CUSTOM, true);
         Mmorpg.INSTANCE.getPlayerManager().getPlayer(owner.getUniqueId()).setPet(this);
-        this.setCustomName(new ChatMessage(generateName()));
+        this.setCustomName(new TextComponent(generateName()));
     }
 
     @Override
@@ -52,29 +46,30 @@ public abstract class AbstractPet extends AbstractEntityBase {
 
     @Override
     protected void generatePathfinder() {
-        this.bP.a(0, new PathfinderGoalFloat(this));
-        this.bP.a(1, new PathfinderGoalPet(this, 0.8D, 25));
-        this.bP.a(2, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
-        this.bP.a(3, new PathfinderGoalRandomLookaround(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new PathfinderGoalPet(this, 0.8D, 25));
+        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, net.minecraft.world.entity.player.Player.class, 8.0F));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     @Override
-    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
+    protected InteractionResult mobInteract(net.minecraft.world.entity.player.Player entityhuman, InteractionHand enumhand) {
         //Play particle
         ((Player) entityhuman.getBukkitEntity()).spawnParticle(Particle.VILLAGER_HAPPY, this.getBukkitEntity().getLocation(), 5, 0.5, 0.5, 0.5, 0.5);
-        return super.b(entityhuman, enumhand);
+        return super.mobInteract(entityhuman, enumhand);
     }
+
 
     @Override
     public void tick() {
         if(!owner.isOnline())
-            this.setRemoved(RemovalReason.a);
+            this.setRemoved(RemovalReason.UNLOADED_WITH_PLAYER);
         super.tick();
     }
 
     @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
-        this.setCustomName(new ChatMessage(generateName()));
+    public boolean hurt(DamageSource damagesource, float f) {
+        this.setCustomName(new TextComponent(generateName()));
         return true;
     }
 
@@ -91,9 +86,9 @@ public abstract class AbstractPet extends AbstractEntityBase {
     }
 
     //Make so the pet don't go in the player
-    private static class PathfinderGoalPet extends PathfinderGoal {
-        private final EntityInsentient petEntity;
-        private EntityLiving owner;
+    private static class PathfinderGoalPet extends Goal {
+        private final PathfinderMob petEntity;
+        private LivingEntity owner;
 
         private final double speed;
         private final float distance;
@@ -102,52 +97,49 @@ public abstract class AbstractPet extends AbstractEntityBase {
         private double targetY;
         private double targetZ;
 
-        public PathfinderGoalPet(EntityInsentient petEntity,  double speed, float distance) {
+        public PathfinderGoalPet(PathfinderMob petEntity,  double speed, float distance) {
             this.petEntity = petEntity;
             this.speed = speed;
             this.distance = distance;
 
-            this.a(EnumSet.of(Type.a));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
-        //run when c true
         @Override
-        public boolean a() {
-            this.owner = this.petEntity.getGoalTarget();
+        public boolean canUse() {
+            this.owner = this.petEntity.getTarget();
             if(this.owner == null) {
                 return false;
             } else if(!this.owner.isAlive()) {
                 return false;
-            } else if(this.petEntity.f(this.owner) > (this.distance * this.distance)) {
-                petEntity.setPosition(this.owner.locX(), this.owner.locY(), this.owner.locZ());
+            } else if(this.petEntity.distanceToSqr(this.owner) > (this.distance * this.distance)) {
+                petEntity.setPos(this.owner.getX(), this.owner.getY(), this.owner.getZ());
                 return false;
             } else {
-                if(this.petEntity.f(this.owner) < 1) {
+                if(this.petEntity.distanceToSqr(this.owner) < 1) {
                     return false;
                 }
-                this.targetX = this.owner.locX();
-                this.targetY = this.owner.locY();
-                this.targetZ = this.owner.locZ();
+                this.targetX = this.owner.getX();
+                this.targetY = this.owner.getY();
+                this.targetZ = this.owner.getZ();
 
                 return true;
             }
         }
 
-        //run c every tick if true
         @Override
-        public boolean b() {
-            return !this.petEntity.getNavigation().m() && this.petEntity.f(this.owner) < (this.distance * this.distance);
+        public boolean canContinueToUse() {
+            return !this.petEntity.getNavigation().isDone() && this.petEntity.distanceToSqr(this.owner) < (this.distance * this.distance);
         }
 
-        //runner
         @Override
-        public void c() {
-            this.petEntity.getNavigation().a(this.targetX, this.targetY, this.targetZ, this.speed);
+        public void start() {
+
+            this.petEntity.getNavigation().moveTo(this.targetX, this.targetY, this.targetZ, this.speed);
         }
 
-        // run when b false
         @Override
-        public void d() {
+        public void stop() {
             this.owner = null;
         }
     }

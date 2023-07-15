@@ -1,51 +1,53 @@
 package orion.mmorpg.entities.pathfinders;
 
-import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.EntityLiving;
-import net.minecraft.world.entity.ai.goal.PathfinderGoal;
-import org.bukkit.Bukkit;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Location;
 
 import java.util.EnumSet;
 
-public class MoveTowardsTargetIfRange extends PathfinderGoal {
+public class MoveTowardsTargetIfRange extends Goal {
     private double speed;
     private float maxDistance;
-    private EntityInsentient entity;
-    private EntityLiving target;
+    private Mob entity;
+    private LivingEntity target;
     private Location spawnPoint;
-    public MoveTowardsTargetIfRange(EntityCreature entity, double speed, float range, Location spawnPoint) {
+    public MoveTowardsTargetIfRange(PathfinderMob entity, double speed, float range, Location spawnPoint) {
         this.speed = speed;
         this.maxDistance = range;
         this.entity = entity;
         this.spawnPoint = spawnPoint;
 
-        this.a(EnumSet.of(Type.a));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
-    public boolean a() {
-        this.target = this.entity.getGoalTarget();
+    @Override
+    public boolean canUse() {
+        this.target = this.entity.getTarget();
         if(spawnPoint == null) return false;
         if(this.target == null) {
 
-            this.entity.getNavigation().a(spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), this.speed);
+            this.entity.getNavigation().moveTo(spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), this.speed);
             return false;
         }
         return true;
     }
 
-    public void c() {
-        this.entity.getNavigation().a(this.entity, this.speed);
+    @Override
+    public void start() {
+        this.entity.getNavigation().moveTo(this.entity, this.speed);
     }
 
-    public boolean b() {
-        return !this.entity.getNavigation().m() && this.target.isAlive() && ((this.entity.h(spawnPoint.getX(), spawnPoint.getY(),spawnPoint.getZ()) < (this.maxDistance) * this.maxDistance) || (this.entity.e(target) < (20*20)));
+    @Override
+    public boolean canContinueToUse() {
+        return !this.entity.getNavigation().isDone() && this.target.isAlive() && ((this.entity.distanceToSqr(spawnPoint.getX(), spawnPoint.getY(),spawnPoint.getZ()) < (this.maxDistance) * this.maxDistance) || (this.entity.distanceToSqr(target) < (20*20)));
     }
 
-    public void d() {
-        // runs when b() returns false
-        this.entity.getNavigation().a(spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), this.speed);
+    @Override
+    public void stop() {
+        this.entity.getNavigation().moveTo(spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), this.speed);
         this.target = null;
     }
 }

@@ -1,7 +1,6 @@
 package orion.mmorpg.items.misc;
 
-import com.github.stefvanschie.inventoryframework.gui.type.AnvilGui;
-import net.minecraft.world.item.ItemMapEmpty;
+
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -14,12 +13,8 @@ import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
-import oshi.util.tuples.Pair;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-
 public class GuildBook extends BasicItem {
     public GuildBook(ItemStack item) {
         super(item);

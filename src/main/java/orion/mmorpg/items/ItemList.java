@@ -16,7 +16,6 @@ import orion.mmorpg.items.misc.reforge.PolarizedStone;
 import orion.mmorpg.items.misc.reforge.StrongStone;
 import orion.mmorpg.items.misc.reforge.TastyStone;
 import orion.mmorpg.items.money.BronzeCoin;
-import orion.mmorpg.items.ressources.BronzeIngot;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.misc.NullItem;
 import orion.mmorpg.items.tools.AdminRod;
@@ -77,6 +76,12 @@ public enum ItemList {
     STARSET_CHESTPLATE(StarSet.StarsetChestplate.class),
     STARSET_LEGGINGS(StarSet.StarsetLeggings.class),
     STARSET_BOOTS(StarSet.StarsetBoots.class),
+
+    CHICKEN_RING(AnimalSet.ChickenRing.class),
+    CHICKEN_BELT(AnimalSet.ChickenBelt.class),
+    SHEEP_CHESTPLATE(AnimalSet.SheepChestplate.class),
+    SHEEP_LEGGINGS(AnimalSet.SheepLeggings.class),
+    SHEEP_BOOTS(AnimalSet.SheepBoots.class),
     //Arrows
     COMMON_ARROW(CommonArrow.class),
     GRAVITY_ARROW(GravityArrow.class),
@@ -134,9 +139,6 @@ public enum ItemList {
     WOODEN_ROD(WoodenRod.class),
     ADMIN_ROD(AdminRod.class),
 
-    //RESSOURCES
-    BRONZE_INGOT(BronzeIngot.class),
-
     //CURRENCY
     BRONZE_COIN(BronzeCoin.class),
     ;
@@ -145,6 +147,10 @@ public enum ItemList {
 
     ItemList(Class<? extends BasicItem> itemClass) {
         this.itemClass = itemClass;
+    }
+
+    public static boolean isItem(ItemStack itemStack) {
+        return getItemFromItemstack(itemStack) != null;
     }
 
     public static BasicItem getItemFromItemstack(ItemStack itemStack) {

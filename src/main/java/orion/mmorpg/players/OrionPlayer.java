@@ -151,7 +151,7 @@ public class OrionPlayer {
     }
 
     /**
-     * Default Constructor of OrionPlayer class used on new logging retrieving data from Database.
+     * Default Constructor of OrionPlayer class used on logging retrieving data from Database.
      *
      * @param infos        Retrieved Infos of the player
      * @param stats    Retrieved Stats of the player
@@ -262,7 +262,7 @@ public class OrionPlayer {
 
     public void setPet(AbstractPet pet) {
         if(this.pet != null)
-            this.pet.setRemoved(Entity.RemovalReason.a);
+            this.pet.setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
         this.pet = pet;
     }
 

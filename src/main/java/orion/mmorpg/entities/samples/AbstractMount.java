@@ -1,20 +1,14 @@
 package orion.mmorpg.entities.samples;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.mount.MountControllerRegistry;
-import com.ticxo.modelengine.api.mount.MountManager;
 import com.ticxo.modelengine.api.mount.controller.walking.WalkingMountController;
-import net.minecraft.world.EnumHand;
-import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.horse.EntityHorse;
-import net.minecraft.world.entity.animal.horse.EntityHorseAbstract;
-import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import orion.mmorpg.entities.EntityType;
 import orion.mmorpg.utils.Stats;
 
 //TODO See if mounts are compatible with custom models
@@ -23,7 +17,7 @@ public abstract class AbstractMount extends AbstractEntityBase {
     final Player owner;
     final MountType type;
 
-    public AbstractMount(EntityTypes<? extends EntityCreature> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, Player owner, MountType type) {
+    public AbstractMount(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, Player owner, MountType type) {
         super(entitytypes, uuid, name, spawnLocation, stats);
         this.owner = owner;
         this.type = type;
@@ -34,19 +28,19 @@ public abstract class AbstractMount extends AbstractEntityBase {
     }
 
     @Override
-    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
+    protected InteractionResult mobInteract(net.minecraft.world.entity.player.Player entityhuman, InteractionHand enumhand) {
         //check if the player is the owner
-        if(!entityhuman.getUniqueID().equals(owner.getUniqueId()))
-            return super.b(entityhuman, enumhand);
+        if(!entityhuman.getUUID().equals(owner.getUniqueId()))
+            return super.mobInteract(entityhuman, enumhand);
         entityhuman.startRiding(this);
-        return super.b(entityhuman, enumhand);
+        return super.mobInteract(entityhuman, enumhand);
     }
 
     @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
-        if(damagesource.equals(DamageSource.k))
+    public boolean hurt(DamageSource damagesource, float f) {
+        if(damagesource.equals(DamageSource.FALL))
             return false;
-        return super.damageEntity(damagesource, f);
+        return super.hurt(damagesource, f);
     }
 
     //TODO handle dismount of modeled entity to prevent glitching
@@ -89,8 +83,8 @@ public abstract class AbstractMount extends AbstractEntityBase {
         return owner;
     }
 
-    public MountType getType() {
-        return type;
+    public MountType getMountType() {
+        return this.type;
     }
 
     public enum MountType {

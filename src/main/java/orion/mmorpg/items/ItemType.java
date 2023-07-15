@@ -7,5 +7,6 @@ public enum ItemType {
     BOW,
     ARMOR,
     TOOL,
-    PLACEHOLDER
+    PLACEHOLDER,
+    RESSOURCE
 }
