@@ -59,6 +59,8 @@ public final class Mmorpg extends JavaPlugin {
     private MythicMob mythicMob;
     ModelEngineAPI modelEngineAPI;
 
+    @Getter
+    WorldManager worldManager;
     ChunkManager chunkManager;
 
     @Getter
@@ -118,6 +120,7 @@ public final class Mmorpg extends JavaPlugin {
 
         playerManager = new PlayerManager(this);
         guildManager = new GuildManager(this);
+        worldManager = new WorldManager(this);
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);

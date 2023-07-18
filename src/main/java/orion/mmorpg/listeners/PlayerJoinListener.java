@@ -2,7 +2,6 @@ package orion.mmorpg.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +9,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.Utils;
 
@@ -61,7 +59,7 @@ public class PlayerJoinListener implements Listener {
             }
         }
 
-        player.teleport(PortalStone.CAMPEMENT_STONE.getLocation());
+        player.teleport(mmorpg.getWorldManager().getPortalStone("CAMPEMENT").getLocation());
 
         OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(player);
 

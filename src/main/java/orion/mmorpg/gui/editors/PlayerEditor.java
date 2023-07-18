@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.managers.WorldManager;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.abilities.SupportList;
@@ -53,8 +53,10 @@ public class PlayerEditor extends ChestGui {
             BasicItem item = BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Nom de la pierre", 0, null, Rarity.COMMON);
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
+            //TODO Rework for new Portal Stones
             List<String> removableStones = targetOrionPlayer.getPortalStones().stream().map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
-            removableStones.addAll(Arrays.stream(PortalStone.values()).map(t -> ChatColor.RED + t.getId()).filter(id ->
+            ArrayList<WorldManager.PortalStone> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().values());
+            removableStones.addAll(portalStones.stream().map(t -> ChatColor.RED + t.getTitle()).filter(id ->
                     (!targetOrionPlayer.getPortalStones().contains(ChatColor.stripColor(id)))).toList());
 
             meta.setLore(removableStones);
@@ -66,7 +68,7 @@ public class PlayerEditor extends ChestGui {
                     .itemLeft(buildItem)
                     .onComplete((player, text) -> {
                         text = text.toLowerCase();
-                        if(EnumUtils.isValidEnum(PortalStone.class, text)) {
+                        if(Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(text)) {
                             if(!targetOrionPlayer.getPortalStones().contains(text)) {
                                 targetOrionPlayer.addPortalStone(text);
                                 Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");

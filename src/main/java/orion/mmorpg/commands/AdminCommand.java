@@ -29,6 +29,7 @@ import orion.mmorpg.items.Reforgeable;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.modelengine.OrionScriptReader;
+import orion.mmorpg.models.NPC;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.utils.Utils;
@@ -68,16 +69,9 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                ItemStack itemStack = player.getInventory().getItemInMainHand();
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.addEnchant(CustomEnchants.WRATH, 3, true);
-                itemMeta.setLore(ItemList.getItemFromItemstack(itemStack).generateLore(null));
-                itemStack.setItemMeta(itemMeta);
-
-                BasicItem basicItem = ItemList.getItemFromItemstack(itemStack);
-                itemMeta.setLore(basicItem.generateLore(null));
-                itemStack.setItemMeta(itemMeta);
-
+                if(args[1].equalsIgnoreCase("npc")) {
+                    Mmorpg.INSTANCE.getNpcManager().setup(player);
+                }
             }
         }
         return false;

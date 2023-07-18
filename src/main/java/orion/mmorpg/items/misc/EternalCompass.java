@@ -7,13 +7,12 @@ import org.bukkit.inventory.meta.CompassMeta;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.PortalStone;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.Collections;
 
 public class EternalCompass extends BasicItem {
-    private static Location location = PortalStone.ARENA_SPAWN_STONE.getLocation();
+    private static Location location = Mmorpg.INSTANCE.getWorldManager().getPortalStone("CAMPEMENT").getLocation();
     public EternalCompass() {
         super(Material.COMPASS, "Eternal Compass", "ETERNAL_COMPASS", 1, Collections.singletonList("Un compas magique"), Rarity.RARE);
     }

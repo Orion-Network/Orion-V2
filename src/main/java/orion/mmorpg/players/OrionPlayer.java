@@ -119,9 +119,9 @@ public class OrionPlayer {
         this.level = level;
         this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
-        portalStones.add(PortalStone.CAMPEMENT_STONE.getId());
-        portalStones.add(PortalStone.ARENA_SPAWN_STONE.getId());
-        portalStones.add(PortalStone.ARENA_STONE.getId());
+        portalStones.add("CAMPEMENT_STONE");
+        portalStones.add("ARENA_SPAWN_TONE");
+        portalStones.add("ARENA_STONE");
 
         this.mana = (int) this.stats.get(Stats.StatsInfo.INTELLIGENCE);
 
@@ -300,7 +300,7 @@ public class OrionPlayer {
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
-        p.teleport(PortalStone.ARENA_SPAWN_STONE.getLocation());
+        p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("CAMPEMENT").getLocation());
         setHealth(this.getStats().get(Stats.StatsInfo.VITALITY));
         Utils.sendInfoMessage(p, "Vous êtes mort.");
         updateHealthbar();
