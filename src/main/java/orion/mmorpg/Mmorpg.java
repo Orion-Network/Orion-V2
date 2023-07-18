@@ -23,6 +23,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
+import orion.mmorpg.items.enchants.CustomEnchants;
+import orion.mmorpg.items.enchants.EnchantmentWrapper;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.modelengine.OrionScriptReader;
@@ -121,6 +123,8 @@ public final class Mmorpg extends JavaPlugin {
         partyManager = new PartyManager(this);
         ressourceManager = new RessourceManager(this);
         npcManager = new NPCManager(this);
+
+        CustomEnchants.register();
 
         if(Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             mobManager = new MobManager(this);

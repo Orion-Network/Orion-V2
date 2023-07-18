@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -26,6 +27,7 @@ import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Modifiers;
+import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
@@ -88,9 +90,15 @@ public class PlayerStatsListener implements Listener {
         orionPlayer.executeOEffect(e);
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(orionPlayer.getStats().get(Stats.StatsInfo.ATTACK_SPEED) / 20);
         if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
-            PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
+            ItemMeta meta = p.getInventory().getItemInMainHand().getItemMeta();
+            PersistentDataContainer container = meta.getPersistentDataContainer();
             if (container.has(Namespaces.damage, PersistentDataType.FLOAT))
                 e.setDamage(container.get(Namespaces.damage, PersistentDataType.FLOAT));
+
+            if(meta.hasEnchant(CustomEnchants.WRATH)) {
+                e.setDamage(e.getDamage() + (e.getDamage() * (1 + (meta.getEnchantLevel(CustomEnchants.WRATH) * 0.1))));
+                Utils.sendInfoMessage(p, "Wrath: " + (1 + (meta.getEnchantLevel(CustomEnchants.WRATH) * 0.1)));
+            }
             if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
                 float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                 Utils.sendDebugMessage(p, "Total damage: " + totalDamage);

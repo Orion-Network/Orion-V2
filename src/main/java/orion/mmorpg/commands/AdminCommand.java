@@ -17,6 +17,8 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
@@ -24,9 +26,9 @@ import orion.mmorpg.entities.Pets;
 import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Reforgeable;
+import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.modelengine.OrionScriptReader;
-import orion.mmorpg.models.NPC;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.utils.Utils;
@@ -66,9 +68,16 @@ public class AdminCommand implements TabExecutor {
                 }
             }
             else if(args[0].equalsIgnoreCase("test")) {
-                if(args[1].equalsIgnoreCase("npc")) {
-                    Mmorpg.INSTANCE.getNpcManager().setup(player);
-                }
+                ItemStack itemStack = player.getInventory().getItemInMainHand();
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.addEnchant(CustomEnchants.WRATH, 3, true);
+                itemMeta.setLore(ItemList.getItemFromItemstack(itemStack).generateLore(null));
+                itemStack.setItemMeta(itemMeta);
+
+                BasicItem basicItem = ItemList.getItemFromItemstack(itemStack);
+                itemMeta.setLore(basicItem.generateLore(null));
+                itemStack.setItemMeta(itemMeta);
+
             }
         }
         return false;

@@ -32,6 +32,8 @@ public final class Namespaces {
 
             mark_location = NamespacedKey.fromString("mark_location", plugin),
             tool_type = NamespacedKey.fromString("tool_type", plugin),
-            tool_power = NamespacedKey.fromString("tool_power", plugin)
+            tool_power = NamespacedKey.fromString("tool_power", plugin),
+            //Enchants
+            wrath = NamespacedKey.fromString("wrath", plugin)
             ;
 }

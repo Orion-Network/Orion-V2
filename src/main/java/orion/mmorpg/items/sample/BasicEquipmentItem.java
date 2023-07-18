@@ -1,7 +1,10 @@
 package orion.mmorpg.items.sample;
 
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -11,9 +14,11 @@ import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.Reforgeable;
+import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
+import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
@@ -51,7 +56,20 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        return super.generateLore(lore);
+        List<String> lorea =  super.generateLore(lore);
+        //Generate enchants with comma separated values
+        if(this.hasItemMeta()) {
+            StringBuilder enchants = new StringBuilder();
+            for(Enchantment enchantment : getItemMeta().getEnchants().keySet()) {
+                enchants.append(ChatColor.GRAY + enchantment.getName()).append(" ").append(Utils.integerToRoman5(getItemMeta().getEnchants().get(enchantment))).append(", ");
+            }
+            if(enchants.length() > 0) {
+                enchants.delete(enchants.length() - 2, enchants.length());
+                lorea.add(enchants.toString());
+            }
+        }
+
+        return lorea;
     }
 
     @Override
