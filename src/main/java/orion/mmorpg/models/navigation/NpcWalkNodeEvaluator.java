@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -64,10 +63,10 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                     ++var0;
                     var2 = this.level.getBlockState(var1.set(this.mob.getX(), (double)var0, this.mob.getZ()));
                 }
-            } else if (this.mob.isOnGround()) {
+            } else if (this.mob.onGround()) {
                 var0 = Mth.floor(this.mob.getY() + 0.5);
             } else {
-                for(var3 = this.mob.blockPosition(); (this.level.getBlockState(var3).isAir() || this.level.getBlockState(var3).isPathfindable(this.level, var3, PathComputationType.LAND)) && var3.getY() > this.mob.level.getMinBuildHeight(); var3 = var3.below()) {
+                for(var3 = this.mob.blockPosition(); (this.getLevel().getBlockState(var3).isAir() || this.getLevel().getBlockState(var3).isPathfindable(this.getLevel(), var3, PathComputationType.LAND)) && var3.getY() > this.mob.level().getMinBuildHeight(); var3 = var3.below()) {
                 }
 
                 var0 = var3.north().getY();
@@ -258,7 +257,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                         return var8;
                     }
 
-                    while(var1 > this.mob.level.getMinBuildHeight()) {
+                    while(var1 > this.mob.level().getMinBuildHeight()) {
                         --var1;
                         var12 = this.getCachedBlockType(this.mob, var0, var1, var2);
                         if (var12 != BlockPathTypes.WATER) {
@@ -278,7 +277,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                     while(var12 == BlockPathTypes.OPEN) {
                         --var1;
                         Node var18;
-                        if (var1 < this.mob.level.getMinBuildHeight()) {
+                        if (var1 < this.mob.level().getMinBuildHeight()) {
                             var18 = this.getNode(var0, var17, var2);
                             var18.type = BlockPathTypes.BLOCKED;
                             var18.costMalus = -1.0F;
@@ -524,7 +523,6 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
     protected static BlockPathTypes getBlockPathTypeRaw(BlockGetter var0, BlockPos var1) {
         BlockState var2 = var0.getBlockState(var1);
         Block var3 = var2.getBlock();
-        Material var4 = var2.getMaterial();
         if (var2.isAir()) {
             return BlockPathTypes.OPEN;
         } else if (!var2.is(BlockTags.TRAPDOORS) && !var2.is(Blocks.LILY_PAD) && !var2.is(Blocks.BIG_DRIPLEAF)) {
@@ -544,7 +542,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                     return BlockPathTypes.DAMAGE_FIRE;
                 } else if (DoorBlock.isWoodenDoor(var2) && !(Boolean)var2.getValue(DoorBlock.OPEN)) {
                     return BlockPathTypes.DOOR_WOOD_CLOSED;
-                } else if (var3 instanceof DoorBlock && var4 == Material.METAL && !(Boolean)var2.getValue(DoorBlock.OPEN)) {
+                } else if (var3 instanceof DoorBlock && !(Boolean)var2.getValue(DoorBlock.OPEN)) {
                     return BlockPathTypes.DOOR_IRON_CLOSED;
                 } else if (var3 instanceof DoorBlock && (Boolean)var2.getValue(DoorBlock.OPEN)) {
                     return BlockPathTypes.DOOR_OPEN;

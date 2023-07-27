@@ -19,11 +19,7 @@ import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
-import orion.mmorpg.utils.Element;
-import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.Namespaces;
-import orion.mmorpg.utils.Rarity;
-import oshi.util.tuples.Pair;
+import orion.mmorpg.utils.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -44,7 +40,7 @@ public abstract class BasicItem extends ItemStack {
     protected final String PERMISSION;
     protected final ItemType ITEM_TYPE;
     protected Element ELEMENT = Element.PHYSIC;
-    protected final LinkedHashMap<String, Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
+    protected final LinkedHashMap<String, Utils.Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
     protected Spell spell;
 
     protected ItemMeta meta;
@@ -116,8 +112,8 @@ public abstract class BasicItem extends ItemStack {
         meta.getPersistentDataContainer().set(Namespaces.internal_id, PersistentDataType.STRING, INTERNAL_ID);
         meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, ITEM_TYPE.toString());
         for(String id : DATA.keySet()) {
-            Pair<PersistentDataType, Object> data = DATA.get(id);
-            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getA(), data.getB());
+            Utils.Pair<PersistentDataType, Object> data = DATA.get(id);
+            meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getKey(), data.getValue());
         }
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -210,7 +206,7 @@ public abstract class BasicItem extends ItemStack {
         return ITEM_TYPE;
     }
 
-    public LinkedHashMap<String, Pair<PersistentDataType, Object>> getDATA() {
+    public LinkedHashMap<String, Utils.Pair<PersistentDataType, Object>> getDATA() {
         return DATA;
     }
 

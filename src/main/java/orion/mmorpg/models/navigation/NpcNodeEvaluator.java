@@ -80,4 +80,8 @@ public abstract class NpcNodeEvaluator extends NodeEvaluator {
     public boolean canFloat() {
         return this.canFloat;
     }
+
+    public PathNavigationRegion getLevel() {
+        return this.level;
+    }
 }

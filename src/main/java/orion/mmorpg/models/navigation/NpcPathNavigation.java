@@ -214,7 +214,7 @@ public class NpcPathNavigation extends PathNavigation {
             } else if (this.path != null && !this.path.isDone()) {
                 var0 = this.getTempMobPos();
                 Vec3 var1 = this.path.getNextEntityPos(this.mob);
-                if (var0.y > var1.y && !this.mob.isOnGround() && Mth.floor(var0.x) == Mth.floor(var1.x) && Mth.floor(var0.z) == Mth.floor(var1.z)) {
+                if (var0.y > var1.y && !this.mob.onGround() && Mth.floor(var0.x) == Mth.floor(var1.x) && Mth.floor(var0.z) == Mth.floor(var1.z)) {
                     this.path.advance();
                 }
             }
@@ -342,7 +342,7 @@ public class NpcPathNavigation extends PathNavigation {
     }
 
     protected boolean canUpdatePath() {
-        return this.mob.isOnGround() || this.isInLiquid() || this.mob.isPassenger();
+        return this.mob.onGround() || this.isInLiquid() || this.mob.isPassenger();
     }
 
     protected boolean isInLiquid() {

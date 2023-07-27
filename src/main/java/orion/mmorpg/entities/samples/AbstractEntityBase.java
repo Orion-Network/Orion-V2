@@ -1,6 +1,7 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -8,9 +9,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.attribute.CraftAttributeMap;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_20_R1.CraftRegionAccessor;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.attribute.CraftAttributeMap;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.utils.Stats;
@@ -25,6 +27,7 @@ public abstract class AbstractEntityBase extends PathfinderMob {
     //Credit to @ysl3000
     //We need this to register the new attribute to the pig
     static {
+
         try {
             attributeField = AttributeMap.class.getDeclaredField("b");
             attributeField.setAccessible(true);

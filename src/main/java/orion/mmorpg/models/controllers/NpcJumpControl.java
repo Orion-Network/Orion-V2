@@ -8,7 +8,7 @@ public class NpcJumpControl extends JumpControl {
     private boolean canJump;
     private final NPC npc;
     public NpcJumpControl(NPC npc) {
-        super(NPCUtils.getDummySentient(npc.getLevel()));
+        super(NPCUtils.getDummySentient(npc.serverLevel()));
         this.npc = npc;
     }
 

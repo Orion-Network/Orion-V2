@@ -67,19 +67,19 @@ public class NPC extends ServerPlayer {
     @Override
     public void doTick() {
         super.doTick();
-        this.level.getProfiler().push("navigation");
+        this.level().getProfiler().push("navigation");
         this.navigation.tick();
-        this.level.getProfiler().pop();
-        this.level.getProfiler().push("move");
+        this.level().getProfiler().pop();
+        this.level().getProfiler().push("move");
         this.moveControl.tick();
-        this.level.getProfiler().popPush("jump");
+        this.level().getProfiler().popPush("jump");
         this.jumpControl.tick();
-        this.level.getProfiler().push("targetSelector");
+        this.level().getProfiler().push("targetSelector");
         this.targetSelector.tick();
-        this.level.getProfiler().pop();
-        this.level.getProfiler().push("goalSelector");
+        this.level().getProfiler().pop();
+        this.level().getProfiler().push("goalSelector");
         this.goalSelector.tick();
-        this.level.getProfiler().pop();
+        this.level().getProfiler().pop();
     }
 
 

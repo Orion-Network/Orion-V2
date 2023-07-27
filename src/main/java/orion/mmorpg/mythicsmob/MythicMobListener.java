@@ -3,7 +3,7 @@ package orion.mmorpg.mythicsmob;
 import io.lumine.mythic.bukkit.events.MythicDropLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import io.lumine.mythic.bukkit.events.MythicMobLootDropEvent;
-import io.lumine.mythic.bukkit.utils.lib.lang3.EnumUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

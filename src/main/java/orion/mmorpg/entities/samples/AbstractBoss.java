@@ -20,7 +20,7 @@ public abstract class AbstractBoss extends AbstractMob {
 
     @Override
     public void spawn() {
-        Bukkit.broadcastMessage(ChatColor.YELLOW + getName().getString() + ChatColor.RED + " a été invoqué!");
+        // Bukkit.broadcastMessage(ChatColor.YELLOW + getName().getString() + ChatColor.RED + " a été invoqué!");
         super.spawn();
     }
 

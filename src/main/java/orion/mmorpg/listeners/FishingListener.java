@@ -22,7 +22,6 @@ import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.utils.*;
-import oshi.util.tuples.Pair;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.UUID;
 public class FishingListener implements Listener {
     Mmorpg plugin;
     Rewards rewards = new Rewards();
-    HashMap<Pair<Integer, Long>, Mobs> seaCreatures = new HashMap<>();
+    HashMap<Utils.Pair<Integer, Long>, Mobs> seaCreatures = new HashMap<>();
 
     public FishingListener(Mmorpg plugin) {
         this.plugin = plugin;
@@ -45,7 +44,7 @@ public class FishingListener implements Listener {
         reward2.getJobExp().put(JobType.FISHING, 5);
         rewards.add(reward2);
 
-        seaCreatures.put(new Pair<>(1, 1000L), Mobs.SEA_ZOMBIE);
+        seaCreatures.put(new Utils.Pair<>(1, 1000L), Mobs.SEA_ZOMBIE);
     }
 
     @EventHandler
@@ -91,8 +90,8 @@ public class FishingListener implements Listener {
         //If fishing level lower than Pair Integer add to possibleCreature
         HashMap<Long, Mobs> possibleCreatures = new HashMap<>();
                 seaCreatures.forEach((pair, mob) -> {
-                    if(pair.getA() <= player.getJobs().getJob(JobType.FISHING).getLevel()) {
-                        possibleCreatures.put(pair.getB(), mob);
+                    if(pair.getKey() <= player.getJobs().getJob(JobType.FISHING).getLevel()) {
+                        possibleCreatures.put(pair.getValue(), mob);
                     }
                 });
                 //get a random SeaCreature weighted with Long
