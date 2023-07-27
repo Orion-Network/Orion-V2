@@ -1,7 +1,6 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,7 +13,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import orion.mmorpg.Mmorpg;
@@ -34,9 +33,9 @@ public abstract class AbstractPet extends AbstractEntityBase {
 
         this.setInvulnerable(true);
 
-        this.setGoalTarget(((CraftPlayer) owner).getHandle(), EntityTargetEvent.TargetReason.CUSTOM, true);
+        this.setTarget(((CraftPlayer) owner).getHandle(), EntityTargetEvent.TargetReason.CUSTOM, true);
         Mmorpg.INSTANCE.getPlayerManager().getPlayer(owner.getUniqueId()).setPet(this);
-        this.setCustomName(new TextComponent(generateName()));
+        //this.setCustomName(new TextComponent(generateName()));
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
 
     @Override
     public boolean hurt(DamageSource damagesource, float f) {
-        this.setCustomName(new TextComponent(generateName()));
+        //this.setCustomName(new TextComponent(generateName()));
         return true;
     }
 

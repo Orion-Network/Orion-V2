@@ -1,6 +1,6 @@
 package orion.mmorpg.items;
 
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;

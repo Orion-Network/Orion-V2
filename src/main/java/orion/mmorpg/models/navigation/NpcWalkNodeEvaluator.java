@@ -1,5 +1,9 @@
 package orion.mmorpg.models.navigation;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -20,10 +24,6 @@ import net.minecraft.world.level.pathfinder.Target;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import orion.mmorpg.models.NPC;
 
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
         int var0 = this.mob.getBlockY();
         BlockState var2 = this.level.getBlockState(var1.set(this.mob.getX(), (double)var0, this.mob.getZ()));
         BlockPos var3;
-        if (!this.mob.canStandOnFluid(var2.getFluidState().getType())) {
+        if (!this.mob.canStandOnFluid(var2.getFluidState())) {
             if (this.canFloat() && this.mob.isInWater()) {
                 while(true) {
                     if (!var2.is(Blocks.WATER) && var2.getFluidState() != Fluids.WATER.getSource(false)) {
@@ -67,14 +67,14 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
             } else if (this.mob.isOnGround()) {
                 var0 = Mth.floor(this.mob.getY() + 0.5);
             } else {
-                for(var3 = this.mob.blockPosition(); (this.level.getBlockState(var3).isAir() || this.level.getBlockState(var3).isPathfindable(this.level, var3, PathComputationType.LAND)) && var3.getY() > this.mob.level.getMinBuildHeight(); var3 = var3.down()) {
+                for(var3 = this.mob.blockPosition(); (this.level.getBlockState(var3).isAir() || this.level.getBlockState(var3).isPathfindable(this.level, var3, PathComputationType.LAND)) && var3.getY() > this.mob.level.getMinBuildHeight(); var3 = var3.below()) {
                 }
 
-                var0 = var3.up().getY();
+                var0 = var3.north().getY();
             }
         } else {
             while(true) {
-                if (!this.mob.canStandOnFluid(var2.getFluidState().getType())) {
+                if (!this.mob.canStandOnFluid(var2.getFluidState())) {
                     --var0;
                     break;
                 }
@@ -117,7 +117,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
         BlockPathTypes var4 = this.getCachedBlockType(this.mob, var1.x, var1.y + 1, var1.z);
         BlockPathTypes var5 = this.getCachedBlockType(this.mob, var1.x, var1.y, var1.z);
         if (this.mob.getPathfindingMalus(var4) >= 0.0F && var5 != BlockPathTypes.STICKY_HONEY) {
-            var3 = Mth.floor(Math.max(1.0F, this.mob.maxUpStep));
+            var3 = Mth.floor(Math.max(1.0F, this.mob.maxUpStep()));
         }
 
         double var6 = this.getFloorLevel(new BlockPos(var1.x, var1.y, var1.z));
@@ -208,7 +208,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
     }
 
     public static double getFloorLevel(BlockGetter var0, BlockPos var1) {
-        BlockPos var2 = var1.down();
+        BlockPos var2 = var1.below();
         VoxelShape var3 = var0.getBlockState(var2).getCollisionShape(var0, var2);
         return (double)var2.getY() + (var3.isEmpty() ? 0.0 : var3.max(Direction.Axis.Y));
     }
@@ -390,7 +390,7 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
             var4 = BlockPathTypes.BLOCKED;
         }
 
-        if (var4 == BlockPathTypes.RAIL && !(var0.getBlockState(var3).getBlock() instanceof BaseRailBlock) && !(var0.getBlockState(var3.down()).getBlock() instanceof BaseRailBlock)) {
+        if (var4 == BlockPathTypes.RAIL && !(var0.getBlockState(var3).getBlock() instanceof BaseRailBlock) && !(var0.getBlockState(var3.below()).getBlock() instanceof BaseRailBlock)) {
             var4 = BlockPathTypes.UNPASSABLE_RAIL;
         }
 
@@ -399,6 +399,11 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
         }
 
         return var4;
+    }
+
+    @Override
+    public BlockPathTypes getBlockPathType(BlockGetter blockGetter, int i, int i1, int i2, Mob mob) {
+        return this.getCachedBlockType(mob, i, i1, i2);
     }
 
     private BlockPathTypes getBlockPathType(Mob var0, BlockPos var1) {
@@ -469,10 +474,6 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                 var5 = BlockPathTypes.DAMAGE_FIRE;
             }
 
-            if (var6 == BlockPathTypes.DAMAGE_CACTUS) {
-                var5 = BlockPathTypes.DAMAGE_CACTUS;
-            }
-
             if (var6 == BlockPathTypes.DAMAGE_OTHER) {
                 var5 = BlockPathTypes.DAMAGE_OTHER;
             }
@@ -500,9 +501,6 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
                     if (var6 != 0 || var8 != 0) {
                         var1.set(var3 + var6, var4 + var7, var5 + var8);
                         BlockState var9 = var0.getBlockState(var1);
-                        if (var9.is(Blocks.CACTUS)) {
-                            return BlockPathTypes.DANGER_CACTUS;
-                        }
 
                         if (var9.is(Blocks.SWEET_BERRY_BUSH)) {
                             return BlockPathTypes.DANGER_OTHER;
@@ -532,8 +530,6 @@ public class NpcWalkNodeEvaluator extends NpcNodeEvaluator {
         } else if (!var2.is(BlockTags.TRAPDOORS) && !var2.is(Blocks.LILY_PAD) && !var2.is(Blocks.BIG_DRIPLEAF)) {
             if (var2.is(Blocks.POWDER_SNOW)) {
                 return BlockPathTypes.POWDER_SNOW;
-            } else if (var2.is(Blocks.CACTUS)) {
-                return BlockPathTypes.DAMAGE_CACTUS;
             } else if (var2.is(Blocks.SWEET_BERRY_BUSH)) {
                 return BlockPathTypes.DAMAGE_OTHER;
             } else if (var2.is(Blocks.HONEY_BLOCK)) {

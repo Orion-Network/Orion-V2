@@ -14,6 +14,8 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.GrimoryGui;
 import orion.mmorpg.items.sample.BasicItem;
+import orion.mmorpg.items.sample.BasicTool;
+import orion.mmorpg.items.sample.BasicUsableItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -24,7 +26,7 @@ import orion.mmorpg.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
-public class GrimoryItem extends BasicItem {
+public class GrimoryItem extends BasicUsableItem {
     public GrimoryItem() {
         super(Material.BOOK, "Grimory", "GRIMORY", 1, Collections.singletonList("A grimory containing all your spells"), Rarity.RARE);
     }
