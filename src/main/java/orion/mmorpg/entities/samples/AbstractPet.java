@@ -73,7 +73,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
     }
 
     private String generateName() {
-        return name + ChatColor.YELLOW + " [ " + owner.getName() + " ]";
+        return mobName + ChatColor.YELLOW + " [ " + owner.getName() + " ]";
     }
 
     public Player getOwner() {

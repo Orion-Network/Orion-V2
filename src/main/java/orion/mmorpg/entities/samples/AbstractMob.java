@@ -53,7 +53,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     private String generateName() {
-        return color + name + ChatColor.YELLOW + " [Lvl " + mobLevel + "]";
+        return color + mobName + ChatColor.YELLOW + " [Lvl " + mobLevel + "]";
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
         if(Bukkit.getBossBar(NamespacedKey.minecraft(uuid)) != null)
             this.keyedBossBar = Bukkit.getBossBar(NamespacedKey.minecraft(uuid));
         else
-            this.keyedBossBar = Bukkit.createBossBar(NamespacedKey.minecraft(uuid), name, BarColor.PURPLE, BarStyle.SEGMENTED_10);
+            this.keyedBossBar = Bukkit.createBossBar(NamespacedKey.minecraft(uuid), mobName, BarColor.PURPLE, BarStyle.SEGMENTED_10);
 
         this.keyedBossBar.setVisible(true);
 
