@@ -1,7 +1,6 @@
 package orion.mmorpg.entities.samples;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -11,7 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Respawnable;
@@ -26,22 +25,22 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public abstract class AbstractMob extends AbstractEntityBase implements Respawnable {
-    int level;
+    int mobLevel;
     public KeyedBossBar keyedBossBar;
     private boolean respawn = true;
     public ChatColor color = ChatColor.YELLOW;
     private Rewards rewards = new Rewards();
 
-    public AbstractMob(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
+    public AbstractMob(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int mobLevel) {
         super(entitytypes, uuid, name, spawnLocation, stats);
-        this.level = level;
+        this.mobLevel = mobLevel;
 
-        this.getRewards().setExp(this.level * 10);
+        this.getRewards().setExp(this.mobLevel * 10);
     }
 
     @Override
     public boolean hurt(DamageSource damagesource, float f) {
-        this.setCustomName(new TextComponent(generateName()));
+        //this.setCustomName(new TextComponent(generateName()));
         float progress = (this.getHealth()-f) / this.getMaxHealth();
         this.keyedBossBar.setProgress((progress > 1 ? 1 : (progress < 0 ? 0 : progress)));
         if(damagesource.getEntity() instanceof net.minecraft.world.entity.player.Player) {
@@ -54,7 +53,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     private String generateName() {
-        return color + name + ChatColor.YELLOW + " [Lvl " + level + "]";
+        return color + name + ChatColor.YELLOW + " [Lvl " + mobLevel + "]";
     }
 
     @Override
@@ -74,7 +73,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
 
     @Override
     public void spawn() {
-        this.setCustomName(new TextComponent(generateName()));
+        //this.setCustomName(new TextComponent(generateName()));
         if(Bukkit.getBossBar(NamespacedKey.minecraft(uuid)) != null)
             this.keyedBossBar = Bukkit.getBossBar(NamespacedKey.minecraft(uuid));
         else
@@ -120,8 +119,8 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
 
-    public int getLevel() {
-        return level;
+    public int getMobLevel() {
+        return mobLevel;
     }
 
     public Location getSpawnLocation() {

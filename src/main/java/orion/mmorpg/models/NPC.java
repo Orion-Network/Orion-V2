@@ -109,7 +109,7 @@ public class NPC extends ServerPlayer {
     }
 
     public boolean canCutCorner(BlockPathTypes pathtype) {
-        return pathtype != BlockPathTypes.DANGER_FIRE && pathtype != BlockPathTypes.DANGER_CACTUS && pathtype != BlockPathTypes.DANGER_OTHER && pathtype != BlockPathTypes.WALKABLE_DOOR;
+        return pathtype != BlockPathTypes.DANGER_FIRE && pathtype != BlockPathTypes.DANGER_POWDER_SNOW && pathtype != BlockPathTypes.DANGER_OTHER && pathtype != BlockPathTypes.WALKABLE_DOOR;
     }
 
     public void setPathfindingMalus(BlockPathTypes pathtype, float f) {

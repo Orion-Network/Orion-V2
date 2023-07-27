@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import orion.mmorpg.utils.Stats;
 
@@ -38,8 +38,6 @@ public abstract class AbstractMount extends AbstractEntityBase {
 
     @Override
     public boolean hurt(DamageSource damagesource, float f) {
-        if(damagesource.equals(DamageSource.FALL))
-            return false;
         return super.hurt(damagesource, f);
     }
 

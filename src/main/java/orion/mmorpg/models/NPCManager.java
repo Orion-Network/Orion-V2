@@ -10,15 +10,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.Mmorpg;
@@ -77,13 +76,13 @@ public class NPCManager {
         for(Player on : Bukkit.getOnlinePlayers()) {
             ServerPlayerConnection connection = ((CraftPlayer) on).getHandle().connection;
 
-            connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, corpse));
+            //connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, corpse));
             connection.send(new ClientboundAddEntityPacket(corpse));
         }
 
         npcEntities.put(corpse.getId(), corpse);
 
-        corpse.getLevel().addEntity(corpse, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        corpse.getLevel().addFreshEntity(corpse, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public void removeNPC(Integer id) {

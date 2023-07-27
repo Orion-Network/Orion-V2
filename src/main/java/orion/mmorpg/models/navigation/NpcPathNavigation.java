@@ -146,9 +146,9 @@ public class NpcPathNavigation extends PathNavigation {
             return this.path;
         } else {
             this.level.getProfiler().push("pathfind");
-            BlockPos var5 = var2 ? this.mob.blockPosition().up() : this.mob.blockPosition();
+            BlockPos var5 = var2 ? this.mob.blockPosition().north() : this.mob.blockPosition();
             int var6 = (int)(var4 + (float)var1);
-            PathNavigationRegion var7 = new PathNavigationRegion(this.level, var5.c(-var6, -var6, -var6), var5.c(var6, var6, var6));
+            PathNavigationRegion var7 = new PathNavigationRegion(this.level, var5.offset(-var6, -var6, -var6), var5.offset(var6, var6, var6));
             Path var8 = this.pathFinder.findPath(var7, this.mob, var0, var4, var3, this.maxVisitedNodesMultiplier);
             this.level.getProfiler().pop();
             if (var8 != null && var8.getTarget() != null) {
@@ -222,8 +222,8 @@ public class NpcPathNavigation extends PathNavigation {
             //DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
                 var0 = this.path.getNextEntityPos(this.mob);
-                BlockPos var1 = new BlockPos(var0);
-                this.mob.getMoveControl().setWantedPosition(var0.x, this.level.getBlockState(var1.down()).isAir() ? var0.y : WalkNodeEvaluator.getFloorLevel(this.level, var1), var0.z, this.speedModifier);
+                BlockPos var1 = new BlockPos(new Vec3i((int) var0.x, (int) var0.y, (int) var0.z));
+                this.mob.getMoveControl().setWantedPosition(var0.x, this.level.getBlockState(var1.below()).isAir() ? var0.y : WalkNodeEvaluator.getFloorLevel(this.level, var1), var0.z, this.speedModifier);
             }
         }
     }
@@ -322,7 +322,7 @@ public class NpcPathNavigation extends PathNavigation {
     private int getSurfaceY() {
         if (this.mob.isInWater() && this.canFloat()) {
             int var0 = this.mob.getBlockY();
-            BlockState var1 = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)var0, this.mob.getZ()));
+            BlockState var1 = this.level.getBlockState(new BlockPos(this.mob.getBlockX(),  var0, this.mob.getBlockZ()));
             int var2 = 0;
 
             do {
@@ -331,7 +331,7 @@ public class NpcPathNavigation extends PathNavigation {
                 }
 
                 ++var0;
-                var1 = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)var0, this.mob.getZ()));
+                var1 = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), var0, this.mob.getBlockZ()));
                 ++var2;
             } while(var2 <= 16);
 
@@ -489,7 +489,7 @@ public class NpcPathNavigation extends PathNavigation {
     }
 
     public boolean isStableDestination(BlockPos var0) {
-        BlockPos var1 = var0.down();
+        BlockPos var1 = var0.below();
         return this.level.getBlockState(var1).isSolidRender(this.level, var1);
     }
 
@@ -508,7 +508,7 @@ public class NpcPathNavigation extends PathNavigation {
     public void recomputePath(BlockPos var0) {
         if (this.path != null && !this.path.isDone() && this.path.getNodeCount() != 0) {
             Node var1 = this.path.getEndNode();
-            Vec3 var2 = new Vec3(((double)var1.x + this.mob.getX()) / 2.0, ((double)var1.y + this.mob.getY()) / 2.0, ((double)var1.z + this.mob.getZ()) / 2.0);
+            Vec3i var2 = new Vec3i((int) ((var1.x + this.mob.getX()) / 2.0),  (int)(((var1.y + this.mob.getY()) / 2.0)), (int)((var1.z + this.mob.getZ()) / 2.0));
             if (var0.closerThan(var2, (double)(this.path.getNodeCount() - this.path.getNextNodeIndex()))) {
                 this.recomputePath();
             }
