@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import orion.mmorpg.Mmorpg;
@@ -73,7 +73,7 @@ public abstract class AbstractPet extends AbstractEntityBase {
     }
 
     private String generateName() {
-        return name + ChatColor.YELLOW + " [ " + owner.getName() + " ]";
+        return mobName + ChatColor.YELLOW + " [ " + owner.getName() + " ]";
     }
 
     public Player getOwner() {

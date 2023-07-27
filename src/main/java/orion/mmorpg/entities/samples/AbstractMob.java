@@ -10,7 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Respawnable;
@@ -53,7 +53,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
     }
 
     private String generateName() {
-        return color + name + ChatColor.YELLOW + " [Lvl " + mobLevel + "]";
+        return color + mobName + ChatColor.YELLOW + " [Lvl " + mobLevel + "]";
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
         if(Bukkit.getBossBar(NamespacedKey.minecraft(uuid)) != null)
             this.keyedBossBar = Bukkit.getBossBar(NamespacedKey.minecraft(uuid));
         else
-            this.keyedBossBar = Bukkit.createBossBar(NamespacedKey.minecraft(uuid), name, BarColor.PURPLE, BarStyle.SEGMENTED_10);
+            this.keyedBossBar = Bukkit.createBossBar(NamespacedKey.minecraft(uuid), mobName, BarColor.PURPLE, BarStyle.SEGMENTED_10);
 
         this.keyedBossBar.setVisible(true);
 

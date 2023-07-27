@@ -1,6 +1,6 @@
 package orion.mmorpg.commands;
 
-import io.lumine.mythic.bukkit.utils.lib.lang3.EnumUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

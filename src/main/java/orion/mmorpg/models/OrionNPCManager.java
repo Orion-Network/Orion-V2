@@ -1,11 +1,5 @@
 package orion.mmorpg.models;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.Getter;
@@ -15,9 +9,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import orion.mmorpg.Mmorpg;
@@ -25,13 +19,13 @@ import orion.mmorpg.Mmorpg;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class NPCManager {
+public class OrionNPCManager {
 
     @Getter
     public HashMap<Integer, ServerPlayer> npcEntities = new HashMap<>();
 
     Mmorpg plugin;
-    public NPCManager(Mmorpg plugin) {
+    public OrionNPCManager(Mmorpg plugin) {
         this.plugin = plugin;
 
         /*
@@ -60,6 +54,7 @@ public class NPCManager {
     public void setup(Player player) {
         ServerPlayer craftPlayer = ((CraftPlayer) player).getHandle();
 
+
         Property textures = (Property) craftPlayer.getGameProfile().getProperties().get("textures").toArray()[0];
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), player.getName());
         gameProfile.getProperties().put("textures", new Property("textures", textures.getValue(), textures.getSignature()));
@@ -82,7 +77,7 @@ public class NPCManager {
 
         npcEntities.put(corpse.getId(), corpse);
 
-        corpse.getLevel().addFreshEntity(corpse, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        corpse.level().addFreshEntity(corpse, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public void removeNPC(Integer id) {

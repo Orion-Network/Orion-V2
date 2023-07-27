@@ -1,7 +1,5 @@
 package orion.mmorpg;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -24,11 +22,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
 import orion.mmorpg.items.enchants.CustomEnchants;
-import orion.mmorpg.items.enchants.EnchantmentWrapper;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
 import orion.mmorpg.modelengine.OrionScriptReader;
-import orion.mmorpg.models.NPCManager;
+import orion.mmorpg.models.OrionNPCManager;
 import orion.mmorpg.mythicsmob.MythicMobListener;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
@@ -66,7 +63,7 @@ public final class Mmorpg extends JavaPlugin {
     @Getter
     RessourceManager ressourceManager;
     @Getter
-    NPCManager npcManager;
+    OrionNPCManager orionNpcManager;
 
     public static boolean isDebug() {
         return debug;
@@ -125,7 +122,8 @@ public final class Mmorpg extends JavaPlugin {
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
         ressourceManager = new RessourceManager(this);
-        npcManager = new NPCManager(this);
+        orionNpcManager = new OrionNPCManager(this);
+
 
         CustomEnchants.register();
 

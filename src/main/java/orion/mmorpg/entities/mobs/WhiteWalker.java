@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.entities.samples.AbstractHostile;
 import orion.mmorpg.utils.Stats;

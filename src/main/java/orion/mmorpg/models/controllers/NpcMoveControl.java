@@ -27,7 +27,7 @@ public class NpcMoveControl extends MoveControl {
     protected double tz;
 
     public NpcMoveControl(NPC var0) {
-        super(NPCUtils.getDummySentient(var0.getLevel()));
+        super(NPCUtils.getDummySentient(var0.serverLevel().getLevel()));
         this.entity = var0;
         this.tx = var0.getX();
         this.ty = var0.getY();

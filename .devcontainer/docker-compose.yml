@@ -17,7 +17,7 @@ services:
       - 5005:5005
     environment:
       EULA: "TRUE"
-      VERSION: "1.19.4"
+      VERSION: "1.20.1"
       TYPE: "PAPER"
       MAX_MEMORY: "2G"
       WORLD: /worlds/world

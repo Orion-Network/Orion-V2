@@ -8,7 +8,7 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
