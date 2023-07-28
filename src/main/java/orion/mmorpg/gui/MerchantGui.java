@@ -56,7 +56,7 @@ public class MerchantGui extends ChestGui {
                     player.getInventory().addItem(buyable.itemStack.clone());
                 } else {
                     long missing = buyable.amount - orionPlayer.getCurrencies().get(buyable.currencyName);
-                    Utils.sendInfoMessage(player, "Il vous manque " + missing + " " + buyable.currencyName);
+                    Utils.sendInfoMessage(player, "Il vous manque " + Utils.NumberFormat.READABLE.format(missing) + " " + buyable.currencyName);
                 }
             }));
         }
