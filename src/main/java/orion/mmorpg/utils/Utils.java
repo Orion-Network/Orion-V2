@@ -1,6 +1,8 @@
 package orion.mmorpg.utils;
 
 import com.google.common.base.Enums;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
@@ -23,6 +25,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.ItemType;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -252,7 +255,8 @@ public class Utils {
 
     }
 
-    public static final String integerToRoman5(int number) {
+    public static String integerToRoman5(int number) {
+        if(number > 1000) return String.valueOf(number);
         int l = treemap.floorKey(number);
         if (number == l) {
             return treemap.get(number);
@@ -275,6 +279,32 @@ public class Utils {
 
         public V getValue() {
             return value;
+        }
+    }
+
+    public enum NumberFormat {
+        SCIENTIFIC((i) -> new DecimalFormat("0.##E0").format(i)),
+        DECIMAL((i) -> new DecimalFormat("0.##").format(i)),
+        ROMAN((i) -> {
+            if(i < Integer.MAX_VALUE)
+                return integerToRoman5(i.intValue());
+            return String.valueOf(i);
+        }),
+        READABLE(i -> {
+            if(i < 1000) return String.valueOf(i);
+            if(i < 1000000) return i/1000 + "K";
+            if(i < 1000000000) return i/1000000 + "M";
+            else return i/1000000000 + "B";
+        });
+
+        Function<Long, String> function;
+
+        NumberFormat(Function<Long, String>  function) {
+            this.function = function;
+        }
+
+        public String format(long i) {
+            return function.apply(i);
         }
     }
 }

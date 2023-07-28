@@ -1,7 +1,9 @@
 package orion.mmorpg.utils;
 
 import com.google.gson.*;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,6 +44,7 @@ public class OrionGson {
         builder.registerTypeAdapter(Equipments.class, new EquipmentsAdapter());
         builder.registerTypeAdapterFactory(basicItemRuntimeTypeAdapterFactory);
         builder.registerTypeAdapter(Jobs.class, new JobsAdapter());
+        builder.registerTypeAdapter(Currencies.class, new CurrenciesAdapter());
         GSON = builder.create();
     }
 
@@ -227,6 +230,37 @@ public class OrionGson {
             });
             return object;
         }
+    }
+
+    public static class CurrenciesAdapter implements JsonSerializer<Currencies>, JsonDeserializer<Currencies> {
+        @Override
+        public Currencies deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject object = jsonElement.getAsJsonObject();
+            Currencies currencies = new Currencies();
+            object.entrySet().forEach(entry -> {
+                JsonObject currencyObject = entry.getValue().getAsJsonObject();
+                Currencies.Currency currency =  new Currencies.Currency(currencyObject.get("name").getAsString(), currencyObject.get("amount").getAsLong());
+                currency.setColor(currencyObject.get("color").getAsString());
+                currency.setSymbol(currencyObject.get("symbol").getAsString());
+                currencies.add(currency);
+            });
+            return currencies;
+        }
+
+        @Override
+        public JsonElement serialize(Currencies currencies, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject object = new JsonObject();
+            currencies.getCurrencies().forEach((name, currency) -> {
+                JsonObject currencyObject = new JsonObject();
+                currencyObject.addProperty("name", currency.getName());
+                currencyObject.addProperty("symbol", currency.getSymbol());
+                currencyObject.addProperty("color", currency.getColor());
+                currencyObject.addProperty("amount", currency.getAmount());
+                object.add(name, currencyObject);
+            });
+            return object;
+        }
+
     }
 
     /*

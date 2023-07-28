@@ -10,13 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Currencies;
 import orion.mmorpg.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class AdminCommand implements TabExecutor {
 
@@ -53,6 +54,23 @@ public class AdminCommand implements TabExecutor {
                     Mmorpg.INSTANCE.getOrionNpcManager().setup(player);
 
                 }
+                if(args[1].equalsIgnoreCase("currencies")) {
+
+                    orionPlayer.getCurrencies().add("test", Integer.parseInt(args[2]));
+                    Utils.sendInfoMessage((Entity) commandSender, "" + orionPlayer.getCurrencies().currencies.containsKey("test"));
+                    for(Currencies.Currency currency : orionPlayer.getCurrencies().currencies.values()) {
+                        Utils.sendInfoMessage((Entity) commandSender, orionPlayer.getCurrencies().getFormatted(currency.name, Utils.NumberFormat.READABLE) + " " + currency.symbol);
+                    }
+                } else if(args[1].equalsIgnoreCase("cmenu")) {
+                    ArrayList<MerchantGui.Buyable> buyables = new ArrayList<>();
+                    buyables.add(new MerchantGui.Buyable("test", 5, ItemList.KNIGHT_BOOTS.generateItemStack(1)));
+                    buyables.add(new MerchantGui.Buyable("test", 50000, ItemList.KNIGHT_CHESTPLATE.generateItemStack(1)));
+
+
+                    MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player, buyables);
+                    merchantGui.show(player);
+                }
+
             }
         }
         return false;

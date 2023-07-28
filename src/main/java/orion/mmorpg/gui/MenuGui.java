@@ -396,10 +396,16 @@ public class MenuGui extends ChestGui {
         menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.generateItemStack(1), e -> {
             new WikiGui(Mmorpg.INSTANCE).show(p);
         }), 1, 1);
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.GOLD_INGOT, "Currencies", 0, orionPlayer.getCurrencies().asLore(), Rarity.COMMON).generateItem(null, 1), e -> {
+
+        }), 3, 1);
+        /*
         menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
             Utils.sendErrorMessage(p, "Ce menu n'est pas encore disponible");
             //new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
         }), 3, 1);
+        */
+
         menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, Collections.singletonList("Ouvre le menu des sorts"), Rarity.COMMON).generateItem(null, 1), e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
         menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.generateItemStack(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
 
