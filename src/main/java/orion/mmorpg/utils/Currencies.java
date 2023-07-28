@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class Currencies {
     @Getter
-    public HashMap<Currency, Integer> currencies;
+    public HashMap<String, Currency> currencies;
     private static final Utils.NumberFormat DEFAULT_FORMAT = Utils.NumberFormat.READABLE;
 
     public Currencies() {
@@ -25,51 +26,53 @@ public class Currencies {
         return format.format(get(name)) + " " + name;
     }
 
-    public int get(String name) {
+    public long get(String name) {
         if(hasCurrency(name)) {
-            return currencies.get(getCurrency(name));
+            return currencies.get(name).getAmount();
         } else {
             return 0;
         }
     }
 
     public Currency getCurrency(String name) {
-        for(Currency currency : currencies.keySet()) {
-            if(currency.name.equalsIgnoreCase(name)) {
-                return currency;
-            }
-        }
-        return null;
+        return currencies.get(name);
     }
 
-   public void add(String name, int amount) {
+   public void add(String name, long amount) {
         if(hasCurrency(name)) {
-            Currency currency = getCurrency(name);
-            currencies.put(currency, currencies.get(currency) + amount);
+            currencies.get(name).add(amount);
         } else {
-            currencies.put(new Currency(name), amount);
+            currencies.put(name, new Currency(name, amount));
         }
    }
 
-   public void add(Currency currency, int amount) {
-        if(hasCurrency(currency.name)) {
-            currencies.put(currency, currencies.get(currency) + amount);
-        } else {
-            currencies.put(currency, amount);
-        }
+   public void add(Currency currency) {
+         if(hasCurrency(currency.getName())) {
+              currencies.get(currency.getName()).add(currency.getAmount());
+         } else {
+              currencies.put(currency.getName(), currency);
+         }
    }
 
     public boolean remove(String name, int amount) {
-          if(hasCurrency(name)) {
-                currencies.put(getCurrency(name), Math.max(0, currencies.get(name) - amount));
+        if(hasCurrency(name)) {
+            if(currencies.get(name).getAmount() >= amount) {
+                currencies.get(name).remove(amount);
                 return true;
-          } else {
-              return false;
-          }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasEnough(String name, int amount) {
+        if(hasCurrency(name)) {
+            return currencies.get(name).getAmount() >= amount;
+        }
+        return false;
     }
 
    public boolean hasCurrency(String name) {
-       return currencies.containsKey(getCurrency(name));
+       return currencies.containsKey(name);
    }
 
    public List<String> asLore() {
@@ -78,7 +81,7 @@ public class Currencies {
            list.add("§c§lNo currencies");
            return list;
        }
-         for(Currency currency : currencies.keySet()) {
+         for(Currency currency : currencies.values()) {
               list.add(ChatColor.of(currency.color) + "" + currencies.get(currency) + " " + currency.name);
          }
             return list;
@@ -89,9 +92,20 @@ public class Currencies {
        public String name;
        @Getter@Setter
        public String symbol = "\uD83D\uDCB0", color = "#FFFFFF";
+       @Getter@Setter
+       long amount;
 
-         public Currency(String name) {
-              this.name = name;
-         }
-   }
+       public Currency(String name, long amount) {
+           this.name = name;
+           this.amount = amount;
+       }
+
+       public void add(long amount) {
+           this.amount += amount;
+       }
+
+       public void remove(long amount) {
+           this.amount -= amount;
+       }
+    }
 }

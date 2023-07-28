@@ -239,10 +239,10 @@ public class OrionGson {
             Currencies currencies = new Currencies();
             object.entrySet().forEach(entry -> {
                 JsonObject currencyObject = entry.getValue().getAsJsonObject();
-                Currencies.Currency currency =  new Currencies.Currency(entry.getKey());
+                Currencies.Currency currency =  new Currencies.Currency(currencyObject.get("name").getAsString(), currencyObject.get("amount").getAsLong());
                 currency.setColor(currencyObject.get("color").getAsString());
                 currency.setSymbol(currencyObject.get("symbol").getAsString());
-                currencies.add(currency, currencyObject.get("amount").getAsInt());
+                currencies.add(currency);
             });
             return currencies;
         }
@@ -250,12 +250,13 @@ public class OrionGson {
         @Override
         public JsonElement serialize(Currencies currencies, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
-            currencies.getCurrencies().forEach((currency, amount) -> {
+            currencies.getCurrencies().forEach((name, currency) -> {
                 JsonObject currencyObject = new JsonObject();
+                currencyObject.addProperty("name", currency.getName());
                 currencyObject.addProperty("symbol", currency.getSymbol());
                 currencyObject.addProperty("color", currency.getColor());
-                currencyObject.addProperty("amount", amount);
-                object.add(currency.getName(), currencyObject);
+                currencyObject.addProperty("amount", currency.getAmount());
+                object.add(name, currencyObject);
             });
             return object;
         }
