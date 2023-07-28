@@ -1,6 +1,7 @@
 package orion.mmorpg.utils;
 
 import com.google.gson.*;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -239,7 +240,7 @@ public class OrionGson {
             object.entrySet().forEach(entry -> {
                 JsonObject currencyObject = entry.getValue().getAsJsonObject();
                 Currencies.Currency currency =  new Currencies.Currency(entry.getKey());
-                currency.setColor(Color.fromARGB(currencyObject.get("color").getAsInt()));
+                currency.setColor(currencyObject.get("color").getAsString());
                 currency.setSymbol(currencyObject.get("symbol").getAsString());
                 currencies.add(currency, currencyObject.get("amount").getAsInt());
             });
@@ -252,7 +253,7 @@ public class OrionGson {
             currencies.getCurrencies().forEach((currency, amount) -> {
                 JsonObject currencyObject = new JsonObject();
                 currencyObject.addProperty("symbol", currency.getSymbol());
-                currencyObject.addProperty("color", currency.getColor().asARGB());
+                currencyObject.addProperty("color", currency.getColor());
                 currencyObject.addProperty("amount", amount);
                 object.add(currency.getName(), currencyObject);
             });

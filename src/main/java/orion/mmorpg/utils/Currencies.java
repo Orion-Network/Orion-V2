@@ -2,9 +2,12 @@ package orion.mmorpg.utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Currencies {
     @Getter
@@ -69,14 +72,23 @@ public class Currencies {
        return currencies.containsKey(getCurrency(name));
    }
 
+   public List<String> asLore() {
+       ArrayList<String> list = new ArrayList<String>();
+       if(currencies.isEmpty()) {
+           list.add("§c§lNo currencies");
+           return list;
+       }
+         for(Currency currency : currencies.keySet()) {
+              list.add(ChatColor.of(currency.color) + "" + currencies.get(currency) + " " + currency.name);
+         }
+            return list;
+   }
+
    public static class Currency {
         @Getter
        public String name;
        @Getter@Setter
-       public String symbol = "\uD83D\uDCB0";
-
-       @Getter@Setter
-       public Color color = Color.YELLOW;
+       public String symbol = "\uD83D\uDCB0", color = "#FFFFFF";
 
          public Currency(String name) {
               this.name = name;
