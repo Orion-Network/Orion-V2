@@ -12,11 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Currencies;
 import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class AdminCommand implements TabExecutor {
 
@@ -53,6 +55,15 @@ public class AdminCommand implements TabExecutor {
                     Mmorpg.INSTANCE.getOrionNpcManager().setup(player);
 
                 }
+                if(args[1].equalsIgnoreCase("currencies")) {
+
+                    orionPlayer.getCurrencies().add("test", Integer.parseInt(args[2]));
+                    Utils.sendInfoMessage((Entity) commandSender, "" + orionPlayer.getCurrencies().currencies.containsKey("test"));
+                    for(Currencies.Currency currency : orionPlayer.getCurrencies().currencies.keySet()) {
+                        Utils.sendInfoMessage((Entity) commandSender, orionPlayer.getCurrencies().getFormatted(currency.name, Utils.NumberFormat.READABLE) + " " + currency.symbol);
+                    }
+                }
+
             }
         }
         return false;

@@ -97,6 +97,9 @@ public class OrionPlayer {
     @Getter
     private Jobs jobs;
 
+    @Getter
+    Currencies currencies;
+
     {
         this.orionEffects = new LinkedHashMap<>();
     }
@@ -148,6 +151,7 @@ public class OrionPlayer {
 
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = Jobs.getBaseJobs();
+        this.currencies = new Currencies();
     }
 
     /**
@@ -165,7 +169,7 @@ public class OrionPlayer {
      * @param mainSupport      Retrieved Support
      * @param race         Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts, Currencies currencies) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;
@@ -194,6 +198,7 @@ public class OrionPlayer {
 
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = jobs;
+        this.currencies = currencies;
     }
 
     public void initHealthBar() {

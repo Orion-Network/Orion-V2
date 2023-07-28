@@ -21,10 +21,7 @@ import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.races.Race;
-import orion.mmorpg.utils.Infos;
-import orion.mmorpg.utils.Knowledge;
-import orion.mmorpg.utils.OrionGson;
-import orion.mmorpg.utils.Stats;
+import orion.mmorpg.utils.*;
 import orion.mmorpg.world.Ressource;
 
 import java.io.IOException;
@@ -77,7 +74,6 @@ public class Client {
         document.put("mana", player.getMana());
 
         document.put("portalStones", Mmorpg.getOrionGson().getGSON().toJson(player.getPortalStones()));
-        //document.put("equipements", Mmorpg.getOrionGson().getGSON().toJson(BukkitSerialization.itemStackArrayToBase64(player.getEquipements())));
         document.put("equipements", Mmorpg.getOrionGson().getGSON().toJson(player.getEquipements()));
 
         Document spells = new Document();
@@ -112,6 +108,11 @@ public class Client {
             document.put("mounts", Mmorpg.getOrionGson().getGSON().toJson(player.getTamedMounts()));
         else
             document.put("mounts", null);
+
+        if(player.getCurrencies() != null)
+            document.put("currencies", Mmorpg.getOrionGson().getGSON().toJson(player.getCurrencies()));
+        else
+            document.put("currencies", new Currencies());
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -196,7 +197,13 @@ public class Client {
             mounts = new HashSet<>();
         else
             mounts = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("mounts"), new TypeToken<Set<Mounts>>(){}.getType());
-        return new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts);
+
+        Currencies currencies;
+        if(document.getString("currencies") == null)
+            currencies = new Currencies();
+        else
+            currencies = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("currencies"), Currencies.class);
+        return new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts, currencies);
     }
 
     public void saveMob(AbstractMob mob) {
