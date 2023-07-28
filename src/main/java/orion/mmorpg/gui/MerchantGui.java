@@ -12,21 +12,19 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MerchantGui extends ChestGui {
 
-    private final ArrayList<Buyable> buyables = new ArrayList<>();
+    private final ArrayList<Buyable> buyables;
     private final OrionPlayer orionPlayer;
     private final Player player;
-    public MerchantGui(String title, OrionPlayer orionPlayer, Player player) {
+    public MerchantGui(String title, OrionPlayer orionPlayer, Player player, ArrayList<Buyable> buyables) {
         super(6, title);
 
+        this.buyables = buyables;
         this.orionPlayer = orionPlayer;
         this.player = player;
-    }
-
-    public void addBuyable(String currencyName, int amount, ItemStack itemStack) {
-        buyables.add(new Buyable(currencyName, amount, itemStack));
     }
 
     @Override
@@ -46,8 +44,10 @@ public class MerchantGui extends ChestGui {
 
             ItemStack displayItem = buyable.itemStack.clone();
             ItemMeta itemMeta = displayItem.getItemMeta();
-            itemMeta.getLore().add("");
-            itemMeta.getLore().add("Cost: " + buyable.amount + " " + buyable.currencyName);
+            List<String> lore = itemMeta.getLore();
+            lore.add("");
+            lore.add("§7Prix: §e" + Utils.NumberFormat.READABLE.format(buyable.amount) + " " + buyable.currencyName);
+            itemMeta.setLore(lore);
             displayItem.setItemMeta(itemMeta);
 
             outlinePane.addItem(new GuiItem(displayItem, event -> {
@@ -64,7 +64,7 @@ public class MerchantGui extends ChestGui {
         return outlinePane;
     }
 
-    private static class Buyable {
+    public static class Buyable {
         private String currencyName;
         private int amount;
 
