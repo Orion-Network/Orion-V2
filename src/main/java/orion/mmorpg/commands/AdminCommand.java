@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Currencies;
 import orion.mmorpg.utils.Utils;
@@ -62,6 +64,12 @@ public class AdminCommand implements TabExecutor {
                     for(Currencies.Currency currency : orionPlayer.getCurrencies().currencies.values()) {
                         Utils.sendInfoMessage((Entity) commandSender, orionPlayer.getCurrencies().getFormatted(currency.name, Utils.NumberFormat.READABLE) + " " + currency.symbol);
                     }
+                } else if(args[1].equalsIgnoreCase("cmenu")) {
+                    MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player);
+                    merchantGui.addBuyable("test", 5, ItemList.KNIGHT_BOOTS.generateItemStack(1));
+                    merchantGui.addBuyable("test", 50000, ItemList.KNIGHT_CHESTPLATE.generateItemStack(1));
+
+                    merchantGui.show(player);
                 }
 
             }
