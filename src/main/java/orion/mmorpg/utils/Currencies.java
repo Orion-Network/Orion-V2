@@ -82,7 +82,7 @@ public class Currencies {
            return list;
        }
          for(Currency currency : currencies.values()) {
-              list.add(ChatColor.of(currency.color) + "" + currencies.get(currency) + " " + currency.name);
+              list.add(ChatColor.of(currency.color) + "" + currencies.get(currency.getName()).getAmount()+ " " + currency.name);
          }
             return list;
    }

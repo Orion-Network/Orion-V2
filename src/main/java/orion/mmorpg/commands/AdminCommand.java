@@ -56,7 +56,7 @@ public class AdminCommand implements TabExecutor {
                 }
                 if(args[1].equalsIgnoreCase("currencies")) {
 
-                    orionPlayer.getCurrencies().add("test", Integer.parseInt(args[2]));
+                    orionPlayer.getCurrencies().add("money", Integer.parseInt(args[2]));
                     Utils.sendInfoMessage((Entity) commandSender, "" + orionPlayer.getCurrencies().currencies.containsKey("test"));
                     for(Currencies.Currency currency : orionPlayer.getCurrencies().currencies.values()) {
                         Utils.sendInfoMessage((Entity) commandSender, orionPlayer.getCurrencies().getFormatted(currency.name, Utils.NumberFormat.READABLE) + " " + currency.symbol);

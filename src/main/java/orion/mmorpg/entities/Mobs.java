@@ -5,6 +5,7 @@ import orion.mmorpg.entities.bosses.Invocator;
 import orion.mmorpg.entities.mobs.*;
 import orion.mmorpg.entities.mobs.sea.SeaZombie;
 import orion.mmorpg.entities.npc.Guardian;
+import orion.mmorpg.entities.npc.shop.Weaponsmith;
 import orion.mmorpg.entities.samples.AbstractMob;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,9 @@ public enum Mobs implements MobOperation {
     INVOCATOR(Invocator.class),
     //Sea Crature
     SEA_ZOMBIE(SeaZombie.class),
+
+    //SHOPKEEPERS
+    WEAPONSMITH(Weaponsmith.class),
     ;
 
     Class<? extends AbstractMob> mobClass;
