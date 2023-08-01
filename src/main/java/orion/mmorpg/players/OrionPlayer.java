@@ -123,7 +123,7 @@ public class OrionPlayer {
         this.exp = exp;
         this.portalStones = new LinkedHashSet<>();
         portalStones.add("CAMPEMENT_STONE");
-        portalStones.add("ARENA_SPAWN_TONE");
+        portalStones.add("ARENA_SPAWN_STONE");
         portalStones.add("ARENA_STONE");
 
         this.mana = (int) this.stats.get(Stats.StatsInfo.INTELLIGENCE);
