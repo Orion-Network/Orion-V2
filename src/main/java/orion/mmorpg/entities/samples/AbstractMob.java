@@ -1,5 +1,7 @@
 package orion.mmorpg.entities.samples;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -27,7 +29,8 @@ import java.util.Set;
 public abstract class AbstractMob extends AbstractEntityBase implements Respawnable {
     int mobLevel;
     public KeyedBossBar keyedBossBar;
-    private boolean respawn = true;
+    @Getter@Setter
+    private boolean respawn = true, isSummon = false;
     public ChatColor color = ChatColor.YELLOW;
     private Rewards rewards = new Rewards();
 
@@ -143,13 +146,7 @@ public abstract class AbstractMob extends AbstractEntityBase implements Respawna
         return rewards;
     }
 
-    public boolean isRespawn() {
-        return respawn;
-    }
 
-    public void setRespawn(boolean respawn) {
-        this.respawn = respawn;
-    }
 
     /**
      * This class is used to store mob data for respawn

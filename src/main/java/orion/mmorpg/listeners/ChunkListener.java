@@ -1,13 +1,11 @@
 package orion.mmorpg.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.event.world.*;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.managers.ChunkManager;
 import orion.mmorpg.entities.samples.AbstractMob;
@@ -24,6 +22,23 @@ public class ChunkListener implements Listener {
     }
 
     @EventHandler
+    public void onEntitiesUnloadEvent(EntitiesUnloadEvent event) {
+
+        LinkedHashSet<AbstractMob.MobData> mobs = new LinkedHashSet<>();
+
+        for(Entity entity : event.getEntities()) {
+            net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+            if(nmsEntity instanceof AbstractMob) {
+                if(((AbstractMob) nmsEntity).isRespawn() || !((AbstractMob) nmsEntity).isSummon())
+                    mobs.add(((AbstractMob) nmsEntity).getMobData());
+                ((AbstractMob)nmsEntity).keyedBossBar.setVisible(false);
+            }
+            nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.UNLOADED_TO_CHUNK);
+        }
+        mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(event.getChunk().getX(), event.getChunk().getZ()), mobs);
+    }
+
+    @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         if(mmorpg.getChunkManager().containChunk(event.getChunk())) {
             for(AbstractMob.MobData mobData : mmorpg.getChunkManager().getChunk(event.getChunk())) {
@@ -36,21 +51,6 @@ public class ChunkListener implements Listener {
 
             }
         }
-    }
-
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        LinkedHashSet<AbstractMob.MobData> mobs = new LinkedHashSet<>();
-        //TODO arena <--> Spawn, when dying in arena and being teleported to spawn, entities became normal entities and not mobs anymore
-        for(Entity entity : event.getChunk().getEntities()) {
-            net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-            if(nmsEntity instanceof AbstractMob) {
-                mobs.add(((AbstractMob) nmsEntity).getMobData());
-                ((AbstractMob)nmsEntity).keyedBossBar.setVisible(false);
-            }
-            nmsEntity.setRemoved(net.minecraft.world.entity.Entity.RemovalReason.UNLOADED_TO_CHUNK);
-        }
-        mmorpg.getChunkManager().getChunkMobs().put(new ChunkManager.ChunkIdentifier(event.getChunk().getX(), event.getChunk().getZ()), mobs);
     }
 
 

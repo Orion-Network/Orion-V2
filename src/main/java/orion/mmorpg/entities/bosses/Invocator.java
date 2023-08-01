@@ -36,20 +36,16 @@ public class Invocator extends AbstractBoss {
     }
 
     PathfinderGoalSummon pathfinderGoalSummon;
-    //bP = goalSelector
-    //bQ = targetSelector
     @Override
     protected void generatePathfinder() {
          pathfinderGoalSummon = new PathfinderGoalSummon(this,
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(5,0,0)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-5,0,0)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(0,0,5)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(0,0,-5)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(4,0,4)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-4,0,4)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(4,0,-4)),
-                new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(-4,0,-4))
-
+              generateSummon(5,0),
+              generateSummon(-5,0),
+              generateSummon(0,5),
+              generateSummon(0,-5), generateSummon(4,4),
+              generateSummon(-4,4),
+              generateSummon(4,-4),
+              generateSummon(-4,-4)
         );
          this.goalSelector.addGoal(0,new PathfinderGoalFireballAttack(this, this.getStats().get(Stats.StatsInfo.INTELLIGENCE)));
         this.goalSelector.addGoal(1, pathfinderGoalSummon);
@@ -58,6 +54,12 @@ public class Invocator extends AbstractBoss {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 
+    }
+
+    private CryptSkeleton generateSummon(int x, int y) {
+        CryptSkeleton skeleton = new CryptSkeleton(UUID.randomUUID().toString(), this.getBukkitEntity().getLocation().add(x,0,y));
+        skeleton.setSummon(true);
+        return skeleton;
     }
 
     @Override
