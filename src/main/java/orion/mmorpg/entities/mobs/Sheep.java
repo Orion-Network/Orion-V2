@@ -20,5 +20,9 @@ public class Sheep extends AbstractNeutral {
         this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_CHESTPLATE.generateItem(), 8));
         this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LEGGINGS.generateItem(), 8));
         this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_BOOTS.generateItem(), 8));
+
+        Rewards.Reward reward = new Rewards.Reward(ItemList.NULL_ITEM.generateItem(), 100);
+        reward.getMoneys().put("gold", 10L);
+        this.getRewards().add(reward);
     }
 }

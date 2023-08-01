@@ -10,6 +10,7 @@ import orion.mmorpg.players.jobs.JobType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class Rewards extends ArrayList<Rewards.Reward> {
@@ -25,6 +26,10 @@ public class Rewards extends ArrayList<Rewards.Reward> {
                 Player p = Bukkit.getPlayer(player.getUniqueId());
                 Utils.sendTooltipInfoMessage(p, "Vous avez gagné " + reward.getJobExp().get(job) + " points d'expérience en " + job.name());
                 player.getJobs().getJob(job).addExp(reward.getJobExp().get(job));
+            }
+            for(String currency : reward.getMoneys().keySet()) {
+                player.getCurrencies().add(currency, reward.getMoneys().get(currency));
+                Utils.sendInfoMessage(Bukkit.getPlayer(player.getUniqueId()), "Vous avez gagné " + reward.getMoneys().get(currency) + " " + currency);
             }
         }
         return items;
@@ -76,6 +81,8 @@ public class Rewards extends ArrayList<Rewards.Reward> {
         HashMap<JobType, Integer> requiredJobLevel = new HashMap<>();
         @Getter
         HashMap<JobType, Integer> jobExp = new HashMap<>();
+        @Getter
+        HashMap<String, Long> moneys = new HashMap<>();
 
         public Reward(ItemStack item, int chance) {
             this.item = item;

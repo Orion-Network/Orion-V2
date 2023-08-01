@@ -9,9 +9,11 @@ import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.entities.samples.AbstractEntityBase;
 import orion.mmorpg.entities.samples.AbstractMob;
 import orion.mmorpg.entities.samples.AbstractMount;
 
@@ -67,10 +69,16 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
         ProtocolLibrary.getProtocolManager().addPacketListener(new MountPacketAdpater(mmorpg));
     }
 
+    //TODO see why mobs are not removed
     public void despawnMobs() {
         for(T mob : mobs.values()) {
             mob.setRemoved(Entity.RemovalReason.UNLOADED_TO_CHUNK);
         }
+        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(entity -> {
+            if(!(entity instanceof Player)) {
+                entity.remove();
+            }
+        }));
     }
 
     public HashMap<String, T> getMobs() {

@@ -3,9 +3,11 @@ package orion.mmorpg.entities.samples;
 import lombok.Getter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.MerchantGui;
@@ -29,5 +31,15 @@ public abstract class AbstractShopkeepers extends AbstractMob {
         MerchantGui gui = new MerchantGui("Shop", player, (org.bukkit.entity.Player) entityhuman.getBukkitEntity(),  buyables);
         gui.show(entityhuman.getBukkitEntity());
         return super.mobInteract(entityhuman, enumhand);
+    }
+
+    @Override
+    public boolean hurt(DamageSource damagesource, float f) {
+        if(damagesource.getEntity() instanceof Player player) {
+            if(player.getBukkitEntity().isOp()) {
+                return super.hurt(damagesource, f);
+            }
+        }
+        return false;
     }
 }
