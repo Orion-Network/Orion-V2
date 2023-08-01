@@ -49,7 +49,7 @@ public class PlayerEditor extends ChestGui {
 
     private StaticPane getPlayerPane() {
         StaticPane pane = new StaticPane(0,0, 9,3);
-        pane.addItem(new GuiItem(new ItemStack(Material.AMETHYST_SHARD), event -> {
+        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer ses Portal Stones", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
             BasicItem item = BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Nom de la pierre", 0, null, Rarity.COMMON);
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
