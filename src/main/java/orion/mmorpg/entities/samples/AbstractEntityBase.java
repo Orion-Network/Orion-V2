@@ -117,6 +117,14 @@ public abstract class AbstractEntityBase extends PathfinderMob {
             ((CraftTextDisplay)this.overheadEntity).getHandle().startRiding(this);
     };
 
+
+    @Override
+    public void remove(RemovalReason entity_removalreason) {
+        if(this.overheadEntity != null && !this.overheadEntity.isDead())
+            this.overheadEntity.remove();
+        super.remove(entity_removalreason);
+    }
+
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);

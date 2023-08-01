@@ -64,7 +64,7 @@ public class Invocator extends AbstractBoss {
     public void die(DamageSource damagesource) {
         super.die(damagesource);
         for(AbstractMob mob : pathfinderGoalSummon.getSummons())
-            mob.die(damagesource);
+            mob.remove(RemovalReason.DISCARDED);
     }
 
     private class PathfinderGoalFireballAttack extends Goal {

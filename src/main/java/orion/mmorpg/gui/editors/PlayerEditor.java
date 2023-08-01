@@ -54,7 +54,6 @@ public class PlayerEditor extends ChestGui {
             BasicItem item = BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Nom de la pierre", 0, null, Rarity.COMMON);
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
-            //TODO Rework for new Portal Stones
             List<String> removableStones = targetOrionPlayer.getPortalStones().stream().map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
             ArrayList<String> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
             removableStones.addAll(portalStones.stream().filter(string -> !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY + string).toList());
@@ -87,11 +86,11 @@ public class PlayerEditor extends ChestGui {
                     .open(ownerPlayer);
         }), 0,0);
 
-        pane.addItem(new GuiItem(new ItemStack(Material.AMETHYST_SHARD), event -> {
+        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer les sorts", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
             new SpellEditor(ownerPlayer, ownerOrionPlayer, targetPlayer, targetOrionPlayer).show(targetPlayer);
         }), 1,0);
 
-        pane.addItem(new GuiItem(new ItemStack(Material.PAPER), event -> {
+        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Editer les supports", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
             BasicItem item = BasicItem.generateTemplateBasicItem(Material.PAPER, (targetOrionPlayer.getMainSupport() != null ? "Support Actuel : " + targetOrionPlayer.getMainSupport().getName() : "Aucun support"), 3, null, (targetOrionPlayer.getMainSupport() != null ? targetOrionPlayer.getMainSupport().getRank() : Rarity.TRASH));
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
