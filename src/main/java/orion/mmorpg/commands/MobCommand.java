@@ -48,6 +48,9 @@ public class MobCommand implements TabExecutor {
                 });
             }
         } else if(args[0].equalsIgnoreCase("chunkMob")) {
+            for(Entity entity : ((Player) commandSender).getLocation().getChunk().getEntities()) {
+                Utils.sendInfoMessage((Entity) commandSender, entity.getName() + " " + entity.getUniqueId() + " " + entity.getType());
+            }
             if(mmorpg.getChunkManager().containChunk(((Player) commandSender).getLocation().getChunk())) {
                 mmorpg.getChunkManager().getChunk(((Player) commandSender).getLocation().getChunk()).forEach(mob -> {
                     Utils.sendInfoMessage((Entity) commandSender, mob.getMobClass().getSimpleName());

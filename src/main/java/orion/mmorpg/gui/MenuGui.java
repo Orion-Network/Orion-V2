@@ -192,6 +192,7 @@ public class MenuGui extends ChestGui {
         });
     }
 
+    //TODO Correct bug where items disapear and reapear when equipping
     public StaticPane getArmorPane() {
         for (int i = 0; i < 7; i++) {
             if(orionPlayer.getEquipements().getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS) == null)
