@@ -49,13 +49,9 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onBossKilled(BossKilledEvent event) {
-        /* TODO see why error with Brigadier
         if(event.getPlayer() != null)
-
-            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getName().getString() + org.bukkit.ChatColor.RED + " a été vaincu par " + org.bukkit.ChatColor.YELLOW + event.getPlayer().getName());
+            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getMobName() + org.bukkit.ChatColor.RED + " a été vaincu par " + org.bukkit.ChatColor.YELLOW + event.getPlayer().getName());
         else
-            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getName().getString() + org.bukkit.ChatColor.RED + " a été vaincu");
-
-         */
+            Bukkit.broadcastMessage(org.bukkit.ChatColor.YELLOW + event.getBoss().getMobName() + org.bukkit.ChatColor.RED + " a été vaincu");
     }
 }
