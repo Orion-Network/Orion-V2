@@ -7,6 +7,7 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.EnumUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -55,9 +56,8 @@ public class PlayerEditor extends ChestGui {
             ItemMeta meta = buildItem.getItemMeta();
             //TODO Rework for new Portal Stones
             List<String> removableStones = targetOrionPlayer.getPortalStones().stream().map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
-            ArrayList<WorldManager.PortalStone> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().values());
-            removableStones.addAll(portalStones.stream().map(t -> ChatColor.RED + t.getTitle()).filter(id ->
-                    (!targetOrionPlayer.getPortalStones().contains(ChatColor.stripColor(id)))).toList());
+            ArrayList<String> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
+            removableStones.addAll(portalStones.stream().filter(string -> !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY + string).toList());
 
             meta.setLore(removableStones);
             buildItem.setItemMeta(meta);
@@ -66,20 +66,23 @@ public class PlayerEditor extends ChestGui {
                     .plugin(Mmorpg.INSTANCE)
                     .title("Editer les pierres de " + targetPlayer.getName())
                     .itemLeft(buildItem)
-                    .onComplete((player, text) -> {
-                        text = text.toLowerCase();
+                    .onClick((slot, snapshot) -> {
+                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                        String text = snapshot.getText();
+                        text = text.toUpperCase();
+
                         if(Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(text)) {
                             if(!targetOrionPlayer.getPortalStones().contains(text)) {
                                 targetOrionPlayer.addPortalStone(text);
                                 Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");
-                                return AnvilGUI.Response.close();
                             } else {
                                 targetOrionPlayer.removePortalStone(text);
                                 Utils.sendInfoMessage(ownerPlayer, "Pierre enlevé");
-                                return AnvilGUI.Response.close();
                             }
+                            return List.of(AnvilGUI.ResponseAction.close());
+                        } else {
+                            return List.of(AnvilGUI.ResponseAction.replaceInputText("Pierre non valide"));
                         }
-                        return AnvilGUI.Response.text("Pierre non valide");
                     })
                     .open(ownerPlayer);
         }), 0,0);
@@ -100,18 +103,19 @@ public class PlayerEditor extends ChestGui {
             new AnvilGUI.Builder()
                     .plugin(Mmorpg.INSTANCE)
                     .itemLeft(buildItem)
-                    .onComplete(((player, text) -> {
-                        text = text.toUpperCase();
+                    .onClick(((slot, snapshot) -> {
+                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                        String text = snapshot.getText().toUpperCase();
                         if(EnumUtils.isValidEnum(SupportList.class, text)) {
                             targetOrionPlayer.setMainSupport(SupportList.valueOf(text).getSupport());
                             Utils.sendInfoMessage(ownerPlayer, "Support modifié");
-                            return AnvilGUI.Response.close();
+                            return List.of(AnvilGUI.ResponseAction.close());
                         } else if(text.equalsIgnoreCase("null")) {
                             targetOrionPlayer.setMainSupport((Support) null);
                             Utils.sendInfoMessage(ownerPlayer, "Support supprimé");
-                            return AnvilGUI.Response.close();
+                            return List.of(AnvilGUI.ResponseAction.close());
                         }
-                        return AnvilGUI.Response.text("Support invalide");
+                        return  List.of(AnvilGUI.ResponseAction.replaceInputText("Support Invalide"));
                     }))
                     .open(ownerPlayer);
         }), 2, 0);
@@ -146,13 +150,15 @@ public class PlayerEditor extends ChestGui {
                         new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE)
                                 .itemLeft(s.getItem())
                                 .title("Ajouter des points de savoir")
-                                .onComplete((player, response) -> {
+                                .onClick((slot, snapshot) -> {
+                                    if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                                    String response = snapshot.getText();
                                     if(!NumberUtils.isNumber(response))
-                                        return AnvilGUI.Response.text("Nombre Invalide");
+                                        return  List.of(AnvilGUI.ResponseAction.replaceInputText("Nombre Invalide"));
                                     if(!targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass()))
                                         SpellList.learnSpell(targetOrionPlayer, s.getSpellClass(), 1);
                                     targetOrionPlayer.getKnownSpells().get(s.getSpellClass()).setKnowledge(Integer.parseInt(response));
-                                    return AnvilGUI.Response.close();
+                                    return  List.of(AnvilGUI.ResponseAction.close());
                                 })
                                 .open(ownerPlayer);
                     } else if(event.getClick().isRightClick()) {

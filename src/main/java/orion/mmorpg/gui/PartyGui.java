@@ -23,6 +23,7 @@ import orion.mmorpg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PartyGui extends ChestGui {
@@ -43,7 +44,9 @@ public class PartyGui extends ChestGui {
                 Collections.singletonList(ChatColor.GRAY + "Cliquez pour ajouter un membre"), Rarity.COMMON);
         primaryPane.addItem(new GuiItem(item.generateItem(null, 1), event -> {
             new AnvilGUI.Builder()
-                    .onComplete((player, text) -> {
+                    .onClick((slot, snapshot) -> {
+                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.close());
+                        String text = snapshot.getText();
                         if (Bukkit.getPlayer(text) != null) {
                             orionPlayer.getParty().addMember(Bukkit.getPlayer(text), Mmorpg.INSTANCE.getPlayerManager().getPlayer(Bukkit.getPlayer(text).getUniqueId()));
                             player.closeInventory();
@@ -51,7 +54,7 @@ public class PartyGui extends ChestGui {
                         } else {
                             player.sendMessage(ChatColor.RED + "Ce joueur n'existe pas");
                         }
-                        return AnvilGUI.Response.close();
+                        return List.of(AnvilGUI.ResponseAction.close());
                     })
                     .plugin(Mmorpg.INSTANCE)
                     .text("Nom du joueur")

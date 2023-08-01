@@ -15,6 +15,8 @@ import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.Collections;
+import java.util.List;
+
 public class GuildBook extends BasicItem {
     public GuildBook(ItemStack item) {
         super(item);
@@ -32,7 +34,9 @@ public class GuildBook extends BasicItem {
             new AnvilGUI.Builder()
                     .title("Inscrivez le nom de la guilde")
                     .itemLeft(ItemList.ACCEPT_BUTTON_PLACEHOLDER.generateItemStack(1))
-                    .onComplete((p, text) -> {
+                    .onClick((slot, snapshot) -> {
+                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.close());
+                        String text = snapshot.getText();
                         meta.getPersistentDataContainer().set(Namespaces.guild_name, PersistentDataType.STRING, text);
                         item.setItemMeta(meta);
                         return AnvilGUI.Response.close();
