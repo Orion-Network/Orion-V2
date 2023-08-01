@@ -41,6 +41,7 @@ public class ChunkListener implements Listener {
     @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event) {
         LinkedHashSet<AbstractMob.MobData> mobs = new LinkedHashSet<>();
+        //TODO arena <--> Spawn, when dying in arena and being teleported to spawn, entities became normal entities and not mobs anymore
         for(Entity entity : event.getChunk().getEntities()) {
             net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
             if(nmsEntity instanceof AbstractMob) {
