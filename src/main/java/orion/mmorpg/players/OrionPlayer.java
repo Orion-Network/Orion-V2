@@ -307,7 +307,7 @@ public class OrionPlayer {
     public void respawn() {
         Player p = Bukkit.getPlayer(getUniqueId());
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
-        p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("CAMPEMENT").getLocation());
+        p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("SPAWN").getLocation());
         setHealth(this.getStats().get(Stats.StatsInfo.VITALITY));
         Utils.sendInfoMessage(p, "Vous êtes mort.");
         updateHealthbar();

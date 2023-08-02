@@ -6,12 +6,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.samples.AbstractMob;
 
 import javax.sound.sampled.Port;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +28,12 @@ public class WorldManager extends AbstractManager {
         bosses = new LinkedHashMap<>();
         portalStones = new LinkedHashMap<>();
 
-        portalStones.put("CAMPEMENT_STONE", new PortalStone("Camp", new Location(mmorpg.getServer().getWorld("world"), 403, 25, 927), Material.STONE));
-        addPortalStone("ARENA_STONE", "Arène", new Location(mmorpg.getServer().getWorld("world"), 462, 42, 1217), Material.STONE);
-        addPortalStone("ARENA_SPAWN_STONE", "Arène (Spawn)", new Location(mmorpg.getServer().getWorld("world"), 438, 68, 1217), Material.STONE);
-
+        ConfigurationSection section = mmorpg.getConfig().getConfigurationSection("portal_stones");
+        assert section != null;
+        section.getKeys(false).forEach(e -> {
+            ConfigurationSection portalSection = section.getConfigurationSection(e);
+            addPortalStone(e.toUpperCase(), new PortalStone(portalSection.getString("title"), new Location(mmorpg.getServer().getWorld(portalSection.getString("location.world")), portalSection.getInt("location.x"), portalSection.getInt("location.y"), portalSection.getInt("location.z")), Material.valueOf(portalSection.getString("material"))));
+        });
     }
 
     public void spawn() {

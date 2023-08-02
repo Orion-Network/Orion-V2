@@ -27,6 +27,7 @@ public class PortalStoneGui extends ChestGui {
         int i = 0;
         for (String id : orionPlayer.getPortalStones()) {
 
+            if(!Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(id)) continue;
             WorldManager.PortalStone portalStone = Mmorpg.INSTANCE.getWorldManager().getPortalStone(id);
 
             listPane.addItem(new GuiItem(portalStone.generateItem(), e -> {

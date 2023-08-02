@@ -70,18 +70,14 @@ public class PlayerEditor extends ChestGui {
                         String text = snapshot.getText();
                         text = text.toUpperCase();
 
-                        if(Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(text)) {
-                            if(!targetOrionPlayer.getPortalStones().contains(text)) {
-                                targetOrionPlayer.addPortalStone(text);
-                                Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");
-                            } else {
-                                targetOrionPlayer.removePortalStone(text);
-                                Utils.sendInfoMessage(ownerPlayer, "Pierre enlevé");
-                            }
-                            return List.of(AnvilGUI.ResponseAction.close());
+                        if(!targetOrionPlayer.getPortalStones().contains(text)) {
+                            targetOrionPlayer.addPortalStone(text);
+                            Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");
                         } else {
-                            return List.of(AnvilGUI.ResponseAction.replaceInputText("Pierre non valide"));
+                            targetOrionPlayer.removePortalStone(text);
+                            Utils.sendInfoMessage(ownerPlayer, "Pierre enlevé");
                         }
+                        return List.of(AnvilGUI.ResponseAction.close());
                     })
                     .open(ownerPlayer);
         }), 0,0);
