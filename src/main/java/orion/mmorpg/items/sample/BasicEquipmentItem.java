@@ -58,6 +58,7 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
     public List<String> generateLore(List<String> lore) {
         List<String> lorea =  super.generateLore(lore);
         //Generate enchants with comma separated values
+        Bukkit.broadcastMessage("hasItemMeta: " + this.hasItemMeta());
         if(this.hasItemMeta()) {
             StringBuilder enchants = new StringBuilder();
             for(Enchantment enchantment : getItemMeta().getEnchants().keySet()) {

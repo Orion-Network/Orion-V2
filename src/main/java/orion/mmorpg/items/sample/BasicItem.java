@@ -43,8 +43,6 @@ public abstract class BasicItem extends ItemStack {
     protected final LinkedHashMap<String, Utils.Pair<PersistentDataType, Object>> DATA = new LinkedHashMap<>();
     protected Spell spell;
 
-    protected ItemMeta meta;
-
     protected BasicItem(ItemStack item) {
         this(item.getType(), item.getItemMeta().getPersistentDataContainer().get(Namespaces.name, PersistentDataType.STRING), item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING), item.getItemMeta().getCustomModelData(), Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.lore, PersistentDataType.STRING), List.class), Rarity.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.rarity, PersistentDataType.STRING)), ItemType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING)));
         this.setItemMeta(item.getItemMeta());
@@ -103,6 +101,7 @@ public abstract class BasicItem extends ItemStack {
         if (item == null)
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
+
         meta.setDisplayName(generateDisplayName());
         meta.setLore(generateLore(null));
 
@@ -151,23 +150,6 @@ public abstract class BasicItem extends ItemStack {
         lore.add(RARITY.getChatColor() + "" + ChatColor.BOLD + RARITY);
 
         return lore;
-    }
-
-    @Nullable
-    @Override
-    public ItemMeta getItemMeta() {
-        return meta;
-    }
-
-    @Override
-    public boolean hasItemMeta() {
-        return meta != null;
-    }
-
-    @Override
-    public boolean setItemMeta(@Nullable ItemMeta itemMeta) {
-        this.meta = itemMeta;
-        return true;
     }
 
     public Material getMATERIAL() {
