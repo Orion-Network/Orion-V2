@@ -50,7 +50,7 @@ public class Invocator extends AbstractBoss {
          this.goalSelector.addGoal(0,new PathfinderGoalFireballAttack(this, this.getStats().get(Stats.StatsInfo.INTELLIGENCE)));
         this.goalSelector.addGoal(1, pathfinderGoalSummon);
         this.goalSelector.addGoal(2, new PathfinderGoalCastSpell(new Repulsion(), this.getBukkitEntity().getLocation(), 120));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 3.0F, 0.8D, 0.33D));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 3.0F, 0.8D, 0.60D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 
