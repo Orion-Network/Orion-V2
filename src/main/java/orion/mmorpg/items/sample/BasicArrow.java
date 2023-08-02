@@ -38,12 +38,12 @@ public class BasicArrow extends BasicItem {
     public ItemStack generateItem(ItemStack item, int amount) {
         if (item == null)
             item = new ItemStack(MATERIAL);
+        ItemMeta meta = item.getItemMeta();
         if (this.spell != null) {
-            ItemMeta meta = item.getItemMeta();
             meta.getPersistentDataContainer().set(Namespaces.spell, PersistentDataType.STRING, spell.getInternal_id());
-            meta.getPersistentDataContainer().set(Namespaces.damage, PersistentDataType.FLOAT, DAMAGE);
-            item.setItemMeta(meta);
         }
+        meta.getPersistentDataContainer().set(Namespaces.damage, PersistentDataType.FLOAT, DAMAGE);
+        item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }
 
