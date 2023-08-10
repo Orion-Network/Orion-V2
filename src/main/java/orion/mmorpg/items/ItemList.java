@@ -112,6 +112,8 @@ public enum ItemList {
     THIRD_SPECIAL_PLACEHOLDER(SpecialPlaceholder.ThirdSpecialPlaceholder.class),
     RING_PLACEHOLDER(RingPlaceholder.class),
     BELT_PLACEHOLDER(BeltPlaceholder.class),
+    EARRING_PLACEHOLDER(EarringPlaceholder.class),
+    NECKLACE_PLACEHOLDER(NecklacePlaceholder.class),
     JOB_PLACEHOLDER(JobPlaceholder.class),
     //MISC
     GIFT(Gift.class),

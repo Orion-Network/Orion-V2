@@ -154,27 +154,29 @@ public class OrionGson {
         @Override
         public JsonElement serialize(Equipments equipments, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET) != null)
-                object.addProperty("helmet", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.HELMET), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET) != null)
+                object.addProperty("helmet", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET), BasicItem.class));
 
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE) != null)
+                object.addProperty("chestplate", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE) != null)
-                object.addProperty("chestplate", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.CHEST_PLATE), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS) != null)
+                object.addProperty("leggings",GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS) != null)
-                object.addProperty("leggings",GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEGGINGS), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS) != null)
+                object.addProperty("boots", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS) != null)
-                object.addProperty("boots", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BOOTS), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT) != null)
+                object.addProperty("belt", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BELT) != null)
-                object.addProperty("belt", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.BELT), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING) != null)
+                object.addProperty("left_ring", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING) != null)
-                object.addProperty("left_ring", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.LEFT_RING), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS) != null)
+                object.addProperty("right_ring", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING) != null)
-                object.addProperty("right_ring", GSON.toJson(equipments.getEquipmentFromSlot(Equipments.EquipmentSlot.RIGHT_RING), BasicItem.class));
+            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE) != null)
+                object.addProperty("necklace", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE), BasicItem.class));
             return object;
         }
 
