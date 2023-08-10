@@ -23,16 +23,16 @@ public class CelestianSet {
         }
 
         @Override
-        public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
+        public boolean onEquip(Player p, OrionPlayer data) {
             if (data.getRace() != Race.CELESTIAL) {
                 Utils.sendInfoMessage(p, "Vous devez être célestien pour équiper la couronne");
                 return false;
             }
-            return super.onEquip(p, data, item);
+            return super.onEquip(p, data);
         }
 
         @Override
-        public void onCosmeticEquip(Player p, OrionPlayer data, ItemStack item) {
+        public void onCosmeticEquip(Player p, OrionPlayer data) {
             DiscoBallEffect effect = new DiscoBallEffect(Mmorpg.effectManager);
             effect.offset = new Vector(0, 1.5, 0);
             effect.disappearWithOriginEntity = true;
@@ -43,7 +43,7 @@ public class CelestianSet {
         }
 
         @Override
-        public void onCosmeticUnequip(Player p, OrionPlayer data, ItemStack item) {
+        public void onCosmeticUnequip(Player p, OrionPlayer data) {
             if (!data.getEffectHashMap().containsKey(this.INTERNAL_ID)) return;
             data.getEffectHashMap().get(this.INTERNAL_ID).cancel();
             data.getEffectHashMap().remove(this.INTERNAL_ID);

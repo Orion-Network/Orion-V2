@@ -57,23 +57,23 @@ public class BasicArmorItem extends BasicEquipmentItem {
         return super.generateLore(lore);
     }
 
-    public boolean onEquip(Player p, OrionPlayer data, ItemStack item) {
+    public boolean onEquip(Player p, OrionPlayer data) {
         data.getStats().addModifiers(getINTERNAL_ID(), getModifiersWithReforge());
-        onCosmeticEquip(p, data, item);
+        onCosmeticEquip(p, data);
         return true;
     }
 
-    public void onCosmeticEquip(Player p, OrionPlayer data, ItemStack item) {
+    public void onCosmeticEquip(Player p, OrionPlayer data) {
 
     }
 
-    public boolean onUnequip(Player p, OrionPlayer data, ItemStack item) {
+    public boolean onUnequip(Player p, OrionPlayer data) {
         data.getStats().removeModifiers(getINTERNAL_ID());
-        onCosmeticUnequip(p, data, item);
+        onCosmeticUnequip(p, data);
         return true;
     }
 
-    public void onCosmeticUnequip(Player p, OrionPlayer data, ItemStack item) {
+    public void onCosmeticUnequip(Player p, OrionPlayer data) {
 
     }
 

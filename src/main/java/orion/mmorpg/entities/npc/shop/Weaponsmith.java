@@ -1,6 +1,7 @@
 package orion.mmorpg.entities.npc.shop;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Villager;
 import orion.mmorpg.entities.samples.AbstractShopkeepers;
 import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.items.ItemList;
@@ -14,6 +15,7 @@ public class Weaponsmith extends AbstractShopkeepers {
 
     @Override
     protected void generatePathfinder() {
-
     }
+
+
 }
