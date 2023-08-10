@@ -29,7 +29,7 @@ public class AnimalSet {
 
     public static class SheepChestplate extends BasicArmorItem {
         public SheepChestplate() {
-            super(Material.LEATHER_CHESTPLATE, "Plastron du Mouton", "SHEEP_HELMET", 0, null, Rarity.RARE, ArmorType.HELMET,
+            super(Material.LEATHER_CHESTPLATE, "Plastron du Mouton", "SHEEP_CHESTPLATE", 0, null, Rarity.RARE, ArmorType.CHESTPLATE,
                     new Stats.Modifiers.Builder()
                             .add(Stats.StatsInfo.VITALITY, 7)
                             .add(Stats.StatsInfo.DEFENCE, 4)
