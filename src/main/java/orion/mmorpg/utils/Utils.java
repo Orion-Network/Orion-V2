@@ -24,6 +24,8 @@ import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.ItemType;
+import orion.mmorpg.items.sample.BasicGuiItem;
+import orion.mmorpg.items.sample.BasicItem;
 
 import java.text.DecimalFormat;
 import java.util.*;

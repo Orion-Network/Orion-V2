@@ -78,10 +78,8 @@ public class MobCommand implements TabExecutor {
         if(commandSender instanceof org.bukkit.entity.Player)
             location = ((org.bukkit.entity.Player) commandSender).getLocation().clone();
         try {
-            Bukkit.broadcastMessage(args[1]);
-            Bukkit.broadcastMessage(Mobs.valueOf(args[1]).getMobClass().getSimpleName());
-            Bukkit.broadcastMessage(Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructor(String.class, Location.class).toString());
             final AbstractMob mob = Mobs.valueOf(args[1]).getMobClass().getDeclaredConstructor(String.class, Location.class).newInstance(UUID.randomUUID().toString(), location);
+            Bukkit.broadcastMessage("Yaw Pitch : " + location.getYaw() + " " + location.getPitch());
             mob.spawn();
             return mob;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
