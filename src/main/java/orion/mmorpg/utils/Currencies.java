@@ -3,6 +3,7 @@ package orion.mmorpg.utils;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Color;
 import org.checkerframework.checker.units.qual.C;
 
@@ -82,7 +83,7 @@ public class Currencies {
            return list;
        }
          for(Currency currency : currencies.values()) {
-              list.add(ChatColor.of(currency.color) + "" + currencies.get(currency.getName()).getAmount()+ " " + currency.name);
+              list.add(ChatColor.of(currency.color) + "" + currency.getAmount()+ " " + currency.name);
          }
             return list;
    }
@@ -96,7 +97,7 @@ public class Currencies {
        long amount;
 
        public Currency(String name, long amount) {
-           this.name = name;
+           this.name = StringUtils.capitalize(name);
            this.amount = amount;
        }
 

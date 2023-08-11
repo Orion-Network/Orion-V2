@@ -372,6 +372,12 @@ public class OrionPlayer {
         if(this.getRace() != null)
             board.add(ChatColor.WHITE + "Race : " + ChatColor.GOLD + this.getRace().getName());
         board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " (" + (int) ((getExp() / getExpToNextLevel())*100) + "%)" );
+        board.add(ChatColor.WHITE + "Expérience : " + ChatColor.GOLD + (int)getExp() + "/" + (int)getExpToNextLevel());
+        board.add(" ");
+        if(this.getCurrencies().hasCurrency("gold")) {
+            Currencies.Currency currency = this.getCurrencies().getCurrency("gold");
+            board.add(net.md_5.bungee.api.ChatColor.of(currency.getColor()) + currency.getName() + " : " + ChatColor.GOLD + currency.getAmount() + " " + currency.getSymbol());
+        }
         board.add(ChatColor.YELLOW + "Quête : " + ChatColor.GRAY + " TBI ");
 
         if(party != null) {

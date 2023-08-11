@@ -109,7 +109,6 @@ public abstract class AbstractEntityBase extends PathfinderMob {
         this.overheadEntity.setBillboard(Display.Billboard.CENTER);
         this.overheadEntity.setTransformation(new Transformation(new Vector3f(0, 1, 0), new AxisAngle4f(), new Vector3f(1,1,1), new AxisAngle4f()));
 
-        Bukkit.broadcastMessage("Rotation: " + this.spawnLocation.getYaw());
         this.setYRot(this.spawnLocation.getYaw());
         this.setYHeadRot(this.spawnLocation.getYaw());
         this.setYBodyRot(this.spawnLocation.getYaw());
