@@ -4,6 +4,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.items.admin.EntityEditor;
 import orion.mmorpg.items.armors.*;
 import orion.mmorpg.items.gui.*;
 import orion.mmorpg.items.minecraft.StoneSword;
@@ -143,6 +144,8 @@ public enum ItemList {
 
     //CURRENCY
     BRONZE_COIN(BronzeCoin.class),
+    //Admin
+    ENTITY_EDITOR(EntityEditor.class),
     ;
 
     Class<?> itemClass;

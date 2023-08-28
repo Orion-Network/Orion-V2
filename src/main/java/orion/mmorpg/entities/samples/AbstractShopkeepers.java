@@ -23,6 +23,7 @@ public abstract class AbstractShopkeepers extends AbstractMob {
     private final ArrayList<MerchantGui.Buyable> buyables = new ArrayList<>();
     public AbstractShopkeepers(String uuid, String mobName, Location spawnLocation) {
         super(EntityType.VILLAGER, uuid, mobName, spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 100).build(), 0);
+        this.setInvulnerable(true);
     }
 
     @Override
@@ -31,15 +32,5 @@ public abstract class AbstractShopkeepers extends AbstractMob {
         MerchantGui gui = new MerchantGui("Shop", player, (org.bukkit.entity.Player) entityhuman.getBukkitEntity(),  buyables);
         gui.show(entityhuman.getBukkitEntity());
         return super.mobInteract(entityhuman, enumhand);
-    }
-
-    @Override
-    public boolean hurt(DamageSource damagesource, float f) {
-        if(damagesource.getEntity() instanceof Player player) {
-            if(player.getBukkitEntity().isOp()) {
-                return super.hurt(damagesource, f);
-            }
-        }
-        return false;
     }
 }

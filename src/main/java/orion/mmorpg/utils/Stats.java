@@ -33,12 +33,10 @@ public class Stats {
 
     public void addModifiers(String id, Modifiers modifiers) {
         this.modifiers.put(id, modifiers);
-        Bukkit.getLogger().info("Added modifiers " + id + " " + modifiers.getAsLore());
     }
 
     public void removeModifiers(String id) {
         this.modifiers.remove(id);
-        Bukkit.getLogger().info("Removed modifiers " + id);
     }
 
     public boolean hasModifiers(String id) {

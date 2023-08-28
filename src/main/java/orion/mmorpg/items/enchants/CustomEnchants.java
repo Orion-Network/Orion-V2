@@ -2,6 +2,7 @@ package orion.mmorpg.items.enchants;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.utils.Namespaces;
 
 import java.lang.reflect.Field;
@@ -30,7 +31,7 @@ public class CustomEnchants {
             e.printStackTrace();
         }
         if (registered) {
-            System.out.println("Registered enchantment " + enchantment.getKey().getKey());
+            Mmorpg.INSTANCE.getLogger().info("Registered enchantment " + enchantment.getKey().getKey());
         }
     }
 }

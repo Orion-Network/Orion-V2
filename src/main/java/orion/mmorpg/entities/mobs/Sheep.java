@@ -15,13 +15,13 @@ public class Sheep extends AbstractNeutral {
     public Sheep(String uuid, Location spawnLocation) {
         super(EntityType.SHEEP, uuid, "Mouton", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 30).setBase(Stats.StatsInfo.STRENGTH, 2).setBase(Stats.StatsInfo.SPEED, 4).build(), 2);
 
-        this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem(Material.WHITE_WOOL, "Laine abimée", 0, null, Rarity.COMMON).generateItem(null, 2), 65));
-        this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem(Material.MUTTON, "Viande de mouton", 0, null, Rarity.COMMON).generateItem(null, 1), 35));
-        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_CHESTPLATE.generateItem(), 8));
-        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LEGGINGS.generateItem(), 8));
-        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_BOOTS.generateItem(), 8));
+        this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem("damaged_meat", Material.WHITE_WOOL, "Laine abimée", 0, null, Rarity.COMMON).generateItem(null, 2), 65));
+        this.getRewards().add(new Rewards.Reward(BasicItem.generateRessourceItem("mutton_meat", Material.MUTTON, "Viande de mouton", 0, null, Rarity.COMMON).generateItem(null, 1), 35));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_CHESTPLATE.generateItemStack(1), 8));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_LEGGINGS.generateItemStack(1), 8));
+        this.getRewards().add(new Rewards.Reward(ItemList.SHEEP_BOOTS.generateItemStack(1), 8));
 
-        Rewards.Reward reward = new Rewards.Reward(ItemList.NULL_ITEM.generateItem(), 100);
+        Rewards.Reward reward = new Rewards.Reward(null, 100);
         reward.getMoneys().put("gold", 10L);
         this.getRewards().add(reward);
     }

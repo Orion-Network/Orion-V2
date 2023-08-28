@@ -216,6 +216,10 @@ public class Client {
         mobCollection.insertOne(document);
     }
 
+    public void deleteMob(AbstractMob mob) {
+        mobCollection.deleteOne(eq("uuid", mob.getUuid()));
+    }
+
     public AbstractMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Document doc = mobCollection.find(eq("uuid", uuid)).first();
 

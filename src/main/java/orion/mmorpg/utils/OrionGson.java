@@ -254,7 +254,7 @@ public class OrionGson {
             JsonObject object = new JsonObject();
             currencies.getCurrencies().forEach((name, currency) -> {
                 JsonObject currencyObject = new JsonObject();
-                currencyObject.addProperty("name", currency.getName());
+                currencyObject.addProperty("name", name);
                 currencyObject.addProperty("symbol", currency.getSymbol());
                 currencyObject.addProperty("color", currency.getColor());
                 currencyObject.addProperty("amount", currency.getAmount());

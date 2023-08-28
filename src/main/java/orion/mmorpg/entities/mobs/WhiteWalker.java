@@ -8,11 +8,12 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.entities.samples.AbstractHostile;
+import orion.mmorpg.utils.Rewards;
 import orion.mmorpg.utils.Stats;
 
 public class WhiteWalker extends AbstractHostile {
 
-    public WhiteWalker(EntityType<? extends PathfinderMob> entitytypes, String uuid, String name, Location spawnLocation, Stats stats, int level) {
+    public WhiteWalker(String uuid, Location spawnLocation) {
         super(EntityType.SKELETON, uuid, "Marcheur Blanc", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 200).setBase(Stats.StatsInfo.STRENGTH, 20).setBase(Stats.StatsInfo.DEFENCE, 7).setBase(Stats.StatsInfo.SPEED, 4).build(), 15);
 
         this.setItemSlot(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_HELMET)));
@@ -21,5 +22,9 @@ public class WhiteWalker extends AbstractHostile {
         this.setItemSlot(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
         this.setItemSlot(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_SWORD)));
         this.setItemSlot(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(new ItemStack(Material.SHIELD)));
+
+        Rewards.Reward money = new Rewards.Reward(null, 100);
+        money.getMoneys().put("gold", 35L);
+        this.getRewards().add(money);
     }
 }

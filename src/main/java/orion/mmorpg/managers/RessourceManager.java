@@ -63,7 +63,6 @@ public class RessourceManager extends AbstractManager implements Runnable {
         Chunk chunk = Objects.requireNonNull(ressource.getLocation().getWorld()).getChunkAt(ressource.getLocation());
         Utils.ChunkCoords chunkCoords = new Utils.ChunkCoords(chunk);
         if(!ressourceBatches.containsKey(chunkCoords)) {
-            System.out.println("Creating new batch for chunk " + chunk.toString());
             ressourceBatches.put(chunkCoords, new RessourceBatch());
         }
         ressourceBatches.get(chunkCoords).addRessource(ressource);

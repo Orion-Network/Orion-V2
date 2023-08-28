@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import orion.mmorpg.gui.PetGui;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.utils.Utils;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
+//TODO add for pet and mount
 public class Equipments {
     private HashMap<BasicArmorItem.ArmorType, BasicArmorItem> equipments = new HashMap<>();
     private Player owner;
@@ -44,7 +46,6 @@ public class Equipments {
     }
 
     public BasicArmorItem getEquipmentFromSlot(BasicArmorItem.ArmorType slot) {
-        equipments.forEach((k,v) -> System.out.println(k + " " + v));
         if(equipments.containsKey(slot))
             return equipments.get(slot);
         return null;
@@ -62,6 +63,10 @@ public class Equipments {
         pane.addItem(new GuiItem(EquipementHolders.getItemStack(this, BasicArmorItem.ArmorType.RING), getEquippingClick(gui, pane, BasicArmorItem.ArmorType.RING)), 0, 2);
         pane.addItem(new GuiItem(EquipementHolders.getItemStack(this, BasicArmorItem.ArmorType.EARRINGS), getEquippingClick(gui, pane, BasicArmorItem.ArmorType.RING)), 2, 1);
         pane.addItem(new GuiItem(EquipementHolders.getItemStack(this, BasicArmorItem.ArmorType.NECKLACE), getEquippingClick(gui, pane, BasicArmorItem.ArmorType.RING)), 0, 1);
+
+        OrionPlayer orionPlayer = OrionPlayer.getOrionPlayer(getOwner());
+        pane.addItem(new GuiItem(ItemList.PET_PLACEHOLDER.generateItemStack(1), e-> new PetGui(getOwner().getPlayer(), orionPlayer).show(getOwner())), 0, 3);
+        pane.addItem(new GuiItem(ItemList.MOUNT_PLACEHOLDER.generateItemStack(1), e-> new PetGui(getOwner().getPlayer(), orionPlayer).show(getOwner())), 2, 3);
 
         return pane;
     }
@@ -90,9 +95,7 @@ public class Equipments {
                     pane.addItem(new GuiItem(item, getEquippingClick(gui, pane, type)), invSlot);
                 }
             } else {
-                System.out.println("Click: " + event.getClick());
                 if(getEquipmentFromSlot(type) != null) {
-                    System.out.println("Unequip");
                     ItemStack item = EquipementHolders.getPlaceholder(type);
                     pane.removeItem(invSlot);
                     gui.update();
@@ -111,8 +114,6 @@ public class Equipments {
     public HashMap<BasicArmorItem.ArmorType, BasicArmorItem> getEquipments() {
         return equipments;
     }
-
-    //TODO Implement gui in class
 
     public Player getOwner() {
         return owner;

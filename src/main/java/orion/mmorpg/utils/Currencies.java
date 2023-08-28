@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+//TODO change so there is no multiple call to toLowerCase
 public class Currencies {
     @Getter
     public HashMap<String, Currency> currencies;
@@ -28,6 +29,7 @@ public class Currencies {
     }
 
     public long get(String name) {
+        name = name.toLowerCase();
         if(hasCurrency(name)) {
             return currencies.get(name).getAmount();
         } else {
@@ -36,10 +38,11 @@ public class Currencies {
     }
 
     public Currency getCurrency(String name) {
-        return currencies.get(name);
+        return currencies.get(name.toLowerCase());
     }
 
    public void add(String name, long amount) {
+        name = name.toLowerCase();
         if(hasCurrency(name)) {
             currencies.get(name).add(amount);
         } else {
@@ -48,14 +51,16 @@ public class Currencies {
    }
 
    public void add(Currency currency) {
-         if(hasCurrency(currency.getName())) {
-              currencies.get(currency.getName()).add(currency.getAmount());
+        String name = currency.getName().toLowerCase();
+         if(hasCurrency(name)) {
+              currencies.get(name).add(currency.getAmount());
          } else {
-              currencies.put(currency.getName(), currency);
+              currencies.put(name, currency);
          }
    }
 
     public boolean remove(String name, int amount) {
+        name = name.toLowerCase();
         if(hasCurrency(name)) {
             if(currencies.get(name).getAmount() >= amount) {
                 currencies.get(name).remove(amount);
@@ -66,6 +71,7 @@ public class Currencies {
     }
 
     public boolean hasEnough(String name, int amount) {
+        name = name.toLowerCase();
         if(hasCurrency(name)) {
             return currencies.get(name).getAmount() >= amount;
         }
@@ -73,6 +79,7 @@ public class Currencies {
     }
 
    public boolean hasCurrency(String name) {
+        name = name.toLowerCase();
        return currencies.containsKey(name);
    }
 

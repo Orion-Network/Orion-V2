@@ -77,7 +77,7 @@ public abstract class Spell {
             }
             case NEAR -> {
                 for (Entity entity : player.getNearbyEntities(range, range, range))
-                    if (entity instanceof LivingEntity)
+                    if (entity instanceof LivingEntity && !entity.isInvulnerable())
                         this.targets.add((LivingEntity) entity);
             }
             case PARTY -> {

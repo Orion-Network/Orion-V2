@@ -35,10 +35,14 @@ public class FishingListener implements Listener {
 
     public FishingListener(Mmorpg plugin) {
         this.plugin = plugin;
-        Rewards.Reward reward = new Rewards.Reward(BasicItem.generateRessourceItem(Material.COPPER_INGOT, "Lingot de bronze", 0, null, Rarity.COMMON), 75);
+        Rewards.Reward reward = new Rewards.Reward(BasicItem.generateRessourceItem("bronze_ingot", Material.COPPER_INGOT, "Lingot de bronze", 0, null, Rarity.COMMON), 75);
         reward.getJobExp().put(JobType.FISHING, 10);
         reward.addRequiredJobExp(JobType.FISHING, 5);
         rewards.add(reward);
+
+        Rewards.Reward money_1 = new Rewards.Reward(null, 50);
+        money_1.getMoneys().put("gold", 10L);
+        rewards.add(money_1);
 
         Rewards.Reward reward2 = new Rewards.Reward(ItemList.BRONZE_COIN.generateItemStack(1), 100);
         reward2.getJobExp().put(JobType.FISHING, 5);

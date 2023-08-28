@@ -22,6 +22,7 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
  * A class to represent items as Rpg Item
  */
 public abstract class BasicItem extends ItemStack {
+
+    static HashMap<String, BasicItem> ressourceItems = new HashMap<>();
 
     protected final Material MATERIAL;
     protected final String NAME;
@@ -69,9 +72,12 @@ public abstract class BasicItem extends ItemStack {
         this.ITEM_TYPE = ITEM_TYPE;
         this.PERMISSION = PERMISSION;
     }
-    public static BasicItem generateRessourceItem(Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
-        return new BasicItem(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, ItemType.RESSOURCE) {
+    public static BasicItem generateRessourceItem(String identifier, Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+        BasicItem item = new BasicItem(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, ItemType.RESSOURCE) {
         };
+        if(!ressourceItems.containsKey(identifier))
+            ressourceItems.put(identifier, item);
+        return item;
     }
     public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {

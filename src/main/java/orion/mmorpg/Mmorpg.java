@@ -11,7 +11,12 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BossBar;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 import orion.mmorpg.config.AssociationConfig;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -21,6 +26,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.commands.*;
 import orion.mmorpg.database.Client;
+import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
@@ -90,6 +96,20 @@ public final class Mmorpg extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
+        ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.fromString("test", JavaPlugin.getProvidingPlugin(Mmorpg.class)), ItemList.DRAGON_SLAYER.generateItemStack(1));
+        recipe.shape("DDD", "DSD", "DDD");
+        recipe.setIngredient('D', Material.DIAMOND);
+        recipe.setIngredient('S', Material.STICK);
+        recipe.setCategory(CraftingBookCategory.EQUIPMENT);
+        Bukkit.addRecipe(recipe);
+
+        ShapedRecipe recipe1 = new ShapedRecipe(NamespacedKey.fromString("testa", JavaPlugin.getProvidingPlugin(Mmorpg.class)), ItemList.FUR_CHESTPLATE.generateItemStack(1));
+        recipe1.shape("FFF", "F F", "FFF");
+        RecipeChoice.ExactChoice choice = new RecipeChoice.ExactChoice(ItemList.NORDIC_WOLF_FUR.generateItemStack(1));
+        recipe1.setIngredient('F', Material.FEATHER);
+        recipe1.setCategory(CraftingBookCategory.EQUIPMENT);
+        Bukkit.addRecipe(recipe1);
 
         //transferResourcesToPluginFolder();
     }
@@ -187,11 +207,13 @@ public final class Mmorpg extends JavaPlugin {
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
         }
-        if(mobManager != null) {
-            mobManager.loadMobs();
-            Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
-        }
 
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            mobManager.despawnMobs();
+            mobManager.loadMobs();
+        });
+
+        Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
         setGameState(GameState.RUNNING);
     }
 

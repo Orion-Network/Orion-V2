@@ -13,5 +13,9 @@ public class NordicWolf extends AbstractHostile {
         super(EntityType.WOLF, uuid, "Loup Nordique", spawnLocation, new Stats.Builder().setBase(Stats.StatsInfo.VITALITY, 150).setBase(Stats.StatsInfo.STRENGTH, 17).setBase(Stats.StatsInfo.DEFENCE, 4).setBase(Stats.StatsInfo.SPEED, 5).build(), 13);
         this.getRewards().add(new Rewards.Reward(new NordicWolfFur().generateItem(null, 1), 70));
         this.getRewards().add(new Rewards.Reward(new NordicWolfBone().generateItem(null, 1), 30));
+
+        Rewards.Reward money = new Rewards.Reward(null, 100);
+        money.getMoneys().put("gold", 20L);
+        this.getRewards().add(money);
     }
 }

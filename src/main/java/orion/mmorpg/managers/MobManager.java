@@ -49,6 +49,11 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
         mobRespawnCooldown.put(mobData, System.currentTimeMillis() + mobData.getSpawnTime());
     }
 
+    public void removeMob(AbstractMob mob) {
+        mobs.remove(mob.getUuid());
+        Mmorpg.INSTANCE.getMongoClient().deleteMob(mob);
+    }
+
     public void loadMobs() {
         mmorpg.getMongoClient().getMobCollection().find().forEach((document) -> {
             try {
@@ -69,7 +74,6 @@ public class MobManager<T extends AbstractMob> extends AbstractManager implement
         ProtocolLibrary.getProtocolManager().addPacketListener(new MountPacketAdpater(mmorpg));
     }
 
-    //TODO see why mobs are not removed
     public void despawnMobs() {
         for(T mob : mobs.values()) {
             mob.setRemoved(Entity.RemovalReason.UNLOADED_TO_CHUNK);

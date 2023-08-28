@@ -16,5 +16,9 @@ public class SeaZombie extends AbstractHostile {
         Rewards.Reward reward = new Rewards.Reward(null, 100);
         reward.getJobExp().put(JobType.FISHING, 25);
         this.getRewards().add(reward);
+
+        Rewards.Reward money = new Rewards.Reward(null, 100);
+        money.getMoneys().put("gold", 100L);
+        this.getRewards().add(money);
     }
 }

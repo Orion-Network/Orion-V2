@@ -32,6 +32,17 @@ public class MobCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        if(args.length == 0) {
+            commandSender.sendMessage("§c/mob spawn <mob>");
+            commandSender.sendMessage("§c/mob set <mob>");
+            commandSender.sendMessage("§c/mob list");
+            commandSender.sendMessage("§c/mob info");
+            commandSender.sendMessage("§c/mob chunks");
+            commandSender.sendMessage("§c/mob chunkMob");
+            commandSender.sendMessage("§c/mob removeAll");
+            commandSender.sendMessage("§c/mob spawnAll");
+            return false;
+        }
         if(args[0].equalsIgnoreCase("spawn")) {
             AbstractMob mob = summonMob(commandSender, args);
             mob.setRespawn(false);

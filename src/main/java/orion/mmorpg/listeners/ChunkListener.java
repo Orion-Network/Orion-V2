@@ -23,7 +23,7 @@ public class ChunkListener implements Listener {
 
     @EventHandler
     public void onEntitiesUnloadEvent(EntitiesUnloadEvent event) {
-
+    //TODO Still bugged, entities are duplicated, try to fix it
         LinkedHashSet<AbstractMob.MobData> mobs = new LinkedHashSet<>();
 
         for(Entity entity : event.getEntities()) {

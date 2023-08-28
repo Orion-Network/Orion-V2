@@ -104,10 +104,6 @@ public abstract class AbstractEntityBase extends PathfinderMob {
 
     public void spawn() {
         ((CraftWorld)this.getSpawnLocation().getWorld()).getHandle().addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        this.overheadEntity = (TextDisplay) this.getSpawnLocation().getWorld().spawnEntity(this.getSpawnLocation(), org.bukkit.entity.EntityType.TEXT_DISPLAY);
-        this.overheadEntity.setText(this.generateName());
-        this.overheadEntity.setBillboard(Display.Billboard.CENTER);
-        this.overheadEntity.setTransformation(new Transformation(new Vector3f(0, 1, 0), new AxisAngle4f(), new Vector3f(1,1,1), new AxisAngle4f()));
 
         this.setYRot(this.spawnLocation.getYaw());
         this.setYHeadRot(this.spawnLocation.getYaw());
@@ -116,8 +112,13 @@ public abstract class AbstractEntityBase extends PathfinderMob {
         if(this instanceof Modeled) {
             ((Modeled) this).spawnModel();
             //TODO see to spawn overhead mob
-        } else
-            ((CraftTextDisplay)this.overheadEntity).getHandle().startRiding(this);
+        } else {
+            this.overheadEntity = (TextDisplay) this.getSpawnLocation().getWorld().spawnEntity(this.getSpawnLocation(), org.bukkit.entity.EntityType.TEXT_DISPLAY);
+            this.overheadEntity.setText(this.generateName());
+            this.overheadEntity.setBillboard(Display.Billboard.CENTER);
+            this.overheadEntity.setTransformation(new Transformation(new Vector3f(0, 1, 0), new AxisAngle4f(), new Vector3f(1,1,1), new AxisAngle4f()));
+            ((CraftTextDisplay) this.overheadEntity).getHandle().startRiding(this);
+        }
     };
 
 
