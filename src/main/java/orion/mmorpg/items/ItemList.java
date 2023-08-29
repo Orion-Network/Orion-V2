@@ -11,8 +11,6 @@ import orion.mmorpg.items.minecraft.StoneSword;
 import orion.mmorpg.items.minecraft.Wheat;
 import orion.mmorpg.items.minecraft.WoodenSword;
 import orion.mmorpg.items.misc.*;
-import orion.mmorpg.items.misc.drops.NordicWolfBone;
-import orion.mmorpg.items.misc.drops.NordicWolfFur;
 import orion.mmorpg.items.misc.reforge.PolarizedStone;
 import orion.mmorpg.items.misc.reforge.StrongStone;
 import orion.mmorpg.items.misc.reforge.TastyStone;
@@ -48,6 +46,7 @@ public enum ItemList {
     MURAMASA(Muramasa.class),
     DRAGON_SLAYER(DragonSlayer.class),
     THOUSANDS_WISDOM(ThousandWisdom.class),
+    SPLIT_SOUL_KATANA(SplitSoulKatana.class),
     //Armor Items
     STARTING_HELMET(StartingSet.StartingBoots.class),
     STARTING_CHESTPLATE(StartingSet.StartingChestplate.class),
@@ -129,9 +128,6 @@ public enum ItemList {
     TEST_ITEM(TestItem.class),
     MENU_ITEM(MenuItem.class),
     ETERNAL_COMPASS(EternalCompass.class),
-    //DROPS
-    NORDIC_WOLF_FUR(NordicWolfFur.class),
-    NORDIC_WOLF_BONE(NordicWolfBone.class),
     //REFORGES
     STRONG_STONE(StrongStone.class),
     POLARIZED_STONE(PolarizedStone.class),
