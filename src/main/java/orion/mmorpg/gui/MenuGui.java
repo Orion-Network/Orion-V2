@@ -96,7 +96,7 @@ public class MenuGui extends ChestGui {
                 lore.add(ChatColor.YELLOW + Bukkit.getPlayer(member.getUniqueId()).getName() + " : "
                         + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth()
                         + ChatColor.YELLOW +  "/"
-                        + Stats.StatsInfo.VITALITY.getColor()  + member.getStats().get(Stats.StatsInfo.VITALITY) + " "
+                        + Stats.StatsInfo.VITALITY.getColor()  + (int) member.getStats().get(Stats.StatsInfo.VITALITY) + " "
                         + Stats.StatsInfo.VITALITY.getCharacter());
 
             menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), lore, Rarity.COMMON).generateItem(null, 1), e-> {
