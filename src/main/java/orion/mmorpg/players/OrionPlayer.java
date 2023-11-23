@@ -267,7 +267,8 @@ public class OrionPlayer {
 
     public void setPet(AbstractPet pet) {
         if(this.pet != null) {
-            this.pet.getOverheadEntity().remove();
+            if(this.pet.getOverheadEntity() != null)
+                this.pet.getOverheadEntity().remove();
             this.pet.setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
         }
         this.pet = pet;
