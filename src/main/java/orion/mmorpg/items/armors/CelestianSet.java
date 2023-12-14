@@ -3,7 +3,6 @@ package orion.mmorpg.items.armors;
 import de.slikey.effectlib.effect.DiscoBallEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicArmorItem;
@@ -39,14 +38,14 @@ public class CelestianSet {
             effect.infinite();
             effect.setEntity(p);
             effect.start();
-            data.getEffectHashMap().put(this.INTERNAL_ID, effect);
+            data.getDisplayEffectHashMap().put(this.INTERNAL_ID, effect);
         }
 
         @Override
         public void onCosmeticUnequip(Player p, OrionPlayer data) {
-            if (!data.getEffectHashMap().containsKey(this.INTERNAL_ID)) return;
-            data.getEffectHashMap().get(this.INTERNAL_ID).cancel();
-            data.getEffectHashMap().remove(this.INTERNAL_ID);
+            if (!data.getDisplayEffectHashMap().containsKey(this.INTERNAL_ID)) return;
+            data.getDisplayEffectHashMap().get(this.INTERNAL_ID).cancel();
+            data.getDisplayEffectHashMap().remove(this.INTERNAL_ID);
         }
     }
 

@@ -41,23 +41,33 @@ import java.util.logging.Level;
 public final class Mmorpg extends JavaPlugin {
 
     public static Mmorpg INSTANCE;
+    @Getter
     private GameState gameState = GameState.STARTING;
     public static boolean debug;
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
+    @Getter
     public static LuckPerms luckPerms;
     public final FileConfiguration config = this.getConfig();
+    @Getter
     Client mongoClient;
+    @Getter
     PlayerManager playerManager;
 
+    @Getter
     GuildManager guildManager;
+    @Getter
     PartyManager partyManager;
+    @Getter
     private MobManager mobManager;
+    @Getter
     private MythicMob mythicMob;
+    @Getter
     ModelEngineAPI modelEngineAPI;
 
     @Getter
     WorldManager worldManager;
+    @Getter
     ChunkManager chunkManager;
 
     @Getter
@@ -153,7 +163,7 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerStatsListener(this), this);
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
-        pm.registerEvents(new SpellListener(), this);
+        pm.registerEvents(new SpellEffectListener(), this);
         pm.registerEvents(new WorldListener(this), this);
         pm.registerEvents(new FishingListener(this), this);
 
@@ -240,47 +250,8 @@ public final class Mmorpg extends JavaPlugin {
         }
     }
 
-    public PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    public GuildManager getGuildManager() {
-        return guildManager;
-    }
-
-    public ChunkManager getChunkManager() {
-        return chunkManager;
-    }
-
-    public PartyManager getPartyManager() {
-        return partyManager;
-    }
-
-    public MobManager getMobManager() {
-        return mobManager;
-    }
-
-    public static LuckPerms getLuckPerms() {
-        return luckPerms;
-    }
-
-    public Client getMongoClient() {
-        return mongoClient;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
-    public MythicMob getMythicMob() {
-        return mythicMob;
-    }
-
-    public ModelEngineAPI getModelEngineAPI() {
-        return modelEngineAPI;
-    }
 }

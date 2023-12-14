@@ -39,11 +39,15 @@ public class PlayerManager extends AbstractManager {
         return playersMap;
     }
 
+    public void savePlayer(OrionPlayer player) {
+        mmorpg.getMongoClient().savePlayer(player);
+        if(Bukkit.getPlayer(player.getUniqueId()) == null)
+            playersMap.remove(player.getUniqueId());
+    }
+
     public void savePlayers() {
         playersMap.forEach((uuid, player) -> {
-            mmorpg.getMongoClient().savePlayer(player);
-            if(Bukkit.getPlayer(uuid) == null)
-                playersMap.remove(player);
+            savePlayer(player);
         });
     }
 

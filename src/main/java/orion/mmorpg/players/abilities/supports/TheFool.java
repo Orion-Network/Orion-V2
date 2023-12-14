@@ -19,7 +19,7 @@ import orion.mmorpg.utils.Utils;
 public class TheFool extends Support {
 
     public TheFool() {
-        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.", (Class<? extends Event>[]) new Class[]{OnSpellSense.class});
+        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.", new Class[]{OnSpellSense.class});
         this.getOEffects().add(SpellAnnulation.class);
     }
 

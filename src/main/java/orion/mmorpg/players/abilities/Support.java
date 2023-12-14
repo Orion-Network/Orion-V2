@@ -1,6 +1,7 @@
 package orion.mmorpg.players.abilities;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -8,6 +9,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
+import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
@@ -47,9 +49,7 @@ public abstract class Support {
         for(Class<? extends OEffect> oEffect : oEffects) {
             try {
                 OEffect effect = oEffect.getConstructor(Long.class).newInstance(duration);
-                if(duration == -1)
-                    effect.setPermanent(true);
-                player.addEffect(this.getName(), effect);
+                Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(player, effect, duration, this.getName()));
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }

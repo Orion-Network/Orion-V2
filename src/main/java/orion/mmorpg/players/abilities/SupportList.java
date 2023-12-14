@@ -1,8 +1,10 @@
 package orion.mmorpg.players.abilities;
 
+import lombok.Getter;
 import orion.mmorpg.players.abilities.supports.*;
 
 //Change to have a list of Effects added to the player
+@Getter
 public enum SupportList {
     THE_FOOL(TheFool.class),
     ;
@@ -13,7 +15,4 @@ public enum SupportList {
         this.support = support;
     }
 
-    public Class<? extends Support> getSupport() {
-        return support;
-    }
 }

@@ -52,6 +52,10 @@ public class WorldManager extends AbstractManager {
         return portalStones.get(title);
     }
 
+    public boolean hasPortalStone(String title) {
+        return portalStones.containsKey(title);
+    }
+
     public void addPortalStone(String id, String title, Location location, Material material) {
         addPortalStone(id, new PortalStone(title, location, material));
     }

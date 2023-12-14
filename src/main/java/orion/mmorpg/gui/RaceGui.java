@@ -55,6 +55,8 @@ public class RaceGui extends ChestGui {
                         sphereEffect.radiusIncrease = 0.3;
                         sphereEffect.setLocation(p.getLocation());
                         sphereEffect.start();
+
+                        Mmorpg.INSTANCE.getPlayerManager().savePlayer(orionPlayer);
                     }, "Vous êtes devenu un(e) " + race.getName());
                 } else {
                     Utils.sendErrorMessage(p, "Vous avez déja selectionné une classe");

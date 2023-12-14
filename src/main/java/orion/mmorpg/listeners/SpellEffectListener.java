@@ -4,11 +4,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import orion.mmorpg.events.BeforeSpellCastEvent;
+import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.utils.Utils;
 import orion.mmorpg.utils.WorldGuardUtils;
 
-public class SpellListener implements Listener {
+public class SpellEffectListener implements Listener {
 
     @EventHandler
     public void beforeSpellCast(BeforeSpellCastEvent event) {
@@ -17,6 +18,14 @@ public class SpellListener implements Listener {
             event.getSpell().setCanceled(true);
             Utils.sendInfoMessage(caster, "Vous ne pouvez pas envoyer de sorts dans cette zone.");
         }
+    }
+
+    @EventHandler
+    public void onGetEffect(OnGetEffect effect) {
+        if(effect.getDuration() == -1)
+            effect.getEffect().setPermanent(true);
+        effect.getPlayer().addEffect(effect.getCause(), effect.getEffect());
+        effect.getPlayer().executeOEffect(effect);
     }
 
     @EventHandler

@@ -59,7 +59,8 @@ public class PlayerJoinListener implements Listener {
             }
         }
 
-        player.teleport(mmorpg.getWorldManager().getPortalStone("CAMPEMENT_STONE").getLocation());
+        if(mmorpg.getWorldManager().hasPortalStone("spawn"))
+            player.teleport(mmorpg.getWorldManager().getPortalStone("spawn").getLocation());
 
         OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(player);
 

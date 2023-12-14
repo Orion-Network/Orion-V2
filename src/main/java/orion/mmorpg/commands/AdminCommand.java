@@ -12,12 +12,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.OEffect;
+import orion.mmorpg.players.abilities.effects.Invincibility;
+import orion.mmorpg.players.abilities.effects.Propagation;
 import orion.mmorpg.utils.Currencies;
 import orion.mmorpg.utils.Utils;
 
@@ -84,6 +88,15 @@ public class AdminCommand implements TabExecutor {
 
                     MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player, buyables);
                     merchantGui.show(player);
+                } else if(args[1].equalsIgnoreCase("oeffect")) {
+                    Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(orionPlayer, new Propagation(100L), 100L, "test"));
+                    Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(orionPlayer, new Invincibility(100L), 100L, "test"));
+                } else if(args[1].equalsIgnoreCase("effect")) {
+                    orionPlayer.getOrionEffects().forEach((uuid, map) -> {
+                        map.forEach((id, effect) -> {
+                            Utils.sendInfoMessage((Entity) commandSender, id + " " + effect.getName());
+                        });
+                    });
                 }
 
             }

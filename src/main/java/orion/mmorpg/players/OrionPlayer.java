@@ -61,7 +61,7 @@ public class OrionPlayer {
     @Getter@Setter
     transient Party party;
     @Getter@Setter
-    transient HashMap<String, Effect> effectHashMap = new HashMap<>();
+    transient HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
     @Getter
     public SlotType[] slotTypes;
     @Getter
@@ -90,6 +90,7 @@ public class OrionPlayer {
     transient AbstractPet pet;
     @Getter
     Set<Mounts> tamedMounts;
+    @Getter
     private Support mainSupport;
     @Getter@Setter
     private Race race;
@@ -274,10 +275,6 @@ public class OrionPlayer {
         this.pet = pet;
     }
 
-    public Support getMainSupport() {
-        return mainSupport;
-    }
-
     public boolean setMainSupport(Class<? extends Support> supportClass) {
         Support support;
         try {
@@ -352,17 +349,19 @@ public class OrionPlayer {
     public void executeOEffect(Event event) {
         if(!this.getOrionEffects().containsKey(event.getClass().getSimpleName()))
             return;
+        ArrayList<String> toRemove = new ArrayList<>();
         this.getOrionEffects().get(event.getEventName()).forEach((id, effect) -> {
             boolean remove = effect.execute(event);
             if(!remove)
-                this.getOrionEffects().get(event.getEventName()).remove(id);
+                toRemove.add(id);
         });
+        toRemove.forEach(id -> this.getOrionEffects().get(event.getEventName()).remove(id));
     }
 
     public void onTick() {
         updateFastboard();
         if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE) - this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30)
-            mana += this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30;
+            mana += (int) (this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30);
     }
 
     ArrayList<String> board = new ArrayList<>();
