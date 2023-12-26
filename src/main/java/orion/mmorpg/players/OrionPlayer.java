@@ -22,6 +22,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.Mounts;
 import orion.mmorpg.entities.Pets;
 import orion.mmorpg.entities.samples.AbstractPet;
+import orion.mmorpg.events.RespawnEvent;
 import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -41,7 +42,7 @@ import java.util.*;
 public class OrionPlayer {
     @Getter
     private final LinkedHashSet<String> portalStones;
-    transient private final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
+    public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
     @Getter
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     @Getter
@@ -303,13 +304,9 @@ public class OrionPlayer {
     }
 
     public void respawn() {
+        //TODO  Create a respawn event and call it so that other plugins can listen to it
         Player p = Bukkit.getPlayer(getUniqueId());
-        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
-        p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("SPAWN").getLocation());
-        setHealth(this.getStats().get(Stats.StatsInfo.VITALITY));
-        Utils.sendInfoMessage(p, "Vous êtes mort.");
-        updateHealthbar();
-        this.mobHealthBar.setVisible(false);
+        Bukkit.getServer().getPluginManager().callEvent(new RespawnEvent(p, this));
     }
 
     public void addExperience(Player p, double exp) {

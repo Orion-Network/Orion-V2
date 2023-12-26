@@ -18,6 +18,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
@@ -25,6 +27,7 @@ import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
+import orion.mmorpg.events.RespawnEvent;
 import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.enchants.CustomEnchants;
@@ -262,5 +265,15 @@ public class PlayerStatsListener implements Listener {
                 event.getDismounted().remove();
             }
         }
+    }
+
+    @EventHandler
+    public void onRespawn(RespawnEvent event) {
+        event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
+        //p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("SPAWN").getLocation()); delegate to OrionWorld
+        event.getPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
+        Utils.sendInfoMessage(event.getPlayer(), "Vous êtes mort.");
+        event.getOrionPlayer().updateHealthbar();
+        event.getOrionPlayer().mobHealthBar.setVisible(false);
     }
 }

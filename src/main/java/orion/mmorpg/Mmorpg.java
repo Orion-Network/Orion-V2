@@ -66,12 +66,8 @@ public final class Mmorpg extends JavaPlugin {
     ModelEngineAPI modelEngineAPI;
 
     @Getter
-    WorldManager worldManager;
-    @Getter
     ChunkManager chunkManager;
 
-    @Getter
-    RessourceManager ressourceManager;
     @Getter
     OrionNPCManager orionNpcManager;
 
@@ -127,11 +123,9 @@ public final class Mmorpg extends JavaPlugin {
 
         playerManager = new PlayerManager(this);
         guildManager = new GuildManager(this);
-        worldManager = new WorldManager(this);
         chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
-        ressourceManager = new RessourceManager(this);
         orionNpcManager = new OrionNPCManager(this);
 
 
@@ -164,7 +158,6 @@ public final class Mmorpg extends JavaPlugin {
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
         pm.registerEvents(new SpellEffectListener(), this);
-        pm.registerEvents(new WorldListener(this), this);
         pm.registerEvents(new FishingListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
@@ -175,7 +168,6 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
         Objects.requireNonNull(getCommand("pet")).setExecutor(new PetCommand(this));
         Objects.requireNonNull(getCommand("mount")).setExecutor(new MountCommand(this));
-        Objects.requireNonNull(getCommand("ressource")).setExecutor(new RessourceCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {

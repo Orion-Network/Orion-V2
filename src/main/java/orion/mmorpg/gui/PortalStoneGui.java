@@ -6,8 +6,8 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.managers.WorldManager;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.PortalStone;
 
 public class PortalStoneGui extends ChestGui {
     Player p;
@@ -24,11 +24,13 @@ public class PortalStoneGui extends ChestGui {
     }
 
     public StaticPane getListPane() {
+        //TODO add this to Orion World
+        /*
         int i = 0;
         for (String id : orionPlayer.getPortalStones()) {
 
             if(!Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(id)) continue;
-            WorldManager.PortalStone portalStone = Mmorpg.INSTANCE.getWorldManager().getPortalStone(id);
+            PortalStone portalStone = Mmorpg.INSTANCE.getWorldManager().getPortalStone(id);
 
             listPane.addItem(new GuiItem(portalStone.generateItem(), e -> {
                 p.teleport(portalStone.getLocation());
@@ -36,5 +38,7 @@ public class PortalStoneGui extends ChestGui {
             i++;
         }
         return listPane;
+         */
+        return new StaticPane(0, 0, 9, 1);
     }
 }

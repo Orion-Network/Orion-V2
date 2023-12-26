@@ -190,42 +190,6 @@ public class Utils {
         return ThreadLocalRandom.current().nextLong(i, totalWeight + 1);
     }
 
-    public static class ChunkCoords {
-        @Getter
-        private final int x;
-        @Getter
-        private final int z;
-        @Getter
-        private final World world;
-
-        public ChunkCoords(Chunk chunk) {
-            this.x = chunk.getX();
-            this.z = chunk.getZ();
-            this.world = chunk.getWorld();
-        }
-
-        public ChunkCoords(int x, int z, World world) {
-            this.x = x;
-            this.z = z;
-            this.world = world;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ChunkCoords that = (ChunkCoords) o;
-            return x == that.x &&
-                    z == that.z &&
-                    world.equals(that.world);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, z, world);
-        }
-    }
-
     /**
      * Clamps the rotation angle to [-180, 180]
      */

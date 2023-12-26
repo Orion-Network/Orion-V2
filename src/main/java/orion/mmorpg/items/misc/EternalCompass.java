@@ -12,7 +12,7 @@ import orion.mmorpg.utils.Rarity;
 import java.util.Collections;
 
 public class EternalCompass extends BasicItem {
-    private static Location location = Mmorpg.INSTANCE.getWorldManager().getPortalStone("CAMPEMENT").getLocation();
+    //private static Location location = Mmorpg.INSTANCE.getWorldManager().getPortalStone("CAMPEMENT").getLocation();
     public EternalCompass() {
         super(Material.COMPASS, "Eternal Compass", "ETERNAL_COMPASS", 1, Collections.singletonList("Un compas magique"), Rarity.RARE);
     }
@@ -20,7 +20,7 @@ public class EternalCompass extends BasicItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         CompassMeta meta = (CompassMeta) e.getItem().getItemMeta();
-        meta.setLodestone(location);
+        //meta.setLodestone(location);
         meta.setLodestoneTracked(false);
         e.getItem().setItemMeta(meta);
     }
