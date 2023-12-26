@@ -115,7 +115,7 @@ public abstract class Spell {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
-        if(!checkIfSpellCastable()) return false;
+        if(checkIfSpellCastable()) return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
         Bukkit.getPluginManager().callEvent(new OnLaunchSpell(player, orionPlayer, this));
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
@@ -155,7 +155,7 @@ public abstract class Spell {
             Utils.sendInfoMessage(caster, "Aucune cible trouvée.");
             return false;
         }
-        if(!checkIfSpellCastable()) return false;
+        if(checkIfSpellCastable()) return false;
         launch(mmorpg, caster.getLocation(), knowledge);
         return true;
     }
@@ -166,9 +166,9 @@ public abstract class Spell {
                 Bukkit.getPluginManager().callEvent(new OnSpellSense(false, this.getCaster(), (Player) e, SpellList.valueOf(this.getInternal_id()), this, OnSpellSense.Target.GLOBAL));
         });
         Bukkit.getPluginManager().callEvent(new BeforeSpellCastEvent(this));
-        if (this.isCanceled()) return false;
+        if (this.isCanceled()) return true;
         Utils.sendDebugMessage(this.getCaster(), "Sort " + this.getInternal_id() + " !");
-        return true;
+        return false;
     }
 
     public abstract void launch(Mmorpg mmorpg, Location location, Knowledge knowledge);
