@@ -6,6 +6,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.reflections.Reflections;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.items.gui.PetPlaceholder;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.utils.Namespaces;
@@ -28,21 +29,23 @@ public class ItemManager extends AbstractManager {
 
     public void registerItems() {
         System.out.println("registering items");
-        //TODO add custom annotation to register items
+
         for (Class<? extends BasicItem> item : new Reflections("orion.mmorpg.items").getSubTypesOf(BasicItem.class)) {
             BasicItem basicItem = null;
+            if(item.isAnnotationPresent(ExcludeRegister.class) || item.getCanonicalName() == null)
+                continue;
             try {
                 basicItem = item.getConstructor().newInstance();
                 registerItem(basicItem.getINTERNAL_ID(), item);
-                System.out.println("registered item " + item.getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                continue;
+                e.printStackTrace();
             }
         }
     }
 
     public void registerItem(String name, Class<? extends BasicItem> item) {
         items.put(name, item);
+        System.out.println("registering item " + name);
     }
 
     public Class<? extends BasicItem> getItem(String name) {

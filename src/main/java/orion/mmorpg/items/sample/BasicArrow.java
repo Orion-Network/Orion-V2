@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -15,6 +16,7 @@ import orion.mmorpg.utils.Rarity;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExcludeRegister
 public class BasicArrow extends BasicItem {
     public final float DAMAGE;
 

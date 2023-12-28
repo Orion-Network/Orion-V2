@@ -2,10 +2,12 @@ package orion.mmorpg.items.sample;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.List;
 
+@ExcludeRegister
 public class BasicUsableItem extends BasicItem {
 
     public BasicUsableItem(ItemStack item) {

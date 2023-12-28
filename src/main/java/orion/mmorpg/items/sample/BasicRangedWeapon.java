@@ -3,11 +3,13 @@ package orion.mmorpg.items.sample;
 import org.bukkit.Material;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 
 import java.util.List;
 
+@ExcludeRegister
 public class BasicRangedWeapon extends BasicMeleeWeapon {
     public BasicRangedWeapon(ItemStack item) {
         super(item);

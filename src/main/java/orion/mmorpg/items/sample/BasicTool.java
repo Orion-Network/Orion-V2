@@ -8,10 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemReforge;
-import orion.mmorpg.items.ItemType;
-import orion.mmorpg.items.Modifiers;
-import orion.mmorpg.items.Reforgeable;
+import orion.mmorpg.items.*;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -20,6 +17,7 @@ import orion.mmorpg.utils.Stats;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExcludeRegister
 public class BasicTool extends BasicEquipmentItem {
     @Getter
     ToolType toolType;

@@ -15,6 +15,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent items as Rpg Item
  */
+@ExcludeRegister
 public abstract class BasicItem extends ItemStack {
 
     static HashMap<String, BasicItem> ressourceItems = new HashMap<>();

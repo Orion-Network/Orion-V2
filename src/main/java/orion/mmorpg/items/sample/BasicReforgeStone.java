@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.items.ItemReforge;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -13,6 +14,7 @@ import orion.mmorpg.utils.Rarity;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExcludeRegister
 public class BasicReforgeStone extends BasicItem {
     @Getter
     ItemReforge reforge;

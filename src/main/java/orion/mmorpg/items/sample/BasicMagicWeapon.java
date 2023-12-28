@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
@@ -20,6 +21,7 @@ import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
+@ExcludeRegister
 public class BasicMagicWeapon extends BasicMeleeWeapon {
 
     public Particle particle = Particle.GLOW;
