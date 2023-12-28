@@ -15,14 +15,13 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.players.abilities.effects.Propagation;
 import orion.mmorpg.utils.Currencies;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Utils;
 
 import java.util.*;
@@ -65,7 +64,7 @@ public class AdminCommand implements TabExecutor {
                     itemMeta.addEnchant(CustomEnchants.WRATH, 1, true);
                     itemStack.setItemMeta(itemMeta);
 
-                    BasicItem basicItem = ItemList.getItemFromItemstack(itemStack);
+                    BasicItem basicItem = ItemUtils.getItemFromItemstack(itemStack);
                     player.getInventory().setItemInMainHand(basicItem.generateItem(itemStack, 1));
 
                 }
@@ -82,8 +81,8 @@ public class AdminCommand implements TabExecutor {
                     }
                 } else if(args[1].equalsIgnoreCase("cmenu")) {
                     ArrayList<MerchantGui.Buyable> buyables = new ArrayList<>();
-                    buyables.add(new MerchantGui.Buyable("test", 5, ItemList.KNIGHT_BOOTS.generateItemStack(1)));
-                    buyables.add(new MerchantGui.Buyable("test", 50000, ItemList.KNIGHT_CHESTPLATE.generateItemStack(1)));
+                    buyables.add(new MerchantGui.Buyable("test", 5, ItemUtils.generateItemStack("KNIGHT_BOOTS", 1)));
+                    buyables.add(new MerchantGui.Buyable("test", 50000, ItemUtils.generateItemStack("KNIGHT_BOOTS", 1)));
 
 
                     MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player, buyables);

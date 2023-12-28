@@ -99,7 +99,7 @@
                                 <resource>
                                     <directory>${basedir}/target/</directory>
                                     <includes>
-                                        <include>mmorpg-1.0-SNAPSHOT.jar</include>
+                                        <include>orion-core-1.0-SNAPSHOT.jar</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -287,6 +287,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
         </dependency>
     </dependencies>
 </project>

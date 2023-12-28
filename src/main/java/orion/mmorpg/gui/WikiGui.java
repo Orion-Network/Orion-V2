@@ -7,8 +7,8 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.*;
+import orion.mmorpg.managers.ItemManager;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.Utils;
@@ -18,15 +18,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WikiGui extends ChestGui {
-    final List<ItemList> hiddenItems = Arrays.asList(ItemList.TEST_ITEM, ItemList.ADMIN_SWORD, ItemList.STARSET_HELMET, ItemList.STARSET_CHESTPLATE, ItemList.STARSET_LEGGINGS, ItemList.STARSET_BOOTS, ItemList.GIFT, ItemList.INFINITE_FIREWORK, ItemList.CELESTIAL_SERUM);
+    final List<String> hiddenItems = Arrays.asList("TEST_ITEM", "ADMIN_SWORD", "STARSET_HELMET", "STARSET_CHESTPLATE", "STARSET_LEGGINGS", "STARSET_BOOTS", "GIFT", "INFINITE_FIREWORK", "CELESTIAL_SERUM");
     final List<SpellList> hiddenSpells = Arrays.asList(SpellList.TEST_SPELL, SpellList.GOAT_HUNGER);
     PaginatedPane mainPane = new PaginatedPane(0, 0, 9, 5);
     List<GuiItem> populateList = new LinkedList<>();
     Mmorpg mmorpg;
+    ItemManager itemManager;
 
     public WikiGui(Mmorpg mmorpg) {
         super(6, "Wiki");
         this.mmorpg = mmorpg;
+        this.itemManager = mmorpg.getItemManager();
 
         this.setOnTopClick(e -> e.setCancelled(true));
 
@@ -59,13 +61,14 @@ public class WikiGui extends ChestGui {
     public PaginatedPane getSampleItem() {
         populateList.clear();
         PaginatedPane samplePane = new PaginatedPane(0, 0, 9, 5);
-        for (ItemList item : ItemList.values()) {
-            if (item.getItemClass() != BasicItem.class) continue;
+        for (String item : Mmorpg.INSTANCE.getItemManager().getItems().keySet()) {
+            if(!Mmorpg.INSTANCE.getItemManager().getItem(item).equals(BasicItem.class)) continue;
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
+            BasicItem basicItem = Mmorpg.INSTANCE.getItemManager().createItem(item);
+            populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.item")) return;
-                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
         }
 
@@ -76,15 +79,16 @@ public class WikiGui extends ChestGui {
     public PaginatedPane getWeaponPane() {
         populateList.clear();
         PaginatedPane weaponPane = new PaginatedPane(0, 0, 9, 5);
-        for (ItemList item : ItemList.values()) {
-            if (!BasicMeleeWeapon.class.isAssignableFrom(item.getItemClass()) && !BasicMagicWeapon.class.isAssignableFrom(item.getItemClass()) && !BasicRangedWeapon.class.isAssignableFrom(item.getItemClass()))
+        for (String item : itemManager.getItems().keySet()) {
+            if (!BasicMeleeWeapon.class.isAssignableFrom(itemManager.getItem(item)) && !BasicMagicWeapon.class.isAssignableFrom(itemManager.getItem(item)) && !BasicRangedWeapon.class.isAssignableFrom(itemManager.getItem(item)))
                 continue;
 
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
+            BasicItem basicItem = itemManager.createItem(item);
+            populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.weapons")) return;
-                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
         }
 
@@ -95,13 +99,14 @@ public class WikiGui extends ChestGui {
     public PaginatedPane getArmorPane() {
         populateList.clear();
         PaginatedPane armorPane = new PaginatedPane(0, 0, 9, 5);
-        for (ItemList item : ItemList.values()) {
-            if (!BasicArmorItem.class.isAssignableFrom(item.getItemClass())) continue;
+        for (String item : itemManager.getItems().keySet()) {
+            if (!BasicArmorItem.class.isAssignableFrom(itemManager.getItem(item))) continue;
             if (hiddenItems.contains(item)) continue;
-            populateList.add(new GuiItem(item.generateItemStack(1), (event) -> {
+            BasicItem basicItem = itemManager.createItem(item);
+            populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
                 if (!event.getWhoClicked().hasPermission("orion.wiki.give.armor")) return;
-                event.getWhoClicked().getInventory().addItem(item.generateItemStack(1));
-                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + item.generateItem().getNAME());
+                event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
+                Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
         }
 
@@ -112,14 +117,14 @@ public class WikiGui extends ChestGui {
     public StaticPane getNavigationPane() {
         StaticPane navigationPane = new StaticPane(0, 5, 9, 1);
 
-        navigationPane.addItem(new GuiItem(ItemList.LEFT_BUTTON_PLACEHOLDER.generateItemStack(1), e -> {
+        navigationPane.addItem(new GuiItem(itemManager.createItemstack("LEFT_BUTTON_PLACEHOLDER", 1), e -> {
             PaginatedPane currentPane = ((PaginatedPane) mainPane.getPanes(mainPane.getPage()));
             if (currentPane.getPage() > 0)
                 currentPane.setPage(currentPane.getPage() - 1);
             this.update();
         }), 0, 0);
 
-        navigationPane.addItem(new GuiItem(ItemList.RIGHT_BUTTON_PLACEHOLDER.generateItemStack(1), e -> {
+        navigationPane.addItem(new GuiItem(itemManager.createItemstack("RIGHT_BUTTON_PLACEHOLDER", 1), e -> {
             PaginatedPane currentPane = ((PaginatedPane) mainPane.getPanes(mainPane.getPage()));
             if (currentPane.getPage() < currentPane.getPages() - 1)
                 currentPane.setPage(currentPane.getPage() + 1);

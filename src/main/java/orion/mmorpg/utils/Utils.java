@@ -1,15 +1,6 @@
 package orion.mmorpg.utils;
 
-import com.google.common.base.Enums;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.WordUtils;
@@ -22,10 +13,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.ItemType;
-import orion.mmorpg.items.sample.BasicGuiItem;
-import orion.mmorpg.items.sample.BasicItem;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -168,16 +156,22 @@ public class Utils {
 
         if(ItemType.valueOf(container.get(Namespaces.type, PersistentDataType.STRING)) == ItemType.RESSOURCE) return true;
 
-        if(!Enums.getIfPresent(ItemList.class, internal_id).isPresent()) return false;
+        if(!Mmorpg.INSTANCE.getItemManager().isItem(internal_id)) return false;
 
-        if(!player.hasPermission(ItemList.getItemFromItemstack(item).getPERMISSION())) return false;
+        if(!player.hasPermission(Mmorpg.INSTANCE.getItemManager().createItem(internal_id).getPERMISSION())) return false;
 
-        return ItemList.isItem(item);
+        return Mmorpg.INSTANCE.getItemManager().createItemstack(internal_id, 1) != null;
     }
 
     public static List<String> enumAutocomplete(String input, Class<? extends Enum> enumClass) {
         return Arrays.stream(enumClass.getEnumConstants())
                 .map(Enum::name)
+                .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> listStringAutoComplete(String input, List<String> list) {
+        return list.stream()
                 .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
                 .collect(Collectors.toList());
     }

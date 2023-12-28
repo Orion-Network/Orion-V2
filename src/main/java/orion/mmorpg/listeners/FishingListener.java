@@ -1,29 +1,21 @@
 package orion.mmorpg.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.effects.FishEffect;
 import orion.mmorpg.entities.Mobs;
-import orion.mmorpg.entities.mobs.sea.SeaZombie;
 import orion.mmorpg.entities.samples.AbstractMob;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.misc.Gift;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.utils.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -44,7 +36,7 @@ public class FishingListener implements Listener {
         money_1.getMoneys().put("gold", 10L);
         rewards.add(money_1);
 
-        Rewards.Reward reward2 = new Rewards.Reward(ItemList.BRONZE_COIN.generateItemStack(1), 100);
+        Rewards.Reward reward2 = new Rewards.Reward(Mmorpg.INSTANCE.getItemManager().createItemstack("BRONZE_COIN", 1), 100);
         reward2.getJobExp().put(JobType.FISHING, 5);
         rewards.add(reward2);
 

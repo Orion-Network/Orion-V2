@@ -20,7 +20,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.entities.samples.AbstractMount;
@@ -28,7 +27,6 @@ import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
 import orion.mmorpg.events.RespawnEvent;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.*;
@@ -102,7 +100,7 @@ public class PlayerStatsListener implements Listener {
                 e.setDamage(e.getDamage() + (e.getDamage() * (1 + (meta.getEnchantLevel(CustomEnchants.WRATH) * 0.1))));
                 Utils.sendInfoMessage(p, "Wrath: " + (1 + (meta.getEnchantLevel(CustomEnchants.WRATH) * 0.1)));
             }
-            if (ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass().getSuperclass().equals(BasicMeleeWeapon.class)) {
+            if (mmorpg.getItemManager().getItem(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getSuperclass().equals(BasicMeleeWeapon.class)) {
                 float totalDamage = Utils.calculateDamage(orionPlayer.getStats(), (float) e.getDamage()) * p.getAttackCooldown();
                 Utils.sendDebugMessage(p, "Total damage: " + totalDamage);
                 e.setDamage(totalDamage);
@@ -145,8 +143,8 @@ public class PlayerStatsListener implements Listener {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getEntity().getUniqueId());
             if (p.getInventory().getItemInMainHand().hasItemMeta() && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
                 PersistentDataContainer container = p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if (BasicRangedWeapon.class.isAssignableFrom(ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getItemClass())) {
-                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+                if (BasicRangedWeapon.class.isAssignableFrom(mmorpg.getItemManager().getItem(container.get(Namespaces.internal_id, PersistentDataType.STRING)))) {
+                    BasicRangedWeapon basicRangedWeapon = (BasicRangedWeapon) mmorpg.getItemManager().createItem(container.get(Namespaces.internal_id, PersistentDataType.STRING));
                     float arrowDamage = 1;
                     if (e.getConsumable().getItemMeta().getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
                         arrowDamage = e.getConsumable().getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
@@ -201,7 +199,7 @@ public class PlayerStatsListener implements Listener {
         orionPlayer.getStats().removeModifiers("HAND");
 
         if(e.getPlayer().getInventory().getItem(e.getNewSlot()) != null && e.getPlayer().getInventory().getItem(e.getNewSlot()).hasItemMeta()) {
-            BasicItem basicItem = ItemList.getItemFromItemstack(e.getPlayer().getInventory().getItem(e.getNewSlot()));
+            BasicItem basicItem = mmorpg.getItemManager().getItemFromItemstack(e.getPlayer().getInventory().getItem(e.getNewSlot()));
             if(basicItem instanceof Modifiers) {
                 orionPlayer.getStats().addModifiers("HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }

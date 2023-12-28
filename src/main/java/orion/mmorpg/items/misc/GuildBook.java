@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Namespaces;
@@ -33,7 +32,7 @@ public class GuildBook extends BasicItem {
         if(!meta.getPersistentDataContainer().has(Namespaces.guild_name, PersistentDataType.STRING)) {
             new AnvilGUI.Builder()
                     .title("Inscrivez le nom de la guilde")
-                    .itemLeft(ItemList.ACCEPT_BUTTON_PLACEHOLDER.generateItemStack(1))
+                    .itemLeft(Mmorpg.INSTANCE.getItemManager().createItemstack("ACCEPT_BUTTON_PLACEHOLDER", 1))
                     .onClick((slot, snapshot) -> {
                         if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.close());
                         String text = snapshot.getText();

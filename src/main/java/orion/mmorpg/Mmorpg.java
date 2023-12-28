@@ -43,7 +43,9 @@ public final class Mmorpg extends JavaPlugin {
     public static Mmorpg INSTANCE;
     @Getter
     private GameState gameState = GameState.STARTING;
+    @Getter
     public static boolean debug;
+    @Getter
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
     @Getter
@@ -61,6 +63,8 @@ public final class Mmorpg extends JavaPlugin {
     @Getter
     private MobManager mobManager;
     @Getter
+    public ItemManager itemManager;
+    @Getter
     private MythicMob mythicMob;
     @Getter
     ModelEngineAPI modelEngineAPI;
@@ -71,16 +75,8 @@ public final class Mmorpg extends JavaPlugin {
     @Getter
     OrionNPCManager orionNpcManager;
 
-    public static boolean isDebug() {
-        return debug;
-    }
-
     public static void setDebug(boolean debug) {
         Mmorpg.debug = debug;
-    }
-
-    public static OrionGson getOrionGson() {
-        return orionGson;
     }
 
     @Override
@@ -127,6 +123,8 @@ public final class Mmorpg extends JavaPlugin {
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
         orionNpcManager = new OrionNPCManager(this);
+        System.out.println("registering items");
+        itemManager = new ItemManager(this);
 
 
         CustomEnchants.register();

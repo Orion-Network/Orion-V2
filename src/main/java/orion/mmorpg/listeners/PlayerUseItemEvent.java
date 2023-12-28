@@ -6,9 +6,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Namespaces;
 
 public class PlayerUseItemEvent implements Listener {
@@ -24,9 +24,9 @@ public class PlayerUseItemEvent implements Listener {
         if (e.getItem() == null)
             return;
         if (e.getItem().getItemMeta().getPersistentDataContainer().has(Namespaces.internal_id, PersistentDataType.STRING)) {
-            if(!ItemList.isItem(e.getItem())) return;
+            if(!ItemUtils.isItem(e.getItem())) return;
             PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
-            BasicItem item = ItemList.valueOf(container.get(Namespaces.internal_id, PersistentDataType.STRING)).generateItem();
+            BasicItem item = ItemUtils.generateBasicItem(container.get(Namespaces.internal_id, PersistentDataType.STRING));
             item.onUseItem(mmorpg, player, e);
         }
     }
