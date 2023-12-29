@@ -3,6 +3,9 @@ package orion.mmorpg.players;
 import de.slikey.effectlib.Effect;
 import de.slikey.effectlib.effect.SphereEffect;
 import fr.mrmicky.fastboard.FastBoard;
+import fr.nexomega.orionmob.entities.Mounts;
+import fr.nexomega.orionmob.entities.Pets;
+import fr.nexomega.orionmob.entities.samples.AbstractPet;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.world.entity.Entity;
@@ -16,12 +19,7 @@ import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.entities.Mounts;
-import orion.mmorpg.entities.Pets;
-import orion.mmorpg.entities.samples.AbstractPet;
 import orion.mmorpg.events.RespawnEvent;
 import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
@@ -269,9 +267,7 @@ public class OrionPlayer {
 
     public void setPet(AbstractPet pet) {
         if(this.pet != null) {
-            if(this.pet.getOverheadEntity() != null)
-                this.pet.getOverheadEntity().remove();
-            this.pet.setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
+            this.getPet().removePet();
         }
         this.pet = pet;
     }

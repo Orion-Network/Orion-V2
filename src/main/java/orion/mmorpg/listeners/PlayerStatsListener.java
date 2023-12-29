@@ -22,7 +22,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.entities.samples.AbstractMount;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
@@ -254,16 +253,7 @@ public class PlayerStatsListener implements Listener {
         e.getEntity().remove();
     }
 
-    @EventHandler
-    public void onDismount(EntityDismountEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if(((CraftEntity)event.getDismounted() ).getHandle() instanceof AbstractMount) {
-                Utils.sendInfoMessage(player, "You have dismounted your mount");
-                event.getDismounted().remove();
-            }
-        }
-    }
+
 
     @EventHandler
     public void onRespawn(RespawnEvent event) {
