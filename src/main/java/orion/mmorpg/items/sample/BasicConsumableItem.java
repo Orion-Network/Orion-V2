@@ -4,12 +4,14 @@ import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
+@ExcludeRegister
 public class BasicConsumableItem extends BasicItem{
     public BasicConsumableItem(ItemStack item) {
         super(item);

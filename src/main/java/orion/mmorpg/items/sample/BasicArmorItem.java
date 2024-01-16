@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.Namespaces;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@ExcludeRegister
 public class BasicArmorItem extends BasicEquipmentItem {
     public final ArmorType ARMORTYPE;
 

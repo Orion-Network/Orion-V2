@@ -24,9 +24,6 @@ import orion.mmorpg.database.Client;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.listeners.*;
 import orion.mmorpg.managers.*;
-import orion.mmorpg.modelengine.OrionScriptReader;
-import orion.mmorpg.models.OrionNPCManager;
-import orion.mmorpg.mythicsmob.MythicMobListener;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.OrionGson;
@@ -43,7 +40,9 @@ public final class Mmorpg extends JavaPlugin {
     public static Mmorpg INSTANCE;
     @Getter
     private GameState gameState = GameState.STARTING;
+    @Getter
     public static boolean debug;
+    @Getter
     public static OrionGson orionGson = new OrionGson();
     public static EffectManager effectManager;
     @Getter
@@ -59,32 +58,10 @@ public final class Mmorpg extends JavaPlugin {
     @Getter
     PartyManager partyManager;
     @Getter
-    private MobManager mobManager;
-    @Getter
-    private MythicMob mythicMob;
-    @Getter
-    ModelEngineAPI modelEngineAPI;
-
-    @Getter
-    WorldManager worldManager;
-    @Getter
-    ChunkManager chunkManager;
-
-    @Getter
-    RessourceManager ressourceManager;
-    @Getter
-    OrionNPCManager orionNpcManager;
-
-    public static boolean isDebug() {
-        return debug;
-    }
+    public ItemManager itemManager;
 
     public static void setDebug(boolean debug) {
         Mmorpg.debug = debug;
-    }
-
-    public static OrionGson getOrionGson() {
-        return orionGson;
     }
 
     @Override
@@ -127,45 +104,22 @@ public final class Mmorpg extends JavaPlugin {
 
         playerManager = new PlayerManager(this);
         guildManager = new GuildManager(this);
-        worldManager = new WorldManager(this);
-        chunkManager = new ChunkManager(this);
         effectManager = new EffectManager(this);
         partyManager = new PartyManager(this);
-        ressourceManager = new RessourceManager(this);
-        orionNpcManager = new OrionNPCManager(this);
+        System.out.println("registering items");
+        itemManager = new ItemManager(this);
 
 
         CustomEnchants.register();
 
-        if(Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
-            mobManager = new MobManager(this);
-            Objects.requireNonNull(getCommand("mob")).setExecutor(new MobCommand(this));
-            getLogger().log(Level.INFO, "MythicMobs is not installed, enabling MobManager");
-        } else {
-            mythicMob = MythicBukkit.inst().getMobManager().getMythicMob("OrionMob").orElse(null);
-            pm.registerEvents(new MythicMobListener(this), this);
-            getLogger().log(Level.WARNING, "MythicMobs is installed, disabling MobManager");
-        }
-
-        if(Bukkit.getPluginManager().getPlugin("ModelEngine") == null) {
-            getLogger().log(Level.WARNING, "ModelEngine is not installed, disabling ModelEngineAPI");
-        } else {
-            modelEngineAPI = ModelEngineAPI.api;
-            ModelEngineAPI.getScriptReaderRegistry().register("orion", new OrionScriptReader());
-            getLogger().log(Level.INFO, "ModelEngine is installed, enabling ModelEngineAPI");
-        }
-
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerPickupListener(this), this);
-        pm.registerEvents(new ChunkListener(this), this);
         pm.registerEvents(new InventoryClickListener(this), this);
         pm.registerEvents(new PlayerUseItemEvent(this), this);
         pm.registerEvents(new PlayerStatsListener(this), this);
         pm.registerEvents(new PlayerChatListener(), this);
         pm.registerEvents(new ServerListener(this), this);
         pm.registerEvents(new SpellEffectListener(), this);
-        pm.registerEvents(new WorldListener(this), this);
-        pm.registerEvents(new FishingListener(this), this);
 
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand(this));
         Objects.requireNonNull(getCommand("data")).setExecutor(new DataCommand(this));
@@ -173,9 +127,6 @@ public final class Mmorpg extends JavaPlugin {
         Objects.requireNonNull(getCommand("party")).setExecutor(new PartyCommand(this));
         Objects.requireNonNull(getCommand("admin")).setExecutor(new AdminCommand(this));
         Objects.requireNonNull(getCommand("support")).setExecutor(new SupportCommand(this));
-        Objects.requireNonNull(getCommand("pet")).setExecutor(new PetCommand(this));
-        Objects.requireNonNull(getCommand("mount")).setExecutor(new MountCommand(this));
-        Objects.requireNonNull(getCommand("ressource")).setExecutor(new RessourceCommand(this));
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {
@@ -198,13 +149,6 @@ public final class Mmorpg extends JavaPlugin {
             }
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            mobManager.despawnMobs();
-            mobManager.loadMobs();
-        });
-
-        Bukkit.getScheduler().runTaskTimer(this, mobManager, 20L, 20L);
-
         setGameState(GameState.RUNNING);
     }
 
@@ -219,8 +163,6 @@ public final class Mmorpg extends JavaPlugin {
             getMongoClient().savePlayer(p);
             getPlayerManager().getPlayersMap().remove(p.getUniqueId());
         }
-        if(mobManager != null)
-            getMobManager().despawnMobs();
         Bukkit.getBossBars().forEachRemaining(BossBar::removeAll);
     }
 

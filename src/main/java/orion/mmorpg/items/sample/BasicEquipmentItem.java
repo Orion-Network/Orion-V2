@@ -10,10 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemReforge;
-import orion.mmorpg.items.ItemType;
-import orion.mmorpg.items.Modifiers;
-import orion.mmorpg.items.Reforgeable;
+import orion.mmorpg.items.*;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Rarity;
@@ -22,6 +19,7 @@ import orion.mmorpg.utils.Utils;
 
 import java.util.List;
 
+@ExcludeRegister
 public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgeable {
     private final Stats.Modifiers MODIFIERS;
     private ItemReforge reforge = ItemReforge.NONE;

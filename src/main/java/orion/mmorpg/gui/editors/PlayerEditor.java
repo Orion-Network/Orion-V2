@@ -7,7 +7,6 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.EnumUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicItem;
-import orion.mmorpg.managers.WorldManager;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
@@ -55,8 +53,9 @@ public class PlayerEditor extends ChestGui {
             ItemStack buildItem = item.generateItem(null, 1);
             ItemMeta meta = buildItem.getItemMeta();
             List<String> removableStones = targetOrionPlayer.getPortalStones().stream().map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
-            ArrayList<String> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
-            removableStones.addAll(portalStones.stream().filter(string -> !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY + string).toList());
+            // TODO
+            // ArrayList<String> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
+            // removableStones.addAll(portalStones.stream().filter(string -> !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY + string).toList());
 
             meta.setLore(removableStones);
             buildItem.setItemMeta(meta);

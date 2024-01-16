@@ -15,14 +15,13 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.players.abilities.effects.Propagation;
 import orion.mmorpg.utils.Currencies;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Utils;
 
 import java.util.*;
@@ -65,12 +64,8 @@ public class AdminCommand implements TabExecutor {
                     itemMeta.addEnchant(CustomEnchants.WRATH, 1, true);
                     itemStack.setItemMeta(itemMeta);
 
-                    BasicItem basicItem = ItemList.getItemFromItemstack(itemStack);
+                    BasicItem basicItem = ItemUtils.getItemFromItemstack(itemStack);
                     player.getInventory().setItemInMainHand(basicItem.generateItem(itemStack, 1));
-
-                }
-                if(args[1].equalsIgnoreCase("npc")) {
-                    Mmorpg.INSTANCE.getOrionNpcManager().setup(player);
 
                 }
                 if(args[1].equalsIgnoreCase("currencies")) {
@@ -80,23 +75,29 @@ public class AdminCommand implements TabExecutor {
                     for(Currencies.Currency currency : orionPlayer.getCurrencies().currencies.values()) {
                         Utils.sendInfoMessage((Entity) commandSender, orionPlayer.getCurrencies().getFormatted(currency.name, Utils.NumberFormat.READABLE) + " " + currency.symbol);
                     }
-                } else if(args[1].equalsIgnoreCase("cmenu")) {
+                }
+                else if(args[1].equalsIgnoreCase("cmenu")) {
                     ArrayList<MerchantGui.Buyable> buyables = new ArrayList<>();
-                    buyables.add(new MerchantGui.Buyable("test", 5, ItemList.KNIGHT_BOOTS.generateItemStack(1)));
-                    buyables.add(new MerchantGui.Buyable("test", 50000, ItemList.KNIGHT_CHESTPLATE.generateItemStack(1)));
+                    buyables.add(new MerchantGui.Buyable("test", 5, ItemUtils.generateItemStack("KNIGHT_BOOTS", 1)));
+                    buyables.add(new MerchantGui.Buyable("test", 50000, ItemUtils.generateItemStack("KNIGHT_BOOTS", 1)));
 
 
                     MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player, buyables);
                     merchantGui.show(player);
-                } else if(args[1].equalsIgnoreCase("oeffect")) {
+                }
+                else if(args[1].equalsIgnoreCase("oeffect")) {
                     Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(orionPlayer, new Propagation(100L), 100L, "test"));
                     Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(orionPlayer, new Invincibility(100L), 100L, "test"));
-                } else if(args[1].equalsIgnoreCase("effect")) {
+                }
+                else if(args[1].equalsIgnoreCase("effect")) {
                     orionPlayer.getOrionEffects().forEach((uuid, map) -> {
                         map.forEach((id, effect) -> {
                             Utils.sendInfoMessage((Entity) commandSender, id + " " + effect.getName());
                         });
                     });
+                }
+                else if (args[1].equalsIgnoreCase("display")) {
+
                 }
 
             }
@@ -107,7 +108,6 @@ public class AdminCommand implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        ArrayList<String> completion = new ArrayList<>();
         if(args[0].equalsIgnoreCase("setlevel")) {
             return Arrays.asList("0", "5", "10", "15", "30");
         } else if(args[0].equalsIgnoreCase("editor")) {

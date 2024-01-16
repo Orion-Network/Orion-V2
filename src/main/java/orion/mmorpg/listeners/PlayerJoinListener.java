@@ -59,9 +59,6 @@ public class PlayerJoinListener implements Listener {
             }
         }
 
-        if(mmorpg.getWorldManager().hasPortalStone("spawn"))
-            player.teleport(mmorpg.getWorldManager().getPortalStone("spawn").getLocation());
-
         OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(player);
 
         mmorpg.getPlayerManager().addPlayer(e.getPlayer().getUniqueId(), orionPlayer);
@@ -73,7 +70,7 @@ public class PlayerJoinListener implements Listener {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         player.getFastBoard().delete();
         if(player.getPet() != null)
-            player.getPet().setRemoved(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
+            player.getPet().removePet();
         if(event.getPlayer().isInsideVehicle()) {
             Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
             event.getPlayer().leaveVehicle();

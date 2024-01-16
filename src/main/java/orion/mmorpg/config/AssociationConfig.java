@@ -27,10 +27,6 @@ public class AssociationConfig {
         fileConfiguration = YamlConfiguration.loadConfiguration(file);
     }
 
-    public static FileConfiguration getFileConfiguration() {
-        return fileConfiguration;
-    }
-
     public static void save() {
         try {
             fileConfiguration.save(file);

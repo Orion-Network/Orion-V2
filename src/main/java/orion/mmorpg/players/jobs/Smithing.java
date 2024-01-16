@@ -2,23 +2,17 @@ package orion.mmorpg.players.jobs;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.gui.type.util.Gui;
-import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
-import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
-import org.apache.commons.lang.math.IEEE754rUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.items.Reforgeable;
-import orion.mmorpg.items.sample.BasicEquipmentItem;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.items.sample.BasicReforgeStone;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Utils;
 
 public class Smithing extends AbstractJob {
@@ -78,16 +72,16 @@ public class Smithing extends AbstractJob {
                     updateGui(gui);
                     return;
                 }
-                if(e.getSlot() == 10 && !(ItemList.getItemFromItemstack(e.getCursor()) instanceof Reforgeable)) {
+                if(e.getSlot() == 10 && !(ItemUtils.getItemFromItemstack(e.getCursor()) instanceof Reforgeable)) {
                     Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre un objet reforgeable");
                     e.setCancelled(true);
                 }
                 if(e.getSlot() == 16) {
-                    if( !BasicReforgeStone.class.isAssignableFrom(ItemList.getItemFromItemstack(e.getCursor()).getClass())) {
+                    if( !BasicReforgeStone.class.isAssignableFrom(ItemUtils.getItemFromItemstack(e.getCursor()).getClass())) {
                         Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre une reforge stone");
                         e.setCancelled(true);
                     }
-                    BasicReforgeStone reforgeStone = (BasicReforgeStone) ItemList.getItemFromItemstack(e.getCursor());
+                    BasicReforgeStone reforgeStone = (BasicReforgeStone) ItemUtils.getItemFromItemstack(e.getCursor());
                     if(reforgeStone.getSmithingLevelRequired() > this.getLevel()) {
                         Utils.sendErrorMessage(e.getWhoClicked(), "Vous n'avez pas le niveau requis pour utiliser cette reforge stone");
                         e.setCancelled(true);
@@ -117,8 +111,8 @@ public class Smithing extends AbstractJob {
     private void updateGui(ChestGui gui) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Mmorpg.INSTANCE, () -> {
             if(gui.getInventory().getItem(10) != null && gui.getInventory().getItem(16) != null) {
-                BasicItem basicEquipmentItem = ItemList.getItemFromItemstack(gui.getInventory().getItem(10).clone());
-                ((Reforgeable)basicEquipmentItem).setReforge(((BasicReforgeStone) ItemList.getItemFromItemstack(gui.getInventory().getItem(16).clone())).getReforge());
+                BasicItem basicEquipmentItem = ItemUtils.getItemFromItemstack(gui.getInventory().getItem(10).clone());
+                ((Reforgeable)basicEquipmentItem).setReforge(((BasicReforgeStone) ItemUtils.getItemFromItemstack(gui.getInventory().getItem(16).clone())).getReforge());
                 gui.getInventory().setItem(13, basicEquipmentItem.generateItem(gui.getInventory().getItem(10).clone(), 1));
             }
             else {

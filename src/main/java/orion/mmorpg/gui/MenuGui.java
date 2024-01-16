@@ -11,17 +11,11 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.config.AssociationConfig;
-import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.items.sample.BasicItem;
-import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.races.Race;
-import orion.mmorpg.utils.Namespaces;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
@@ -69,7 +63,7 @@ public class MenuGui extends ChestGui {
         head.setItemMeta(headMeta);
 
         menuPane.addItem(new GuiItem(head, e->new StatsGui(p, orionPlayer).show(p)), 2, 0);
-        menuPane.addItem(new GuiItem(ItemList.JOB_PLACEHOLDER.generateItemStack(1), e->new JobGui(p, orionPlayer).show(p)), 3, 0);
+        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("JOB_PLACEHOLDER", 1), e->new JobGui(p, orionPlayer).show(p)), 3, 0);
         /*if (p.hasPermission("*")) {
             menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
                 if (orionPlayer.getPlayerMode() == Mode.PLAYER)
@@ -115,11 +109,11 @@ public class MenuGui extends ChestGui {
         }
 
 
-        menuPane.addItem(new GuiItem(ItemList.PORTAL_STONE.generateItemStack(1), e -> {
+        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("PORTAL_STONE", 1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
         }), 2, 1);
 
-        menuPane.addItem(new GuiItem(ItemList.WIKI_BOOK_PLACEHOLDER.generateItemStack(1), e -> {
+        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("WIKI_BOOK_PLACEHOLDER", 1), e -> {
             new WikiGui(Mmorpg.INSTANCE).show(p);
         }), 1, 1);
         menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.GOLD_INGOT, "Currencies", 0, orionPlayer.getCurrencies().asLore(), Rarity.COMMON).generateItem(null, 1), e -> {
@@ -133,7 +127,7 @@ public class MenuGui extends ChestGui {
         */
 
         menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, Collections.singletonList("Ouvre le menu des sorts"), Rarity.COMMON).generateItem(null, 1), e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
-        menuPane.addItem(new GuiItem(ItemList.SETTINGS_PLACEHOLDER.generateItemStack(1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
+        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("SETTINGS_PLACEHOLDER", 1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
 
         return menuPane;
     }

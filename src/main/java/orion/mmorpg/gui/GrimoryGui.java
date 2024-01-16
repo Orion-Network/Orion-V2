@@ -6,7 +6,6 @@ import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
@@ -29,7 +28,7 @@ public class GrimoryGui extends ChestGui {
     public OutlinePane getSpellPane() {
         for (String spell : orionPlayer.getSelectedSpells()) {
             if (spell == null)
-                spellPane.addItem(new GuiItem(ItemList.SPELL_PLACEHOLDER.generateItemStack(1)));
+                spellPane.addItem(new GuiItem(Mmorpg.INSTANCE.getItemManager().createItemstack("SPELL_PLACEHOLDER", 1)));
             else
             {
                 try {

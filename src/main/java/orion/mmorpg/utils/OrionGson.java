@@ -1,20 +1,17 @@
 package orion.mmorpg.utils;
 
 import com.google.gson.*;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import orion.mmorpg.items.ItemList;
+import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.jobs.AbstractJob;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
-import orion.mmorpg.players.jobs.Smithing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -71,7 +68,7 @@ public class OrionGson {
                 if (Objects.equals(jsonElement.getAsString(), "null"))
                     return null;
             JsonObject object = jsonElement.getAsJsonObject();
-            return ItemList.valueOf(object.get("internal_id").getAsString()).generateItemStack(object.get("amount").getAsInt());
+            return Mmorpg.INSTANCE.getItemManager().createItemstack(object.get("internal_id").getAsString(), object.get("amount").getAsInt());
         }
     }
 

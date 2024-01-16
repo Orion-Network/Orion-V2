@@ -1,21 +1,15 @@
 package orion.mmorpg.listeners;
 
-import com.google.common.base.Enums;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.ItemList;
-import orion.mmorpg.items.misc.MasterScrollItem;
-import orion.mmorpg.items.misc.SpellScroll;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.Mode;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.utils.Namespaces;
+import orion.mmorpg.utils.ItemUtils;
 import orion.mmorpg.utils.Utils;
 
 public class PlayerPickupListener implements Listener {
@@ -45,8 +39,8 @@ public class PlayerPickupListener implements Listener {
             return;
         }
 
-        if(ItemList.isItem(item)) {
-            BasicItem basicItem = ItemList.getItemFromItemstack(item);
+        if(ItemUtils.isItem(item)) {
+            BasicItem basicItem = ItemUtils.getItemFromItemstack(item);
             basicItem.onPickupItem(e,item);
         }
 

@@ -24,18 +24,6 @@ commands:
   admin:
     permission: "orion.admin.command"
     description: "Administrator Command"
-  mob:
-    permission: "orion.mob.use"
-    description: "Spawn mob"
   support:
     permission: "orion.support.use"
     description: "Support Command"
-  pet:
-    permission: "orion.pet.use"
-    description: "Pet Command"
-  mount:
-    permission: "orion.mount.use"
-    description: "Mount Command"
-  ressource:
-    permission: "orion.ressource.use"
-    description: "Ressource Command"

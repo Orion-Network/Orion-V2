@@ -5,24 +5,23 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import fr.nexomega.orionmob.entities.Mounts;
+import fr.nexomega.orionmob.entities.Pets;
+import fr.nexomega.orionmob.entities.samples.AbstractMob;
+import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.entities.Mounts;
-import orion.mmorpg.entities.Pets;
-import orion.mmorpg.entities.samples.AbstractMob;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
-import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.*;
-import orion.mmorpg.world.Ressource;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,20 +40,17 @@ public class Client {
     }.getType();
     String uri;
     public MongoClient mongoClient;
+    @Getter
     public MongoDatabase orionDatabase;
     public MongoCollection<Document> playerCollection;
-    public MongoCollection<Document> mobCollection;
     public MongoCollection<Document> jobsCollection;
-    public MongoCollection<Document> ressourceCollection;
 
     public Client(Mmorpg mmorpg) {
         uri = "mongodb://"+mmorpg.getConfig().getString("mongo.username")+":"+ mmorpg.getConfig().getString("mongo.password")+"@"+mmorpg.getConfig().getString("mongo.auth")+"/?authSource=admin";
         this.mongoClient = MongoClients.create(uri);
         orionDatabase = mongoClient.getDatabase("orion");
         playerCollection = orionDatabase.getCollection("players");
-        mobCollection = orionDatabase.getCollection("mobs");
         jobsCollection = orionDatabase.getCollection("jobs");
-        ressourceCollection = orionDatabase.getCollection("ressources");
     }
 
     public boolean hasPlayer(UUID uuid) {
@@ -206,71 +202,4 @@ public class Client {
         return new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones, equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts, currencies);
     }
 
-    public void saveMob(AbstractMob mob) {
-        Document document = new Document();
-
-        document.put("className", mob.getMobData().getMobClass().getName());
-        document.put("uuid", mob.getMobData().getUuid());
-        document.put("location", Mmorpg.getOrionGson().GSON.toJson(mob.getMobData().getLocation()));
-
-        mobCollection.insertOne(document);
-    }
-
-    public void deleteMob(AbstractMob mob) {
-        mobCollection.deleteOne(eq("uuid", mob.getUuid()));
-    }
-
-    public AbstractMob loadMob(String uuid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Document doc = mobCollection.find(eq("uuid", uuid)).first();
-
-        Location location = Mmorpg.getOrionGson().GSON.fromJson(doc.getString("location"), Location.class);
-        Class<? extends AbstractMob> mobClass = (Class<? extends AbstractMob>) Class.forName(doc.getString("className"));
-        String uuidMob = doc.getString("uuid");
-
-        return mobClass.getConstructor(String.class, Location.class).newInstance(uuidMob, location);
-    }
-
-    public void saveRessource(Ressource ressource) {
-        Document document = new Document();
-
-        document.put("location", OrionGson.GSON.toJson(ressource.getLocation()));
-        document.put("material", ressource.getMaterial().name());
-        document.put("respawnTime", ressource.getRespawnTime());
-        document.put("jobType", ressource.getJobType().name());
-        document.put("jobLevel", ressource.getJobLevel());
-        document.put("toolType", ressource.getToolType().name());
-        document.put("toolPower", ressource.getToolPower());
-        document.put("jobExp", ressource.getJobExp());
-        document.put("drop", OrionGson.GSON.toJson(ressource.getDrop(), ItemStack.class));
-
-        ressourceCollection.insertOne(document);
-    }
-
-    public void deleteRessource(Ressource ressource) {
-        ressourceCollection.deleteOne(eq("location", OrionGson.GSON.toJson(ressource.getLocation())));
-    }
-
-    public HashMap<Location, Ressource> loadRessources() {
-        HashMap<Location, Ressource> ressources = new HashMap<>();
-
-        ressourceCollection.find().forEach((Consumer<? super Document>) document -> {
-            Location location = OrionGson.GSON.fromJson(document.getString("location"), Location.class);
-            Material material = Material.valueOf(document.getString("material"));
-            long respawnTime = document.getLong("respawnTime");
-            JobType jobType = JobType.valueOf(document.getString("jobType"));
-            int jobLevel = document.getInteger("jobLevel");
-            ToolType toolType = ToolType.valueOf(document.getString("toolType"));
-            int toolPower = document.getInteger("toolPower");
-            int jobExp = document.getInteger("jobExp");
-            ItemStack drop = OrionGson.GSON.fromJson(document.getString("drop"), ItemStack.class);
-
-            ressources.put(location, new Ressource(location, material, respawnTime, jobType, jobLevel, toolType, toolPower, jobExp, drop));
-        });
-
-        return ressources;
-    }
-
-    public MongoCollection<Document> getMobCollection() {
-        return mobCollection;
-    }
 }
