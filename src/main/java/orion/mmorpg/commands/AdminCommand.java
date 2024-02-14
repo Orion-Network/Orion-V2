@@ -1,6 +1,7 @@
 package orion.mmorpg.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,12 +17,14 @@ import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.gui.MerchantGui;
 import orion.mmorpg.gui.editors.PlayerEditor;
 import orion.mmorpg.items.enchants.CustomEnchants;
+import orion.mmorpg.items.sample.BasicIngredient;
 import orion.mmorpg.items.sample.BasicItem;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.effects.Invincibility;
 import orion.mmorpg.players.abilities.effects.Propagation;
 import orion.mmorpg.utils.Currencies;
 import orion.mmorpg.utils.ItemUtils;
+import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Utils;
 
 import java.util.*;
@@ -96,8 +99,14 @@ public class AdminCommand implements TabExecutor {
                         });
                     });
                 }
+                else if(args[1].equalsIgnoreCase("ingredient")) {
+                    BasicItem ingredient = BasicIngredient.generateIngredientItem(Material.DIAMOND, "test", 0, new ArrayList<>(), Rarity.COMMON, Invincibility.class);
+                    player.getInventory().addItem(ingredient.generateItem(null, 1));
+                }
                 else if (args[1].equalsIgnoreCase("display")) {
-
+                    mmorpg.getItemManager().getItems().forEach((s1, aClass) -> {
+                        Utils.sendInfoMessage((Entity) commandSender, s1);
+                    });
                 }
 
             }

@@ -32,6 +32,7 @@ import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
+import orion.mmorpg.players.jobs.Alchemist;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.*;
@@ -60,6 +61,9 @@ public class PlayerStatsListener implements Listener {
             if(event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
                 event.setCancelled(true);
                 ((Smithing)orionPlayer.getJobs().getJob(JobType.SMITHING)).getUpgradeGui().show(event.getPlayer());
+            }else if(event.getClickedBlock().getType().equals(Material.BREWING_STAND)) {
+                event.setCancelled(true);
+                ((Alchemist) orionPlayer.getJobs().getJob(JobType.ALCHEMIST)).getBrewingPane().show(event.getPlayer());
             }
         }
     }

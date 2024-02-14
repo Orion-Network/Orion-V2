@@ -5,6 +5,7 @@ import org.bukkit.Material;
 
 public enum JobType {
     SMITHING(Smithing.class, Material.IRON_AXE, "⚒"),
+    ALCHEMIST(Alchemist.class, Material.BREWING_STAND, "🧪"),
     MINING(Mining.class, Material.IRON_PICKAXE, "⛏"),
     FISHING(Fishing.class, Material.FISHING_ROD, "🎣")
     ;

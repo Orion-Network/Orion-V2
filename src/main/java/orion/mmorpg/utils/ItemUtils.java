@@ -37,4 +37,8 @@ public class ItemUtils {
         String internal_id = item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
         return Mmorpg.INSTANCE.getItemManager().isItem(internal_id);
     }
+
+    public static void registerItem(String name, Class<? extends BasicItem> item) {
+        Mmorpg.INSTANCE.getItemManager().registerItem(name, item);
+    }
 }

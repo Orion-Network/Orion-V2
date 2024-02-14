@@ -18,6 +18,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ExcludeRegister;
 import orion.mmorpg.items.ItemType;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.utils.*;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent items as Rpg Item
  */
+// TODO add to lore Rarity + ItemType
 @ExcludeRegister
 public abstract class BasicItem extends ItemStack {
 
@@ -79,6 +81,14 @@ public abstract class BasicItem extends ItemStack {
         };
         if(!ressourceItems.containsKey(identifier))
             ressourceItems.put(identifier, item);
+        return item;
+    }
+
+    public static BasicItem generateIngredientItem(Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY, Class<? extends  OEffect> effect) {
+        BasicItem item = new BasicIngredient(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, effect) {
+        };
+        if(!ressourceItems.containsKey(NAME))
+            ressourceItems.put(NAME, item);
         return item;
     }
     public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
@@ -150,7 +160,7 @@ public abstract class BasicItem extends ItemStack {
         }
 
         lore.add("\n");
-        lore.add(RARITY.getChatColor() + "" + ChatColor.BOLD + RARITY);
+        lore.add(RARITY.getChatColor() + "" + ChatColor.BOLD + RARITY + " " + ITEM_TYPE.name().replaceAll("_", " "));
 
         return lore;
     }
