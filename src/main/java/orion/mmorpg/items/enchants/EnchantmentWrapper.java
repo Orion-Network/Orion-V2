@@ -77,8 +77,7 @@ public class EnchantmentWrapper extends Enchantment {
             this.enchantment = enchantment;
         }
 
-        public EnchantmentBuilder(@NotNull NamespacedKey key, String name, int maxLevel)
-        {
+        public EnchantmentBuilder(@NotNull NamespacedKey key, String name, int maxLevel) {
             this.enchantment = new EnchantmentWrapper(key, name, maxLevel);
         }
 

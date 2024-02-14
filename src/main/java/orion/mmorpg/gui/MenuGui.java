@@ -42,14 +42,14 @@ public class MenuGui extends ChestGui {
             new RaceGui(p, orionPlayer);
         }
 
-        this.setOnBottomClick(e->{
+        this.setOnBottomClick(e -> {
             if (e.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
                 e.setCancelled(true);
         });
     }
 
     public StaticPane getMenuPane() {
-        menuPane.setOnClick(e->e.setCancelled(true));
+        menuPane.setOnClick(e -> e.setCancelled(true));
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         ItemMeta headMeta = head.getItemMeta();
@@ -62,52 +62,53 @@ public class MenuGui extends ChestGui {
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);
 
-        menuPane.addItem(new GuiItem(head, e->new StatsGui(p, orionPlayer).show(p)), 2, 0);
-        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("JOB_PLACEHOLDER", 1), e->new JobGui(p, orionPlayer).show(p)), 3, 0);
-        /*if (p.hasPermission("*")) {
-            menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> {
-                if (orionPlayer.getPlayerMode() == Mode.PLAYER)
-                    if (p.hasPermission("builder"))
-                        orionPlayer.setPlayerMode(Mode.BUILDER);
+        menuPane.addItem(new GuiItem(head, e -> new StatsGui(p, orionPlayer).show(p)), 2, 0);
+        menuPane.addItem(
+                new GuiItem(ItemUtils.generateItemStack("JOB_PLACEHOLDER", 1), e -> new JobGui(p, orionPlayer).show(p)),
+                3, 0);
+        /*
+         * if (p.hasPermission("*")) { menuPane.addItem(new GuiItem(new ItemStack(Material.BARRIER), e -> { if
+         * (orionPlayer.getPlayerMode() == Mode.PLAYER) if (p.hasPermission("builder"))
+         * orionPlayer.setPlayerMode(Mode.BUILDER);
+         *
+         * if (orionPlayer.getPlayerMode() == Mode.BUILDER) if (p.hasPermission("admin"))
+         * orionPlayer.setPlayerMode(Mode.ADMIN); else orionPlayer.setPlayerMode(Mode.PLAYER);
+         *
+         * if (orionPlayer.getPlayerMode() == Mode.ADMIN) orionPlayer.setPlayerMode(Mode.PLAYER);
+         * Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode()); }), 3, 0); }
+         */
 
-                if (orionPlayer.getPlayerMode() == Mode.BUILDER)
-                    if (p.hasPermission("admin"))
-                        orionPlayer.setPlayerMode(Mode.ADMIN);
-                    else
-                        orionPlayer.setPlayerMode(Mode.PLAYER);
-
-                if (orionPlayer.getPlayerMode() == Mode.ADMIN)
-                    orionPlayer.setPlayerMode(Mode.PLAYER);
-                Utils.sendInfoMessage(p, "Vous êtes en mode : " + orionPlayer.getPlayerMode());
-            }), 3, 0);
-        }*/
-
-        if(orionPlayer.getParty() != null) {
+        if (orionPlayer.getParty() != null) {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Cliquez pour ouvrir le menu d'équipe");
             lore.add(ChatColor.GRAY + "Clique droit pour quitter l'équipe");
-            for(OrionPlayer member : orionPlayer.getParty().getMembers())
+            for (OrionPlayer member : orionPlayer.getParty().getMembers())
                 lore.add(ChatColor.YELLOW + Bukkit.getPlayer(member.getUniqueId()).getName() + " : "
-                        + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth()
-                        + ChatColor.YELLOW +  "/"
-                        + Stats.StatsInfo.VITALITY.getColor()  + (int) member.getStats().get(Stats.StatsInfo.VITALITY) + " "
-                        + Stats.StatsInfo.VITALITY.getCharacter());
+                        + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth() + ChatColor.YELLOW + "/"
+                        + Stats.StatsInfo.VITALITY.getColor() + (int) member.getStats().get(Stats.StatsInfo.VITALITY)
+                        + " " + Stats.StatsInfo.VITALITY.getCharacter());
 
-            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), lore, Rarity.COMMON).generateItem(null, 1), e-> {
-                if(e.getClick().equals(ClickType.LEFT))
-                    new PartyGui( p, orionPlayer).show(p);
-                else if(e.getClick().equals(ClickType.RIGHT)) {
-                    orionPlayer.getParty().removeMember(orionPlayer);
-                    Utils.sendInfoMessage(p, "Vous avez quitté l'équipe");
-                }
-            }), 1,0);
+            menuPane.addItem(new GuiItem(BasicItem
+                    .generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe",
+                            AssociationConfig.getModel("gui/party_placeholder"), lore, Rarity.COMMON)
+                    .generateItem(null, 1), e -> {
+                        if (e.getClick().equals(ClickType.LEFT))
+                            new PartyGui(p, orionPlayer).show(p);
+                        else if (e.getClick().equals(ClickType.RIGHT)) {
+                            orionPlayer.getParty().removeMember(orionPlayer);
+                            Utils.sendInfoMessage(p, "Vous avez quitté l'équipe");
+                        }
+                    }), 1, 0);
         } else {
-            menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe", AssociationConfig.getModel("gui/party_placeholder"), Collections.singletonList("Cliquez pour ouvrir le menu d'équipe"), Rarity.COMMON).generateItem(null, 1), e-> {
-                Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
-                new PartyGui( p, orionPlayer).show(p);
-            }), 1,0);
+            menuPane.addItem(new GuiItem(BasicItem
+                    .generateTemplateBasicItem(Material.CARROT_ON_A_STICK, "Menu d'équipe",
+                            AssociationConfig.getModel("gui/party_placeholder"),
+                            Collections.singletonList("Cliquez pour ouvrir le menu d'équipe"), Rarity.COMMON)
+                    .generateItem(null, 1), e -> {
+                        Mmorpg.INSTANCE.getPartyManager().createParty().addMember(p, orionPlayer);
+                        new PartyGui(p, orionPlayer).show(p);
+                    }), 1, 0);
         }
-
 
         menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("PORTAL_STONE", 1), e -> {
             new PortalStoneGui(p, orionPlayer).show(p);
@@ -116,18 +117,23 @@ public class MenuGui extends ChestGui {
         menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("WIKI_BOOK_PLACEHOLDER", 1), e -> {
             new WikiGui(Mmorpg.INSTANCE).show(p);
         }), 1, 1);
-        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.GOLD_INGOT, "Currencies", 0, orionPlayer.getCurrencies().asLore(), Rarity.COMMON).generateItem(null, 1), e -> {
+        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.GOLD_INGOT, "Currencies", 0,
+                orionPlayer.getCurrencies().asLore(), Rarity.COMMON).generateItem(null, 1), e -> {
 
-        }), 3, 1);
+                }), 3, 1);
         /*
-        menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> {
-            Utils.sendErrorMessage(p, "Ce menu n'est pas encore disponible");
-            //new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p);
-        }), 3, 1);
-        */
+         * menuPane.addItem(new GuiItem(new ItemStack(Material.ARROW), e -> { Utils.sendErrorMessage(p,
+         * "Ce menu n'est pas encore disponible"); //new QuiverGui(Mmorpg.INSTANCE, p, orionPlayer).show(p); }), 3, 1);
+         */
 
-        menuPane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1, Collections.singletonList("Ouvre le menu des sorts"), Rarity.COMMON).generateItem(null, 1), e -> new SpellGui(p, orionPlayer).show(p)), 2,2);
-        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("SETTINGS_PLACEHOLDER", 1), e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2,3);
+        menuPane.addItem(
+                new GuiItem(BasicItem
+                        .generateTemplateBasicItem(Material.PAPER, "Menu des sorts", 1,
+                                Collections.singletonList("Ouvre le menu des sorts"), Rarity.COMMON)
+                        .generateItem(null, 1), e -> new SpellGui(p, orionPlayer).show(p)),
+                2, 2);
+        menuPane.addItem(new GuiItem(ItemUtils.generateItemStack("SETTINGS_PLACEHOLDER", 1),
+                e -> new SlotGui(Mmorpg.INSTANCE, p, orionPlayer).show(p)), 2, 3);
 
         return menuPane;
     }

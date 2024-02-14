@@ -17,8 +17,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     private final boolean maintainType;
     private boolean recognizeSubtypes;
 
-    private RuntimeTypeAdapterFactory(
-            Class<?> baseType, String typeFieldName, boolean maintainType) {
+    private RuntimeTypeAdapterFactory(Class<?> baseType, String typeFieldName, boolean maintainType) {
         if (typeFieldName == null || baseType == null) {
             throw new NullPointerException();
         }
@@ -31,7 +30,8 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
      * Creates a new runtime type adapter using for {@code baseType} using {@code
      * typeFieldName} as the type field name. Type field names are case sensitive.
      *
-     * @param maintainType true if the type field should be included in deserialized objects
+     * @param maintainType
+     *            true if the type field should be included in deserialized objects
      */
     public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType, String typeFieldName, boolean maintainType) {
         return new RuntimeTypeAdapterFactory<>(baseType, typeFieldName, maintainType);
@@ -46,16 +46,14 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     }
 
     /**
-     * Creates a new runtime type adapter for {@code baseType} using {@code "type"} as
-     * the type field name.
+     * Creates a new runtime type adapter for {@code baseType} using {@code "type"} as the type field name.
      */
     public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType) {
         return new RuntimeTypeAdapterFactory<>(baseType, "type", false);
     }
 
     /**
-     * Ensures that this factory will handle not just the given {@code baseType}, but any subtype
-     * of that type.
+     * Ensures that this factory will handle not just the given {@code baseType}, but any subtype of that type.
      */
     public RuntimeTypeAdapterFactory<T> recognizeSubtypes() {
         this.recognizeSubtypes = true;
@@ -63,11 +61,10 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     }
 
     /**
-     * Registers {@code type} identified by {@code label}. Labels are case
-     * sensitive.
+     * Registers {@code type} identified by {@code label}. Labels are case sensitive.
      *
-     * @throws IllegalArgumentException if either {@code type} or {@code label}
-     *     have already been registered on this type adapter.
+     * @throws IllegalArgumentException
+     *             if either {@code type} or {@code label} have already been registered on this type adapter.
      */
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type, String label) {
         if (type == null || label == null) {
@@ -82,11 +79,10 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     }
 
     /**
-     * Registers {@code type} identified by its {@link Class#getSimpleName simple
-     * name}. Labels are case sensitive.
+     * Registers {@code type} identified by its {@link Class#getSimpleName simple name}. Labels are case sensitive.
      *
-     * @throws IllegalArgumentException if either {@code type} or its simple name
-     *     have already been registered on this type adapter.
+     * @throws IllegalArgumentException
+     *             if either {@code type} or its simple name have already been registered on this type adapter.
      */
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type) {
         return registerSubtype(type, type.getSimpleName());
@@ -98,8 +94,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
             return null;
         }
         Class<?> rawType = type.getRawType();
-        boolean handle =
-                recognizeSubtypes ? baseType.isAssignableFrom(rawType) : baseType.equals(rawType);
+        boolean handle = recognizeSubtypes ? baseType.isAssignableFrom(rawType) : baseType.equals(rawType);
         if (!handle) {
             return null;
         }
@@ -114,7 +109,8 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         }
 
         return new TypeAdapter<R>() {
-            @Override public R read(JsonReader in) throws IOException {
+            @Override
+            public R read(JsonReader in) throws IOException {
                 JsonElement jsonElement = jsonElementAdapter.read(in);
                 JsonElement labelJsonElement;
                 if (maintainType) {
@@ -131,20 +127,21 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
                 @SuppressWarnings("unchecked") // registration requires that subtype extends T
                 TypeAdapter<R> delegate = (TypeAdapter<R>) labelToDelegate.get(label);
                 if (delegate == null) {
-                    throw new JsonParseException("cannot deserialize " + baseType + " subtype named "
-                            + label + "; did you forget to register a subtype?");
+                    throw new JsonParseException("cannot deserialize " + baseType + " subtype named " + label
+                            + "; did you forget to register a subtype?");
                 }
                 return delegate.fromJsonTree(jsonElement);
             }
 
-            @Override public void write(JsonWriter out, R value) throws IOException {
+            @Override
+            public void write(JsonWriter out, R value) throws IOException {
                 Class<?> srcType = value.getClass();
                 String label = subtypeToLabel.get(srcType);
                 @SuppressWarnings("unchecked") // registration requires that subtype extends T
                 TypeAdapter<R> delegate = (TypeAdapter<R>) subtypeToDelegate.get(srcType);
                 if (delegate == null) {
-                    throw new JsonParseException("cannot serialize " + srcType.getName()
-                            + "; did you forget to register a subtype?");
+                    throw new JsonParseException(
+                            "cannot serialize " + srcType.getName() + "; did you forget to register a subtype?");
                 }
                 JsonObject jsonObject = delegate.toJsonTree(value).getAsJsonObject();
 

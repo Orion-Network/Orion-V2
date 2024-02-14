@@ -23,7 +23,9 @@ public class QuiverGui extends ChestGui {
         this.orionPlayer = orionPlayer;
         this.addPane(getQuiverPane());
         this.setOnBottomClick(e -> {
-            if (!e.getCurrentItem().getType().equals(Material.ARROW) && !e.getCurrentItem().getType().equals(Material.SPECTRAL_ARROW) && !e.getCurrentItem().getType().equals(Material.TIPPED_ARROW))
+            if (!e.getCurrentItem().getType().equals(Material.ARROW)
+                    && !e.getCurrentItem().getType().equals(Material.SPECTRAL_ARROW)
+                    && !e.getCurrentItem().getType().equals(Material.TIPPED_ARROW))
                 return;
             e.setCancelled(true);
             for (int i = 0; i < orionPlayer.getQuiver().length; i++) {

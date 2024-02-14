@@ -24,9 +24,9 @@ public class InstantTransmission extends Spell {
         WarpEffect endEffect = new WarpEffect(Mmorpg.effectManager);
         endEffect.particle = Particle.PORTAL;
         endEffect.duration = 500;
-        if(getCaster() != null && getCaster() instanceof Player) {
+        if (getCaster() != null && getCaster() instanceof Player) {
             Player player = (Player) getCaster();
-            if(location != player.getLocation()) {
+            if (location != player.getLocation()) {
                 startEffect.setLocation(getCaster().getLocation());
                 startEffect.start();
                 player.teleport(location);
@@ -37,7 +37,8 @@ public class InstantTransmission extends Spell {
             Vector v = player.getEyeLocation().getDirection().normalize().multiply(8);
             Location l = player.getLocation().add(v);
 
-            RayTraceResult rayTrace = player.getWorld().rayTraceBlocks(player.getEyeLocation(), player.getEyeLocation().getDirection(), 8);
+            RayTraceResult rayTrace = player.getWorld().rayTraceBlocks(player.getEyeLocation(),
+                    player.getEyeLocation().getDirection(), 8);
 
             if (l.getBlock().isEmpty() && l.add(0, 1, 0).getBlock().isEmpty() && rayTrace == null) {
                 startEffect.setLocation(getCaster().getLocation());
@@ -46,7 +47,7 @@ public class InstantTransmission extends Spell {
                 endEffect.setLocation(l);
                 endEffect.start();
             }
-        } else if(getTargets().getFirst() != null && getTargets().getFirst() instanceof Player) {
+        } else if (getTargets().getFirst() != null && getTargets().getFirst() instanceof Player) {
             Player player = (Player) getTargets().getFirst();
             player.teleport(location);
         }

@@ -19,17 +19,19 @@ public class Rewards extends ArrayList<Rewards.Reward> {
     public ArrayList<ItemStack> award(OrionPlayer player) {
         ArrayList<ItemStack> items = new ArrayList<>();
         player.addExperience(Bukkit.getPlayer(player.getUniqueId()), exp);
-        for(Reward reward : generateRewards(player)) {
-            if(reward.getItem() != null)
+        for (Reward reward : generateRewards(player)) {
+            if (reward.getItem() != null)
                 items.add(reward.getItem());
-            for(JobType job : reward.getJobExp().keySet()) {
+            for (JobType job : reward.getJobExp().keySet()) {
                 Player p = Bukkit.getPlayer(player.getUniqueId());
-                Utils.sendTooltipInfoMessage(p, "Vous avez gagné " + reward.getJobExp().get(job) + " points d'expérience en " + job.name());
+                Utils.sendTooltipInfoMessage(p,
+                        "Vous avez gagné " + reward.getJobExp().get(job) + " points d'expérience en " + job.name());
                 player.getJobs().getJob(job).addExp(reward.getJobExp().get(job));
             }
-            for(String currency : reward.getMoneys().keySet()) {
+            for (String currency : reward.getMoneys().keySet()) {
                 player.getCurrencies().add(currency, reward.getMoneys().get(currency));
-                Utils.sendInfoMessage(Bukkit.getPlayer(player.getUniqueId()), "Vous avez gagné " + reward.getMoneys().get(currency) + " " + currency);
+                Utils.sendInfoMessage(Bukkit.getPlayer(player.getUniqueId()),
+                        "Vous avez gagné " + reward.getMoneys().get(currency) + " " + currency);
             }
         }
         return items;
@@ -39,18 +41,20 @@ public class Rewards extends ArrayList<Rewards.Reward> {
         int luck = (int) orionPlayer.getStats().get(Stats.StatsInfo.LUCK);
         ArrayList<Reward> rewards = new ArrayList<>();
         Random random = new Random();
-        for(Reward reward : this) {
-            if(reward.getRequiredLevel() > orionPlayer.getLevel()) {
+        for (Reward reward : this) {
+            if (reward.getRequiredLevel() > orionPlayer.getLevel()) {
                 continue;
             }
             boolean canGet = true;
-            for(JobType job : reward.getRequiredJobLevel().keySet()) {
-                if(orionPlayer.getJobs().getJob(job) == null || orionPlayer.getJobs().getJob(job).getLevel() < reward.getRequiredJobLevel().get(job)) {
+            for (JobType job : reward.getRequiredJobLevel().keySet()) {
+                if (orionPlayer.getJobs().getJob(job) == null
+                        || orionPlayer.getJobs().getJob(job).getLevel() < reward.getRequiredJobLevel().get(job)) {
                     canGet = false;
                     break;
                 }
             }
-            if(canGet && random.nextInt(reward.maxChance + 1) <= reward.getChance() * (luck == 0 ? 1 : (1 + luck/Stats.StatsInfo.LUCK.getCap()))) {
+            if (canGet && random.nextInt(reward.maxChance + 1) <= reward.getChance()
+                    * (luck == 0 ? 1 : (1 + luck / Stats.StatsInfo.LUCK.getCap()))) {
                 rewards.add(reward);
             }
         }
@@ -71,11 +75,13 @@ public class Rewards extends ArrayList<Rewards.Reward> {
 
     public static class Reward {
         ItemStack item;
-        @Getter@Setter
+        @Getter
+        @Setter
         int exp = 0;
         int chance;
         int maxChance = 100;
-        @Getter@Setter
+        @Getter
+        @Setter
         int requiredLevel = 0;
         @Getter
         HashMap<JobType, Integer> requiredJobLevel = new HashMap<>();
@@ -106,7 +112,7 @@ public class Rewards extends ArrayList<Rewards.Reward> {
         }
 
         public void addRequiredJobExp(JobType job, int level) {
-            if(requiredJobLevel.containsKey(job)) {
+            if (requiredJobLevel.containsKey(job)) {
                 requiredJobLevel.put(job, requiredJobLevel.get(job) + level);
             } else {
                 requiredJobLevel.put(job, level);

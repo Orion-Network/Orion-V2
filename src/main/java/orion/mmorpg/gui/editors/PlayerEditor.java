@@ -34,7 +34,9 @@ public class PlayerEditor extends ChestGui {
     private final OrionPlayer ownerOrionPlayer;
     private final Player targetPlayer;
     private final OrionPlayer targetOrionPlayer;
-    public PlayerEditor(Player ownerPlayer, OrionPlayer ownerOrionPlayer, Player targetPlayer, OrionPlayer targetOrionPlayer) {
+
+    public PlayerEditor(Player ownerPlayer, OrionPlayer ownerOrionPlayer, Player targetPlayer,
+            OrionPlayer targetOrionPlayer) {
         super(3, "Editing " + targetPlayer.getName());
         this.ownerPlayer = ownerPlayer;
         this.ownerOrionPlayer = ownerOrionPlayer;
@@ -47,72 +49,86 @@ public class PlayerEditor extends ChestGui {
     }
 
     private StaticPane getPlayerPane() {
-        StaticPane pane = new StaticPane(0,0, 9,3);
-        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer ses Portal Stones", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
-            BasicItem item = BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Nom de la pierre", 0, null, Rarity.COMMON);
-            ItemStack buildItem = item.generateItem(null, 1);
-            ItemMeta meta = buildItem.getItemMeta();
-            List<String> removableStones = targetOrionPlayer.getPortalStones().stream().map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
-            // TODO
-            // ArrayList<String> portalStones = new ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
-            // removableStones.addAll(portalStones.stream().filter(string -> !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY + string).toList());
+        StaticPane pane = new StaticPane(0, 0, 9, 3);
+        pane.addItem(new GuiItem(BasicItem
+                .generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer ses Portal Stones", 0, null, Rarity.COMMON)
+                .generateItem(null, 1), event -> {
+                    BasicItem item = BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Nom de la pierre", 0,
+                            null, Rarity.COMMON);
+                    ItemStack buildItem = item.generateItem(null, 1);
+                    ItemMeta meta = buildItem.getItemMeta();
+                    List<String> removableStones = targetOrionPlayer.getPortalStones().stream()
+                            .map(string -> ChatColor.YELLOW + string).collect(Collectors.toCollection(ArrayList::new));
+                    // TODO
+                    // ArrayList<String> portalStones = new
+                    // ArrayList<>(Mmorpg.INSTANCE.getWorldManager().getPortalStones().keySet());
+                    // removableStones.addAll(portalStones.stream().filter(string ->
+                    // !targetOrionPlayer.getPortalStones().contains(string)).map(string -> ChatColor.GRAY +
+                    // string).toList());
 
-            meta.setLore(removableStones);
-            buildItem.setItemMeta(meta);
+                    meta.setLore(removableStones);
+                    buildItem.setItemMeta(meta);
 
-            new AnvilGUI.Builder()
-                    .plugin(Mmorpg.INSTANCE)
-                    .title("Editer les pierres de " + targetPlayer.getName())
-                    .itemLeft(buildItem)
-                    .onClick((slot, snapshot) -> {
-                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
-                        String text = snapshot.getText();
-                        text = text.toUpperCase();
+                    new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE)
+                            .title("Editer les pierres de " + targetPlayer.getName()).itemLeft(buildItem)
+                            .onClick((slot, snapshot) -> {
+                                if (slot != AnvilGUI.Slot.OUTPUT)
+                                    return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                                String text = snapshot.getText();
+                                text = text.toUpperCase();
 
-                        if(!targetOrionPlayer.getPortalStones().contains(text)) {
-                            targetOrionPlayer.addPortalStone(text);
-                            Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");
-                        } else {
-                            targetOrionPlayer.removePortalStone(text);
-                            Utils.sendInfoMessage(ownerPlayer, "Pierre enlevé");
-                        }
-                        return List.of(AnvilGUI.ResponseAction.close());
-                    })
-                    .open(ownerPlayer);
-        }), 0,0);
+                                if (!targetOrionPlayer.getPortalStones().contains(text)) {
+                                    targetOrionPlayer.addPortalStone(text);
+                                    Utils.sendInfoMessage(ownerPlayer, "Pierre ajoutée");
+                                } else {
+                                    targetOrionPlayer.removePortalStone(text);
+                                    Utils.sendInfoMessage(ownerPlayer, "Pierre enlevé");
+                                }
+                                return List.of(AnvilGUI.ResponseAction.close());
+                            }).open(ownerPlayer);
+                }), 0, 0);
 
-        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer les sorts", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
-            new SpellEditor(ownerPlayer, ownerOrionPlayer, targetPlayer, targetOrionPlayer).show(targetPlayer);
-        }), 1,0);
+        pane.addItem(new GuiItem(
+                BasicItem.generateTemplateBasicItem(Material.AMETHYST_SHARD, "Editer les sorts", 0, null, Rarity.COMMON)
+                        .generateItem(null, 1),
+                event -> {
+                    new SpellEditor(ownerPlayer, ownerOrionPlayer, targetPlayer, targetOrionPlayer).show(targetPlayer);
+                }), 1, 0);
 
-        pane.addItem(new GuiItem(BasicItem.generateTemplateBasicItem(Material.PAPER, "Editer les supports", 0, null, Rarity.COMMON).generateItem(null, 1), event -> {
-            BasicItem item = BasicItem.generateTemplateBasicItem(Material.PAPER, (targetOrionPlayer.getMainSupport() != null ? "Support Actuel : " + targetOrionPlayer.getMainSupport().getName() : "Aucun support"), 3, null, (targetOrionPlayer.getMainSupport() != null ? targetOrionPlayer.getMainSupport().getRank() : Rarity.TRASH));
-            ItemStack buildItem = item.generateItem(null, 1);
-            ItemMeta meta = buildItem.getItemMeta();
-            ArrayList<String> lore = Arrays.stream(SupportList.values()).map(t -> ChatColor.GRAY + t.name()).collect(Collectors.toCollection(ArrayList::new));
-            lore.add("Null");
-            meta.setLore(lore);
-            buildItem.setItemMeta(meta);
+        pane.addItem(new GuiItem(
+                BasicItem.generateTemplateBasicItem(Material.PAPER, "Editer les supports", 0, null, Rarity.COMMON)
+                        .generateItem(null, 1),
+                event -> {
+                    BasicItem item = BasicItem.generateTemplateBasicItem(Material.PAPER,
+                            (targetOrionPlayer.getMainSupport() != null
+                                    ? "Support Actuel : " + targetOrionPlayer.getMainSupport().getName()
+                                    : "Aucun support"),
+                            3, null, (targetOrionPlayer.getMainSupport() != null
+                                    ? targetOrionPlayer.getMainSupport().getRank() : Rarity.TRASH));
+                    ItemStack buildItem = item.generateItem(null, 1);
+                    ItemMeta meta = buildItem.getItemMeta();
+                    ArrayList<String> lore = Arrays.stream(SupportList.values()).map(t -> ChatColor.GRAY + t.name())
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    lore.add("Null");
+                    meta.setLore(lore);
+                    buildItem.setItemMeta(meta);
 
-            new AnvilGUI.Builder()
-                    .plugin(Mmorpg.INSTANCE)
-                    .itemLeft(buildItem)
-                    .onClick(((slot, snapshot) -> {
-                        if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                    new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE).itemLeft(buildItem).onClick(((slot, snapshot) -> {
+                        if (slot != AnvilGUI.Slot.OUTPUT)
+                            return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
                         String text = snapshot.getText().toUpperCase();
-                        if(EnumUtils.isValidEnum(SupportList.class, text)) {
+                        if (EnumUtils.isValidEnum(SupportList.class, text)) {
                             targetOrionPlayer.setMainSupport(SupportList.valueOf(text).getSupport());
                             Utils.sendInfoMessage(ownerPlayer, "Support modifié");
                             return List.of(AnvilGUI.ResponseAction.close());
-                        } else if(text.equalsIgnoreCase("null")) {
+                        } else if (text.equalsIgnoreCase("null")) {
                             targetOrionPlayer.setMainSupport((Support) null);
                             Utils.sendInfoMessage(ownerPlayer, "Support supprimé");
                             return List.of(AnvilGUI.ResponseAction.close());
                         }
-                        return  List.of(AnvilGUI.ResponseAction.replaceInputText("Support Invalide"));
-                    }))
-                    .open(ownerPlayer);
-        }), 2, 0);
+                        return List.of(AnvilGUI.ResponseAction.replaceInputText("Support Invalide"));
+                    })).open(ownerPlayer);
+                }), 2, 0);
 
         return pane;
     }
@@ -125,7 +141,8 @@ public class PlayerEditor extends ChestGui {
 
         List<GuiItem> populateList = new LinkedList<>();
 
-        public SpellEditor(Player ownerPlayer, OrionPlayer ownerOrionPlayer, Player targetPlayer, OrionPlayer targetOwnerPlayer) {
+        public SpellEditor(Player ownerPlayer, OrionPlayer ownerOrionPlayer, Player targetPlayer,
+                OrionPlayer targetOwnerPlayer) {
             super(3, "Editer les sorts du joueur");
             this.ownerPlayer = ownerPlayer;
             this.ownerOrionPlayer = ownerOrionPlayer;
@@ -140,24 +157,24 @@ public class PlayerEditor extends ChestGui {
             PaginatedPane supportPane = new PaginatedPane(0, 0, 9, 5);
             for (SpellList s : SpellList.values()) {
                 populateList.add(new GuiItem(s.getItem(), (event) -> {
-                    if(event.getClick().equals(ClickType.LEFT)) {
-                        new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE)
-                                .itemLeft(s.getItem())
-                                .title("Ajouter des points de savoir")
-                                .onClick((slot, snapshot) -> {
-                                    if(slot != AnvilGUI.Slot.OUTPUT) return List.of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
+                    if (event.getClick().equals(ClickType.LEFT)) {
+                        new AnvilGUI.Builder().plugin(Mmorpg.INSTANCE).itemLeft(s.getItem())
+                                .title("Ajouter des points de savoir").onClick((slot, snapshot) -> {
+                                    if (slot != AnvilGUI.Slot.OUTPUT)
+                                        return List
+                                                .of(AnvilGUI.ResponseAction.replaceInputText("Clique sur le résultat"));
                                     String response = snapshot.getText();
-                                    if(!NumberUtils.isNumber(response))
-                                        return  List.of(AnvilGUI.ResponseAction.replaceInputText("Nombre Invalide"));
-                                    if(!targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass()))
+                                    if (!NumberUtils.isNumber(response))
+                                        return List.of(AnvilGUI.ResponseAction.replaceInputText("Nombre Invalide"));
+                                    if (!targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass()))
                                         SpellList.learnSpell(targetOrionPlayer, s.getSpellClass(), 1);
-                                    targetOrionPlayer.getKnownSpells().get(s.getSpellClass()).setKnowledge(Integer.parseInt(response));
-                                    return  List.of(AnvilGUI.ResponseAction.close());
-                                })
-                                .open(ownerPlayer);
-                    } else if(event.getClick().isRightClick()) {
+                                    targetOrionPlayer.getKnownSpells().get(s.getSpellClass())
+                                            .setKnowledge(Integer.parseInt(response));
+                                    return List.of(AnvilGUI.ResponseAction.close());
+                                }).open(ownerPlayer);
+                    } else if (event.getClick().isRightClick()) {
                         targetOrionPlayer.getKnownSpells().forEach((spellClass, knowledge) -> {
-                            if(targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass())) {
+                            if (targetOrionPlayer.getKnownSpells().containsKey(s.getSpellClass())) {
                                 targetOrionPlayer.getKnownSpells().remove(s.getSpellClass());
                                 return;
                             }

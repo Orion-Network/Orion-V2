@@ -17,11 +17,14 @@ public class SpellGui extends ChestGui {
     Player player;
     OrionPlayer orionPlayer;
     final int rows;
+
     public SpellGui(Player player, OrionPlayer orionPlayer) {
-        super((orionPlayer.getKnownSpells().size()/9 <= 0 ? 1 : Math.abs(orionPlayer.getKnownSpells().size()/9)), "Menu des sorts");
+        super((orionPlayer.getKnownSpells().size() / 9 <= 0 ? 1 : Math.abs(orionPlayer.getKnownSpells().size() / 9)),
+                "Menu des sorts");
         this.player = player;
         this.orionPlayer = orionPlayer;
-        this.rows = (orionPlayer.getKnownSpells().size()/9 <= 0 ? 1 : Math.abs(orionPlayer.getKnownSpells().size()/9));
+        this.rows = (orionPlayer.getKnownSpells().size() / 9 <= 0 ? 1
+                : Math.abs(orionPlayer.getKnownSpells().size() / 9));
         this.setOnTopClick(e -> e.setCancelled(true));
 
         this.addPane(createSpellPane());
@@ -34,9 +37,10 @@ public class SpellGui extends ChestGui {
             Material material = sp.getMaterial();
             ArrayList<String> lore = new ArrayList<>();
             lore.addAll(sp.getLore());
-            //TODO add knowledge bar to represent mastering of the spell
+            // TODO add knowledge bar to represent mastering of the spell
             lore.addAll(knowledge.getKnowledgeLore());
-            ItemStack item = BasicItem.generateTemplateBasicItem(material, sp.getRarity().getChatColor() + sp.getName(), 1, lore, sp.getRarity()).generateItem(null, 1);
+            ItemStack item = BasicItem.generateTemplateBasicItem(material, sp.getRarity().getChatColor() + sp.getName(),
+                    1, lore, sp.getRarity()).generateItem(null, 1);
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setLore(lore);
             item.setItemMeta(itemMeta);

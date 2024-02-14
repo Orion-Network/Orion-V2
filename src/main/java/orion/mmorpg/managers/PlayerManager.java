@@ -19,7 +19,7 @@ public class PlayerManager extends AbstractManager {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(mmorpg, () -> {
             JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.FINE, "Saving players");
             savePlayers();
-        }, 1L, 300* 20);
+        }, 1L, 300 * 20);
     }
 
     public boolean addPlayer(UUID uuid, OrionPlayer orionPlayer) {
@@ -41,7 +41,7 @@ public class PlayerManager extends AbstractManager {
 
     public void savePlayer(OrionPlayer player) {
         mmorpg.getMongoClient().savePlayer(player);
-        if(Bukkit.getPlayer(player.getUniqueId()) == null)
+        if (Bukkit.getPlayer(player.getUniqueId()) == null)
             playersMap.remove(player.getUniqueId());
     }
 

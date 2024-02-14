@@ -17,7 +17,7 @@ import java.awt.*;
 
 public class ChannelStrike extends Spell {
     public ChannelStrike() {
-        super("CHANNEL_STRIKE", 10, Element.ELECTRIC, 10*1000);
+        super("CHANNEL_STRIKE", 10, Element.ELECTRIC, 10 * 1000);
     }
 
     @Override
@@ -25,16 +25,16 @@ public class ChannelStrike extends Spell {
 
         LivingEntity previousTarget = null;
         LivingEntity target = getTargets().getFirst();
-        if(target == null)
+        if (target == null)
             return;
 
         int count = 0;
         int max = 5;
 
-        while(count < max) {
-            strike(target, (int) (getOrionCaster().getStats().get(Stats.StatsInfo.INTELLIGENCE)/10));
-            //Draw LineEffect between previous and current target
-            if(previousTarget != null) {
+        while (count < max) {
+            strike(target, (int) (getOrionCaster().getStats().get(Stats.StatsInfo.INTELLIGENCE) / 10));
+            // Draw LineEffect between previous and current target
+            if (previousTarget != null) {
                 LineEffect lineEffect = new LineEffect(Mmorpg.effectManager);
                 lineEffect.particle = Particle.REDSTONE;
                 lineEffect.color = Color.YELLOW;
@@ -46,20 +46,16 @@ public class ChannelStrike extends Spell {
 
             previousTarget = target;
             target = getNextTarget(target);
-            if(target == null)
+            if (target == null)
                 break;
             count++;
         }
     }
 
-    public LivingEntity getNextTarget(LivingEntity previous ) {
-        return previous.getNearbyEntities(10, 10, 10).stream()
-                .filter(entity -> entity instanceof LivingEntity)
-                .filter(entity -> entity != previous)
-                .filter(entity -> entity != getCaster())
-                .map(entity -> (LivingEntity) entity)
-                .findFirst()
-                .orElse(null);
+    public LivingEntity getNextTarget(LivingEntity previous) {
+        return previous.getNearbyEntities(10, 10, 10).stream().filter(entity -> entity instanceof LivingEntity)
+                .filter(entity -> entity != previous).filter(entity -> entity != getCaster())
+                .map(entity -> (LivingEntity) entity).findFirst().orElse(null);
     }
 
     public void strike(LivingEntity target, int power) {

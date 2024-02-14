@@ -40,7 +40,8 @@ import java.util.*;
 public class OrionPlayer {
     @Getter
     private final LinkedHashSet<String> portalStones;
-    public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar", BarColor.PURPLE, BarStyle.SEGMENTED_10);
+    public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar",
+            BarColor.PURPLE, BarStyle.SEGMENTED_10);
     @Getter
     transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     @Getter
@@ -50,16 +51,16 @@ public class OrionPlayer {
     /**
      * A map of all the effects of the player.
      * <p>
-     *     The first key is the event name
-     *     The second key is a map of all the effects of the event
-     *      The key is the id of the effect
-     *      The value is the effect
+     * The first key is the event name The second key is a map of all the effects of the event The key is the id of the
+     * effect The value is the effect
      */
     @Getter
     transient LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects;
-    @Getter@Setter
+    @Getter
+    @Setter
     transient Party party;
-    @Getter@Setter
+    @Getter
+    @Setter
     transient HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
     @Getter
     public SlotType[] slotTypes;
@@ -67,21 +68,27 @@ public class OrionPlayer {
     String[] selectedSpells;
     @Getter
     private Mode playerMode = Mode.PLAYER;
-    @Getter@Setter
+    @Getter
+    @Setter
     private Infos infos;
-    @Getter@Setter
+    @Getter
+    @Setter
     private Stats stats;
     @Getter
     private UUID uniqueId;
-    @Getter@Setter
+    @Getter
+    @Setter
     private double health, exp;
-    @Getter@Setter
+    @Getter
+    @Setter
     private int level, mana;
-    @Getter@Setter
+    @Getter
+    @Setter
     private Equipments equipements;
     @Getter
     transient private KeyedBossBar healthBar;
-    @Getter@Setter
+    @Getter
+    @Setter
     transient FastBoard fastBoard;
     @Getter
     Set<Pets> tamedPets;
@@ -91,7 +98,8 @@ public class OrionPlayer {
     Set<Mounts> tamedMounts;
     @Getter
     private Support mainSupport;
-    @Getter@Setter
+    @Getter
+    @Setter
     private Race race;
 
     @Getter
@@ -107,12 +115,16 @@ public class OrionPlayer {
     /**
      * Default Constructor of OrionPlayer class used on first logging.
      *
-     * @param infos       Infos of the new player {@link Infos}
-     * @param stats   Base stats of the new player {@link Stats}
-     * @param uniqueId    UniqueId of the new player {@link Player#getUniqueId()}
-     * @param level       Level of the new player
+     * @param infos
+     *            Infos of the new player {@link Infos}
+     * @param stats
+     *            Base stats of the new player {@link Stats}
+     * @param uniqueId
+     *            UniqueId of the new player {@link Player#getUniqueId()}
+     * @param level
+     *            Level of the new player
      */
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId,int level, double exp) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, int level, double exp) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;
@@ -139,15 +151,9 @@ public class OrionPlayer {
         tamedPets = new LinkedHashSet<>();
         tamedMounts = new LinkedHashSet<>();
 
-        this.slotTypes = new SlotType[]{SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.FREE_SLOT,
-                SlotType.USE_SLOT};
+        this.slotTypes = new SlotType[] { SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT,
+                SlotType.USE_SLOT };
 
         fastBoard = new FastBoard(Bukkit.getPlayer(uniqueId));
         this.jobs = Jobs.getBaseJobs();
@@ -157,19 +163,34 @@ public class OrionPlayer {
     /**
      * Default Constructor of OrionPlayer class used on logging retrieving data from Database.
      *
-     * @param infos        Retrieved Infos of the player
-     * @param stats    Retrieved Stats of the player
-     * @param uniqueId     Retrieved UniqueId of the player
-     * @param health       Health before the player log out
-     * @param level        Retrieved Level
-     * @param mana         Retrieved mana
-     * @param portalStones Retrieved Portal Stones
-     * @param equipements  Retrieved Equipments
-     * @param spells       Retrieved Spells
-     * @param mainSupport      Retrieved Support
-     * @param race         Retrieved Race
+     * @param infos
+     *            Retrieved Infos of the player
+     * @param stats
+     *            Retrieved Stats of the player
+     * @param uniqueId
+     *            Retrieved UniqueId of the player
+     * @param health
+     *            Health before the player log out
+     * @param level
+     *            Retrieved Level
+     * @param mana
+     *            Retrieved mana
+     * @param portalStones
+     *            Retrieved Portal Stones
+     * @param equipements
+     *            Retrieved Equipments
+     * @param spells
+     *            Retrieved Spells
+     * @param mainSupport
+     *            Retrieved Support
+     * @param race
+     *            Retrieved Race
      */
-    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana, LinkedHashSet<String> portalStones, Equipments equipements, LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver, SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets, Set<Mounts> tamedMounts, Currencies currencies) {
+    public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana,
+            LinkedHashSet<String> portalStones, Equipments equipements,
+            LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver,
+            SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets,
+            Set<Mounts> tamedMounts, Currencies currencies) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;
@@ -202,16 +223,17 @@ public class OrionPlayer {
     }
 
     public void initHealthBar() {
-        //Check if bossbar exist
+        // Check if bossbar exist
         Bukkit.getBossBars().forEachRemaining(bossbar -> {
             if (bossbar.getKey().getKey().equals(uniqueId.toString())) {
                 this.healthBar = bossbar;
             }
         });
-        if(healthBar == null)
-            this.healthBar = Bukkit.createBossBar(NamespacedKey.fromString(uniqueId.toString(), Mmorpg.INSTANCE), "Vie", BarColor.RED, BarStyle.SEGMENTED_10);
+        if (healthBar == null)
+            this.healthBar = Bukkit.createBossBar(NamespacedKey.fromString(uniqueId.toString(), Mmorpg.INSTANCE), "Vie",
+                    BarColor.RED, BarStyle.SEGMENTED_10);
         this.healthBar.setProgress(1);
-        if(!this.healthBar.getPlayers().contains(Bukkit.getPlayer(uniqueId)))
+        if (!this.healthBar.getPlayers().contains(Bukkit.getPlayer(uniqueId)))
             this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
     }
@@ -219,22 +241,18 @@ public class OrionPlayer {
     public static OrionPlayer generateSamplePlayer(Player p) {
         Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
         Stats stats = new Stats.Builder().setBase(Stats.StatsInfo.STRENGTH, 1)
-                .setBase(Stats.StatsInfo.CRITICAL_CHANCE, 10)
-                .setBase(Stats.StatsInfo.CRITICAL_DAMAGE, 50)
-                .setBase(Stats.StatsInfo.ATTACK_SPEED, 100)
-                .setBase(Stats.StatsInfo.VITALITY, 20)
-                .setBase(Stats.StatsInfo.INTELLIGENCE, 0)
-                .setBase(Stats.StatsInfo.DEFENCE, 0)
-                .setBase(Stats.StatsInfo.SPEED, 25)
-                .setBase(Stats.StatsInfo.LUCK, 0)
-                .build();
+                .setBase(Stats.StatsInfo.CRITICAL_CHANCE, 10).setBase(Stats.StatsInfo.CRITICAL_DAMAGE, 50)
+                .setBase(Stats.StatsInfo.ATTACK_SPEED, 100).setBase(Stats.StatsInfo.VITALITY, 20)
+                .setBase(Stats.StatsInfo.INTELLIGENCE, 0).setBase(Stats.StatsInfo.DEFENCE, 0)
+                .setBase(Stats.StatsInfo.SPEED, 25).setBase(Stats.StatsInfo.LUCK, 0).build();
         return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
     }
 
     public void updateHealthbar() {
-        this.healthBar.setTitle("Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().get(Stats.StatsInfo.VITALITY));
+        this.healthBar.setTitle(
+                "Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().get(Stats.StatsInfo.VITALITY));
         double healthValue = this.getHealth() / this.getStats().get(Stats.StatsInfo.VITALITY);
-        if(healthValue > 1)
+        if (healthValue > 1)
             this.healthBar.setProgress(1);
         else if (healthValue < 0)
             this.healthBar.setProgress(0);
@@ -244,29 +262,22 @@ public class OrionPlayer {
 
     public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
         /*
-        if (mobHealth <= 0) {
-            this.mobHealthBar.setVisible(false);
-            this.mobHealthBar.setProgress(1);
-        } else {
-            this.mobHealthBar.setVisible(true);
-            this.mobHealthBar.setTitle(title);
-            this.mobHealthBar.setProgress(mobHealth / maxHealth < 1 ? mobHealth / maxHealth : 1);
-        }*/
+         * if (mobHealth <= 0) { this.mobHealthBar.setVisible(false); this.mobHealthBar.setProgress(1); } else {
+         * this.mobHealthBar.setVisible(true); this.mobHealthBar.setTitle(title);
+         * this.mobHealthBar.setProgress(mobHealth / maxHealth < 1 ? mobHealth / maxHealth : 1); }
+         */
     }
-
 
     public void addPortalStone(String id) {
         this.getPortalStones().add(id);
     }
 
-
     public void removePortalStone(String id) {
         this.getPortalStones().remove(id);
     }
 
-
     public void setPet(AbstractPet pet) {
-        if(this.pet != null) {
+        if (this.pet != null) {
             this.getPet().removePet();
         }
         this.pet = pet;
@@ -285,29 +296,30 @@ public class OrionPlayer {
     }
 
     public void setMainSupport(Support mainSupport) {
-        if(this.mainSupport != null) {
+        if (this.mainSupport != null) {
             this.mainSupport.removeEffects(this);
         }
         this.mainSupport = mainSupport;
-        if(this.mainSupport == null)
+        if (this.mainSupport == null)
             return;
         mainSupport.applyEffects(this, -1);
     }
 
     public void heal(double health) {
-        this.setHealth(this.getHealth() + health < this.getStats().get(Stats.StatsInfo.VITALITY) ? this.getHealth() + health : this.getStats().get(Stats.StatsInfo.VITALITY));
+        this.setHealth(this.getHealth() + health < this.getStats().get(Stats.StatsInfo.VITALITY)
+                ? this.getHealth() + health : this.getStats().get(Stats.StatsInfo.VITALITY));
         this.updateHealthbar();
     }
 
     public void respawn() {
-        //TODO  Create a respawn event and call it so that other plugins can listen to it
+        // TODO Create a respawn event and call it so that other plugins can listen to it
         Player p = Bukkit.getPlayer(getUniqueId());
         Bukkit.getServer().getPluginManager().callEvent(new RespawnEvent(p, this));
     }
 
     public void addExperience(Player p, double exp) {
         this.setExp(this.getExp() + exp);
-        if(this.getExp() >= this.getExpToNextLevel()) {
+        if (this.getExp() >= this.getExpToNextLevel()) {
             this.setExp(this.getExp() - this.getExpToNextLevel());
             this.setLevel(this.getLevel() + 1);
             SphereEffect e = new SphereEffect(Mmorpg.effectManager);
@@ -317,7 +329,7 @@ public class OrionPlayer {
             e.radiusIncrease = 0.3;
             e.setLocation(p.getLocation());
             e.start();
-            if(this.getRace().getLearningSpells().containsKey(this.getLevel())) {
+            if (this.getRace().getLearningSpells().containsKey(this.getLevel())) {
                 Class<? extends Spell> spellClass = this.getRace().getLearningSpells().get(this.getLevel());
                 SpellList.learnSpell(this, spellClass, 100);
                 Utils.sendInfoMessage(p, "Vous avez appris un nouveau sort !");
@@ -328,24 +340,24 @@ public class OrionPlayer {
     }
 
     public void addEffect(String id, OEffect effect) {
-        if(!this.getOrionEffects().containsKey(effect.getEvent().getSimpleName()))
+        if (!this.getOrionEffects().containsKey(effect.getEvent().getSimpleName()))
             this.getOrionEffects().put(effect.getEvent().getSimpleName(), new LinkedHashMap<>());
         this.getOrionEffects().get(effect.getEvent().getSimpleName()).put(id, effect);
     }
 
     public void removeEffect(String id, Class<? extends Event> event) {
-        if(!this.getOrionEffects().containsKey(event.getSimpleName()))
+        if (!this.getOrionEffects().containsKey(event.getSimpleName()))
             return;
         this.getOrionEffects().get(event.getSimpleName()).remove(id);
     }
 
     public void executeOEffect(Event event) {
-        if(!this.getOrionEffects().containsKey(event.getClass().getSimpleName()))
+        if (!this.getOrionEffects().containsKey(event.getClass().getSimpleName()))
             return;
         ArrayList<String> toRemove = new ArrayList<>();
         this.getOrionEffects().get(event.getEventName()).forEach((id, effect) -> {
             boolean remove = effect.execute(event);
-            if(!remove)
+            if (!remove)
                 toRemove.add(id);
         });
         toRemove.forEach(id -> this.getOrionEffects().get(event.getEventName()).remove(id));
@@ -353,30 +365,36 @@ public class OrionPlayer {
 
     public void onTick() {
         updateFastboard();
-        if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE) - this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30)
+        if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE)
+                - this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30)
             mana += (int) (this.getStats().get(Stats.StatsInfo.INTELLIGENCE) / 30);
     }
 
     ArrayList<String> board = new ArrayList<>();
+
     private void updateFastboard() {
         board.clear();
         this.fastBoard.updateTitle("Statistiques");
         board.add(" ");
-        if(this.getRace() != null)
+        if (this.getRace() != null)
             board.add(ChatColor.WHITE + "Race : " + ChatColor.GOLD + this.getRace().getName());
-        board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " (" + (int) ((getExp() / getExpToNextLevel())*100) + "%)" );
-        board.add(ChatColor.WHITE + "Expérience : " + ChatColor.GOLD + (int)getExp() + "/" + (int)getExpToNextLevel());
+        board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " ("
+                + (int) ((getExp() / getExpToNextLevel()) * 100) + "%)");
+        board.add(
+                ChatColor.WHITE + "Expérience : " + ChatColor.GOLD + (int) getExp() + "/" + (int) getExpToNextLevel());
         board.add(" ");
-        if(this.getCurrencies().hasCurrency("gold")) {
+        if (this.getCurrencies().hasCurrency("gold")) {
             Currencies.Currency currency = this.getCurrencies().getCurrency("gold");
-            board.add(net.md_5.bungee.api.ChatColor.of(currency.getColor()) + currency.getName() + " : " + ChatColor.GOLD + currency.getAmount() + " " + currency.getSymbol());
+            board.add(net.md_5.bungee.api.ChatColor.of(currency.getColor()) + currency.getName() + " : "
+                    + ChatColor.GOLD + currency.getAmount() + " " + currency.getSymbol());
         }
         board.add(ChatColor.YELLOW + "Quête : " + ChatColor.GRAY + " TBI ");
 
-        if(party != null) {
+        if (party != null) {
             board.add(" ");
             board.add(ChatColor.YELLOW + "Groupe : ");
-            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : " + (int)p.getHealth() + "/" + (int)p.getStats().get(Stats.StatsInfo.VITALITY)));
+            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : "
+                    + (int) p.getHealth() + "/" + (int) p.getStats().get(Stats.StatsInfo.VITALITY)));
         }
         this.fastBoard.updateLines(board);
     }
@@ -386,9 +404,7 @@ public class OrionPlayer {
     }
 
     public enum SlotType {
-        FREE_SLOT,
-        USE_SLOT,
-        RESTRICTED_SLOT
+        FREE_SLOT, USE_SLOT, RESTRICTED_SLOT
     }
 
     public static OrionPlayer getOrionPlayer(Player player) {

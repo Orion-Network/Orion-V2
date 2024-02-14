@@ -26,6 +26,7 @@ public class WorldGuardUtils {
         RegionQuery query = container.createQuery();
         return query.testState(BukkitAdapter.adapt(location), null, flag);
     }
+
     public static class Flag {
         public static StateFlag NO_SPELLS = new StateFlag("no-spells", true);
     }

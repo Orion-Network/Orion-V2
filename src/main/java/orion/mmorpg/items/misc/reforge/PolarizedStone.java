@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class PolarizedStone extends BasicReforgeStone {
     public PolarizedStone() {
-        super(Material.NETHERITE_INGOT, "Pierre polarisée", "POLARIZED_STONE", 0, Arrays.asList("Permet d'appliquer polarisée"), Rarity.UNCOMMON, ItemReforge.POLARIZER, 5);
+        super(Material.NETHERITE_INGOT, "Pierre polarisée", "POLARIZED_STONE", 0,
+                Arrays.asList("Permet d'appliquer polarisée"), Rarity.UNCOMMON, ItemReforge.POLARIZER, 5);
     }
 }

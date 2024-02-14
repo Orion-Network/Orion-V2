@@ -35,7 +35,7 @@ public class Party {
     public void removeMember(OrionPlayer player) {
         players.remove(player);
         player.setParty(null);
-        if(players.isEmpty())
+        if (players.isEmpty())
             Mmorpg.INSTANCE.getPartyManager().removeParty(this);
     }
 

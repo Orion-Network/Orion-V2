@@ -23,15 +23,14 @@ public class OrionGson {
     public static Gson GSON;
 
     public OrionGson() {
-        RuntimeTypeAdapterFactory<BasicItem> basicItemRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(BasicItem.class, "typeofclazz")
-                .registerSubtype(BasicArmorItem.class, "Armor")
-                .registerSubtype(BasicArrow.class, "Arrow")
-                .registerSubtype(BasicConsumableItem.class, "Consumable")
+        RuntimeTypeAdapterFactory<BasicItem> basicItemRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+                .of(BasicItem.class, "typeofclazz").registerSubtype(BasicArmorItem.class, "Armor")
+                .registerSubtype(BasicArrow.class, "Arrow").registerSubtype(BasicConsumableItem.class, "Consumable")
                 .registerSubtype(BasicMagicWeapon.class, "MagicWeapon")
                 .registerSubtype(BasicMeleeWeapon.class, "MeleeWeapon")
                 .registerSubtype(BasicRangedWeapon.class, "RangedWeapon")
 
-                ;
+        ;
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
@@ -52,23 +51,27 @@ public class OrionGson {
     static final class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {
 
         @Override
-        public JsonElement serialize(ItemStack itemStack, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(ItemStack itemStack, Type type,
+                JsonSerializationContext jsonSerializationContext) {
             if (itemStack == null)
                 return JsonNull.INSTANCE;
             JsonObject jsonObject = new JsonObject();
             ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
-            jsonObject.addProperty("internal_id", meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING));
+            jsonObject.addProperty("internal_id",
+                    meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING));
             jsonObject.addProperty("amount", itemStack.getAmount());
             return jsonObject;
         }
 
         @Override
-        public ItemStack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public ItemStack deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             if (!jsonElement.isJsonObject())
                 if (Objects.equals(jsonElement.getAsString(), "null"))
                     return null;
             JsonObject object = jsonElement.getAsJsonObject();
-            return Mmorpg.INSTANCE.getItemManager().createItemstack(object.get("internal_id").getAsString(), object.get("amount").getAsInt());
+            return Mmorpg.INSTANCE.getItemManager().createItemstack(object.get("internal_id").getAsString(),
+                    object.get("amount").getAsInt());
         }
     }
 
@@ -77,7 +80,8 @@ public class OrionGson {
         ItemStackAdapter itemStackAdapter = new ItemStackAdapter();
 
         @Override
-        public JsonElement serialize(ItemStack[] itemStacks, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(ItemStack[] itemStacks, Type type,
+                JsonSerializationContext jsonSerializationContext) {
             JsonObject items = new JsonObject();
             for (int i = 0; i < itemStacks.length; i++) {
                 if (itemStacks[i] != null)
@@ -89,7 +93,8 @@ public class OrionGson {
         }
 
         @Override
-        public ItemStack[] deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public ItemStack[] deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonArray = jsonElement.getAsJsonObject();
             ItemStack[] items = new ItemStack[jsonArray.size()];
 
@@ -125,23 +130,28 @@ public class OrionGson {
         }
 
         @Override
-        public Location deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Location deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            return new Location(Bukkit.getWorld(jsonObject.get("world").getAsString()), jsonObject.get("x").getAsDouble(), jsonObject.get("y").getAsDouble(), jsonObject.get("z").getAsDouble());
+            return new Location(Bukkit.getWorld(jsonObject.get("world").getAsString()),
+                    jsonObject.get("x").getAsDouble(), jsonObject.get("y").getAsDouble(),
+                    jsonObject.get("z").getAsDouble());
         }
     }
 
     private final static class KnowledgeAdapter implements JsonSerializer<Knowledge>, JsonDeserializer<Knowledge> {
 
         @Override
-        public JsonElement serialize(Knowledge knowledge, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(Knowledge knowledge, Type type,
+                JsonSerializationContext jsonSerializationContext) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("knowledge", knowledge.getKnowledge());
             return jsonObject;
         }
 
         @Override
-        public Knowledge deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Knowledge deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             return new Knowledge(jsonObject.get("knowledge").getAsInt());
         }
@@ -149,51 +159,61 @@ public class OrionGson {
 
     private final static class EquipmentsAdapter implements JsonSerializer<Equipments>, JsonDeserializer<Equipments> {
         @Override
-        public JsonElement serialize(Equipments equipments, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(Equipments equipments, Type type,
+                JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET) != null)
-                object.addProperty("helmet", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET) != null)
+                object.addProperty("helmet",
+                        GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.HELMET), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE) != null)
-                object.addProperty("chestplate", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE) != null)
+                object.addProperty("chestplate", GSON
+                        .toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.CHESTPLATE), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS) != null)
-                object.addProperty("leggings",GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS) != null)
+                object.addProperty("leggings", GSON
+                        .toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.LEGGINGS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS) != null)
-                object.addProperty("boots", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS) != null)
+                object.addProperty("boots",
+                        GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BOOTS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT) != null)
-                object.addProperty("belt", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT) != null)
+                object.addProperty("belt",
+                        GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.BELT), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING) != null)
-                object.addProperty("left_ring", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING) != null)
+                object.addProperty("left_ring",
+                        GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.RING), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS) != null)
-                object.addProperty("right_ring", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS) != null)
+                object.addProperty("right_ring", GSON
+                        .toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.EARRINGS), BasicItem.class));
 
-            if(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE) != null)
-                object.addProperty("necklace", GSON.toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE), BasicItem.class));
+            if (equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE) != null)
+                object.addProperty("necklace", GSON
+                        .toJson(equipments.getEquipmentFromSlot(BasicArmorItem.ArmorType.NECKLACE), BasicItem.class));
             return object;
         }
 
         @Override
-        public Equipments deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Equipments deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject object = jsonElement.getAsJsonObject();
             Equipments equipments = new Equipments();
-            if(object.has("helmet"))
+            if (object.has("helmet"))
                 equipments.addEquipment(GSON.fromJson(object.get("helmet").getAsString(), (Type) BasicItem.class));
-            if(object.has("chestplate"))
+            if (object.has("chestplate"))
                 equipments.addEquipment(GSON.fromJson(object.get("chestplate").getAsString(), (Type) BasicItem.class));
-            if(object.has("leggings"))
+            if (object.has("leggings"))
                 equipments.addEquipment(GSON.fromJson(object.get("leggings").getAsString(), (Type) BasicItem.class));
-            if(object.has("boots"))
+            if (object.has("boots"))
                 equipments.addEquipment(GSON.fromJson(object.get("boots").getAsString(), (Type) BasicItem.class));
-            if(object.has("belt"))
+            if (object.has("belt"))
                 equipments.addEquipment(GSON.fromJson(object.get("belt").getAsString(), (Type) BasicItem.class));
-            if(object.has("left_ring"))
+            if (object.has("left_ring"))
                 equipments.addEquipment(GSON.fromJson(object.get("left_ring").getAsString(), (Type) BasicItem.class));
-            if(object.has("right_ring"))
+            if (object.has("right_ring"))
                 equipments.addEquipment(GSON.fromJson(object.get("right_ring").getAsString(), (Type) BasicItem.class));
             return equipments;
         }
@@ -201,17 +221,19 @@ public class OrionGson {
 
     private static final class JobsAdapter implements JsonSerializer<Jobs>, JsonDeserializer<Jobs> {
         @Override
-        public Jobs deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Jobs deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject object = jsonElement.getAsJsonObject();
             Jobs jobs = new Jobs();
             object.entrySet().forEach(entry -> {
                 JsonObject jobObject = entry.getValue().getAsJsonObject();
                 JobType jobType = JobType.valueOf(entry.getKey().toUpperCase());
                 try {
-                    AbstractJob job = jobType.getJobClass().getDeclaredConstructor(int.class, int.class).newInstance(jobObject.get("level").getAsInt(), jobObject.get("experience").getAsInt());
+                    AbstractJob job = jobType.getJobClass().getDeclaredConstructor(int.class, int.class)
+                            .newInstance(jobObject.get("level").getAsInt(), jobObject.get("experience").getAsInt());
                     jobs.addJob(job);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException e) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                        | NoSuchMethodException e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -233,12 +255,14 @@ public class OrionGson {
 
     public static class CurrenciesAdapter implements JsonSerializer<Currencies>, JsonDeserializer<Currencies> {
         @Override
-        public Currencies deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Currencies deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject object = jsonElement.getAsJsonObject();
             Currencies currencies = new Currencies();
             object.entrySet().forEach(entry -> {
                 JsonObject currencyObject = entry.getValue().getAsJsonObject();
-                Currencies.Currency currency =  new Currencies.Currency(currencyObject.get("name").getAsString(), currencyObject.get("amount").getAsLong());
+                Currencies.Currency currency = new Currencies.Currency(currencyObject.get("name").getAsString(),
+                        currencyObject.get("amount").getAsLong());
                 currency.setColor(currencyObject.get("color").getAsString());
                 currency.setSymbol(currencyObject.get("symbol").getAsString());
                 currencies.add(currency);
@@ -247,7 +271,8 @@ public class OrionGson {
         }
 
         @Override
-        public JsonElement serialize(Currencies currencies, Type type, JsonSerializationContext jsonSerializationContext) {
+        public JsonElement serialize(Currencies currencies, Type type,
+                JsonSerializationContext jsonSerializationContext) {
             JsonObject object = new JsonObject();
             currencies.getCurrencies().forEach((name, currency) -> {
                 JsonObject currencyObject = new JsonObject();
@@ -263,27 +288,21 @@ public class OrionGson {
     }
 
     /*
-    private static final class GuildAdapter implements JsonSerializer<Guild>, JsonDeserializer<Guild> {
-        @Override
-        public Guild deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            JsonObject object = jsonElement.getAsJsonObject();
-            Guild guild = new Guild(object.get("guildName").getAsString(),
-                    LocalDateTime.parse(object.get("creationDate").getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    GSON.fromJson("guildMembers", Ha)
-
-            );
-            return null;
-        }
-
-        @Override
-        public JsonElement serialize(Guild guild, Type type, JsonSerializationContext jsonSerializationContext) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("guildName", guild.getGuildName());
-            jsonObject.addProperty("creationDate", guild.getCreationDate().toString());
-            jsonObject.addProperty("guildMembers", GSON.toJson(guild.getGuildMemberMap()));
-            jsonObject.addProperty("guildPermissions", GSON.toJson(guild.getGuildMapPermissions()));
-            return jsonObject;
-        }
-    }*/
+     * private static final class GuildAdapter implements JsonSerializer<Guild>, JsonDeserializer<Guild> {
+     *
+     * @Override public Guild deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext
+     * jsonDeserializationContext) throws JsonParseException { JsonObject object = jsonElement.getAsJsonObject(); Guild
+     * guild = new Guild(object.get("guildName").getAsString(),
+     * LocalDateTime.parse(object.get("creationDate").getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+     * GSON.fromJson("guildMembers", Ha)
+     *
+     * ); return null; }
+     *
+     * @Override public JsonElement serialize(Guild guild, Type type, JsonSerializationContext jsonSerializationContext)
+     * { JsonObject jsonObject = new JsonObject(); jsonObject.addProperty("guildName", guild.getGuildName());
+     * jsonObject.addProperty("creationDate", guild.getCreationDate().toString());
+     * jsonObject.addProperty("guildMembers", GSON.toJson(guild.getGuildMemberMap()));
+     * jsonObject.addProperty("guildPermissions", GSON.toJson(guild.getGuildMapPermissions())); return jsonObject; } }
+     */
 
 }

@@ -13,7 +13,8 @@ public class CustomEnchants {
     public static final Enchantment WRATH = new EnchantmentWrapper(Namespaces.wrath, "Wrath", 3);
 
     public static void register() {
-        boolean registered = Arrays.stream(Enchantment.values()).anyMatch(enchantment -> enchantment.getKey().getKey().equals("wrath"));
+        boolean registered = Arrays.stream(Enchantment.values())
+                .anyMatch(enchantment -> enchantment.getKey().getKey().equals("wrath"));
         if (!registered) {
             registerEnchantment(WRATH);
         }

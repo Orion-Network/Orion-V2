@@ -23,13 +23,15 @@ public class SupportCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(commandSender instanceof Player) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s,
+            @NotNull String[] args) {
+        if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             OrionPlayer player1 = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
-            if(SupportList.valueOf(args[0].toUpperCase()) != null) {
+            if (SupportList.valueOf(args[0].toUpperCase()) != null) {
                 try {
-                    player1.setMainSupport((Support) SupportList.valueOf(args[0].toUpperCase()).getSupport().getDeclaredConstructors()[0].newInstance());
+                    player1.setMainSupport((Support) SupportList.valueOf(args[0].toUpperCase()).getSupport()
+                            .getDeclaredConstructors()[0].newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -40,7 +42,8 @@ public class SupportCommand implements TabExecutor {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s,
+            @NotNull String[] strings) {
         return Utils.enumAutocomplete(strings[0], SupportList.class);
     }
 }

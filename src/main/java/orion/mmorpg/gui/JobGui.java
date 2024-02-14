@@ -41,7 +41,6 @@ public class JobGui extends ChestGui {
         JobType jobType;
         AbstractJob job;
 
-
         public JobItem(JobType jobType, AbstractJob job) {
             super(jobType.getMaterial(), jobType.name(), "JOB_ITEM", 0);
             this.jobType = jobType;

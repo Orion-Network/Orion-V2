@@ -13,12 +13,16 @@ import java.util.Collections;
 
 public class AdminSword extends BasicMeleeWeapon {
     public AdminSword() {
-        super(Material.NETHERITE_SWORD, "Admin Sword", "ADMIN_SWORD", 0, Collections.singletonList("You shall not have this !"), Rarity.UNOBTAINABLE, "admin.use",
-                new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 10000).add(Stats.StatsInfo.CRITICAL_CHANCE, 95).build(), 200);
+        super(Material.NETHERITE_SWORD, "Admin Sword", "ADMIN_SWORD", 0,
+                Collections.singletonList("You shall not have this !"), Rarity.UNOBTAINABLE, "admin.use",
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 10000)
+                        .add(Stats.StatsInfo.CRITICAL_CHANCE, 95).build(),
+                200);
     }
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        e.getPlayer().sendMessage(e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).getBaseValue() + "" + e.getPlayer().getAttackCooldown());
+        e.getPlayer().sendMessage(e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).getBaseValue() + ""
+                + e.getPlayer().getAttackCooldown());
     }
 }

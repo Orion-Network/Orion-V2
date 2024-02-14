@@ -78,7 +78,7 @@ public final class Mmorpg extends JavaPlugin {
             }
         }
 
-        //transferResourcesToPluginFolder();
+        // transferResourcesToPluginFolder();
     }
 
     @Override
@@ -109,7 +109,6 @@ public final class Mmorpg extends JavaPlugin {
         System.out.println("registering items");
         itemManager = new ItemManager(this);
 
-
         CustomEnchants.register();
 
         pm.registerEvents(new PlayerJoinListener(this), this);
@@ -138,7 +137,8 @@ public final class Mmorpg extends JavaPlugin {
                     if (orionPlayer.getRace() == null)
                         p.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
                     return;
-                } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+                } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                        | InstantiationException | IllegalAccessException ex) {
                     ex.printStackTrace();
                     p.kickPlayer("Error in loading");
                 }
@@ -171,7 +171,8 @@ public final class Mmorpg extends JavaPlugin {
         if (!pluginFolder.exists()) {
             pluginFolder.mkdir();
         }
-        for (String fileName : new String[]{"pentagram.png","img/alchemy.png","img/alchemy_1.png","img/alchemy_2.png"}) {
+        for (String fileName : new String[] { "pentagram.png", "img/alchemy.png", "img/alchemy_1.png",
+                "img/alchemy_2.png" }) {
             File file = new File(pluginFolder, fileName);
             if (!file.exists()) {
                 try {

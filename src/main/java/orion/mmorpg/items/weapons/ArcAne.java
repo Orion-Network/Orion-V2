@@ -10,7 +10,9 @@ import java.util.Collections;
 
 public class ArcAne extends BasicRangedWeapon {
     public ArcAne() {
-        super(Material.BOW, "Arcane", "ARCANE", 0, Collections.singletonList("Un arc simple tirant son nom d'une ancienne créature."), Rarity.COMMON, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 2).build(), 2);
+        super(Material.BOW, "Arcane", "ARCANE", 0,
+                Collections.singletonList("Un arc simple tirant son nom d'une ancienne créature."), Rarity.COMMON,
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 2).build(), 2);
     }
 
     @Override

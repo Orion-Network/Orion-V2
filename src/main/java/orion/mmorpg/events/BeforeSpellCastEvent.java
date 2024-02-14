@@ -9,6 +9,7 @@ import orion.mmorpg.utils.Knowledge;
 public class BeforeSpellCastEvent extends Event {
     public static final HandlerList HANDLERS = new HandlerList();
     private final Spell spell;
+
     public BeforeSpellCastEvent(Spell spell) {
         this.spell = spell;
     }

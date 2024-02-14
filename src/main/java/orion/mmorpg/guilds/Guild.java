@@ -16,32 +16,38 @@ public class Guild {
 
     /**
      * Create a new guild with name and members
-     * @param guildName Define Guild Name
-     * @param guildMemberMap Map of Original Members
+     *
+     * @param guildName
+     *            Define Guild Name
+     * @param guildMemberMap
+     *            Map of Original Members
      */
     public Guild(String guildName, HashMap<UUID, MemberState> guildMemberMap) {
         this.guildName = guildName;
         this.creationDate = LocalDateTime.now();
         this.guildMemberMap = guildMemberMap;
         this.guildMapPermissions = new HashMap<>();
-        this.guildMapPermissions.put(GuildRank.CHEF, new ArrayList<>(Arrays.asList(
-                GuildPermissions.TELEPORT_TO_GUILD,
-                GuildPermissions.ACCEPT_MEMBERS,
-                GuildPermissions.INVITE_MEMBERS,
-                GuildPermissions.EXCLUDE_MEMBERS,
-                GuildPermissions.BAN_MEMBERS
-        )));
+        this.guildMapPermissions.put(GuildRank.CHEF,
+                new ArrayList<>(Arrays.asList(GuildPermissions.TELEPORT_TO_GUILD, GuildPermissions.ACCEPT_MEMBERS,
+                        GuildPermissions.INVITE_MEMBERS, GuildPermissions.EXCLUDE_MEMBERS,
+                        GuildPermissions.BAN_MEMBERS)));
     }
 
     /**
      * Constructor used to load guild from Json
-     * @param guildName Guild Name From Json
-     * @param creationDate Creation Date from Json
-     * @param guildMemberMap Guild Map From Json
-     * @param guildMapPermissions Guild Permission Form Json
+     *
+     * @param guildName
+     *            Guild Name From Json
+     * @param creationDate
+     *            Creation Date from Json
+     * @param guildMemberMap
+     *            Guild Map From Json
+     * @param guildMapPermissions
+     *            Guild Permission Form Json
      */
 
-    public Guild(String guildName, LocalDateTime creationDate, HashMap<UUID, MemberState> guildMemberMap, HashMap<GuildRank, ArrayList<GuildPermissions>> guildMapPermissions) {
+    public Guild(String guildName, LocalDateTime creationDate, HashMap<UUID, MemberState> guildMemberMap,
+            HashMap<GuildRank, ArrayList<GuildPermissions>> guildMapPermissions) {
         this.guildName = guildName;
         this.creationDate = creationDate;
         this.guildMemberMap = guildMemberMap;
@@ -50,14 +56,14 @@ public class Guild {
 
     public boolean addMemberPermission(OrionPlayer player, GuildPermissions permission) {
         MemberState state = guildMemberMap.get(player);
-        if(state.getPermissions().contains(permission))
+        if (state.getPermissions().contains(permission))
             return false;
         state.getPermissions().add(permission);
         return true;
     }
 
     public boolean addRankPermission(GuildRank rank, GuildPermissions permission) {
-        if(guildMapPermissions.get(rank).contains(permission))
+        if (guildMapPermissions.get(rank).contains(permission))
             return false;
         guildMapPermissions.get(rank).add(permission);
         return true;
@@ -65,7 +71,8 @@ public class Guild {
 
     public boolean hasPermission(OrionPlayer player, GuildPermissions permission) {
         MemberState state = guildMemberMap.get(player);
-        return (state.getPermissions().contains(permission) || guildMapPermissions.get(state.getGuildRank()).contains(permission));
+        return (state.getPermissions().contains(permission)
+                || guildMapPermissions.get(state.getGuildRank()).contains(permission));
     }
 
     public String getGuildName() {

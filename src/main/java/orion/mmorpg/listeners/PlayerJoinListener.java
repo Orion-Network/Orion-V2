@@ -34,7 +34,7 @@ public class PlayerJoinListener implements Listener {
         }
 
         Player player = e.getPlayer();
-        if(mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId())) {
+        if (mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId())) {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
             orionPlayer.setFastBoard(new FastBoard(player));
             return;
@@ -43,17 +43,18 @@ public class PlayerJoinListener implements Listener {
             try {
                 OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
                 mmorpg.getPlayerManager().addPlayer(player.getUniqueId(), orionPlayer);
-                if(orionPlayer.getHealth() <= 0) {
+                if (orionPlayer.getHealth() <= 0) {
                     orionPlayer.respawn();
                 }
                 orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(player, "Data loaded !");
-                if(orionPlayer.getMainSupport() != null)
+                if (orionPlayer.getMainSupport() != null)
                     orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
                 if (orionPlayer.getRace() == null)
                     player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
                 return;
-            } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+            } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                    | InstantiationException | IllegalAccessException ex) {
                 ex.printStackTrace();
                 player.kickPlayer("Error in loading");
             }
@@ -69,9 +70,9 @@ public class PlayerJoinListener implements Listener {
     public void playerQuitEvent(PlayerQuitEvent event) {
         OrionPlayer player = mmorpg.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         player.getFastBoard().delete();
-        if(player.getPet() != null)
+        if (player.getPet() != null)
             player.getPet().removePet();
-        if(event.getPlayer().isInsideVehicle()) {
+        if (event.getPlayer().isInsideVehicle()) {
             Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
             event.getPlayer().leaveVehicle();
         }

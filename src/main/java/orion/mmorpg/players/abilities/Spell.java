@@ -43,6 +43,7 @@ public abstract class Spell {
         this.element = element;
         this.cooldown = cooldown;
     }
+
     public Spell(String internal_id, int level, Element element, long cooldown, TargetType targetType) {
         this.internal_id = internal_id;
         this.level = level;
@@ -64,26 +65,26 @@ public abstract class Spell {
         this.caster = player;
         this.orionCaster = orionPlayer;
         switch (targetType) {
-            case SELF -> this.targets.add(player);
-            case TARGET -> {
-                LivingEntity target = Utils.getTargetInFront(player, range);
-                if (target != null)
-                    this.targets.add(target);
-            }
-            case NEAREST -> {
-                LivingEntity nearest = Utils.getNearestEntity(player, range);
-                if (nearest != null)
-                    this.targets.add(nearest);
-            }
-            case NEAR -> {
-                for (Entity entity : player.getNearbyEntities(range, range, range))
-                    if (entity instanceof LivingEntity && !entity.isInvulnerable())
-                        this.targets.add((LivingEntity) entity);
-            }
-            case PARTY -> {
-                if(orionPlayer.getParty() != null)
-                    orionPlayer.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
-            }
+        case SELF -> this.targets.add(player);
+        case TARGET -> {
+            LivingEntity target = Utils.getTargetInFront(player, range);
+            if (target != null)
+                this.targets.add(target);
+        }
+        case NEAREST -> {
+            LivingEntity nearest = Utils.getNearestEntity(player, range);
+            if (nearest != null)
+                this.targets.add(nearest);
+        }
+        case NEAR -> {
+            for (Entity entity : player.getNearbyEntities(range, range, range))
+                if (entity instanceof LivingEntity && !entity.isInvulnerable())
+                    this.targets.add((LivingEntity) entity);
+        }
+        case PARTY -> {
+            if (orionPlayer.getParty() != null)
+                orionPlayer.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+        }
         }
         if (this.targets.isEmpty()) {
             Utils.sendInfoMessage(player, "Aucune cible trouvée.");
@@ -96,10 +97,10 @@ public abstract class Spell {
                 return false;
             }
             knowledge = orionPlayer.getKnownSpells().get(this.getClass());
-            if(knowledge.getKnowledgeState().equals(Knowledge.KnowledgeState.UNKNOWN)) {
+            if (knowledge.getKnowledgeState().equals(Knowledge.KnowledgeState.UNKNOWN)) {
                 Utils.sendInfoMessage(player, "Nous ne connaissons pas ce sort.");
                 return false;
-            } else if(knowledge.getKnowledgeState().equals(Knowledge.KnowledgeState.LEARN)) {
+            } else if (knowledge.getKnowledgeState().equals(Knowledge.KnowledgeState.LEARN)) {
                 Utils.sendInfoMessage(player, "Vous devez continuer d'apprendre ce sort.");
                 return false;
             }
@@ -115,7 +116,8 @@ public abstract class Spell {
                 Utils.sendInfoMessage(player, "Le sort est en cooldown");
                 return false;
             }
-        if(checkIfSpellCastable()) return false;
+        if (checkIfSpellCastable())
+            return false;
         Utils.sendDebugMessage(player, "Sort " + this.internal_id + " !");
         Bukkit.getPluginManager().callEvent(new OnLaunchSpell(player, orionPlayer, this));
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
@@ -127,35 +129,36 @@ public abstract class Spell {
     public boolean beforeLaunchFromItem(Mmorpg mmorpg, Entity caster, Knowledge knowledge) {
         this.caster = caster;
         this.knowledge = knowledge;
-        if(caster instanceof Player)
+        if (caster instanceof Player)
             this.orionCaster = mmorpg.getPlayerManager().getPlayer(caster.getUniqueId());
         switch (targetType) {
-            case SELF -> this.targets.add((LivingEntity) caster);
-            case TARGET -> {
-                LivingEntity target = Utils.getTargetInFront((LivingEntity) caster, range);
-                if (target != null)
-                    this.targets.add(target);
-            }
-            case NEAREST -> {
-                LivingEntity nearest = Utils.getNearestEntity((LivingEntity) caster, range);
-                if (nearest != null)
-                    this.targets.add(nearest);
-            }
-            case NEAR -> {
-                for (Entity entity : caster.getNearbyEntities(range, range, range))
-                    if (entity instanceof LivingEntity)
-                        this.targets.add((LivingEntity) entity);
-            }
-            case PARTY -> {
-                if(orionCaster != null && orionCaster.getParty() != null)
-                    orionCaster.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
-            }
+        case SELF -> this.targets.add((LivingEntity) caster);
+        case TARGET -> {
+            LivingEntity target = Utils.getTargetInFront((LivingEntity) caster, range);
+            if (target != null)
+                this.targets.add(target);
+        }
+        case NEAREST -> {
+            LivingEntity nearest = Utils.getNearestEntity((LivingEntity) caster, range);
+            if (nearest != null)
+                this.targets.add(nearest);
+        }
+        case NEAR -> {
+            for (Entity entity : caster.getNearbyEntities(range, range, range))
+                if (entity instanceof LivingEntity)
+                    this.targets.add((LivingEntity) entity);
+        }
+        case PARTY -> {
+            if (orionCaster != null && orionCaster.getParty() != null)
+                orionCaster.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+        }
         }
         if (this.targets.isEmpty()) {
             Utils.sendInfoMessage(caster, "Aucune cible trouvée.");
             return false;
         }
-        if(checkIfSpellCastable()) return false;
+        if (checkIfSpellCastable())
+            return false;
         launch(mmorpg, caster.getLocation(), knowledge);
         return true;
     }
@@ -163,10 +166,12 @@ public abstract class Spell {
     private boolean checkIfSpellCastable() {
         this.getCaster().getNearbyEntities(5 * 10, 5 * 10, 5 * 10).forEach(e -> {
             if (e instanceof Player)
-                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, this.getCaster(), (Player) e, SpellList.valueOf(this.getInternal_id()), this, OnSpellSense.Target.GLOBAL));
+                Bukkit.getPluginManager().callEvent(new OnSpellSense(false, this.getCaster(), (Player) e,
+                        SpellList.valueOf(this.getInternal_id()), this, OnSpellSense.Target.GLOBAL));
         });
         Bukkit.getPluginManager().callEvent(new BeforeSpellCastEvent(this));
-        if (this.isCanceled()) return true;
+        if (this.isCanceled())
+            return true;
         Utils.sendDebugMessage(this.getCaster(), "Sort " + this.getInternal_id() + " !");
         return false;
     }
@@ -219,7 +224,7 @@ public abstract class Spell {
 
     public void setCaster(Entity caster) {
         this.caster = caster;
-        if(caster instanceof Player)
+        if (caster instanceof Player)
             this.orionCaster = Mmorpg.INSTANCE.getPlayerManager().getPlayer(caster.getUniqueId());
     }
 

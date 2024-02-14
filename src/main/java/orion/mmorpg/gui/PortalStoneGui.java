@@ -24,20 +24,15 @@ public class PortalStoneGui extends ChestGui {
     }
 
     public StaticPane getListPane() {
-        //TODO add this to Orion World
+        // TODO add this to Orion World
         /*
-        int i = 0;
-        for (String id : orionPlayer.getPortalStones()) {
-
-            if(!Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(id)) continue;
-            PortalStone portalStone = Mmorpg.INSTANCE.getWorldManager().getPortalStone(id);
-
-            listPane.addItem(new GuiItem(portalStone.generateItem(), e -> {
-                p.teleport(portalStone.getLocation());
-            }), i, i / 6);
-            i++;
-        }
-        return listPane;
+         * int i = 0; for (String id : orionPlayer.getPortalStones()) {
+         *
+         * if(!Mmorpg.INSTANCE.getWorldManager().getPortalStones().containsKey(id)) continue; PortalStone portalStone =
+         * Mmorpg.INSTANCE.getWorldManager().getPortalStone(id);
+         *
+         * listPane.addItem(new GuiItem(portalStone.generateItem(), e -> { p.teleport(portalStone.getLocation()); }), i,
+         * i / 6); i++; } return listPane;
          */
         return new StaticPane(0, 0, 9, 1);
     }

@@ -15,14 +15,14 @@ import orion.mmorpg.utils.WorldGuardUtils;
 public class Repulsion extends Spell {
 
     public Repulsion() {
-        super("REPULSION", 30, Element.ARCANE, 15*1000, TargetType.NEAR, 5);
+        super("REPULSION", 30, Element.ARCANE, 15 * 1000, TargetType.NEAR, 5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         getTargets().forEach(entity -> {
-            if(entity instanceof Player)
-                if(!WorldGuardUtils.canPvp(entity))
+            if (entity instanceof Player)
+                if (!WorldGuardUtils.canPvp(entity))
                     return;
             SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
             sphereEffect.particle = Particle.FIREWORKS_SPARK;

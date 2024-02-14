@@ -12,7 +12,8 @@ import java.util.Collections;
 
 public class MenuItem extends BasicItem {
     public MenuItem() {
-        super(Material.CLOCK, "Menu", "MENU_ITEM", 1, Collections.singletonList("Permet d'ouvrir le menu"), Rarity.RARE);
+        super(Material.CLOCK, "Menu", "MENU_ITEM", 1, Collections.singletonList("Permet d'ouvrir le menu"),
+                Rarity.RARE);
     }
 
     @Override

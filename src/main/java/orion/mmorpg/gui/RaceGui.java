@@ -39,7 +39,8 @@ public class RaceGui extends ChestGui {
 
     public OutlinePane generateRacePane() {
         for (Race race : Race.values()) {
-            if(excludedRaces.contains(race)) continue;
+            if (excludedRaces.contains(race))
+                continue;
             racePane.addItem(new GuiItem(race.getItemStack(), e -> {
                 if (orionPlayer.getRace() == null) {
                     new AcceptGui("Devenir " + race.getName(), p, orionPlayer, () -> {

@@ -23,7 +23,7 @@ public class MountGui extends ChestGui {
         OutlinePane mountPane = new OutlinePane(0, 0, 9, 3);
         orionPlayer.getTamedMounts().forEach(mount -> {
             Utils.sendInfoMessage(owner, mount.name());
-            mountPane.addItem(new GuiItem(mount.generateItemStack(),e -> {
+            mountPane.addItem(new GuiItem(mount.generateItemStack(), e -> {
                 e.setCancelled(true);
                 owner.closeInventory();
                 mount.spawn(owner);

@@ -12,7 +12,7 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.utils.Element;
 import orion.mmorpg.utils.Knowledge;
 
-public class FullGravity extends Spell{
+public class FullGravity extends Spell {
     public FullGravity() {
         super("FULL_GRAVITY", 15, Element.BLACK, 60 * 1000);
     }
@@ -31,8 +31,11 @@ public class FullGravity extends Spell{
             @Override
             public void run() {
                 i++;
-                location.getWorld().getNearbyEntities(location, 10, 10, 10, e -> e instanceof Player).forEach(p -> ((Player) p).addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 40, 128, false, false, false)));
-                if (i == 15) cancel();
+                location.getWorld().getNearbyEntities(location, 10, 10, 10, e -> e instanceof Player)
+                        .forEach(p -> ((Player) p).addPotionEffect(
+                                new PotionEffect(PotionEffectType.JUMP, 40, 128, false, false, false)));
+                if (i == 15)
+                    cancel();
             }
         }.runTaskTimer(mmorpg, 0l, 20l);
 

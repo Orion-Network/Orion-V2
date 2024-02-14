@@ -11,14 +11,16 @@ import orion.mmorpg.utils.Utils;
 
 public class Recall extends Spell {
     public Recall() {
-        super("RECALL", 10, Element.ARCANE, 10*1000);
+        super("RECALL", 10, Element.ARCANE, 10 * 1000);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         assert Namespaces.mark_location != null;
-        if(getTargets().getFirst().getPersistentDataContainer().has(Namespaces.mark_location, PersistentDataType.STRING)) {
-            String locationString = getTargets().getFirst().getPersistentDataContainer().get(Namespaces.mark_location, PersistentDataType.STRING);
+        if (getTargets().getFirst().getPersistentDataContainer().has(Namespaces.mark_location,
+                PersistentDataType.STRING)) {
+            String locationString = getTargets().getFirst().getPersistentDataContainer().get(Namespaces.mark_location,
+                    PersistentDataType.STRING);
             Location markLocation = Mmorpg.getOrionGson().getGSON().fromJson(locationString, Location.class);
             getTargets().getFirst().teleport(markLocation);
             Utils.sendInfoMessage(getTargets().getFirst(), "Teleportation reussie !");

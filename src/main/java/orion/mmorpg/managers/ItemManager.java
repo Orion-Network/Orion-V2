@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class ItemManager extends AbstractManager {
 
     private final HashMap<String, Class<? extends BasicItem>> items;
+
     public ItemManager(Mmorpg mmorpg) {
         super(mmorpg);
 
@@ -33,12 +34,13 @@ public class ItemManager extends AbstractManager {
 
         for (Class<? extends BasicItem> item : new Reflections("orion.mmorpg.items").getSubTypesOf(BasicItem.class)) {
             BasicItem basicItem = null;
-            if(item.isAnnotationPresent(ExcludeRegister.class) || item.getCanonicalName() == null)
+            if (item.isAnnotationPresent(ExcludeRegister.class) || item.getCanonicalName() == null)
                 continue;
             try {
                 basicItem = item.getConstructor().newInstance();
                 registerItem(basicItem.getINTERNAL_ID(), item);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                    | NoSuchMethodException e) {
                 e.printStackTrace();
             }
         }
@@ -70,10 +72,13 @@ public class ItemManager extends AbstractManager {
 
     public BasicItem getItemFromItemstack(ItemStack itemStack) {
         PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-        if(container.has(Namespaces.internal_id, PersistentDataType.STRING) && isItem(container.get(Namespaces.internal_id, PersistentDataType.STRING))) {
+        if (container.has(Namespaces.internal_id, PersistentDataType.STRING)
+                && isItem(container.get(Namespaces.internal_id, PersistentDataType.STRING))) {
             try {
-                return (BasicItem) getItem(container.get(Namespaces.internal_id, PersistentDataType.STRING)).getSuperclass().getDeclaredConstructor(ItemStack.class).newInstance(itemStack);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                return (BasicItem) getItem(container.get(Namespaces.internal_id, PersistentDataType.STRING))
+                        .getSuperclass().getDeclaredConstructor(ItemStack.class).newInstance(itemStack);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                    | NoSuchMethodException e) {
                 e.printStackTrace();
             }
         }
@@ -81,11 +86,9 @@ public class ItemManager extends AbstractManager {
     }
 
     public ItemStack createItemstack(String name, int i) {
-        if(createItem(name) == null)
+        if (createItem(name) == null)
             return null;
         return createItem(name).generateItem(null, i);
     }
 
 }
-
-

@@ -26,7 +26,8 @@ public class BasicArrow extends BasicItem {
         this.DAMAGE = container.get(Namespaces.damage, PersistentDataType.FLOAT);
     }
 
-    public BasicArrow(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, float DAMAGE) {
+    public BasicArrow(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
         this.DAMAGE = DAMAGE;
     }

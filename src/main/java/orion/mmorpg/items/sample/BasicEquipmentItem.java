@@ -27,16 +27,19 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
     public BasicEquipmentItem(ItemStack item) {
         super(item);
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-        this.MODIFIERS = Mmorpg.getOrionGson().getGSON().fromJson(container.get(Namespaces.modifiers, PersistentDataType.STRING), Stats.Modifiers.class);
+        this.MODIFIERS = Mmorpg.getOrionGson().getGSON()
+                .fromJson(container.get(Namespaces.modifiers, PersistentDataType.STRING), Stats.Modifiers.class);
         setReforge(ItemReforge.valueOf(container.get(Namespaces.reforge, PersistentDataType.STRING)));
     }
 
-    public BasicEquipmentItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType TYPE, Stats.Modifiers modifiers) {
+    public BasicEquipmentItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ItemType TYPE, Stats.Modifiers modifiers) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, TYPE);
         this.MODIFIERS = modifiers;
     }
 
-    public BasicEquipmentItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType TYPE, String PERMISSION, Stats.Modifiers modifiers) {
+    public BasicEquipmentItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ItemType TYPE, String PERMISSION, Stats.Modifiers modifiers) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, TYPE, PERMISSION);
         this.MODIFIERS = modifiers;
     }
@@ -47,21 +50,23 @@ public class BasicEquipmentItem extends BasicItem implements Modifiers, Reforgea
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.reforge, PersistentDataType.STRING, reforge.name());
-        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
+        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING,
+                Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        List<String> lorea =  super.generateLore(lore);
-        //Generate enchants with comma separated values
-        if(this.hasItemMeta()) {
+        List<String> lorea = super.generateLore(lore);
+        // Generate enchants with comma separated values
+        if (this.hasItemMeta()) {
             StringBuilder enchants = new StringBuilder();
-            for(Enchantment enchantment : getItemMeta().getEnchants().keySet()) {
-                enchants.append(ChatColor.GRAY + enchantment.getName()).append(" ").append(Utils.integerToRoman5(getItemMeta().getEnchants().get(enchantment))).append(", ");
+            for (Enchantment enchantment : getItemMeta().getEnchants().keySet()) {
+                enchants.append(ChatColor.GRAY + enchantment.getName()).append(" ")
+                        .append(Utils.integerToRoman5(getItemMeta().getEnchants().get(enchantment))).append(", ");
             }
-            if(enchants.length() > 0) {
+            if (enchants.length() > 0) {
                 enchants.delete(enchants.length() - 2, enchants.length());
                 lorea.add(enchants.toString());
             }

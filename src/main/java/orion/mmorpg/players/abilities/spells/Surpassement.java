@@ -26,20 +26,20 @@ public class Surpassement extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
-        if(getOrionCaster() != null)
+        if (getOrionCaster() != null)
             getOrionCaster().addEffect("BOOST", new Boost((long) (1000 * 60 * 5)));
     }
 
     public static class Boost extends OEffect {
 
-            public Boost(Long duration) {
-                super("BOOST", "Boosted mode", PlayerDamageEntityEvent.class, duration);
-            }
+        public Boost(Long duration) {
+            super("BOOST", "Boosted mode", PlayerDamageEntityEvent.class, duration);
+        }
 
-            @Override
-            public void onEvent(Event event) {
-                PlayerDamageEntityEvent e = (PlayerDamageEntityEvent) event;
-                e.setDamage(e.getDamage() * 2);
-            }
+        @Override
+        public void onEvent(Event event) {
+            PlayerDamageEntityEvent e = (PlayerDamageEntityEvent) event;
+            e.setDamage(e.getDamage() * 2);
+        }
     }
 }

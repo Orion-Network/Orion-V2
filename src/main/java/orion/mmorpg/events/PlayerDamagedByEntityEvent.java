@@ -25,6 +25,7 @@ public class PlayerDamagedByEntityEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
+
     @NotNull
     @Override
     public HandlerList getHandlers() {
@@ -43,10 +44,10 @@ public class PlayerDamagedByEntityEvent extends Event implements Cancellable {
         return event.getDamager();
     }
 
-
     public double getDamage() {
         return event.getDamage();
     }
+
     public void setDamage(double damage) {
         event.setDamage(damage);
     }

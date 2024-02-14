@@ -24,9 +24,14 @@ public class GoatHunger extends Spell {
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         Effect goatHungerEffect = new GoatHungerEffect(Mmorpg.effectManager);
-        RayTraceResult rayTraceResult = getCaster().getWorld().rayTraceEntities(((Player)getCaster()).getEyeLocation().add(((Player)getCaster()).getEyeLocation().getDirection().normalize()), ((Player)getCaster()).getEyeLocation().getDirection().normalize(), 10, (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
-        if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == getCaster()) return;
-        goatHungerEffect.setLocation(((Player)getCaster()).getEyeLocation());
+        RayTraceResult rayTraceResult = getCaster().getWorld().rayTraceEntities(
+                ((Player) getCaster()).getEyeLocation()
+                        .add(((Player) getCaster()).getEyeLocation().getDirection().normalize()),
+                ((Player) getCaster()).getEyeLocation().getDirection().normalize(), 10,
+                (e) -> (e instanceof LivingEntity && !e.isInvulnerable()));
+        if (rayTraceResult.getHitEntity() == null || rayTraceResult.getHitEntity() == getCaster())
+            return;
+        goatHungerEffect.setLocation(((Player) getCaster()).getEyeLocation());
         goatHungerEffect.setTargetEntity(rayTraceResult.getHitEntity());
         goatHungerEffect.start();
     }
@@ -51,7 +56,10 @@ public class GoatHunger extends Spell {
                 this.cancel();
                 if (getTargetEntity() instanceof Player) {
                     ((Player) getTargetEntity()).setWalkSpeed(0);
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId()).respawn(), 5 * 1000);
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class),
+                            () -> Mmorpg.INSTANCE.getPlayerManager().getPlayer(getTargetEntity().getUniqueId())
+                                    .respawn(),
+                            5 * 1000);
                 } else {
                     ((LivingEntity) getTargetEntity()).setAI(false);
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mmorpg.getPlugin(Mmorpg.class), () -> {

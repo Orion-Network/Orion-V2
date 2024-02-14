@@ -30,14 +30,14 @@ public class SlashEffect extends Effect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        for(int i = 0; i < particlesPerIterations; i++) {
+        for (int i = 0; i < particlesPerIterations; i++) {
             double t = (Math.PI / particles) * step;
-            double x = (Math.sin(t)*radius)/2;
-            double z = Math.cos(t)*radius/2;
-            for(float j = 0; j < 1; j+=0.1) {
+            double x = (Math.sin(t) * radius) / 2;
+            double z = Math.cos(t) * radius / 2;
+            for (float j = 0; j < 1; j += 0.1) {
                 float size = step / 100; // 0 - 0.9
                 size = size > 0.4 ? (float) (0.9 - size) : size;
-                Vector v = new Vector(x + (x*j*size), 1, z + (z*j*size));
+                Vector v = new Vector(x + (x * j * size), 1, z + (z * j * size));
                 v = VectorUtils.rotateVector(v, location.getYaw(), 0);
 
                 display(particle, location.clone().add(v));

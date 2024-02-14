@@ -11,25 +11,25 @@ import orion.mmorpg.players.abilities.Spell;
 
 public class OnLaunchSpell extends Event implements Cancellable {
 
-        private static final HandlerList HANDLERS = new HandlerList();
-        private boolean cancelled;
-        @Getter
-        private Player player;
-        @Getter
-        private OrionPlayer stats;
-        @Getter
-        private Spell spell;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private boolean cancelled;
+    @Getter
+    private Player player;
+    @Getter
+    private OrionPlayer stats;
+    @Getter
+    private Spell spell;
 
-        public OnLaunchSpell(Player player, OrionPlayer stats, Spell spell) {
-                this.player = player;
-                this.stats = stats;
-                this.spell = spell;
-        }
-
+    public OnLaunchSpell(Player player, OrionPlayer stats, Spell spell) {
+        this.player = player;
+        this.stats = stats;
+        this.spell = spell;
+    }
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
+
     @NotNull
     @Override
     public HandlerList getHandlers() {

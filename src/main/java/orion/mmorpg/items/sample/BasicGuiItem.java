@@ -10,7 +10,8 @@ import java.util.List;
 @ExcludeRegister
 public class BasicGuiItem extends BasicItem {
     public BasicGuiItem(String NAME, String INTERNAL_ID, int MODEL_ID) {
-        super(Material.CARROT_ON_A_STICK, NAME, INTERNAL_ID, MODEL_ID, null, Rarity.TRASH, ItemType.PLACEHOLDER, "item.display");
+        super(Material.CARROT_ON_A_STICK, NAME, INTERNAL_ID, MODEL_ID, null, Rarity.TRASH, ItemType.PLACEHOLDER,
+                "item.display");
     }
 
     public BasicGuiItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID) {

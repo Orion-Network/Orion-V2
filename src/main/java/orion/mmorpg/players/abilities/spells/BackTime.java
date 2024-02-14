@@ -19,6 +19,6 @@ public class BackTime extends Spell {
 
         Bukkit.getScheduler().runTaskLater(mmorpg, () -> {
             this.getCaster().teleport(currentLocation);
-        }, 15*20);
+        }, 15 * 20);
     }
 }

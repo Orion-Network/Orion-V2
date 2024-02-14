@@ -16,17 +16,19 @@ public class BasicRessource extends BasicItem {
         super(item);
     }
 
-    public BasicRessource(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+    public BasicRessource(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.RESSOURCE);
     }
 
-    public BasicRessource(Material material, String name, String internalId, int modelId, List<String> lore, Rarity rarity, ItemType itemType) {
+    public BasicRessource(Material material, String name, String internalId, int modelId, List<String> lore,
+            Rarity rarity, ItemType itemType) {
         super(material, name, internalId, modelId, lore, rarity, itemType);
     }
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
         return super.generateLore(lore);
     }

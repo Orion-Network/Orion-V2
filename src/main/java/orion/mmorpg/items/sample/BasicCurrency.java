@@ -15,13 +15,14 @@ public class BasicCurrency extends BasicItem {
         super(item);
     }
 
-    public BasicCurrency(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+    public BasicCurrency(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
     }
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.DARK_GRAY + "Monnaie");
         return super.generateLore(lore);

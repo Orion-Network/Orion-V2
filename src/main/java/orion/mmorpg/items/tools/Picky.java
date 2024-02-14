@@ -10,6 +10,7 @@ import java.util.List;
 public class Picky extends BasicTool {
 
     public Picky() {
-        super(Material.IRON_PICKAXE, "Picky the good Pick", "PICKY", 0, null, Rarity.HERO, new Stats.Modifiers(), ToolType.PICKAXE, 9);
+        super(Material.IRON_PICKAXE, "Picky the good Pick", "PICKY", 0, null, Rarity.HERO, new Stats.Modifiers(),
+                ToolType.PICKAXE, 9);
     }
 }

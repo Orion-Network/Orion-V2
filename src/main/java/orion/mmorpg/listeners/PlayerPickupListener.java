@@ -21,27 +21,27 @@ public class PlayerPickupListener implements Listener {
 
     @EventHandler
     public void onPlayerPickup(EntityPickupItemEvent e) {
-        if(!(e.getEntity() instanceof Player))
+        if (!(e.getEntity() instanceof Player))
             return;
 
         Player player = (Player) e.getEntity();
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(player.getUniqueId());
 
-        if(orionPlayer.getPlayerMode() != Mode.PLAYER)
+        if (orionPlayer.getPlayerMode() != Mode.PLAYER)
             return;
 
         ItemStack item = e.getItem().getItemStack();
 
-        if(!Utils.isItemValid(item, player))    {
+        if (!Utils.isItemValid(item, player)) {
             e.setCancelled(true);
             e.getItem().remove();
             Utils.sendErrorMessage(e.getEntity(), "Cet objet n'est pas valide");
             return;
         }
 
-        if(ItemUtils.isItem(item)) {
+        if (ItemUtils.isItem(item)) {
             BasicItem basicItem = ItemUtils.getItemFromItemstack(item);
-            basicItem.onPickupItem(e,item);
+            basicItem.onPickupItem(e, item);
         }
 
         ((Player) e.getEntity()).updateInventory();

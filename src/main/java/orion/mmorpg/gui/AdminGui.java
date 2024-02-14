@@ -7,6 +7,7 @@ import orion.mmorpg.players.OrionPlayer;
 public class AdminGui extends ChestGui {
     Player player;
     OrionPlayer orionPlayer;
+
     public AdminGui(Player player, OrionPlayer orionPlayer) {
         super(6, "Menu Admin");
         this.player = player;

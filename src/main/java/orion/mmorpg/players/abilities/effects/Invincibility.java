@@ -9,14 +9,16 @@ import orion.mmorpg.players.abilities.OEffect;
 public class Invincibility extends OEffect {
 
     public Invincibility(long duration) {
-        super("Invincibility", "Makes the player invincible for a short period of time.", PlayerDamagedByEntityEvent.class, duration);
+        super("Invincibility", "Makes the player invincible for a short period of time.",
+                PlayerDamagedByEntityEvent.class, duration);
     }
 
     @Override
     public void onEvent(Event event) {
         PlayerDamagedByEntityEvent e = (PlayerDamagedByEntityEvent) event;
-        if(e.getPlayer().isSneaking())
+        if (e.getPlayer().isSneaking())
             e.setCancelled(true);
-        Bukkit.broadcastMessage("Player " + e.getPlayer().getName() + " is invincible for " + getDuration() + " ticks.");
+        Bukkit.broadcastMessage(
+                "Player " + e.getPlayer().getName() + " is invincible for " + getDuration() + " ticks.");
     }
 }

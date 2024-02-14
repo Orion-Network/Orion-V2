@@ -20,15 +20,28 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public enum Race {
-    HUMAN("Humain", new Stats.Builder().build(), BasicItem.generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0, Collections.singletonList("La race la plus populaire de ce monde malgré leurs faible magie"), Rarity.COMMON).generateItem(null, 1), new ArrayList<>(Collections.singleton(Heal.class)), null, null,
+    HUMAN("Humain", new Stats.Builder().build(),
+            BasicItem
+                    .generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0,
+                            Collections.singletonList(
+                                    "La race la plus populaire de ce monde malgré leurs faible magie"),
+                            Rarity.COMMON)
+                    .generateItem(null, 1),
+            new ArrayList<>(Collections.singleton(Heal.class)), null, null,
             new LinkedHashMap<Integer, Class<? extends Spell>>() {
                 {
                     put(5, Surpassement.class);
                 }
-            },(p, op) -> {
-        p.getInventory().addItem(new WoodenSword().generateItem(null, 1), new StartingSet.StartingChestplate().generateItem(null, 1));
-    }),
-    CELESTIAL("Célestien", new Stats.Builder().build(), BasicItem.generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0, Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE).generateItem(null, 1), null, Arrays.asList(spec.ELYTRA), null, null, null);
+            }, (p, op) -> {
+                p.getInventory().addItem(new WoodenSword().generateItem(null, 1),
+                        new StartingSet.StartingChestplate().generateItem(null, 1));
+            }),
+    CELESTIAL("Célestien", new Stats.Builder().build(),
+            BasicItem
+                    .generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0,
+                            Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE)
+                    .generateItem(null, 1),
+            null, Arrays.asList(spec.ELYTRA), null, null, null);
 
     public String name;
     public Stats stats;
@@ -39,7 +52,10 @@ public enum Race {
     public Map<Integer, Class<? extends Spell>> learningSpells;
     BiConsumer<Player, OrionPlayer> onRaceSelected;
 
-    Race(String name, Stats stats, ItemStack itemStack, @Nullable ArrayList<Class<? extends Spell>> spellList, @Nullable List<spec> species, @Nullable Support support, @Nullable Map<Integer, Class<? extends Spell>> learningSpells, @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
+    Race(String name, Stats stats, ItemStack itemStack, @Nullable ArrayList<Class<? extends Spell>> spellList,
+            @Nullable List<spec> species, @Nullable Support support,
+            @Nullable Map<Integer, Class<? extends Spell>> learningSpells,
+            @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
         this.name = name;
         this.stats = stats;
         this.itemStack = itemStack;
@@ -52,7 +68,7 @@ public enum Race {
             this.species.addAll(species);
         this.support = support;
 
-        if(learningSpells != null)
+        if (learningSpells != null)
             this.learningSpells = learningSpells;
 
         if (onRaceSelected != null)

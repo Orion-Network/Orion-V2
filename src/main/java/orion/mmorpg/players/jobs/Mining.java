@@ -1,6 +1,6 @@
 package orion.mmorpg.players.jobs;
 
-public class Mining extends AbstractJob{
+public class Mining extends AbstractJob {
     public Mining() {
         super(JobType.MINING);
     }

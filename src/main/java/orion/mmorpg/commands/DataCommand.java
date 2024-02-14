@@ -41,7 +41,8 @@ public class DataCommand implements TabExecutor {
                     builder.append(ChatColor.GRAY + "Mode : " + ChatColor.YELLOW + data.getPlayerMode().name() + "\n");
                     builder.append(ChatColor.GRAY + "Health : " + ChatColor.YELLOW + data.getHealth() + "\n");
                     builder.append(ChatColor.GRAY + "Mana : " + ChatColor.YELLOW + data.getMana() + "\n");
-                    builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW + (data.getMainSupport() == null ? "Aucun" : data.getMainSupport().getName()) + "\n");
+                    builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW
+                            + (data.getMainSupport() == null ? "Aucun" : data.getMainSupport().getName()) + "\n");
                     builder.append(ChatColor.GRAY + "Race : " + ChatColor.YELLOW + data.getRace().getName() + "\n");
                     builder.append(data.getStats().modifiersAsLore()).append("\n");
                     for (String stat : data.getStats().statsAsLore())
@@ -53,16 +54,21 @@ public class DataCommand implements TabExecutor {
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
                     builder.append("\n" + data.getKnownSpells().keySet() + "\n");
-                    builder.append("\n" + "Smithing : " + data.getJobs().getJob(JobType.SMITHING).getLevel() + " " + data.getJobs().getJob(JobType.SMITHING).getExperience());
-                    builder.append("\n" + "Mining : " + data.getJobs().getJob(JobType.MINING).getLevel() + " " + data.getJobs().getJob(JobType.MINING).getExperience());
+                    builder.append("\n" + "Smithing : " + data.getJobs().getJob(JobType.SMITHING).getLevel() + " "
+                            + data.getJobs().getJob(JobType.SMITHING).getExperience());
+                    builder.append("\n" + "Mining : " + data.getJobs().getJob(JobType.MINING).getLevel() + " "
+                            + data.getJobs().getJob(JobType.MINING).getExperience());
                     sender.sendMessage(builder.toString());
                 }
             } else if (args[0].equalsIgnoreCase("item")) {
                 if (sender instanceof Player) {
                     ItemMeta meta = ((Player) sender).getInventory().getItemInMainHand().getItemMeta();
-                    String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
+                    String internal_id = meta.getPersistentDataContainer().get(Namespaces.internal_id,
+                            PersistentDataType.STRING);
                     String type = meta.getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING);
-                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(meta.getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING), Stats.class);
+                    Stats stats = Mmorpg.getOrionGson().getGSON().fromJson(
+                            meta.getPersistentDataContainer().get(Namespaces.stats, PersistentDataType.STRING),
+                            Stats.class);
                     float damage = 0;
                     if (meta.getPersistentDataContainer().has(Namespaces.damage, PersistentDataType.FLOAT))
                         damage = meta.getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
@@ -77,7 +83,8 @@ public class DataCommand implements TabExecutor {
                         builder.append("\n");
                     }
                     builder.append(meta.getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING));
-                    builder.append(ChatColor.GRAY + "Data: " + ChatColor.LIGHT_PURPLE + meta.getPersistentDataContainer().getKeys());
+                    builder.append(ChatColor.GRAY + "Data: " + ChatColor.LIGHT_PURPLE
+                            + meta.getPersistentDataContainer().getKeys());
 
                     sender.sendMessage(builder.toString());
                 }

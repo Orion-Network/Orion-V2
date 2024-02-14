@@ -29,50 +29,65 @@ public class ItemCommand implements TabExecutor {
         if (args.length > 1) {
             if (args[0].equalsIgnoreCase("give")) {
                 if (args.length > 2) {
-                    if(Bukkit.getPlayer(args[1]) == null) {
+                    if (Bukkit.getPlayer(args[1]) == null) {
                         Utils.sendErrorMessage((Entity) sender, "Le joueur n'existe pas.");
                         return false;
                     }
                     if (args[2].equalsIgnoreCase("master_scroll")) {
-                        if (checkMasterSpellScrollValidity((Entity) sender, args)) return false;
+                        if (checkMasterSpellScrollValidity((Entity) sender, args))
+                            return false;
 
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MasterScrollItem) ItemUtils.generateBasicItem(args[2].toUpperCase())).generateScroll(args[3], Integer.parseInt(args[4])));
+                        Bukkit.getPlayer(args[1]).getInventory()
+                                .addItem(((MasterScrollItem) ItemUtils.generateBasicItem(args[2].toUpperCase()))
+                                        .generateScroll(args[3], Integer.parseInt(args[4])));
                         return true;
-                    } else if(args[2].equalsIgnoreCase("spell_scroll")) {
-                        if(!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
+                    } else if (args[2].equalsIgnoreCase("spell_scroll")) {
+                        if (!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
                             Utils.sendErrorMessage((Entity) sender, "Le sort n'existe pas.");
                             return false;
                         }
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((SpellScroll) ItemUtils.generateBasicItem(args[2].toUpperCase())).generateScroll(args[3]));
+                        Bukkit.getPlayer(args[1]).getInventory()
+                                .addItem(((SpellScroll) ItemUtils.generateBasicItem(args[2].toUpperCase()))
+                                        .generateScroll(args[3]));
                         return true;
-                    }else if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemUtils.generateBasicItem(args[2].toUpperCase())).generateScroll(args[3]));
+                    } else if (args[2].equalsIgnoreCase("mythical_scroll")) {
+                        Bukkit.getPlayer(args[1]).getInventory()
+                                .addItem(((MythicalScroll) ItemUtils.generateBasicItem(args[2].toUpperCase()))
+                                        .generateScroll(args[3]));
                         return true;
                     }
-                    if(!ItemUtils.isItem(args[2].toUpperCase())) {
+                    if (!ItemUtils.isItem(args[2].toUpperCase())) {
                         Utils.sendErrorMessage((Entity) sender, "L'item n'existe pas.");
                         return false;
                     }
-                    Bukkit.getPlayer(args[1]).getInventory().addItem(ItemUtils.generateItemStack(args[2].toUpperCase(), 1));
+                    Bukkit.getPlayer(args[1]).getInventory()
+                            .addItem(ItemUtils.generateItemStack(args[2].toUpperCase(), 1));
                 } else {
                     if (sender instanceof Player) {
                         if (args[2].equalsIgnoreCase("master_scroll")) {
-                            if (checkMasterSpellScrollValidity((Entity) sender, args)) return false;
-                            ((Player) sender).getInventory().addItem(((MasterScrollItem) ItemUtils.generateBasicItem(args[1].toUpperCase())).generateScroll(args[2], Integer.parseInt(args[3])));
+                            if (checkMasterSpellScrollValidity((Entity) sender, args))
+                                return false;
+                            ((Player) sender).getInventory()
+                                    .addItem(((MasterScrollItem) ItemUtils.generateBasicItem(args[1].toUpperCase()))
+                                            .generateScroll(args[2], Integer.parseInt(args[3])));
                             return true;
-                        } else if(args[2].equalsIgnoreCase("spell_scroll")) {
-                            if(!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
+                        } else if (args[2].equalsIgnoreCase("spell_scroll")) {
+                            if (!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
                                 Utils.sendErrorMessage((Entity) sender, "Le sort n'existe pas.");
                                 return false;
                             }
-                            ((Player) sender).getInventory().addItem(((SpellScroll) ItemUtils.generateBasicItem(args[2].toUpperCase())).generateScroll(args[3]));
+                            ((Player) sender).getInventory()
+                                    .addItem(((SpellScroll) ItemUtils.generateBasicItem(args[2].toUpperCase()))
+                                            .generateScroll(args[3]));
                             return true;
-                        } else if(args[2].equalsIgnoreCase("mythical_scroll")) {
-                            if(!EnumUtils.isValidEnum(SupportList.class, args[3].toUpperCase())) {
+                        } else if (args[2].equalsIgnoreCase("mythical_scroll")) {
+                            if (!EnumUtils.isValidEnum(SupportList.class, args[3].toUpperCase())) {
                                 Utils.sendErrorMessage((Entity) sender, "Le support n'existe pas.");
                                 return false;
                             }
-                            Bukkit.getPlayer(args[1]).getInventory().addItem(((MythicalScroll) ItemUtils.generateBasicItem(args[2].toUpperCase())).generateScroll(args[3]));
+                            Bukkit.getPlayer(args[1]).getInventory()
+                                    .addItem(((MythicalScroll) ItemUtils.generateBasicItem(args[2].toUpperCase()))
+                                            .generateScroll(args[3]));
                             return true;
                         }
                         ((Player) sender).getInventory().addItem(ItemUtils.generateItemStack(args[1].toUpperCase(), 1));
@@ -81,12 +96,14 @@ public class ItemCommand implements TabExecutor {
             } else if (args[0].equalsIgnoreCase("drop")) {
                 if (sender instanceof Player p) {
                     if (args[1].equalsIgnoreCase("gift")) {
-                        ItemStack gift = ((Gift) ItemUtils.generateBasicItem("GIFT")).generateGift(args[2], p.getDisplayName());
+                        ItemStack gift = ((Gift) ItemUtils.generateBasicItem("GIFT")).generateGift(args[2],
+                                p.getDisplayName());
                         Item item = p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), gift);
                         item.setGlowing(true);
                         return true;
                     }
-                    p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(), ItemUtils.generateItemStack(args[1].toUpperCase(), 1));
+                    p.getWorld().dropItem(p.getTargetBlock(null, 20).getLocation(),
+                            ItemUtils.generateItemStack(args[1].toUpperCase(), 1));
                 }
             }
         }
@@ -95,15 +112,15 @@ public class ItemCommand implements TabExecutor {
     }
 
     private boolean checkMasterSpellScrollValidity(Entity sender, String[] args) {
-        if(!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
+        if (!EnumUtils.isValidEnum(SpellList.class, args[3].toUpperCase())) {
             Utils.sendErrorMessage(sender, "Le sort n'existe pas.");
             return true;
         }
-        if(args.length < 5) {
+        if (args.length < 5) {
             Utils.sendErrorMessage(sender, "Vous devez spécifier la quantité de savoir.");
             return true;
         }
-        if(!args[4].matches("[0-9]+")) {
+        if (!args[4].matches("[0-9]+")) {
             Utils.sendErrorMessage(sender, "La quantité de savoir doit être un nombre.");
             return true;
         }
@@ -124,16 +141,19 @@ public class ItemCommand implements TabExecutor {
                 return Utils.enumAutocomplete(args[args.length - 1], SpellList.class);
             }
 
-            if(args[2].equalsIgnoreCase("mythical_scroll")) {
+            if (args[2].equalsIgnoreCase("mythical_scroll")) {
                 return Utils.enumAutocomplete(args[args.length - 1], SupportList.class);
             }
-            return Utils.listStringAutoComplete(args[args.length - 1], Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
+            return Utils.listStringAutoComplete(args[args.length - 1],
+                    Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
 
         } else if (args[0].equalsIgnoreCase("drop")) {
             if (args[1].equalsIgnoreCase("gift")) {
-                return Utils.listStringAutoComplete(args[args.length - 1], Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
+                return Utils.listStringAutoComplete(args[args.length - 1],
+                        Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
             }
-            return Utils.listStringAutoComplete(args[args.length - 1], Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
+            return Utils.listStringAutoComplete(args[args.length - 1],
+                    Mmorpg.INSTANCE.getItemManager().getItems().keySet().stream().toList());
         }
         return Arrays.asList("give", "drop");
     }

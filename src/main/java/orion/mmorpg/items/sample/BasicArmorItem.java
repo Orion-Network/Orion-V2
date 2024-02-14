@@ -25,10 +25,12 @@ public class BasicArmorItem extends BasicEquipmentItem {
 
     public BasicArmorItem(ItemStack item) {
         super(item);
-        this.ARMORTYPE = ArmorType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.armor_type, PersistentDataType.STRING));
+        this.ARMORTYPE = ArmorType.valueOf(
+                item.getItemMeta().getPersistentDataContainer().get(Namespaces.armor_type, PersistentDataType.STRING));
     }
 
-    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ArmorType ARMORTYPE, Stats.Modifiers modifiers) {
+    public BasicArmorItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ArmorType ARMORTYPE, Stats.Modifiers modifiers) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ARMOR, modifiers);
         this.ARMORTYPE = ARMORTYPE;
     }

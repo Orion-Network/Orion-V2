@@ -16,7 +16,7 @@ public class AssociationConfig {
     public static void setup(Mmorpg mmorpg) {
         file = new File(mmorpg.getDataFolder(), "association.yml");
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -40,8 +40,8 @@ public class AssociationConfig {
     }
 
     public static int getModel(String identifier) {
-        if(fileConfiguration.contains("item."+identifier))
-            return fileConfiguration.getInt("item."+identifier);
+        if (fileConfiguration.contains("item." + identifier))
+            return fileConfiguration.getInt("item." + identifier);
         else {
             JavaPlugin.getPlugin(Mmorpg.class).getLogger().log(Level.WARNING, "Model not found for " + identifier);
             return 0;

@@ -26,8 +26,10 @@ public class Utils {
     /**
      * Send info message to entity with good formatting.
      *
-     * @param e       The entity to send message
-     * @param message The message to send
+     * @param e
+     *            The entity to send message
+     * @param message
+     *            The message to send
      */
     public static void sendInfoMessage(Entity e, String message) {
         e.sendMessage(ChatColor.YELLOW + message);
@@ -36,8 +38,10 @@ public class Utils {
     /**
      * Send Error message to entity with good formating
      *
-     * @param e       The entity to send message
-     * @param message The message to send
+     * @param e
+     *            The entity to send message
+     * @param message
+     *            The message to send
      */
     public static void sendErrorMessage(Entity e, String message) {
         e.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + message);
@@ -46,8 +50,10 @@ public class Utils {
     /**
      * Send debug message if debugging is enabled
      *
-     * @param e       The entity to send message
-     * @param message The message to send
+     * @param e
+     *            The entity to send message
+     * @param message
+     *            The message to send
      */
     public static void sendDebugMessage(Entity e, String message) {
         if (Mmorpg.isDebug())
@@ -61,8 +67,11 @@ public class Utils {
     /**
      * Compute damage to inflict based on Strength, Critical Chance, Critical Damages and default damage
      *
-     * @param playerStats Stats who will be used for computing damages {@link Stats}
-     * @param damage      Default damage to inflict
+     * @param playerStats
+     *            Stats who will be used for computing damages {@link Stats}
+     * @param damage
+     *            Default damage to inflict
+     *
      * @return Computed damages
      */
     public static float calculateDamage(Stats playerStats, float damage) {
@@ -75,24 +84,26 @@ public class Utils {
         int randomized = (r.nextInt(100 - 1) + 1);
         float critical = (randomized < critical_chance ? 1 : 0);
         if (Mmorpg.isDebug())
-            Bukkit.broadcastMessage(ChatColor.YELLOW + "Strength: " + ChatColor.RED + strength + "\n" +
-                    ChatColor.YELLOW + "Random: " + ChatColor.RED + randomized + "\n" +
-                    ChatColor.YELLOW + "Critical Chance: " + ChatColor.RED + critical_chance + "\n" +
-                    ChatColor.YELLOW + "Critical Damage: " + ChatColor.RED + critical_damage + "\n" +
-                    ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
-                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
-                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" +
-                    ChatColor.YELLOW + "Is Critical : " + ChatColor.RED + (critical == 1) + "\n" +
-                    ChatColor.YELLOW + "Critical Multiplier: " + ChatColor.RED + (1 + ((critical_damage * critical) / 100)) + "\n" +
-                    ChatColor.YELLOW + "Total: " + ChatColor.RED + totalDamage * (1 + ((critical_damage * critical) / 100)));
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Strength: " + ChatColor.RED + strength + "\n" + ChatColor.YELLOW
+                    + "Random: " + ChatColor.RED + randomized + "\n" + ChatColor.YELLOW + "Critical Chance: "
+                    + ChatColor.RED + critical_chance + "\n" + ChatColor.YELLOW + "Critical Damage: " + ChatColor.RED
+                    + critical_damage + "\n" + ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n"
+                    + ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n" + ChatColor.YELLOW
+                    + "Total Damage" + ChatColor.RED + totalDamage + "\n" + ChatColor.YELLOW + "Is Critical : "
+                    + ChatColor.RED + (critical == 1) + "\n" + ChatColor.YELLOW + "Critical Multiplier: "
+                    + ChatColor.RED + (1 + ((critical_damage * critical) / 100)) + "\n" + ChatColor.YELLOW + "Total: "
+                    + ChatColor.RED + totalDamage * (1 + ((critical_damage * critical) / 100)));
         return totalDamage * (1 + ((critical_damage * critical) / 100));
     }
 
     /**
      * Compute magic damage to inflict based ond Intel
      *
-     * @param playerStats Stats who will be used to compute magic damages {@link Stats}
-     * @param damage      Default damages to inflict
+     * @param playerStats
+     *            Stats who will be used to compute magic damages {@link Stats}
+     * @param damage
+     *            Default damages to inflict
+     *
      * @return Computed magic damages
      */
     public static float calculateMagicDamage(Stats playerStats, float damage) {
@@ -100,9 +111,9 @@ public class Utils {
 
         float totalDamage = (5 + damage) * (1 + (intel / 50));
         if (Mmorpg.isDebug())
-            Bukkit.broadcastMessage(ChatColor.YELLOW + "Intel: " + ChatColor.RED + intel + "\n" +
-                    ChatColor.YELLOW + "Base Damage: " + ChatColor.RED + damage + "\n" +
-                    ChatColor.YELLOW + "Total Damage" + ChatColor.RED + totalDamage + "\n");
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Intel: " + ChatColor.RED + intel + "\n" + ChatColor.YELLOW
+                    + "Base Damage: " + ChatColor.RED + damage + "\n" + ChatColor.YELLOW + "Total Damage"
+                    + ChatColor.RED + totalDamage + "\n");
         return totalDamage;
     }
 
@@ -111,13 +122,10 @@ public class Utils {
     }
 
     public static LivingEntity getTargetInFront(LivingEntity entity, int range) {
-        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()), entity.getEyeLocation().getDirection().normalize(), range,
-                (e) -> (
-                        e instanceof LivingEntity
-                                && !e.isInvulnerable()
-                                && e != entity
-                )
-        );
+        RayTraceResult rayTraceResult = entity.getWorld().rayTraceEntities(
+                entity.getEyeLocation().add(entity.getEyeLocation().getDirection().normalize()),
+                entity.getEyeLocation().getDirection().normalize(), range,
+                (e) -> (e instanceof LivingEntity && !e.isInvulnerable() && e != entity));
         if (rayTraceResult != null) {
             return (LivingEntity) rayTraceResult.getHitEntity();
         }
@@ -144,35 +152,37 @@ public class Utils {
     }
 
     public static String itemDisplayName(ItemStack item) {
-        return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(item.getType().name().replaceAll("_"," ")));
+        return (Objects.requireNonNull(item.getItemMeta()).hasDisplayName() ? item.getItemMeta().getDisplayName()
+                : WordUtils.capitalizeFully(item.getType().name().replaceAll("_", " ")));
     }
 
     public static boolean isItemValid(ItemStack item, Player player) {
-        //Check if item can be converted to BasicItem
-        if (item == null || item.getType() == Material.AIR || !item.hasItemMeta()) return false;
+        // Check if item can be converted to BasicItem
+        if (item == null || item.getType() == Material.AIR || !item.hasItemMeta())
+            return false;
 
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         String internal_id = container.get(Namespaces.internal_id, PersistentDataType.STRING);
 
-        if(ItemType.valueOf(container.get(Namespaces.type, PersistentDataType.STRING)) == ItemType.RESSOURCE) return true;
+        if (ItemType.valueOf(container.get(Namespaces.type, PersistentDataType.STRING)) == ItemType.RESSOURCE)
+            return true;
 
-        if(!Mmorpg.INSTANCE.getItemManager().isItem(internal_id)) return false;
+        if (!Mmorpg.INSTANCE.getItemManager().isItem(internal_id))
+            return false;
 
-        if(!player.hasPermission(Mmorpg.INSTANCE.getItemManager().createItem(internal_id).getPERMISSION())) return false;
+        if (!player.hasPermission(Mmorpg.INSTANCE.getItemManager().createItem(internal_id).getPERMISSION()))
+            return false;
 
         return Mmorpg.INSTANCE.getItemManager().createItemstack(internal_id, 1) != null;
     }
 
     public static List<String> enumAutocomplete(String input, Class<? extends Enum> enumClass) {
-        return Arrays.stream(enumClass.getEnumConstants())
-                .map(Enum::name)
-                .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
-                .collect(Collectors.toList());
+        return Arrays.stream(enumClass.getEnumConstants()).map(Enum::name)
+                .filter(name -> name.toLowerCase().startsWith(input.toLowerCase())).collect(Collectors.toList());
     }
 
     public static List<String> listStringAutoComplete(String input, List<String> list) {
-        return list.stream()
-                .filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
+        return list.stream().filter(name -> name.toLowerCase().startsWith(input.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -216,7 +226,8 @@ public class Utils {
     }
 
     public static String integerToRoman5(int number) {
-        if(number > 1000) return String.valueOf(number);
+        if (number > 1000)
+            return String.valueOf(number);
         int l = treemap.floorKey(number);
         if (number == l) {
             return treemap.get(number);
@@ -243,23 +254,25 @@ public class Utils {
     }
 
     public enum NumberFormat {
-        SCIENTIFIC((i) -> new DecimalFormat("0.##E0").format(i)),
-        DECIMAL((i) -> new DecimalFormat("0.##").format(i)),
+        SCIENTIFIC((i) -> new DecimalFormat("0.##E0").format(i)), DECIMAL((i) -> new DecimalFormat("0.##").format(i)),
         ROMAN((i) -> {
-            if(i < Integer.MAX_VALUE)
+            if (i < Integer.MAX_VALUE)
                 return integerToRoman5(i.intValue());
             return String.valueOf(i);
-        }),
-        READABLE(i -> {
-            if(i < 1000) return String.valueOf(i);
-            if(i < 1000000) return i/1000 + "K";
-            if(i < 1000000000) return i/1000000 + "M";
-            else return i/1000000000 + "B";
+        }), READABLE(i -> {
+            if (i < 1000)
+                return String.valueOf(i);
+            if (i < 1000000)
+                return i / 1000 + "K";
+            if (i < 1000000000)
+                return i / 1000000 + "M";
+            else
+                return i / 1000000000 + "B";
         });
 
         Function<Long, String> function;
 
-        NumberFormat(Function<Long, String>  function) {
+        NumberFormat(Function<Long, String> function) {
             this.function = function;
         }
 

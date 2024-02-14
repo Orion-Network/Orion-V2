@@ -20,13 +20,17 @@ public class BasicReforgeStone extends BasicItem {
     ItemReforge reforge;
     @Getter
     int smithingLevelRequired;
+
     public BasicReforgeStone(ItemStack item) {
         super(item);
-        this.reforge = ItemReforge.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.reforge, PersistentDataType.STRING));
-        this.smithingLevelRequired = item.getItemMeta().getPersistentDataContainer().get(Namespaces.smithingLevelRequired, PersistentDataType.INTEGER);
+        this.reforge = ItemReforge.valueOf(
+                item.getItemMeta().getPersistentDataContainer().get(Namespaces.reforge, PersistentDataType.STRING));
+        this.smithingLevelRequired = item.getItemMeta().getPersistentDataContainer()
+                .get(Namespaces.smithingLevelRequired, PersistentDataType.INTEGER);
     }
 
-    public BasicReforgeStone(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemReforge reforge, int smithingLevelRequired) {
+    public BasicReforgeStone(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ItemReforge reforge, int smithingLevelRequired) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
         this.reforge = reforge;
         this.smithingLevelRequired = smithingLevelRequired;
@@ -34,7 +38,7 @@ public class BasicReforgeStone extends BasicItem {
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.YELLOW + "Smithing Level Required: §e" + ChatColor.GRAY + getSmithingLevelRequired());
         return super.generateLore(lore);
@@ -46,7 +50,8 @@ public class BasicReforgeStone extends BasicItem {
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.reforge, PersistentDataType.STRING, reforge.name());
-        meta.getPersistentDataContainer().set(Namespaces.smithingLevelRequired, PersistentDataType.INTEGER, getSmithingLevelRequired());
+        meta.getPersistentDataContainer().set(Namespaces.smithingLevelRequired, PersistentDataType.INTEGER,
+                getSmithingLevelRequired());
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }

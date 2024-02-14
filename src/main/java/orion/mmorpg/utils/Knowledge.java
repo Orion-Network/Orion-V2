@@ -12,11 +12,11 @@ public class Knowledge {
     }
 
     public KnowledgeState getKnowledgeState() {
-        if(knowledge > 0 && knowledge < 100) {
+        if (knowledge > 0 && knowledge < 100) {
             return KnowledgeState.LEARN;
-        } else if(knowledge >= 100 && knowledge < 1000) {
+        } else if (knowledge >= 100 && knowledge < 1000) {
             return KnowledgeState.EXPERIENCE;
-        } else if(knowledge >= 1000) {
+        } else if (knowledge >= 1000) {
             return KnowledgeState.MASTERY;
         }
         return KnowledgeState.UNKNOWN;
@@ -36,12 +36,12 @@ public class Knowledge {
 
     public ArrayList<String> getKnowledgeLore() {
         ArrayList<String> lore = new ArrayList<String>();
-        if(knowledge > 0 && knowledge < 100) {
+        if (knowledge > 0 && knowledge < 100) {
             lore.add(ChatColor.WHITE + "Vous ne savez rien du sort.");
-        } else if(knowledge >= 100 && knowledge < 1000) {
+        } else if (knowledge >= 100 && knowledge < 1000) {
             lore.add(ChatColor.WHITE + "Vous savez un peu utiliser ce sort, ");
             lore.add(ChatColor.WHITE + "utilisez le plus pour gagner de l'expérience.");
-        } else if(knowledge >= 1000) {
+        } else if (knowledge >= 1000) {
             lore.add(ChatColor.WHITE + "Vous connaissez parfaitement ce sort.");
         }
         lore.add(ChatColor.WHITE + "Vous avez " + ChatColor.GOLD + knowledge + " points de connaissance.");

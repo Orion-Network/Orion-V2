@@ -14,14 +14,14 @@ import orion.mmorpg.utils.WorldGuardUtils;
 
 public class Attraction extends Spell {
     public Attraction() {
-        super("ATTRACTION", 30, Element.ARCANE, 15*1000, TargetType.NEAR, 5);
+        super("ATTRACTION", 30, Element.ARCANE, 15 * 1000, TargetType.NEAR, 5);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         getTargets().forEach(target -> {
-            if(target instanceof Player)
-                if(!WorldGuardUtils.canPvp(target))
+            if (target instanceof Player)
+                if (!WorldGuardUtils.canPvp(target))
                     return;
             SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
             sphereEffect.particle = Particle.FIREWORKS_SPARK;

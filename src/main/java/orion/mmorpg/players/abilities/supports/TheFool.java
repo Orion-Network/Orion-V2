@@ -19,22 +19,23 @@ import orion.mmorpg.utils.Utils;
 public class TheFool extends Support {
 
     public TheFool() {
-        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.", new Class[]{OnSpellSense.class});
+        super("The Fool", Rarity.MYTHIC, "Un pouvoir mystérieux annulant toute magie environnante.",
+                new Class[] { OnSpellSense.class });
         this.getOEffects().add(SpellAnnulation.class);
     }
 
     public static class SpellAnnulation extends OEffect {
 
-            public SpellAnnulation(Long duration) {
-                super("Spell Annulation", "Annule les sorts", OnSpellSense.class, duration);
-            }
+        public SpellAnnulation(Long duration) {
+            super("Spell Annulation", "Annule les sorts", OnSpellSense.class, duration);
+        }
 
-            @Override
-            public void onEvent(Event event) {
-                OnSpellSense onLaunchSpell = (OnSpellSense) event;
-                onLaunchSpell.getSpell().setCanceled(true);
-                Utils.sendInfoMessage(onLaunchSpell.getSender(), "Votre sort a été annulé.");
-            }
+        @Override
+        public void onEvent(Event event) {
+            OnSpellSense onLaunchSpell = (OnSpellSense) event;
+            onLaunchSpell.getSpell().setCanceled(true);
+            Utils.sendInfoMessage(onLaunchSpell.getSender(), "Votre sort a été annulé.");
+        }
     }
 
 }

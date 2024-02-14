@@ -37,7 +37,8 @@ public abstract class Support {
         this.events = events;
     }
 
-    public Support(String name, Rarity rarity, String description, HashMap<String, Object> dataMap, Class<? extends Event>[] events) {
+    public Support(String name, Rarity rarity, String description, HashMap<String, Object> dataMap,
+            Class<? extends Event>[] events) {
         this.name = name;
         this.rarity = rarity;
         this.description = description;
@@ -46,18 +47,20 @@ public abstract class Support {
     }
 
     public void applyEffects(OrionPlayer player, long duration) {
-        for(Class<? extends OEffect> oEffect : oEffects) {
+        for (Class<? extends OEffect> oEffect : oEffects) {
             try {
                 OEffect effect = oEffect.getConstructor(Long.class).newInstance(duration);
-                Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(player, effect, duration, this.getName()));
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                Bukkit.getServer().getPluginManager()
+                        .callEvent(new OnGetEffect(player, effect, duration, this.getName()));
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                    | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
     }
 
     public void removeEffects(OrionPlayer player) {
-        for(Class<? extends Event> event : events) {
+        for (Class<? extends Event> event : events) {
             player.removeEffect(this.getName(), event);
         }
     }
@@ -79,11 +82,9 @@ public abstract class Support {
         return this;
     }
 
-
     public void setDataMap(@NotNull String s, @NotNull Object value) {
         dataMap.put(s, value);
     }
-
 
     public @NotNull Object getData(@NotNull String s) {
         return dataMap.get(s);

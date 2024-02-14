@@ -32,9 +32,9 @@ public class BasicTool extends BasicEquipmentItem {
         this.toolPower = container.get(Namespaces.tool_power, PersistentDataType.INTEGER);
     }
 
-    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers modifiers, ToolType toolType, int toolPower) {
-        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY,
-                ItemType.TOOL, modifiers);
+    public BasicTool(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY,
+            Stats.Modifiers modifiers, ToolType toolType, int toolPower) {
+        super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.TOOL, modifiers);
         this.toolType = toolType;
         this.toolPower = toolPower;
     }
@@ -47,7 +47,8 @@ public class BasicTool extends BasicEquipmentItem {
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.tool_type, PersistentDataType.STRING, toolType.name());
         meta.getPersistentDataContainer().set(Namespaces.tool_power, PersistentDataType.INTEGER, toolPower);
-        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
+        meta.getPersistentDataContainer().set(Namespaces.modifiers, PersistentDataType.STRING,
+                Mmorpg.getOrionGson().getGSON().toJson(getModifiers()));
         item.setItemMeta(meta);
 
         return super.generateItem(item, amount);

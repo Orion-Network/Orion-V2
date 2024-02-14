@@ -21,7 +21,8 @@ public class SkyFlux extends Spell {
 
     @Override
     public void launch(Mmorpg mmorpg, Location Location, Knowledge knowledge) {
-        if(getCaster() == null || !(getCaster() instanceof Player)) return;
+        if (getCaster() == null || !(getCaster() instanceof Player))
+            return;
         Player player = (Player) getCaster();
         Effect lineEffect = new TestEffect(Mmorpg.effectManager, player.getEyeLocation().getDirection().normalize());
         lineEffect.setLocation(player.getEyeLocation());

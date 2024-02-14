@@ -12,7 +12,10 @@ import java.util.Collections;
 
 public class FeuTon extends BasicMagicWeapon {
     public FeuTon() {
-        super(Material.WOODEN_SHOVEL, "FeuTon", "FEUTON", AssociationConfig.getModel("weapon/staff/brillant_staff"), Collections.singletonList("Un baton en bois, lançant du feu, logique."), Rarity.RARE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.INTELLIGENCE, 9).add(Stats.StatsInfo.LUCK, 3).build(), 7);
+        super(Material.WOODEN_SHOVEL, "FeuTon", "FEUTON", AssociationConfig.getModel("weapon/staff/brillant_staff"),
+                Collections.singletonList("Un baton en bois, lançant du feu, logique."), Rarity.RARE,
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.INTELLIGENCE, 9).add(Stats.StatsInfo.LUCK, 3).build(),
+                7);
         this.ELEMENT = Element.FIRE;
         this.particle = Particle.SMALL_FLAME;
     }

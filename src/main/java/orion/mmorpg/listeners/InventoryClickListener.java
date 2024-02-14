@@ -24,28 +24,38 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if(e.getSlot() == -999)
+        if (e.getSlot() == -999)
             return;
-        OrionPlayer player = mmorpg.getPlayerManager().getPlayer(Objects.requireNonNull(e.getWhoClicked()).getUniqueId());
-        if(!e.getInventory().getType().equals(InventoryType.CRAFTING)) return;
+        OrionPlayer player = mmorpg.getPlayerManager()
+                .getPlayer(Objects.requireNonNull(e.getWhoClicked()).getUniqueId());
+        if (!e.getInventory().getType().equals(InventoryType.CRAFTING))
+            return;
         e.getInventory().setItem(0, ItemUtils.generateItemStack("MENU_ITEM", 1));
         if (e.getSlotType() == InventoryType.SlotType.RESULT) {
             e.setCancelled(true);
-            new MenuGui((Player) e.getWhoClicked(), this.mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
+            new MenuGui((Player) e.getWhoClicked(),
+                    this.mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
         }
         if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
-            if(Objects.requireNonNull(e.getCurrentItem()).getType() == Material.AIR && Objects.requireNonNull(e.getCursor()).getType() == Material.AIR) return;
-            if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR) && e.getCurrentItem() != null) {
-                ((BasicArmorItem) ItemUtils.getItemFromItemstack(Objects.requireNonNull(e.getCursor()))).onCosmeticEquip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
+            if (Objects.requireNonNull(e.getCurrentItem()).getType() == Material.AIR
+                    && Objects.requireNonNull(e.getCursor()).getType() == Material.AIR)
+                return;
+            if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.AIR)
+                    && e.getCurrentItem() != null) {
+                ((BasicArmorItem) ItemUtils.getItemFromItemstack(Objects.requireNonNull(e.getCursor())))
+                        .onCosmeticEquip((Player) e.getWhoClicked(),
+                                mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez équipé un cosmétique.");
             } else {
-                ((BasicArmorItem) ItemUtils.getItemFromItemstack(e.getCurrentItem())).onCosmeticUnequip((Player) e.getWhoClicked(), mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
+                ((BasicArmorItem) ItemUtils.getItemFromItemstack(e.getCurrentItem())).onCosmeticUnequip(
+                        (Player) e.getWhoClicked(),
+                        mmorpg.getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId()));
                 Utils.sendInfoMessage(e.getWhoClicked(), "Vous avez déséquipé un cosmétique.");
             }
         }
-        if(player.getSlotTypes().length > e.getSlot())
+        if (player.getSlotTypes().length > e.getSlot())
             return;
-        if(e.getSlot() < 9 && player.getSlotTypes()[e.getSlot()] == OrionPlayer.SlotType.RESTRICTED_SLOT)
+        if (e.getSlot() < 9 && player.getSlotTypes()[e.getSlot()] == OrionPlayer.SlotType.RESTRICTED_SLOT)
             e.setCancelled(true);
         if (e.isShiftClick())
             e.setCancelled(true);

@@ -11,13 +11,14 @@ import orion.mmorpg.utils.Utils;
 
 public class Mark extends Spell {
     public Mark() {
-        super("MARK", 10, Element.ARCANE, 10*1000, TargetType.SELF);
+        super("MARK", 10, Element.ARCANE, 10 * 1000, TargetType.SELF);
     }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {
         assert Namespaces.mark_location != null;
-        getCaster().getPersistentDataContainer().set(Namespaces.mark_location, PersistentDataType.STRING , Mmorpg.getOrionGson().getGSON().toJson(location));
+        getCaster().getPersistentDataContainer().set(Namespaces.mark_location, PersistentDataType.STRING,
+                Mmorpg.getOrionGson().getGSON().toJson(location));
         Utils.sendInfoMessage(getTargets().getFirst(), "Location marquee !");
     }
 }

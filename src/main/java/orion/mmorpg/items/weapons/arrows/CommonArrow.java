@@ -8,6 +8,7 @@ import java.util.Collections;
 
 public class CommonArrow extends BasicArrow {
     public CommonArrow() {
-        super(Material.ARROW, "Flèche Commune", "COMMON_ARROW", 1, Collections.singletonList("Des flèches simple"), Rarity.COMMON, 3);
+        super(Material.ARROW, "Flèche Commune", "COMMON_ARROW", 1, Collections.singletonList("Des flèches simple"),
+                Rarity.COMMON, 3);
     }
 }

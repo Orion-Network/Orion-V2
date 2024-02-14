@@ -14,7 +14,7 @@ public class UsablePlaceholder extends BasicGuiItem {
 
     @Override
     public List<String> generateLore(List<String> lore) {
-        if(lore == null)
+        if (lore == null)
             lore = new LinkedList<>();
         lore.add(ChatColor.GRAY + "Cliquez pour rendre ce slot libre");
         return super.generateLore(lore);

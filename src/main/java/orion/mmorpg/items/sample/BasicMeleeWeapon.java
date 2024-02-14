@@ -24,12 +24,14 @@ public class BasicMeleeWeapon extends BasicEquipmentItem {
         this.DAMAGE = item.getItemMeta().getPersistentDataContainer().get(Namespaces.damage, PersistentDataType.FLOAT);
     }
 
-    public BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
+    public BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.WEAPON, PERMISSION, MODIFIERS);
         this.DAMAGE = DAMAGE;
     }
 
-    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
+    protected BasicMeleeWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.WEAPON, MODIFIERS);
         this.DAMAGE = DAMAGE;
     }
@@ -58,6 +60,5 @@ public class BasicMeleeWeapon extends BasicEquipmentItem {
     public float getDAMAGE() {
         return DAMAGE;
     }
-
 
 }

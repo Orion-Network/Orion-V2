@@ -28,7 +28,8 @@ import java.util.Collections;
 
 public class GrimoryItem extends BasicUsableItem {
     public GrimoryItem() {
-        super(Material.BOOK, "Grimory", "GRIMORY", 1, Collections.singletonList("A grimory containing all your spells"), Rarity.RARE);
+        super(Material.BOOK, "Grimory", "GRIMORY", 1, Collections.singletonList("A grimory containing all your spells"),
+                Rarity.RARE);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class GrimoryItem extends BasicUsableItem {
         return super.generateItem(item, amount);
     }
 
-    //TODO cast spell when select spell in selector
+    // TODO cast spell when select spell in selector
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         ItemStack item = e.getItem();
@@ -50,18 +51,23 @@ public class GrimoryItem extends BasicUsableItem {
         int slot = container.get(Namespaces.slot, PersistentDataType.INTEGER);
         if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Spell spell;
-            if(data.getSelectedSpells()[slot] == null)
+            if (data.getSelectedSpells()[slot] == null)
                 return;
             try {
                 spell = (Spell) Class.forName(data.getSelectedSpells()[slot]).getConstructor().newInstance();
-            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException ex) {
+            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException
+                    | IllegalAccessException | NoSuchMethodException ex) {
                 ex.printStackTrace();
                 return;
             }
-            Utils.sendDebugMessage(e.getPlayer(), "slot : " + slot + "Spell : " + data.getSelectedSpells()[slot] + " in spell : ");
+            Utils.sendDebugMessage(e.getPlayer(),
+                    "slot : " + slot + "Spell : " + data.getSelectedSpells()[slot] + " in spell : ");
             boolean canLaunch = spell.beforeLaunch(mmorpg, e.getPlayer(), data, true);
-            if (!canLaunch && data.getCooldownSpells().containsKey(spell.getClass()) && data.getCooldownSpells().get(spell.getClass()) > System.currentTimeMillis())
-                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Math.round((data.getCooldownSpells().get(spell.getClass()) - System.currentTimeMillis()) / 1000) + "s restantes."));
+            if (!canLaunch && data.getCooldownSpells().containsKey(spell.getClass())
+                    && data.getCooldownSpells().get(spell.getClass()) > System.currentTimeMillis())
+                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(
+                        Math.round((data.getCooldownSpells().get(spell.getClass()) - System.currentTimeMillis()) / 1000)
+                                + "s restantes."));
         } else {
             if (e.getPlayer().isSneaking())
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());
@@ -72,17 +78,18 @@ public class GrimoryItem extends BasicUsableItem {
                     container.set(Namespaces.slot, PersistentDataType.INTEGER, slot + 1);
                 slot = container.get(Namespaces.slot, PersistentDataType.INTEGER);
 
-                String[] slots = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                String[] slots = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
                 slots[slot] = ChatColor.GREEN + "" + (slot + 1) + ChatColor.WHITE;
-                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.join(slots, " ")));
+                e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(StringUtils.join(slots, " ")));
                 if (data.getSelectedSpells()[slot] != null) {
                     SpellList spell = null;
-                    for(SpellList s : SpellList.values()) {
-                        if(s.getSpellClass().getName().equals(data.getSelectedSpells()[slot])) {
+                    for (SpellList s : SpellList.values()) {
+                        if (s.getSpellClass().getName().equals(data.getSelectedSpells()[slot])) {
                             spell = s;
                         }
                     }
-                    if(spell == null)
+                    if (spell == null)
                         return;
                     meta.setDisplayName(this.RARITY.getChatColor() + this.NAME + " : " + spell.getName());
                 } else {

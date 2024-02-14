@@ -1,14 +1,5 @@
 package orion.mmorpg.items;
 
 public enum ItemType {
-    ITEM,
-    REFORGE_STONE,
-    WEAPON,
-    ARMOR,
-    TOOL,
-    PLACEHOLDER,
-    RESSOURCE,
-    CONSUMABLE,
-    INGREDIENT,
-    POTION,
+    ITEM, REFORGE_STONE, WEAPON, ARMOR, TOOL, PLACEHOLDER, RESSOURCE, CONSUMABLE, INGREDIENT, POTION,
 }

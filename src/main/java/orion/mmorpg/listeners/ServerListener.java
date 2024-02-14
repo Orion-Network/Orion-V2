@@ -17,19 +17,14 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onServerStart(ServerListPingEvent event) {
-        if(mmorpg.getGameState() == GameState.STARTING) {
+        if (mmorpg.getGameState() == GameState.STARTING) {
             event.setMotd(ChatColor.RED + "Server is starting, please wait, it can take up to 5 minutes.");
-        } else if(mmorpg.getGameState() == GameState.ENDING) {
+        } else if (mmorpg.getGameState() == GameState.ENDING) {
             event.setMotd(ChatColor.RED + "Server is shutting down, please wait.");
         }
-        event.setMotd(
-                "                       " +
-                ChatColor.GRAY + "play.orionrpg.fr" +
-                "   " +
-                ChatColor.GREEN + "v" + mmorpg.getDescription().getVersion() +
-                "                     " +
-                        ChatColor.BOLD + "Minecraft Open World RPG"
-        );
+        event.setMotd("                       " + ChatColor.GRAY + "play.orionrpg.fr" + "   " + ChatColor.GREEN + "v"
+                + mmorpg.getDescription().getVersion() + "                     " + ChatColor.BOLD
+                + "Minecraft Open World RPG");
     }
 
     @EventHandler

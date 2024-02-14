@@ -11,5 +11,4 @@ public class TransmissionArrow extends BasicArrow {
         this.spell = new InstantTransmission();
     }
 
-
 }

@@ -22,7 +22,7 @@ public class Currencies {
     }
 
     public String getFormatted(String name, Utils.NumberFormat format) {
-        if(format == null) {
+        if (format == null) {
             format = DEFAULT_FORMAT;
         }
         return format.format(get(name)) + " " + name;
@@ -30,7 +30,7 @@ public class Currencies {
 
     public long get(String name) {
         name = name.toLowerCase();
-        if(hasCurrency(name)) {
+        if (hasCurrency(name)) {
             return currencies.get(name).getAmount();
         } else {
             return 0;
@@ -41,28 +41,28 @@ public class Currencies {
         return currencies.get(name.toLowerCase());
     }
 
-   public void add(String name, long amount) {
+    public void add(String name, long amount) {
         name = name.toLowerCase();
-        if(hasCurrency(name)) {
+        if (hasCurrency(name)) {
             currencies.get(name).add(amount);
         } else {
             currencies.put(name, new Currency(name, amount));
         }
-   }
+    }
 
-   public void add(Currency currency) {
+    public void add(Currency currency) {
         String name = currency.getName().toLowerCase();
-         if(hasCurrency(name)) {
-              currencies.get(name).add(currency.getAmount());
-         } else {
-              currencies.put(name, currency);
-         }
-   }
+        if (hasCurrency(name)) {
+            currencies.get(name).add(currency.getAmount());
+        } else {
+            currencies.put(name, currency);
+        }
+    }
 
     public boolean remove(String name, int amount) {
         name = name.toLowerCase();
-        if(hasCurrency(name)) {
-            if(currencies.get(name).getAmount() >= amount) {
+        if (hasCurrency(name)) {
+            if (currencies.get(name).getAmount() >= amount) {
                 currencies.get(name).remove(amount);
                 return true;
             }
@@ -72,48 +72,50 @@ public class Currencies {
 
     public boolean hasEnough(String name, int amount) {
         name = name.toLowerCase();
-        if(hasCurrency(name)) {
+        if (hasCurrency(name)) {
             return currencies.get(name).getAmount() >= amount;
         }
         return false;
     }
 
-   public boolean hasCurrency(String name) {
+    public boolean hasCurrency(String name) {
         name = name.toLowerCase();
-       return currencies.containsKey(name);
-   }
+        return currencies.containsKey(name);
+    }
 
-   public List<String> asLore() {
-       ArrayList<String> list = new ArrayList<String>();
-       if(currencies.isEmpty()) {
-           list.add("§c§lNo currencies");
-           return list;
-       }
-         for(Currency currency : currencies.values()) {
-              list.add(ChatColor.of(currency.color) + "" + currency.getAmount()+ " " + currency.name);
-         }
+    public List<String> asLore() {
+        ArrayList<String> list = new ArrayList<String>();
+        if (currencies.isEmpty()) {
+            list.add("§c§lNo currencies");
             return list;
-   }
+        }
+        for (Currency currency : currencies.values()) {
+            list.add(ChatColor.of(currency.color) + "" + currency.getAmount() + " " + currency.name);
+        }
+        return list;
+    }
 
-   public static class Currency {
+    public static class Currency {
         @Getter
-       public String name;
-       @Getter@Setter
-       public String symbol = "\uD83D\uDCB0", color = "#FFFFFF";
-       @Getter@Setter
-       long amount;
+        public String name;
+        @Getter
+        @Setter
+        public String symbol = "\uD83D\uDCB0", color = "#FFFFFF";
+        @Getter
+        @Setter
+        long amount;
 
-       public Currency(String name, long amount) {
-           this.name = StringUtils.capitalize(name);
-           this.amount = amount;
-       }
+        public Currency(String name, long amount) {
+            this.name = StringUtils.capitalize(name);
+            this.amount = amount;
+        }
 
-       public void add(long amount) {
-           this.amount += amount;
-       }
+        public void add(long amount) {
+            this.amount += amount;
+        }
 
-       public void remove(long amount) {
-           this.amount -= amount;
-       }
+        public void remove(long amount) {
+            this.amount -= amount;
+        }
     }
 }

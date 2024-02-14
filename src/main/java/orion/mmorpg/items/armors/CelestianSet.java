@@ -18,7 +18,9 @@ public class CelestianSet {
     public static class CelestianCrown extends BasicArmorItem {
 
         public CelestianCrown() {
-            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1, Collections.singletonList("Une couronne donnée au premier célestien"), Rarity.HERO, ArmorType.HELMET, new Stats.Modifiers());
+            super(Material.GOLDEN_HELMET, "Couronne Céleste", "CELESTIAN_CROWN", 1,
+                    Collections.singletonList("Une couronne donnée au premier célestien"), Rarity.HERO,
+                    ArmorType.HELMET, new Stats.Modifiers());
         }
 
         @Override
@@ -43,7 +45,8 @@ public class CelestianSet {
 
         @Override
         public void onCosmeticUnequip(Player p, OrionPlayer data) {
-            if (!data.getDisplayEffectHashMap().containsKey(this.INTERNAL_ID)) return;
+            if (!data.getDisplayEffectHashMap().containsKey(this.INTERNAL_ID))
+                return;
             data.getDisplayEffectHashMap().get(this.INTERNAL_ID).cancel();
             data.getDisplayEffectHashMap().remove(this.INTERNAL_ID);
         }
@@ -52,14 +55,16 @@ public class CelestianSet {
     public static class CelestianWings extends BasicArmorItem {
         public CelestianWings() {
             super(Material.ELYTRA, "Ailes Célestes", "CELESTIAN_WINGS", 0, null, Rarity.COMMON, ArmorType.WINGS,
-                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.VITALITY, 5).add(Stats.StatsInfo.DEFENCE, 2).build());
+                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.VITALITY, 5).add(Stats.StatsInfo.DEFENCE, 2)
+                            .build());
         }
     }
 
     public static class CelestianRing extends BasicArmorItem {
         public CelestianRing() {
             super(Material.BLUE_DYE, "Anneau Céleste", "CELESTIAN_RING", 1, null, Rarity.COMMON, ArmorType.RING,
-                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.CRITICAL_CHANCE,5).add(Stats.StatsInfo.CRITICAL_DAMAGE, 3).build());
+                    new Stats.Modifiers.Builder().add(Stats.StatsInfo.CRITICAL_CHANCE, 5)
+                            .add(Stats.StatsInfo.CRITICAL_DAMAGE, 3).build());
         }
     }
 

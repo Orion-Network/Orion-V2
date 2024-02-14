@@ -28,11 +28,12 @@ public class GrimoryGui extends ChestGui {
     public OutlinePane getSpellPane() {
         for (String spell : orionPlayer.getSelectedSpells()) {
             if (spell == null)
-                spellPane.addItem(new GuiItem(Mmorpg.INSTANCE.getItemManager().createItemstack("SPELL_PLACEHOLDER", 1)));
-            else
-            {
+                spellPane
+                        .addItem(new GuiItem(Mmorpg.INSTANCE.getItemManager().createItemstack("SPELL_PLACEHOLDER", 1)));
+            else {
                 try {
-                    spellPane.addItem(new GuiItem(SpellList.getByClass((Class<? extends Spell>) Class.forName(spell)).getItem()));
+                    spellPane.addItem(
+                            new GuiItem(SpellList.getByClass((Class<? extends Spell>) Class.forName(spell)).getItem()));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

@@ -13,7 +13,9 @@ import java.util.Collections;
 
 public class CelestialSerum extends BasicConsumableItem {
     public CelestialSerum() {
-        super(Material.POTION, "Serum Celeste", "CELESTIAL_SERUM", 0, Collections.singletonList("Un serum pouvant selon les légendes vous faire atteindre le 7 ème ciel"), Rarity.MYTHIC);
+        super(Material.POTION, "Serum Celeste", "CELESTIAL_SERUM", 0,
+                Collections.singletonList("Un serum pouvant selon les légendes vous faire atteindre le 7 ème ciel"),
+                Rarity.MYTHIC);
     }
 
     @Override

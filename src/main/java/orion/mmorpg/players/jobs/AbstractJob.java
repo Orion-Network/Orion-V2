@@ -24,14 +24,14 @@ public abstract class AbstractJob {
 
     public final void addExp(int experience) {
         this.experience += experience;
-        if(this.experience >= neededExperienceToLevelup()) {
+        if (this.experience >= neededExperienceToLevelup()) {
             this.experience = 0;
             this.level += 1;
         }
     }
 
     public int neededExperienceToLevelup() {
-        return (int) (Math.pow(this.level, 1.2)*25);
+        return (int) (Math.pow(this.level, 1.2) * 25);
     }
 
     public int getExperience() {

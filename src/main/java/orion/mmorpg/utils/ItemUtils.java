@@ -12,7 +12,7 @@ public class ItemUtils {
     }
 
     public static ItemStack generateItemStack(String name, int i) {
-        if(!Mmorpg.INSTANCE.getItemManager().isItem(name)) {
+        if (!Mmorpg.INSTANCE.getItemManager().isItem(name)) {
             System.out.println("item " + name + " doesn't exist");
             // TODO return default item
             return null;
@@ -21,7 +21,7 @@ public class ItemUtils {
     }
 
     public static BasicItem generateBasicItem(String name) {
-        if(!Mmorpg.INSTANCE.getItemManager().isItem(name)) {
+        if (!Mmorpg.INSTANCE.getItemManager().isItem(name)) {
             System.out.println("item " + name + " doesn't exist");
             // TODO return default item
             return null;
@@ -34,7 +34,8 @@ public class ItemUtils {
     }
 
     public static boolean isItem(ItemStack item) {
-        String internal_id = item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING);
+        String internal_id = item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id,
+                PersistentDataType.STRING);
         return Mmorpg.INSTANCE.getItemManager().isItem(internal_id);
     }
 

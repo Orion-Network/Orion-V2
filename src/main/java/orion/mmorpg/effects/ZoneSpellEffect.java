@@ -21,16 +21,14 @@ public class ZoneSpellEffect extends ImageEffect {
     }
 
     public void load(BaseImage baseImage) {
-        File f = Objects.requireNonNull(Mmorpg.INSTANCE.getDataFolder().listFiles((dir, name) -> name.equalsIgnoreCase(baseImage.getImageName())))[0];
+        File f = Objects.requireNonNull(Mmorpg.INSTANCE.getDataFolder()
+                .listFiles((dir, name) -> name.equalsIgnoreCase(baseImage.getImageName())))[0];
         this.loadFile(f);
     }
 
     public enum BaseImage {
-        PENTAGRAM("pentagram.png"),
-        ALCHEMY("img/alchemy.png"),
-        ALCHEMY_1("img/alchemy_1.png"),
-        ALCHEMY_2("img/alchemy_2.png"),
-        ;
+        PENTAGRAM("pentagram.png"), ALCHEMY("img/alchemy.png"), ALCHEMY_1("img/alchemy_1.png"),
+        ALCHEMY_2("img/alchemy_2.png"),;
 
         private final String imageName;
 

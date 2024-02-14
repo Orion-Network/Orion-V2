@@ -14,7 +14,8 @@ import java.util.List;
 public class PortalStone {
     @Getter
     final String title;
-    @Getter@Setter
+    @Getter
+    @Setter
     String description;
     @Getter
     final Location location;
@@ -33,11 +34,11 @@ public class PortalStone {
 
         meta.setDisplayName(ChatColor.YELLOW + title);
         List<String> lore = new LinkedList<>();
-        if(description != null)
+        if (description != null)
             lore.add(ChatColor.GRAY + description);
-        lore.add(ChatColor.GRAY + "X : " + ChatColor.YELLOW + location.getBlockX() + ", " +
-                ChatColor.GRAY + "Y : " + ChatColor.YELLOW + location.getBlockY() + ", " +
-                ChatColor.GRAY + "Z : " + ChatColor.YELLOW + location.getBlockZ());
+        lore.add(ChatColor.GRAY + "X : " + ChatColor.YELLOW + location.getBlockX() + ", " + ChatColor.GRAY + "Y : "
+                + ChatColor.YELLOW + location.getBlockY() + ", " + ChatColor.GRAY + "Z : " + ChatColor.YELLOW
+                + location.getBlockZ());
         meta.setLore(lore);
 
         item.setItemMeta(meta);

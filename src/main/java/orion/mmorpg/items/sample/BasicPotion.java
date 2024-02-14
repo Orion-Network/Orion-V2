@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Getter@ExcludeRegister
+@Getter
+@ExcludeRegister
 public class BasicPotion extends BasicConsumableItem {
     @Setter
     int duration;
@@ -34,13 +35,14 @@ public class BasicPotion extends BasicConsumableItem {
 
     public BasicPotion(ItemStack item) {
         super(item);
-        this.duration = item.getItemMeta().getPersistentDataContainer().get(Namespaces.duration, PersistentDataType.INTEGER);
-        String[] list = item.getItemMeta().getPersistentDataContainer().get(Namespaces.effectList, DataType.STRING_ARRAY);
+        this.duration = item.getItemMeta().getPersistentDataContainer().get(Namespaces.duration,
+                PersistentDataType.INTEGER);
+        String[] list = item.getItemMeta().getPersistentDataContainer().get(Namespaces.effectList,
+                DataType.STRING_ARRAY);
 
         this.effectList = new ArrayList<>();
         Collections.addAll(effectList, list);
     }
-
 
     public BasicPotion(String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, int duration) {
         super(Material.POTION, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.POTION);
@@ -67,11 +69,13 @@ public class BasicPotion extends BasicConsumableItem {
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
-        String[] effectList = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.effectList, DataType.STRING_ARRAY);
+        String[] effectList = e.getItem().getItemMeta().getPersistentDataContainer().get(Namespaces.effectList,
+                DataType.STRING_ARRAY);
         for (String effect : effectList) {
             try {
                 OEffect oEffect = (OEffect) Class.forName(effect).getConstructor(long.class).newInstance(duration);
-                Bukkit.getServer().getPluginManager().callEvent(new OnGetEffect(data, oEffect, oEffect.getDuration(), this.getNAME()));
+                Bukkit.getServer().getPluginManager()
+                        .callEvent(new OnGetEffect(data, oEffect, oEffect.getDuration(), this.getNAME()));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -85,7 +89,8 @@ public class BasicPotion extends BasicConsumableItem {
             item = new ItemStack(MATERIAL);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(Namespaces.duration, PersistentDataType.INTEGER, duration);
-        meta.getPersistentDataContainer().set(Namespaces.effectList, DataType.STRING_ARRAY, effectList.toArray(new String[0]));
+        meta.getPersistentDataContainer().set(Namespaces.effectList, DataType.STRING_ARRAY,
+                effectList.toArray(new String[0]));
         item.setItemMeta(meta);
         return super.generateItem(item, amount);
     }
@@ -95,7 +100,7 @@ public class BasicPotion extends BasicConsumableItem {
         if (lore == null)
             lore = new ArrayList<>();
         lore.add(ChatColor.YELLOW + "Durée : " + this.RARITY.getChatColor() + duration + ChatColor.YELLOW + "s");
-        if(effectList.isEmpty())
+        if (effectList.isEmpty())
             lore.add(ChatColor.YELLOW + "Aucun effet");
         else {
             lore.add(ChatColor.YELLOW + "Effets : ");

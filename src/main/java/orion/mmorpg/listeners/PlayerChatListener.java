@@ -47,28 +47,34 @@ public class PlayerChatListener implements Listener {
                         Utils.sendErrorMessage(pl, "L'item designé n'est pas valide");
                         return null;
                     }
-                    return textBuilder.text(ChatColor.GREEN + "[" + ChatColor.WHITE + Utils.itemDisplayName(player.getInventory().getItemInMainHand()) + ChatColor.GREEN + "]").onHover(BookUtil.HoverAction.showItem(pl.getInventory().getItemInMainHand())).build();
+                    return textBuilder.text(ChatColor.GREEN + "[" + ChatColor.WHITE
+                            + Utils.itemDisplayName(player.getInventory().getItemInMainHand()) + ChatColor.GREEN + "]")
+                            .onHover(BookUtil.HoverAction.showItem(pl.getInventory().getItemInMainHand())).build();
                 } else if (!var.replaceAll("[^\\d.]", "").equals("")) {
                     int slot = Integer.parseInt(var.replaceAll("[^\\d.]", ""));
                     if (pl.getInventory().getItem(slot).getType() == Material.AIR) {
                         Utils.sendErrorMessage(pl, "L'item designé n'est pas valide");
                         return null;
                     }
-                    return textBuilder.text(ChatColor.GREEN + "[" + ChatColor.WHITE + Utils.itemDisplayName(pl.getInventory().getItem(slot)) + ChatColor.GREEN + "]")
+                    return textBuilder
+                            .text(ChatColor.GREEN + "[" + ChatColor.WHITE
+                                    + Utils.itemDisplayName(pl.getInventory().getItem(slot)) + ChatColor.GREEN + "]")
                             .onHover(BookUtil.HoverAction.showItem(pl.getInventory().getItem(slot))).build();
                 }
-            }
-            else if (var.equalsIgnoreCase("me")) {
+            } else if (var.equalsIgnoreCase("me")) {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(ChatColor.GRAY + "Nom: " + ChatColor.WHITE + pl.getName() + "\n");
                 stringBuilder.append(ChatColor.GRAY + "Niveau: " + ChatColor.WHITE + stats.getLevel() + "\n");
                 stringBuilder.append(ChatColor.GRAY + "Race:" + ChatColor.WHITE + stats.getRace().getName() + "\n");
-                stringBuilder.append(ChatColor.GRAY + "Support: " + ChatColor.WHITE + stats.getMainSupport().getName() + "\n");
-                stats.getStats().statsAsLore().forEach(s -> stringBuilder.append(ChatColor.GRAY + "\n" + ChatColor.stripColor(s)));
+                stringBuilder.append(
+                        ChatColor.GRAY + "Support: " + ChatColor.WHITE + stats.getMainSupport().getName() + "\n");
+                stats.getStats().statsAsLore()
+                        .forEach(s -> stringBuilder.append(ChatColor.GRAY + "\n" + ChatColor.stripColor(s)));
 
-
-                return textBuilder.text(ChatColor.GREEN + "[" + ChatColor.WHITE + pl.getDisplayName() + ChatColor.GREEN + "]").onHover(BookUtil.HoverAction.showText(stringBuilder.toString())).build();
+                return textBuilder
+                        .text(ChatColor.GREEN + "[" + ChatColor.WHITE + pl.getDisplayName() + ChatColor.GREEN + "]")
+                        .onHover(BookUtil.HoverAction.showText(stringBuilder.toString())).build();
             }
         }
         return null;

@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class StrongStone extends BasicReforgeStone {
     public StrongStone() {
-        super(Material.NETHERITE_INGOT, "Pierre forte", "STRONG_STONE", 0, Arrays.asList("Permet d'appliquer forte"), Rarity.UNCOMMON, ItemReforge.STRONG, 5);
+        super(Material.NETHERITE_INGOT, "Pierre forte", "STRONG_STONE", 0, Arrays.asList("Permet d'appliquer forte"),
+                Rarity.UNCOMMON, ItemReforge.STRONG, 5);
     }
 }

@@ -51,47 +51,65 @@ public abstract class BasicItem extends ItemStack {
     protected Spell spell;
 
     protected BasicItem(ItemStack item) {
-        this(item.getType(), item.getItemMeta().getPersistentDataContainer().get(Namespaces.name, PersistentDataType.STRING), item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING), item.getItemMeta().getCustomModelData(), Mmorpg.getOrionGson().getGSON().fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.lore, PersistentDataType.STRING), List.class), Rarity.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.rarity, PersistentDataType.STRING)), ItemType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.type, PersistentDataType.STRING)));
+        this(item.getType(),
+                item.getItemMeta().getPersistentDataContainer().get(Namespaces.name, PersistentDataType.STRING),
+                item.getItemMeta().getPersistentDataContainer().get(Namespaces.internal_id, PersistentDataType.STRING),
+                item.getItemMeta().getCustomModelData(),
+                Mmorpg.getOrionGson().getGSON()
+                        .fromJson(item.getItemMeta().getPersistentDataContainer().get(Namespaces.lore,
+                                PersistentDataType.STRING), List.class),
+                Rarity.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.rarity,
+                        PersistentDataType.STRING)),
+                ItemType.valueOf(item.getItemMeta().getPersistentDataContainer().get(Namespaces.type,
+                        PersistentDataType.STRING)));
         this.setItemMeta(item.getItemMeta());
     }
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY) {
         this(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.ITEM);
     }
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE) {
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ItemType ITEM_TYPE) {
         this(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ITEM_TYPE, "basic.item");
     }
 
-    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, ItemType ITEM_TYPE, String PERMISSION) {
+    protected BasicItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, ItemType ITEM_TYPE, String PERMISSION) {
         this.MATERIAL = MATERIAL;
         this.NAME = NAME;
         this.INTERNAL_ID = INTERNAL_ID;
         this.MODEL_ID = MODEL_ID;
         this.RARITY = RARITY;
-        if(LORE != null)
+        if (LORE != null)
             this.LORE = LORE.stream().map(a -> ChatColor.GRAY + a).collect(Collectors.toList());
         else
             this.LORE = null;
         this.ITEM_TYPE = ITEM_TYPE;
         this.PERMISSION = PERMISSION;
     }
-    public static BasicItem generateRessourceItem(String identifier, Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+
+    public static BasicItem generateRessourceItem(String identifier, Material MATERIAl, String NAME, int MODEL_ID,
+            List<String> LORE, Rarity RARITY) {
         BasicItem item = new BasicItem(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, ItemType.RESSOURCE) {
         };
-        if(!ressourceItems.containsKey(identifier))
+        if (!ressourceItems.containsKey(identifier))
             ressourceItems.put(identifier, item);
         return item;
     }
 
-    public static BasicItem generateIngredientItem(Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY, Class<? extends  OEffect> effect) {
+    public static BasicItem generateIngredientItem(Material MATERIAl, String NAME, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, Class<? extends OEffect> effect) {
         BasicItem item = new BasicIngredient(MATERIAl, NAME, "null", MODEL_ID, LORE, RARITY, effect) {
         };
-        if(!ressourceItems.containsKey(NAME))
+        if (!ressourceItems.containsKey(NAME))
             ressourceItems.put(NAME, item);
         return item;
     }
-    public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+
+    public static BasicItem generateTemplateBasicItem(Material MATERIAL, String NAME, int MODEL_ID, List<String> LORE,
+            Rarity RARITY) {
         return new BasicItem(MATERIAL, NAME, "null", MODEL_ID, LORE, RARITY) {
         };
     }
@@ -119,11 +137,12 @@ public abstract class BasicItem extends ItemStack {
         meta.setLore(generateLore(null));
 
         meta.getPersistentDataContainer().set(Namespaces.name, PersistentDataType.STRING, NAME);
-        meta.getPersistentDataContainer().set(Namespaces.lore, PersistentDataType.STRING, Mmorpg.getOrionGson().getGSON().toJson(getLORE()));
+        meta.getPersistentDataContainer().set(Namespaces.lore, PersistentDataType.STRING,
+                Mmorpg.getOrionGson().getGSON().toJson(getLORE()));
         meta.getPersistentDataContainer().set(Namespaces.rarity, PersistentDataType.STRING, RARITY.toString());
         meta.getPersistentDataContainer().set(Namespaces.internal_id, PersistentDataType.STRING, INTERNAL_ID);
         meta.getPersistentDataContainer().set(Namespaces.type, PersistentDataType.STRING, ITEM_TYPE.toString());
-        for(String id : DATA.keySet()) {
+        for (String id : DATA.keySet()) {
             Utils.Pair<PersistentDataType, Object> data = DATA.get(id);
             meta.getPersistentDataContainer().set(NamespacedKey.minecraft(id), data.getKey(), data.getValue());
         }
@@ -142,7 +161,7 @@ public abstract class BasicItem extends ItemStack {
     public List<String> generateLore(List<String> lore) {
         if (lore == null)
             lore = new ArrayList<>();
-        if(LORE != null)
+        if (LORE != null)
             lore.addAll(LORE);
 
         if (this.spell != null) {

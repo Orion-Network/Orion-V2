@@ -14,18 +14,22 @@ import java.io.IOException;
 
 public class BukkitSerialization {
     /**
-     * Converts the player inventory to a String array of Base64 strings. First string is the content and second string is the armor.
+     * Converts the player inventory to a String array of Base64 strings. First string is the content and second string
+     * is the armor.
      *
-     * @param playerInventory to turn into an array of strings.
+     * @param playerInventory
+     *            to turn into an array of strings.
+     *
      * @return Array of strings: [ main content, armor content ]
+     *
      * @throws IllegalStateException
      */
     public static String[] playerInventoryToBase64(PlayerInventory playerInventory) throws IllegalStateException {
-        //get the main content part, this doesn't return the armor
+        // get the main content part, this doesn't return the armor
         String content = toBase64(playerInventory);
         String armor = itemStackArrayToBase64(playerInventory.getArmorContents());
 
-        return new String[]{content, armor};
+        return new String[] { content, armor };
     }
 
     /**
@@ -35,8 +39,11 @@ public class BukkitSerialization {
      * <p>
      * Based off of {@link #toBase64(Inventory)}.
      *
-     * @param items to turn into a Base64 String.
+     * @param items
+     *            to turn into a Base64 String.
+     *
      * @return Base64 string of the items.
+     *
      * @throws IllegalStateException
      */
     public static String itemStackArrayToBase64(ItemStack[] items) throws IllegalStateException {
@@ -65,13 +72,15 @@ public class BukkitSerialization {
      * <p>
      * <p/>
      * <p>
-     * Special thanks to Comphenix in the Bukkit forums or also known
-     * as aadnk on GitHub.
+     * Special thanks to Comphenix in the Bukkit forums or also known as aadnk on GitHub.
      *
      * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
      *
-     * @param inventory to serialize
+     * @param inventory
+     *            to serialize
+     *
      * @return Base64 string of the provided inventory
+     *
      * @throws IllegalStateException
      */
     public static String toBase64(Inventory inventory) throws IllegalStateException {
@@ -100,13 +109,15 @@ public class BukkitSerialization {
      * <p>
      * <p/>
      * <p>
-     * Special thanks to Comphenix in the Bukkit forums or also known
-     * as aadnk on GitHub.
+     * Special thanks to Comphenix in the Bukkit forums or also known as aadnk on GitHub.
      *
      * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
      *
-     * @param data Base64 string of data containing an inventory.
+     * @param data
+     *            Base64 string of data containing an inventory.
+     *
      * @return Inventory created from the Base64 string.
+     *
      * @throws IOException
      */
     public static Inventory fromBase64(String data) throws IOException {
@@ -134,8 +145,11 @@ public class BukkitSerialization {
      * <p>
      * Base off of {@link #fromBase64(String)}.
      *
-     * @param data Base64 string to convert to ItemStack array.
+     * @param data
+     *            Base64 string to convert to ItemStack array.
+     *
      * @return ItemStack array created from the Base64 string.
+     *
      * @throws IOException
      */
     public static ItemStack[] itemStackArrayFromBase64(String data) throws IOException {

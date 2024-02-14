@@ -30,11 +30,13 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
         super(item);
     }
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, Stats.Modifiers MODIFIERS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, MODIFIERS, DAMAGE);
     }
 
-    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
+    public BasicMagicWeapon(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, String PERMISSION, Stats.Modifiers MODIFIERS, float DAMAGE) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, PERMISSION, MODIFIERS, DAMAGE);
     }
 
@@ -50,7 +52,7 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
     @Override
     public void onHitWithItem(EntityDamageByEntityEvent e) {
         super.onHitWithItem(e);
-        //castSpell((Player) e.getDamager());
+        // castSpell((Player) e.getDamager());
     }
 
     private void castSpell(Player caster) {
@@ -59,7 +61,8 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
         }
         OrionPlayer data = Mmorpg.INSTANCE.getPlayerManager().getPlayer(caster.getUniqueId());
         Vector dir = caster.getEyeLocation().getDirection().normalize();
-        AttackEffect effect = new AttackEffect(Mmorpg.effectManager, dir.multiply(0.5), caster, data, getDAMAGE(), particle);
+        AttackEffect effect = new AttackEffect(Mmorpg.effectManager, dir.multiply(0.5), caster, data, getDAMAGE(),
+                particle);
         effect.setLocation(caster.getEyeLocation());
         effect.start();
     }
@@ -70,7 +73,8 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
         OrionPlayer casterData;
         float damage;
 
-        public AttackEffect(EffectManager effectManager, Vector v, Player caster, OrionPlayer casterData, float damage, Particle particle) {
+        public AttackEffect(EffectManager effectManager, Vector v, Player caster, OrionPlayer casterData, float damage,
+                Particle particle) {
             super(effectManager);
             this.v = v;
             this.particle = particle;
@@ -86,18 +90,23 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
         public void onRun() {
             super.onRun();
             setLocation(getLocation().add(v));
-            getLocation().getWorld().getNearbyEntities(getLocation(), 1, 1, 1, e -> ((e instanceof Damageable) && (e != caster))).forEach(e -> {
-                float totalDamage = Utils.calculateMagicDamage(casterData.getStats(), damage);
-                ((LivingEntity) e).damage(totalDamage, caster);
-                e.setVelocity(e.getVelocity().add(e.getLocation().toVector().subtract(getLocation().toVector()).normalize().multiply(1)));
-                if (!(e instanceof Player))
-                    casterData.updateMobHealthBar(((LivingEntity) e).getHealth() - totalDamage, ((LivingEntity) e).getMaxHealth(), e.getName());
-                else {
-                    OrionPlayer target = Mmorpg.INSTANCE.getPlayerManager().getPlayer(e.getUniqueId());
-                    casterData.updateMobHealthBar(target.getHealth(), target.getStats().get(Stats.StatsInfo.VITALITY), e.getName());
-                }
-                this.cancel();
-            });
+            getLocation().getWorld()
+                    .getNearbyEntities(getLocation(), 1, 1, 1, e -> ((e instanceof Damageable) && (e != caster)))
+                    .forEach(e -> {
+                        float totalDamage = Utils.calculateMagicDamage(casterData.getStats(), damage);
+                        ((LivingEntity) e).damage(totalDamage, caster);
+                        e.setVelocity(e.getVelocity().add(
+                                e.getLocation().toVector().subtract(getLocation().toVector()).normalize().multiply(1)));
+                        if (!(e instanceof Player))
+                            casterData.updateMobHealthBar(((LivingEntity) e).getHealth() - totalDamage,
+                                    ((LivingEntity) e).getMaxHealth(), e.getName());
+                        else {
+                            OrionPlayer target = Mmorpg.INSTANCE.getPlayerManager().getPlayer(e.getUniqueId());
+                            casterData.updateMobHealthBar(target.getHealth(),
+                                    target.getStats().get(Stats.StatsInfo.VITALITY), e.getName());
+                        }
+                        this.cancel();
+                    });
         }
     }
 }

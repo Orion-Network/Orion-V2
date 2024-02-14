@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  */
 public class Infos {
 
-    //TODO Save LocalDateTime
+    // TODO Save LocalDateTime
     String playerName;
     transient LocalDateTime firstPlayed;
     transient LocalDateTime lastPlayed;

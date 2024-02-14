@@ -11,9 +11,9 @@ import orion.mmorpg.utils.Utils;
 
 public class Switch extends Spell {
 
-        public Switch() {
-            super("SWITCH", 30, Element.ARCANE, 15*1000, TargetType.TARGET);
-        }
+    public Switch() {
+        super("SWITCH", 30, Element.ARCANE, 15 * 1000, TargetType.TARGET);
+    }
 
     @Override
     public void launch(Mmorpg mmorpg, Location location, Knowledge knowledge) {

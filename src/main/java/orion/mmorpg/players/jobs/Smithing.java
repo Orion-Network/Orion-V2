@@ -31,33 +31,31 @@ public class Smithing extends AbstractJob {
     }
 
     boolean validated = false;
+
     public ChestGui getUpgradeGui() {
         ChestGui gui = new ChestGui(3, "Menu d'amélioration");
         gui.setOnBottomClick(e -> {
-            if(e.isShiftClick()) {
+            if (e.isShiftClick()) {
                 e.setCancelled(true);
             }
         });
         gui.setOnClose(e -> {
-            if(gui.getInventory().getItem(10) != null)
+            if (gui.getInventory().getItem(10) != null)
                 e.getPlayer().getInventory().addItem(gui.getInventory().getItem(10));
-            if(gui.getInventory().getItem(16) != null)
+            if (gui.getInventory().getItem(16) != null)
                 e.getPlayer().getInventory().addItem(gui.getInventory().getItem(16));
-            if(gui.getInventory().getItem(13) != null && validated == true)
+            if (gui.getInventory().getItem(13) != null && validated == true)
                 e.getPlayer().getInventory().addItem(gui.getInventory().getItem(13));
         });
 
-        Pattern pattern = new Pattern(
-                "111111111",
-                "101101101",
-                "111101111");
-        PatternPane maskPane = new PatternPane(0,0,9,3, pattern);
+        Pattern pattern = new Pattern("111111111", "101101101", "111101111");
+        PatternPane maskPane = new PatternPane(0, 0, 9, 3, pattern);
         maskPane.bindItem('1', new GuiItem(new ItemStack(Material.RED_STAINED_GLASS_PANE), e -> e.setCancelled(true)));
 
-        StaticPane guiPane = new StaticPane(9,3);
+        StaticPane guiPane = new StaticPane(9, 3);
         guiPane.addItem(new GuiItem(new ItemStack(Material.ANVIL), e -> {
-            if(gui.getInventory().getItem(10) != null && gui.getInventory().getItem(16) != null) {
-                if(validated) {
+            if (gui.getInventory().getItem(10) != null && gui.getInventory().getItem(16) != null) {
+                if (validated) {
                     e.getWhoClicked().sendMessage("Veuillez prendre l'item précédent");
                     return;
                 }
@@ -67,31 +65,33 @@ public class Smithing extends AbstractJob {
             }
         }), 4, 2);
         guiPane.setOnClick(e -> {
-            if(e.getSlot() == 10 || e.getSlot() == 16) {
-                if(e.getCursor().getType() == Material.AIR) {
+            if (e.getSlot() == 10 || e.getSlot() == 16) {
+                if (e.getCursor().getType() == Material.AIR) {
                     updateGui(gui);
                     return;
                 }
-                if(e.getSlot() == 10 && !(ItemUtils.getItemFromItemstack(e.getCursor()) instanceof Reforgeable)) {
+                if (e.getSlot() == 10 && !(ItemUtils.getItemFromItemstack(e.getCursor()) instanceof Reforgeable)) {
                     Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre un objet reforgeable");
                     e.setCancelled(true);
                 }
-                if(e.getSlot() == 16) {
-                    if( !BasicReforgeStone.class.isAssignableFrom(ItemUtils.getItemFromItemstack(e.getCursor()).getClass())) {
+                if (e.getSlot() == 16) {
+                    if (!BasicReforgeStone.class
+                            .isAssignableFrom(ItemUtils.getItemFromItemstack(e.getCursor()).getClass())) {
                         Utils.sendErrorMessage(e.getWhoClicked(), "Item non-valide. Veuillez mettre une reforge stone");
                         e.setCancelled(true);
                     }
                     BasicReforgeStone reforgeStone = (BasicReforgeStone) ItemUtils.getItemFromItemstack(e.getCursor());
-                    if(reforgeStone.getSmithingLevelRequired() > this.getLevel()) {
-                        Utils.sendErrorMessage(e.getWhoClicked(), "Vous n'avez pas le niveau requis pour utiliser cette reforge stone");
+                    if (reforgeStone.getSmithingLevelRequired() > this.getLevel()) {
+                        Utils.sendErrorMessage(e.getWhoClicked(),
+                                "Vous n'avez pas le niveau requis pour utiliser cette reforge stone");
                         e.setCancelled(true);
                     }
                 }
 
                 updateGui(gui);
             } else {
-                if(e.getSlot() == 13) {
-                    if(gui.getInventory().getItem(13) != null && validated) {
+                if (e.getSlot() == 13) {
+                    if (gui.getInventory().getItem(13) != null && validated) {
                         validated = false;
                         return;
                     } else {
@@ -110,12 +110,14 @@ public class Smithing extends AbstractJob {
 
     private void updateGui(ChestGui gui) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Mmorpg.INSTANCE, () -> {
-            if(gui.getInventory().getItem(10) != null && gui.getInventory().getItem(16) != null) {
+            if (gui.getInventory().getItem(10) != null && gui.getInventory().getItem(16) != null) {
                 BasicItem basicEquipmentItem = ItemUtils.getItemFromItemstack(gui.getInventory().getItem(10).clone());
-                ((Reforgeable)basicEquipmentItem).setReforge(((BasicReforgeStone) ItemUtils.getItemFromItemstack(gui.getInventory().getItem(16).clone())).getReforge());
-                gui.getInventory().setItem(13, basicEquipmentItem.generateItem(gui.getInventory().getItem(10).clone(), 1));
-            }
-            else {
+                ((Reforgeable) basicEquipmentItem).setReforge(
+                        ((BasicReforgeStone) ItemUtils.getItemFromItemstack(gui.getInventory().getItem(16).clone()))
+                                .getReforge());
+                gui.getInventory().setItem(13,
+                        basicEquipmentItem.generateItem(gui.getInventory().getItem(10).clone(), 1));
+            } else {
                 gui.getInventory().setItem(13, new ItemStack(Material.AIR));
             }
         }, 10L);

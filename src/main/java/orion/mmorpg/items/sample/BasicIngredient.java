@@ -15,7 +15,8 @@ import orion.mmorpg.utils.Rarity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter@ExcludeRegister
+@Getter
+@ExcludeRegister
 public class BasicIngredient extends BasicRessource {
     Class<? extends OEffect> oEffect;
     int duration;
@@ -24,13 +25,15 @@ public class BasicIngredient extends BasicRessource {
     public BasicIngredient(ItemStack item) {
         super(item);
         try {
-            this.oEffect = (Class<? extends OEffect>) Class.forName(item.getItemMeta().getPersistentDataContainer().get(Namespaces.oeffect, PersistentDataType.STRING));
+            this.oEffect = (Class<? extends OEffect>) Class.forName(
+                    item.getItemMeta().getPersistentDataContainer().get(Namespaces.oeffect, PersistentDataType.STRING));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public BasicIngredient(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY, Class<? extends OEffect> effect) {
+    public BasicIngredient(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY, Class<? extends OEffect> effect) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY, ItemType.INGREDIENT);
         this.oEffect = effect;
     }

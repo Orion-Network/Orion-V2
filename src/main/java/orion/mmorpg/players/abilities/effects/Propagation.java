@@ -16,19 +16,20 @@ public class Propagation extends OEffect {
         super("Propagation", "Propagate effects to nearby players.", OnGetEffect.class, duration);
     }
 
-
     @Override
     public void onEvent(Event event) {
         OnGetEffect e = (OnGetEffect) event;
-        if(((OnGetEffect) event).getEffect() == this) return;
+        if (((OnGetEffect) event).getEffect() == this)
+            return;
         Player player = Bukkit.getPlayer(e.getPlayer().getUniqueId());
 
-        for(Entity entity : player.getNearbyEntities(5, 5, 5)) {
-            if(entity instanceof Player nearbyPlayer) {
-                if(nearbyPlayer.getUniqueId() != player.getUniqueId()) {
-                    Bukkit.getPluginManager().callEvent(
-                            new OnGetEffect(Mmorpg.INSTANCE.getPlayerManager().getPlayer(nearbyPlayer.getUniqueId()), e.getEffect(), e.getDuration(), "Propagation")
-                    );
+        for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
+            if (entity instanceof Player nearbyPlayer) {
+                if (nearbyPlayer.getUniqueId() != player.getUniqueId()) {
+                    Bukkit.getPluginManager()
+                            .callEvent(new OnGetEffect(
+                                    Mmorpg.INSTANCE.getPlayerManager().getPlayer(nearbyPlayer.getUniqueId()),
+                                    e.getEffect(), e.getDuration(), "Propagation"));
                 }
             }
         }

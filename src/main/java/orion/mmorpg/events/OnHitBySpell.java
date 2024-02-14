@@ -17,7 +17,8 @@ public class OnHitBySpell extends Event implements Cancellable {
     Spell s;
     double damage;
 
-    public OnHitBySpell(Player damager, Player entity, OrionPlayer damagerStats, OrionPlayer entityStats, Spell s, float damage) {
+    public OnHitBySpell(Player damager, Player entity, OrionPlayer damagerStats, OrionPlayer entityStats, Spell s,
+            float damage) {
         this.cancelled = false;
         this.damager = damager;
         this.entity = entity;
@@ -26,8 +27,6 @@ public class OnHitBySpell extends Event implements Cancellable {
         this.s = s;
         this.damage = damage;
     }
-
-
 
     @NotNull
     @Override

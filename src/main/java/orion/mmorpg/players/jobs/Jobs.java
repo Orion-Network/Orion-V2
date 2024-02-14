@@ -16,12 +16,12 @@ public class Jobs {
     public static Jobs getBaseJobs() {
         Jobs jobs = new Jobs();
         JobType[] jobTypes = JobType.values();
-        for(JobType jobType : jobTypes) {
+        for (JobType jobType : jobTypes) {
             try {
                 AbstractJob job = jobType.getJobClass().getDeclaredConstructor().newInstance();
                 jobs.addJob(job);
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
-                     IllegalAccessException e) {
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException
+                    | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -33,7 +33,7 @@ public class Jobs {
     }
 
     public void addJob(AbstractJob job) {
-        if(!jobs.containsKey(job.getJobType()))
+        if (!jobs.containsKey(job.getJobType()))
             jobs.put(job.getJobType(), job);
     }
 }

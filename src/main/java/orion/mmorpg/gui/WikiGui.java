@@ -18,7 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WikiGui extends ChestGui {
-    final List<String> hiddenItems = Arrays.asList("TEST_ITEM", "ADMIN_SWORD", "STARSET_HELMET", "STARSET_CHESTPLATE", "STARSET_LEGGINGS", "STARSET_BOOTS", "GIFT", "INFINITE_FIREWORK", "CELESTIAL_SERUM");
+    final List<String> hiddenItems = Arrays.asList("TEST_ITEM", "ADMIN_SWORD", "STARSET_HELMET", "STARSET_CHESTPLATE",
+            "STARSET_LEGGINGS", "STARSET_BOOTS", "GIFT", "INFINITE_FIREWORK", "CELESTIAL_SERUM");
     final List<SpellList> hiddenSpells = Arrays.asList(SpellList.TEST_SPELL, SpellList.GOAT_HUNGER);
     PaginatedPane mainPane = new PaginatedPane(0, 0, 9, 5);
     List<GuiItem> populateList = new LinkedList<>();
@@ -46,9 +47,11 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane supportPane = new PaginatedPane(0, 0, 9, 5);
         for (SpellList s : SpellList.values()) {
-            if (hiddenSpells.contains(s)) continue;
+            if (hiddenSpells.contains(s))
+                continue;
             populateList.add(new GuiItem(s.getItem(), (event) -> {
-                if (!event.getWhoClicked().hasPermission("orion.wiki.give.spell")) return;
+                if (!event.getWhoClicked().hasPermission("orion.wiki.give.spell"))
+                    return;
                 OrionPlayer p = mmorpg.getPlayerManager().getPlayer(event.getWhoClicked().getUniqueId());
                 SpellList.learnSpell(p, s.getSpellClass(), 200);
                 Utils.sendInfoMessage(event.getWhoClicked(), "Apprentissage du sort : " + s.getName());
@@ -62,11 +65,14 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane samplePane = new PaginatedPane(0, 0, 9, 5);
         for (String item : Mmorpg.INSTANCE.getItemManager().getItems().keySet()) {
-            if(!Mmorpg.INSTANCE.getItemManager().getItem(item).equals(BasicItem.class)) continue;
-            if (hiddenItems.contains(item)) continue;
+            if (!Mmorpg.INSTANCE.getItemManager().getItem(item).equals(BasicItem.class))
+                continue;
+            if (hiddenItems.contains(item))
+                continue;
             BasicItem basicItem = Mmorpg.INSTANCE.getItemManager().createItem(item);
             populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
-                if (!event.getWhoClicked().hasPermission("orion.wiki.give.item")) return;
+                if (!event.getWhoClicked().hasPermission("orion.wiki.give.item"))
+                    return;
                 event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
                 Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
@@ -80,13 +86,17 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane weaponPane = new PaginatedPane(0, 0, 9, 5);
         for (String item : itemManager.getItems().keySet()) {
-            if (!BasicMeleeWeapon.class.isAssignableFrom(itemManager.getItem(item)) && !BasicMagicWeapon.class.isAssignableFrom(itemManager.getItem(item)) && !BasicRangedWeapon.class.isAssignableFrom(itemManager.getItem(item)))
+            if (!BasicMeleeWeapon.class.isAssignableFrom(itemManager.getItem(item))
+                    && !BasicMagicWeapon.class.isAssignableFrom(itemManager.getItem(item))
+                    && !BasicRangedWeapon.class.isAssignableFrom(itemManager.getItem(item)))
                 continue;
 
-            if (hiddenItems.contains(item)) continue;
+            if (hiddenItems.contains(item))
+                continue;
             BasicItem basicItem = itemManager.createItem(item);
             populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
-                if (!event.getWhoClicked().hasPermission("orion.wiki.give.weapons")) return;
+                if (!event.getWhoClicked().hasPermission("orion.wiki.give.weapons"))
+                    return;
                 event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
                 Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
@@ -100,11 +110,14 @@ public class WikiGui extends ChestGui {
         populateList.clear();
         PaginatedPane armorPane = new PaginatedPane(0, 0, 9, 5);
         for (String item : itemManager.getItems().keySet()) {
-            if (!BasicArmorItem.class.isAssignableFrom(itemManager.getItem(item))) continue;
-            if (hiddenItems.contains(item)) continue;
+            if (!BasicArmorItem.class.isAssignableFrom(itemManager.getItem(item)))
+                continue;
+            if (hiddenItems.contains(item))
+                continue;
             BasicItem basicItem = itemManager.createItem(item);
             populateList.add(new GuiItem(basicItem.generateItem(null, 1), (event) -> {
-                if (!event.getWhoClicked().hasPermission("orion.wiki.give.armor")) return;
+                if (!event.getWhoClicked().hasPermission("orion.wiki.give.armor"))
+                    return;
                 event.getWhoClicked().getInventory().addItem(basicItem.generateItem(null, 1));
                 Utils.sendInfoMessage(event.getWhoClicked(), "Give Item : " + basicItem.getNAME());
             }));
@@ -147,7 +160,6 @@ public class WikiGui extends ChestGui {
             mainPane.setPage(3);
             this.update();
         }), 5, 0);
-
 
         return navigationPane;
     }

@@ -20,17 +20,22 @@ import java.util.Collections;
 
 public class Muramasa extends BasicMeleeWeapon {
     public Muramasa() {
-        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", AssociationConfig.getModel("weapon/sword/legacy_sword"), Collections.singletonList("Une épée légendaire dégageant une aura maléfique."), Rarity.SUPERRARE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 7).add(Stats.StatsInfo.SPEED, 5).add(Stats.StatsInfo.CRITICAL_CHANCE, 20).add(Stats.StatsInfo.CRITICAL_DAMAGE, 10).build(), 15);
+        super(Material.NETHERITE_SWORD, "Muramasa", "MURAMASA", AssociationConfig.getModel("weapon/sword/legacy_sword"),
+                Collections.singletonList("Une épée légendaire dégageant une aura maléfique."), Rarity.SUPERRARE,
+                new Stats.Modifiers.Builder().add(Stats.StatsInfo.STRENGTH, 7).add(Stats.StatsInfo.SPEED, 5)
+                        .add(Stats.StatsInfo.CRITICAL_CHANCE, 20).add(Stats.StatsInfo.CRITICAL_DAMAGE, 10).build(),
+                15);
     }
 
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         super.onUseItem(mmorpg, data, e);
-        if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+            return;
         castAttack(e.getPlayer(), data);
     }
 
-    //TODO : Sword kill entities two times
+    // TODO : Sword kill entities two times
     @Override
     public void onHitWithItem(EntityDamageByEntityEvent e) {
         super.onHitWithItem(e);
@@ -38,15 +43,22 @@ public class Muramasa extends BasicMeleeWeapon {
     }
 
     private void castAttack(Player player, OrionPlayer data) {
-        if(player.getAttackCooldown() != 1) return;
+        if (player.getAttackCooldown() != 1)
+            return;
         Effect slashEffect = new SlashEffect(Mmorpg.effectManager);
         slashEffect.setLocation(player.getLocation());
-        slashEffect.setTargetLocation(player.getLocation().clone().add(10,1,10));
+        slashEffect.setTargetLocation(player.getLocation().clone().add(10, 1, 10));
         slashEffect.start();
-        player.getLocation().getWorld().getNearbyEntities(player.getLocation().add(player.getEyeLocation().getDirection().normalize().multiply(4)), 2, 2, 2, ent -> ent instanceof LivingEntity).forEach(entity -> {
-            if(entity.isInvulnerable() || entity == player) return;
-            ((LivingEntity) entity).damage(Utils.calculateDamage(data.getStats(), this.getDAMAGE()));
-            data.updateMobHealthBar(((LivingEntity) entity).getHealth(), ((LivingEntity) entity).getMaxHealth(), entity.getName());
-        });
+        player.getLocation().getWorld()
+                .getNearbyEntities(
+                        player.getLocation().add(player.getEyeLocation().getDirection().normalize().multiply(4)), 2, 2,
+                        2, ent -> ent instanceof LivingEntity)
+                .forEach(entity -> {
+                    if (entity.isInvulnerable() || entity == player)
+                        return;
+                    ((LivingEntity) entity).damage(Utils.calculateDamage(data.getStats(), this.getDAMAGE()));
+                    data.updateMobHealthBar(((LivingEntity) entity).getHealth(), ((LivingEntity) entity).getMaxHealth(),
+                            entity.getName());
+                });
     }
 }

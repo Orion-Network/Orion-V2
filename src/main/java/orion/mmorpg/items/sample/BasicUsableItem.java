@@ -14,7 +14,8 @@ public class BasicUsableItem extends BasicItem {
         super(item);
     }
 
-    public BasicUsableItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE, Rarity RARITY) {
+    public BasicUsableItem(Material MATERIAL, String NAME, String INTERNAL_ID, int MODEL_ID, List<String> LORE,
+            Rarity RARITY) {
         super(MATERIAL, NAME, INTERNAL_ID, MODEL_ID, LORE, RARITY);
     }
 }
