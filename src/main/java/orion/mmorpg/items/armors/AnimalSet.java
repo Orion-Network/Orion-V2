@@ -17,7 +17,7 @@ public class AnimalSet {
     public static class ChickenBelt extends BasicArmorItem {
 
         public ChickenBelt() {
-            super(Material.BLUE_DYE, "Ceinture de Poulet", "CHICKEN_BELT", 3, null, Rarity.RARE, ArmorType.BELT,
+            super(Material.MAGENTA_DYE, "Ceinture de Poulet", "CHICKEN_BELT", 3, null, Rarity.RARE, ArmorType.BELT,
                     new Stats.Modifiers.Builder().add(Stats.StatsInfo.LUCK, 5).add(Stats.StatsInfo.CRITICAL_CHANCE, 3)
                             .build());
         }

@@ -43,6 +43,7 @@ public class GrimoryItem extends BasicUsableItem {
     }
 
     // TODO cast spell when select spell in selector
+    // TODO switch only to the next spell in the selector
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         ItemStack item = e.getItem();

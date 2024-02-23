@@ -20,7 +20,7 @@ public class KnightSet {
     public static class KnightChestplate extends BasicArmorItem {
         public KnightChestplate() {
             super(Material.IRON_CHESTPLATE, "Plastron de Chevalier", "KNIGHT_HELMET", 1, null, Rarity.UNCOMMON,
-                    ArmorType.CHESTPLATE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.VITALITY, 5)
+                    ArmorType.CHESTPLATE, new Stats.Modifiers.Builder().add(Stats.StatsInfo.VITALITY, 9)
                             .add(Stats.StatsInfo.DEFENCE, 5).build());
         }
     }
