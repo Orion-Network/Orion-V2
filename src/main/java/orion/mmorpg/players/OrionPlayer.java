@@ -312,7 +312,6 @@ public class OrionPlayer {
     }
 
     public void respawn() {
-        // TODO Create a respawn event and call it so that other plugins can listen to it
         Player p = Bukkit.getPlayer(getUniqueId());
         Bukkit.getServer().getPluginManager().callEvent(new RespawnEvent(p, this));
     }

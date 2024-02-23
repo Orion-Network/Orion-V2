@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 /**
  * A class to represent items as Rpg Item
  */
-// TODO add to lore Rarity + ItemType
 @ExcludeRegister
 public abstract class BasicItem extends ItemStack {
 
