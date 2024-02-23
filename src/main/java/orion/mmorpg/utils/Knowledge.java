@@ -22,6 +22,15 @@ public class Knowledge {
         return KnowledgeState.UNKNOWN;
     }
 
+    public int getNextMilestone() {
+        if (knowledge < 100) {
+            return 100;
+        } else if (knowledge < 1000) {
+            return 1000;
+        }
+        return 0;
+    }
+
     public int getKnowledge() {
         return knowledge;
     }

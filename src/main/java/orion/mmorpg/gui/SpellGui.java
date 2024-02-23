@@ -3,6 +3,7 @@ package orion.mmorpg.gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,8 +38,8 @@ public class SpellGui extends ChestGui {
             Material material = sp.getMaterial();
             ArrayList<String> lore = new ArrayList<>();
             lore.addAll(sp.getLore());
-            // TODO add knowledge bar to represent mastering of the spell
             lore.addAll(knowledge.getKnowledgeLore());
+            lore.add("§7" + generateProgressBar(knowledge.getKnowledge(), knowledge.getNextMilestone()));
             ItemStack item = BasicItem.generateTemplateBasicItem(material, sp.getRarity().getChatColor() + sp.getName(),
                     1, lore, sp.getRarity()).generateItem(null, 1);
             ItemMeta itemMeta = item.getItemMeta();
@@ -47,5 +48,24 @@ public class SpellGui extends ChestGui {
             spellPane.addItem(new GuiItem(item));
         });
         return spellPane;
+    }
+
+    public String generateProgressBar(int value, int max) {
+        if (value > max)
+            value = max;
+        System.out.println("value: " + value + " max: " + max);
+        StringBuilder sb = new StringBuilder();
+        int percentage = Math.round(((float) value / max) * 100);
+        sb.append(ChatColor.GOLD + "[");
+        for (int i = 0; i < 10; i++) {
+            if (i < percentage / 10) {
+                sb.append(ChatColor.GOLD + "█");
+            } else {
+                sb.append(ChatColor.GRAY + "█");
+            }
+        }
+        sb.append(ChatColor.GOLD + "] " + ChatColor.GRAY + "(" + percentage + "%)");
+
+        return sb.toString();
     }
 }
