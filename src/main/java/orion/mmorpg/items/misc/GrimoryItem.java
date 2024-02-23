@@ -43,7 +43,6 @@ public class GrimoryItem extends BasicUsableItem {
     }
 
     // TODO cast spell when select spell in selector
-    // TODO switch only to the next spell in the selector
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         ItemStack item = e.getItem();
@@ -73,9 +72,9 @@ public class GrimoryItem extends BasicUsableItem {
             if (e.getPlayer().isSneaking())
                 new GrimoryGui(mmorpg, e.getPlayer(), data).show(e.getPlayer());
             else {
-                if (slot == 8)
+                if (slot == 8 || data.getSelectedSpells()[slot + 1] == null) {
                     container.set(Namespaces.slot, PersistentDataType.INTEGER, 0);
-                else
+                } else
                     container.set(Namespaces.slot, PersistentDataType.INTEGER, slot + 1);
                 slot = container.get(Namespaces.slot, PersistentDataType.INTEGER);
 
