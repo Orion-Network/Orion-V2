@@ -126,19 +126,13 @@ public final class Mmorpg extends JavaPlugin {
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (getMongoClient().hasPlayer(p.getUniqueId())) {
-                try {
-                    OrionPlayer orionPlayer = getMongoClient().loadPlayer(p.getUniqueId());
-                    getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
-                    orionPlayer.updateHealthbar();
-                    Utils.sendInfoMessage(p, "Data loaded !");
-                    if (orionPlayer.getRace() == null)
-                        p.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
-                    return;
-                } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException
-                        | InstantiationException | IllegalAccessException ex) {
-                    ex.printStackTrace();
-                    p.kickPlayer("Error in loading");
-                }
+                OrionPlayer orionPlayer = getMongoClient().loadPlayer(p.getUniqueId());
+                getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
+                orionPlayer.updateHealthbar();
+                Utils.sendInfoMessage(p, "Data loaded !");
+                if (orionPlayer.getRace() == null)
+                    p.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
+                return;
             } else {
                 OrionPlayer orionPlayer = Utils.generateStarterPlayer(p);
                 getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);

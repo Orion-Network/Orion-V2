@@ -1,8 +1,6 @@
 package orion.mmorpg.players.abilities.effects;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
 import orion.mmorpg.players.abilities.OEffect;
 

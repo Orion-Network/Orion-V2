@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class Client {
+public class Client extends SaveStrategy {
     static Type portalStoneType = new TypeToken<LinkedHashSet<String>>() {
     }.getType();
     static Type spellSetType = new TypeToken<LinkedHashMap<Class<? extends Spell>, Knowledge>>() {
@@ -119,8 +119,7 @@ public class Client {
             playerCollection.replaceOne(eq("uuid", player.getUniqueId().toString()), document);
     }
 
-    public OrionPlayer loadPlayer(UUID uniqueId) throws IOException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException, InstantiationException, IllegalAccessException {
+    public OrionPlayer loadPlayer(UUID uniqueId) {
         Document document = playerCollection.find(eq("uuid", uniqueId.toString())).first();
 
         Infos info = Mmorpg.getOrionGson().GSON.fromJson(document.getString("infos"), Infos.class);
@@ -171,8 +170,14 @@ public class Client {
         Support support;
         if (document.getString("support") == null)
             support = null;
-        else
-            support = (Support) Class.forName(document.getString("support")).getConstructor().newInstance();
+        else {
+            try {
+                support = (Support) Class.forName(document.getString("support")).getConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
+                    | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         Race race;
         if (document.getString("race") == null)
