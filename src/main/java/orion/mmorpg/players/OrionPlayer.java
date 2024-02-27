@@ -8,7 +8,6 @@ import fr.nexomega.orionmob.entities.Pets;
 import fr.nexomega.orionmob.entities.samples.AbstractPet;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -17,9 +16,9 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
+import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.events.RespawnEvent;
 import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
@@ -31,13 +30,12 @@ import orion.mmorpg.players.races.Race;
 import orion.mmorpg.utils.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * A class representing a Player in Orion.
  */
-public class OrionPlayer {
+public class OrionPlayer implements Effectable {
     @Getter
     private final LinkedHashSet<String> portalStones;
     public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar",
@@ -48,14 +46,7 @@ public class OrionPlayer {
     ItemStack[] quiver;
     @Getter
     transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
-    /**
-     * A map of all the effects of the player.
-     * <p>
-     * The first key is the event name The second key is a map of all the effects of the event The key is the id of the
-     * effect The value is the effect
-     */
-    @Getter
-    transient LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects;
+
     @Getter
     @Setter
     transient Party party;
@@ -107,10 +98,6 @@ public class OrionPlayer {
 
     @Getter
     Currencies currencies;
-
-    {
-        this.orionEffects = new LinkedHashMap<>();
-    }
 
     /**
      * Default Constructor of OrionPlayer class used on first logging.
@@ -238,16 +225,6 @@ public class OrionPlayer {
         this.healthBar.setVisible(true);
     }
 
-    public static OrionPlayer generateSamplePlayer(Player p) {
-        Infos infos = new Infos(p.getName(), LocalDateTime.now(), LocalDateTime.now(), p.getPlayerTime());
-        Stats stats = new Stats.Builder().setBase(Stats.StatsInfo.STRENGTH, 1)
-                .setBase(Stats.StatsInfo.CRITICAL_CHANCE, 10).setBase(Stats.StatsInfo.CRITICAL_DAMAGE, 50)
-                .setBase(Stats.StatsInfo.ATTACK_SPEED, 100).setBase(Stats.StatsInfo.VITALITY, 20)
-                .setBase(Stats.StatsInfo.INTELLIGENCE, 0).setBase(Stats.StatsInfo.DEFENCE, 0)
-                .setBase(Stats.StatsInfo.SPEED, 25).setBase(Stats.StatsInfo.LUCK, 0).build();
-        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
-    }
-
     public void updateHealthbar() {
         this.healthBar.setTitle(
                 "Vie : " + (int) this.getHealth() + "/" + (int) this.getStats().get(Stats.StatsInfo.VITALITY));
@@ -338,30 +315,6 @@ public class OrionPlayer {
 
     }
 
-    public void addEffect(String id, OEffect effect) {
-        if (!this.getOrionEffects().containsKey(effect.getEvent().getSimpleName()))
-            this.getOrionEffects().put(effect.getEvent().getSimpleName(), new LinkedHashMap<>());
-        this.getOrionEffects().get(effect.getEvent().getSimpleName()).put(id, effect);
-    }
-
-    public void removeEffect(String id, Class<? extends Event> event) {
-        if (!this.getOrionEffects().containsKey(event.getSimpleName()))
-            return;
-        this.getOrionEffects().get(event.getSimpleName()).remove(id);
-    }
-
-    public void executeOEffect(Event event) {
-        if (!this.getOrionEffects().containsKey(event.getClass().getSimpleName()))
-            return;
-        ArrayList<String> toRemove = new ArrayList<>();
-        this.getOrionEffects().get(event.getEventName()).forEach((id, effect) -> {
-            boolean remove = effect.execute(event);
-            if (!remove)
-                toRemove.add(id);
-        });
-        toRemove.forEach(id -> this.getOrionEffects().get(event.getEventName()).remove(id));
-    }
-
     public void onTick() {
         updateFastboard();
         if (mana < this.getStats().get(Stats.StatsInfo.INTELLIGENCE)
@@ -400,6 +353,15 @@ public class OrionPlayer {
 
     public double getExpToNextLevel() {
         return (Math.pow(this.getLevel(), 1.3) * 100) + 25;
+    }
+
+    @Override
+    public void addEffect(String id, OEffect effect) {
+        if (!orionEffects.containsKey(effect.getEvent().getSimpleName()))
+            orionEffects.put(effect.getEvent().getSimpleName(), new LinkedHashMap<>());
+        orionEffects.get(effect.getEvent().getSimpleName()).put(id, effect);
+
+        Bukkit.getPluginManager().callEvent(new OnGetEffect(this, effect, effect.getDuration()));
     }
 
     public enum SlotType {

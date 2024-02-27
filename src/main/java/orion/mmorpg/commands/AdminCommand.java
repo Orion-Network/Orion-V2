@@ -91,10 +91,7 @@ public class AdminCommand implements TabExecutor {
                     MerchantGui merchantGui = new MerchantGui("Test gui", orionPlayer, player, buyables);
                     merchantGui.show(player);
                 } else if (args[1].equalsIgnoreCase("oeffect")) {
-                    Bukkit.getServer().getPluginManager()
-                            .callEvent(new OnGetEffect(orionPlayer, new Propagation(100L), 100L, "test"));
-                    Bukkit.getServer().getPluginManager()
-                            .callEvent(new OnGetEffect(orionPlayer, new Invincibility(100L), 100L, "test"));
+                    orionPlayer.addEffect("test", new Invincibility(100L));
                 } else if (args[1].equalsIgnoreCase("effect")) {
                     orionPlayer.getOrionEffects().forEach((uuid, map) -> {
                         map.forEach((id, effect) -> {

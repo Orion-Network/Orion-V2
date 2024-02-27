@@ -1,7 +1,6 @@
 package orion.mmorpg.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
-import net.minecraft.world.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,7 +59,7 @@ public class PlayerJoinListener implements Listener {
             }
         }
 
-        OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(player);
+        OrionPlayer orionPlayer = Utils.generateStarterPlayer(player);
 
         mmorpg.getPlayerManager().addPlayer(e.getPlayer().getUniqueId(), orionPlayer);
         player.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);

@@ -16,21 +16,37 @@ public abstract class OEffect {
     @Getter
     private Long duration;
     @Getter
-    @Setter
-    private boolean isPermanent = false;
+    private final boolean isPermanent;
 
+    /**
+     * Constructor for effects
+     *
+     * @param name
+     *            The name of the effect
+     * @param description
+     *            The description of the effect
+     * @param event
+     *            The event that triggers the effect
+     * @param duration
+     *            The duration of the effect in seconds, -1 for permanent
+     */
     public OEffect(String name, String description, Class<? extends Event> event, Long duration) {
         this.name = name;
         this.description = description;
         this.event = event;
-        this.duration = duration + System.currentTimeMillis();
+        this.duration = (duration * 1000) + System.currentTimeMillis();
+        this.isPermanent = (duration == -1);
     }
 
     private boolean isEventValid(Event event) {
         return this.event.isInstance(event);
     }
 
+    /**
+     * Returns true if the effect has been executed else false
+     */
     public boolean execute(Event event) {
+        System.out.println(duration + " " + (System.currentTimeMillis() > duration));
         if (!isEventValid(event))
             return false;
         if (!isPermanent && System.currentTimeMillis() > duration)

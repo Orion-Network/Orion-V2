@@ -22,9 +22,6 @@ public class SpellEffectListener implements Listener {
 
     @EventHandler
     public void onGetEffect(OnGetEffect effect) {
-        if (effect.getDuration() == -1)
-            effect.getEffect().setPermanent(true);
-        effect.getPlayer().addEffect(effect.getCause(), effect.getEffect());
         effect.getPlayer().executeOEffect(effect);
     }
 

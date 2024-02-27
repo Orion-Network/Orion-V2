@@ -16,9 +16,6 @@ public class Invincibility extends OEffect {
     @Override
     public void onEvent(Event event) {
         PlayerDamagedByEntityEvent e = (PlayerDamagedByEntityEvent) event;
-        if (e.getPlayer().isSneaking())
-            e.setCancelled(true);
-        Bukkit.broadcastMessage(
-                "Player " + e.getPlayer().getName() + " is invincible for " + getDuration() + " ticks.");
+        e.setCancelled(true);
     }
 }

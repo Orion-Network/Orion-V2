@@ -296,6 +296,7 @@ public class PlayerStatsListener implements Listener {
         // to OrionWorld
         event.getPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
         Utils.sendInfoMessage(event.getPlayer(), "Vous êtes mort.");
+        event.getOrionPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
         event.getOrionPlayer().updateHealthbar();
         event.getOrionPlayer().mobHealthBar.setVisible(false);
     }

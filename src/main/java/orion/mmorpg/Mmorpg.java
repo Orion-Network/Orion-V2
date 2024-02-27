@@ -5,9 +5,6 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
-import com.ticxo.modelengine.api.ModelEngineAPI;
-import io.lumine.mythic.api.mobs.MythicMob;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -143,7 +140,7 @@ public final class Mmorpg extends JavaPlugin {
                     p.kickPlayer("Error in loading");
                 }
             } else {
-                OrionPlayer orionPlayer = OrionPlayer.generateSamplePlayer(p);
+                OrionPlayer orionPlayer = Utils.generateStarterPlayer(p);
                 getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
                 p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             }
