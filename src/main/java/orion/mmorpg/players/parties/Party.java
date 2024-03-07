@@ -1,5 +1,6 @@
 package orion.mmorpg.players.parties;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import orion.mmorpg.Mmorpg;
@@ -11,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
 public class Party {
     final UUID uuid;
     final LinkedHashSet<OrionPlayer> players;
@@ -24,7 +26,8 @@ public class Party {
 
     public void invite(Player inviter, String player) {
         invites.add(player);
-        Utils.sendInfoMessage(Bukkit.getPlayer(player), "Vous avez été à rejoindre la party");
+        Utils.sendInfoMessage(Bukkit.getPlayer(player),
+                "Vous avez été à rejoindre la party par " + inviter.getDisplayName());
     }
 
     public void addMember(Player player, OrionPlayer data) {
@@ -49,15 +52,4 @@ public class Party {
         return infos;
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public LinkedHashSet<OrionPlayer> getMembers() {
-        return players;
-    }
-
-    public LinkedHashSet<String> getInvites() {
-        return invites;
-    }
 }

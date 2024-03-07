@@ -95,13 +95,11 @@ public class Currencies {
         return list;
     }
 
+    @Getter
     public static class Currency {
-        @Getter
         public String name;
-        @Getter
         @Setter
         public String symbol = "\uD83D\uDCB0", color = "#FFFFFF";
-        @Getter
         @Setter
         long amount;
 

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
+@Getter
 public class Rewards extends ArrayList<Rewards.Reward> {
     double exp = 0;
 
@@ -59,10 +60,6 @@ public class Rewards extends ArrayList<Rewards.Reward> {
             }
         }
         return rewards;
-    }
-
-    public double getExp() {
-        return exp;
     }
 
     public void setExp(double exp) {

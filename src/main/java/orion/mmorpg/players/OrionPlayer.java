@@ -345,7 +345,7 @@ public class OrionPlayer implements Effectable {
         if (party != null) {
             board.add(" ");
             board.add(ChatColor.YELLOW + "Groupe : ");
-            party.getMembers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : "
+            party.getPlayers().forEach(p -> board.add("- " + Bukkit.getPlayer(p.getUniqueId()).getDisplayName() + " : "
                     + (int) p.getHealth() + "/" + (int) p.getStats().get(Stats.StatsInfo.VITALITY)));
         }
         this.fastBoard.updateLines(board);
@@ -362,6 +362,18 @@ public class OrionPlayer implements Effectable {
         orionEffects.get(effect.getEvent().getSimpleName()).put(id, effect);
 
         Bukkit.getPluginManager().callEvent(new OnGetEffect(this, effect, effect.getDuration()));
+    }
+
+    public HashMap<Class<? extends Spell>, Knowledge> getUsableSpells() {
+        HashMap<Class<? extends Spell>, Knowledge> usableSpells = new HashMap<>(knownSpells);
+
+        if (mainSupport != null) {
+            mainSupport.getSpells().forEach((spellClass) -> {
+                usableSpells.put(spellClass, new Knowledge(1000));
+
+            });
+        }
+        return usableSpells;
     }
 
     public enum SlotType {

@@ -82,7 +82,7 @@ public class MenuGui extends ChestGui {
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Cliquez pour ouvrir le menu d'équipe");
             lore.add(ChatColor.GRAY + "Clique droit pour quitter l'équipe");
-            for (OrionPlayer member : orionPlayer.getParty().getMembers())
+            for (OrionPlayer member : orionPlayer.getParty().getPlayers())
                 lore.add(ChatColor.YELLOW + Bukkit.getPlayer(member.getUniqueId()).getName() + " : "
                         + Stats.StatsInfo.VITALITY.getColor() + (int) member.getHealth() + ChatColor.YELLOW + "/"
                         + Stats.StatsInfo.VITALITY.getColor() + (int) member.getStats().get(Stats.StatsInfo.VITALITY)

@@ -11,15 +11,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.LinkedList;
 import java.util.List;
 
+@Getter
 public class PortalStone {
-    @Getter
     final String title;
-    @Getter
     @Setter
     String description;
-    @Getter
     final Location location;
-    @Getter
     final Material material;
 
     public PortalStone(String title, Location location, Material material) {

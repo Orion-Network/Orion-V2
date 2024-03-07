@@ -39,24 +39,18 @@ public class PlayerJoinListener implements Listener {
             return;
         }
         if (mmorpg.getMongoClient().hasPlayer(player.getUniqueId())) {
-            try {
-                OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
-                mmorpg.getPlayerManager().addPlayer(player.getUniqueId(), orionPlayer);
-                if (orionPlayer.getHealth() <= 0) {
-                    orionPlayer.respawn();
-                }
-                orionPlayer.updateHealthbar();
-                Utils.sendInfoMessage(player, "Data loaded !");
-                if (orionPlayer.getMainSupport() != null)
-                    orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
-                if (orionPlayer.getRace() == null)
-                    player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
-                return;
-            } catch (IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException
-                    | InstantiationException | IllegalAccessException ex) {
-                ex.printStackTrace();
-                player.kickPlayer("Error in loading");
+            OrionPlayer orionPlayer = mmorpg.getMongoClient().loadPlayer(player.getUniqueId());
+            mmorpg.getPlayerManager().addPlayer(player.getUniqueId(), orionPlayer);
+            if (orionPlayer.getHealth() <= 0) {
+                orionPlayer.respawn();
             }
+            orionPlayer.updateHealthbar();
+            Utils.sendInfoMessage(player, "Data loaded !");
+            if (orionPlayer.getMainSupport() != null)
+                orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
+            if (orionPlayer.getRace() == null)
+                player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
+            return;
         }
 
         OrionPlayer orionPlayer = Utils.generateStarterPlayer(player);

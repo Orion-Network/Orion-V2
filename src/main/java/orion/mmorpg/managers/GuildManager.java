@@ -1,5 +1,6 @@
 package orion.mmorpg.managers;
 
+import lombok.Getter;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.guilds.Guild;
 import orion.mmorpg.guilds.GuildRank;
@@ -9,6 +10,7 @@ import orion.mmorpg.players.OrionPlayer;
 import java.util.HashMap;
 import java.util.UUID;
 
+@Getter
 public class GuildManager extends AbstractManager {
     HashMap<String, Guild> guildHashMap;
 
@@ -35,7 +37,4 @@ public class GuildManager extends AbstractManager {
 
     }
 
-    public HashMap<String, Guild> getGuildHashMap() {
-        return guildHashMap;
-    }
 }

@@ -20,12 +20,12 @@ public class SpellGui extends ChestGui {
     final int rows;
 
     public SpellGui(Player player, OrionPlayer orionPlayer) {
-        super((orionPlayer.getKnownSpells().size() / 9 <= 0 ? 1 : Math.abs(orionPlayer.getKnownSpells().size() / 9)),
+        super((orionPlayer.getUsableSpells().size() / 9 <= 0 ? 1 : Math.abs(orionPlayer.getUsableSpells().size() / 9)),
                 "Menu des sorts");
         this.player = player;
         this.orionPlayer = orionPlayer;
-        this.rows = (orionPlayer.getKnownSpells().size() / 9 <= 0 ? 1
-                : Math.abs(orionPlayer.getKnownSpells().size() / 9));
+        this.rows = (orionPlayer.getUsableSpells().size() / 9 <= 0 ? 1
+                : Math.abs(orionPlayer.getUsableSpells().size() / 9));
         this.setOnTopClick(e -> e.setCancelled(true));
 
         this.addPane(createSpellPane());
@@ -33,7 +33,7 @@ public class SpellGui extends ChestGui {
 
     public OutlinePane createSpellPane() {
         OutlinePane spellPane = new OutlinePane(0, 0, 9, rows);
-        orionPlayer.getKnownSpells().forEach((spell, knowledge) -> {
+        orionPlayer.getUsableSpells().forEach((spell, knowledge) -> {
             SpellList sp = SpellList.getByClass(spell);
             Material material = sp.getMaterial();
             ArrayList<String> lore = new ArrayList<>();

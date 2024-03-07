@@ -14,8 +14,8 @@ import java.util.List;
  * A class to handle different Stats
  */
 public class Stats {
-    private HashMap<StatsInfo, Float> baseStats = new HashMap<>();
-    private HashMap<String, Modifiers> modifiers = new HashMap<>();
+    private final HashMap<StatsInfo, Float> baseStats = new HashMap<>();
+    private final HashMap<String, Modifiers> modifiers = new HashMap<>();
 
     public float getBase(StatsInfo stat) {
         return baseStats.getOrDefault(stat, 0f);

@@ -66,7 +66,7 @@ public class GrimoryGui extends ChestGui {
         }
 
         public OutlinePane getSpellList() {
-            for (Class<? extends Spell> spell : orionPlayer.getKnownSpells().keySet()) {
+            for (Class<? extends Spell> spell : orionPlayer.getUsableSpells().keySet()) {
                 spellList.addItem(new GuiItem(SpellList.getByClass(spell).getItem(), e -> {
                     orionPlayer.getSelectedSpells()[clickedSlot] = spell.getName();
                     player.closeInventory();

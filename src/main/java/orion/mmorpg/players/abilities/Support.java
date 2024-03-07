@@ -13,6 +13,7 @@ import orion.mmorpg.events.OnGetEffect;
 import orion.mmorpg.events.OnLaunchSpell;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.utils.Knowledge;
 import orion.mmorpg.utils.Rarity;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +28,8 @@ public abstract class Support {
     Class<? extends Event>[] events;
     @Getter
     ArrayList<Class<? extends OEffect>> oEffects = new ArrayList<>();
+    @Getter
+    ArrayList<Class<? extends Spell>> spells = new ArrayList<>();
     protected HashMap<String, Object> dataMap;
 
     public Support(String name, Rarity rarity, String description, Class<? extends Event>[] events) {

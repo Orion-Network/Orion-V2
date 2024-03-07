@@ -1,5 +1,6 @@
 package orion.mmorpg.managers;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import orion.mmorpg.Mmorpg;
@@ -9,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
+@Getter
 public class PlayerManager extends AbstractManager {
     private final LinkedHashMap<UUID, OrionPlayer> playersMap;
 
@@ -33,10 +35,6 @@ public class PlayerManager extends AbstractManager {
 
     public OrionPlayer getPlayer(UUID uuid) {
         return playersMap.get(uuid);
-    }
-
-    public LinkedHashMap<UUID, OrionPlayer> getPlayersMap() {
-        return playersMap;
     }
 
     public void savePlayer(OrionPlayer player) {

@@ -83,7 +83,7 @@ public abstract class Spell {
         }
         case PARTY -> {
             if (orionPlayer.getParty() != null)
-                orionPlayer.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+                orionPlayer.getParty().getPlayers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
         }
         }
         if (this.targets.isEmpty()) {
@@ -92,11 +92,11 @@ public abstract class Spell {
         }
         Knowledge knowledge;
         if (needSpell) {
-            if (!orionPlayer.getKnownSpells().containsKey(this.getClass())) {
+            if (!orionPlayer.getUsableSpells().containsKey(this.getClass())) {
                 Utils.sendInfoMessage(player, "Nous ne connaissez pas ce sort.");
                 return false;
             }
-            knowledge = orionPlayer.getKnownSpells().get(this.getClass());
+            knowledge = orionPlayer.getUsableSpells().get(this.getClass());
             if (knowledge.getKnowledgeState().equals(Knowledge.KnowledgeState.UNKNOWN)) {
                 Utils.sendInfoMessage(player, "Nous ne connaissons pas ce sort.");
                 return false;
@@ -122,7 +122,7 @@ public abstract class Spell {
         Bukkit.getPluginManager().callEvent(new OnLaunchSpell(player, orionPlayer, this));
         orionPlayer.getCooldownSpells().put(this.getClass(), System.currentTimeMillis() + cooldown);
         launch(mmorpg, caster.getLocation(), knowledge);
-        orionPlayer.getKnownSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));
+        orionPlayer.getUsableSpells().get(this.getClass()).addKnowledge((100 - getLevel() < 0 ? 1 : 100 - getLevel()));
         return true;
     }
 
@@ -150,7 +150,7 @@ public abstract class Spell {
         }
         case PARTY -> {
             if (orionCaster != null && orionCaster.getParty() != null)
-                orionCaster.getParty().getMembers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
+                orionCaster.getParty().getPlayers().forEach(p -> this.targets.add(Bukkit.getPlayer(p.getUniqueId())));
         }
         }
         if (this.targets.isEmpty()) {

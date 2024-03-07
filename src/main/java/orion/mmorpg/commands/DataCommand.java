@@ -53,7 +53,7 @@ public class DataCommand implements TabExecutor {
                             builder.append(item.getNAME());
                         else
                             builder.append(ChatColor.GRAY + "Vide, ");
-                    builder.append("\n" + data.getKnownSpells().keySet() + "\n");
+                    builder.append("\n" + data.getUsableSpells().keySet() + "\n");
                     builder.append("\n" + "Smithing : " + data.getJobs().getJob(JobType.SMITHING).getLevel() + " "
                             + data.getJobs().getJob(JobType.SMITHING).getExperience());
                     builder.append("\n" + "Mining : " + data.getJobs().getJob(JobType.MINING).getLevel() + " "

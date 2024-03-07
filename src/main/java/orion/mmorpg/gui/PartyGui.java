@@ -58,11 +58,11 @@ public class PartyGui extends ChestGui {
                 return List.of(AnvilGUI.ResponseAction.close());
             }).plugin(Mmorpg.INSTANCE).text("Nom du joueur").title("Ajouter un joueur").open(player);
         }));
-        orionPlayer.getParty().getMembers().forEach(member -> {
+        orionPlayer.getParty().getPlayers().forEach(member -> {
             primaryPane.addItem(new PartyMemberItem(member, event -> {
                 event.setCancelled(true);
                 if (event.getClick().isRightClick()
-                        && orionPlayer.getParty().getMembers().toArray()[0].equals(orionPlayer)) {
+                        && orionPlayer.getParty().getPlayers().toArray()[0].equals(orionPlayer)) {
                     orionPlayer.getParty().removeMember(member);
                     player.closeInventory();
                     player.sendMessage(ChatColor.GREEN + "Vous avez kick "

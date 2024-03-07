@@ -5,6 +5,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import fr.nexomega.orionmob.gui.PetGui;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,8 +18,9 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 //TODO add for pet and mount
+@Getter
 public class Equipments {
-    private HashMap<BasicArmorItem.ArmorType, BasicArmorItem> equipments = new HashMap<>();
+    private final HashMap<BasicArmorItem.ArmorType, BasicArmorItem> equipments = new HashMap<>();
     private Player owner;
 
     public Utils.Pair<Boolean, String> addEquipment(BasicArmorItem item) {
@@ -112,14 +114,6 @@ public class Equipments {
 
             gui.update();
         };
-    }
-
-    public HashMap<BasicArmorItem.ArmorType, BasicArmorItem> getEquipments() {
-        return equipments;
-    }
-
-    public Player getOwner() {
-        return owner;
     }
 
     public void setOwner(Player owner) {
