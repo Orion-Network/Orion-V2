@@ -6,9 +6,11 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.reflections.Reflections;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.*;
 import orion.mmorpg.players.Equipments;
+import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.jobs.AbstractJob;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.players.jobs.Jobs;
@@ -31,6 +33,7 @@ public class OrionGson {
                 .registerSubtype(BasicRangedWeapon.class, "RangedWeapon")
 
         ;
+
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
@@ -41,6 +44,7 @@ public class OrionGson {
         builder.registerTypeAdapterFactory(basicItemRuntimeTypeAdapterFactory);
         builder.registerTypeAdapter(Jobs.class, new JobsAdapter());
         builder.registerTypeAdapter(Currencies.class, new CurrenciesAdapter());
+
         GSON = builder.create();
     }
 

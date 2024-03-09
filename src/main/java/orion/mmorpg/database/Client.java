@@ -17,6 +17,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
+import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.jobs.Jobs;
@@ -112,6 +113,22 @@ public class Client extends SaveStrategy {
             document.put("currencies", Mmorpg.getOrionGson().getGSON().toJson(player.getCurrencies()));
         else
             document.put("currencies", new Currencies());
+
+        if (player.getOrionEffects() != null) {
+            Document effects = new Document();
+            player.getOrionEffects().forEach((event, map) -> {
+                Document eventDoc = new Document();
+                map.forEach((id, effect) -> {
+                    eventDoc.put("id", id);
+                    eventDoc.put("effectClass", effect.getClass().getName());
+                    eventDoc.put("remainingTime", effect.getRemainingTime());
+                });
+                effects.put(event, eventDoc);
+            });
+            document.put("effects", effects);
+            System.out.println(effects.size() + " effectss");
+        } else
+            document.put("effects", new LinkedHashMap<>());
 
         if (!hasPlayer(player.getUniqueId()))
             playerCollection.insertOne(document);
@@ -211,8 +228,33 @@ public class Client extends SaveStrategy {
             currencies = new Currencies();
         else
             currencies = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("currencies"), Currencies.class);
-        return new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones, equipements, spells,
-                selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts, currencies);
+
+        LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects = new LinkedHashMap<>();
+        if (document.containsKey("effects")) {
+            Document effects = document.get("effects", Document.class);
+            System.out.println(effects.size() + " effects");
+            effects.forEach((event, map) -> {
+                Document mapDoc = (Document) map;
+                LinkedHashMap<String, OEffect> eventMap = new LinkedHashMap<>();
+                try {
+                    OEffect oEffect = (OEffect) Class.forName(mapDoc.getString("effectClass"))
+                            .getConstructor(long.class).newInstance(mapDoc.getLong("remainingTime"));
+                    eventMap.put(mapDoc.getString("id"), oEffect);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                orionEffects.put(event, eventMap);
+            });
+        }
+        System.out.println(orionEffects.size() + " o effects");
+        OrionPlayer orionPlayer = new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones,
+                equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts, currencies);
+        for (Map.Entry<String, LinkedHashMap<String, OEffect>> entry : orionEffects.entrySet()) {
+            for (Map.Entry<String, OEffect> effect : entry.getValue().entrySet()) {
+                orionPlayer.addEffect(effect.getKey(), effect.getValue());
+            }
+        }
+        return orionPlayer;
     }
 
 }

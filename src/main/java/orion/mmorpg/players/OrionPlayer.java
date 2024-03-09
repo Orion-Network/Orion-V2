@@ -41,7 +41,7 @@ public class OrionPlayer implements Effectable {
     public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar",
             BarColor.PURPLE, BarStyle.SEGMENTED_10);
     @Getter
-    transient LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
+    transient final LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     @Getter
     ItemStack[] quiver;
     @Getter
@@ -52,7 +52,7 @@ public class OrionPlayer implements Effectable {
     transient Party party;
     @Getter
     @Setter
-    transient HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
+    transient final HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
     @Getter
     public SlotType[] slotTypes;
     @Getter
@@ -383,4 +383,5 @@ public class OrionPlayer implements Effectable {
     public static OrionPlayer getOrionPlayer(Player player) {
         return Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
     }
+
 }

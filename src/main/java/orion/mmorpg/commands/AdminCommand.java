@@ -95,7 +95,8 @@ public class AdminCommand implements TabExecutor {
                 } else if (args[1].equalsIgnoreCase("effect")) {
                     orionPlayer.getOrionEffects().forEach((uuid, map) -> {
                         map.forEach((id, effect) -> {
-                            Utils.sendInfoMessage((Entity) commandSender, id + " " + effect.getName());
+                            Utils.sendInfoMessage((Entity) commandSender, id + " " + effect.getName() + " "
+                                    + effect.getDuration() + " " + effect.getEvent() + " " + effect.getRemainingTime());
                         });
                     });
                 } else if (args[1].equalsIgnoreCase("ingredient")) {

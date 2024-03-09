@@ -56,4 +56,8 @@ public abstract class OEffect {
     }
 
     public abstract void onEvent(Event event);
+
+    public long getRemainingTime() {
+        return duration - System.currentTimeMillis();
+    }
 }
