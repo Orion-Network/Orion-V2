@@ -57,8 +57,6 @@ public class Muramasa extends BasicMeleeWeapon {
                     if (entity.isInvulnerable() || entity == player)
                         return;
                     ((LivingEntity) entity).damage(Utils.calculateDamage(data.getStats(), this.getDAMAGE()));
-                    data.updateMobHealthBar(((LivingEntity) entity).getHealth(), ((LivingEntity) entity).getMaxHealth(),
-                            entity.getName());
                 });
     }
 }

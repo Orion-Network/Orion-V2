@@ -38,20 +38,17 @@ import java.util.*;
 public class OrionPlayer implements Effectable {
     @Getter
     private final LinkedHashSet<String> portalStones;
-    public transient final KeyedBossBar mobHealthBar = Bukkit.createBossBar(Namespaces.mobhealth, "HealthBar",
-            BarColor.PURPLE, BarStyle.SEGMENTED_10);
     @Getter
     transient final LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
     @Getter
     ItemStack[] quiver;
     @Getter
-    transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells;
+    transient LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells = new LinkedHashMap<>();
 
     @Getter
     @Setter
     transient Party party;
     @Getter
-    @Setter
     transient final HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
     @Getter
     public SlotType[] slotTypes;
@@ -128,11 +125,7 @@ public class OrionPlayer implements Effectable {
         this.mana = (int) this.stats.get(Stats.StatsInfo.INTELLIGENCE);
 
         this.initHealthBar();
-        this.mobHealthBar.setProgress(1);
-        this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.mobHealthBar.setVisible(false);
 
-        cooldownSpells = new LinkedHashMap<>();
         selectedSpells = new String[9];
         quiver = new ItemStack[9];
         tamedPets = new LinkedHashSet<>();
@@ -193,11 +186,7 @@ public class OrionPlayer implements Effectable {
         this.race = race;
 
         this.initHealthBar();
-        this.mobHealthBar.setProgress(1);
-        this.mobHealthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
-        this.mobHealthBar.setVisible(false);
 
-        cooldownSpells = new LinkedHashMap<>();
         this.selectedSpells = selectedSpells;
         this.quiver = quiver;
         this.slotTypes = slotTypes;
@@ -210,7 +199,6 @@ public class OrionPlayer implements Effectable {
     }
 
     public void initHealthBar() {
-        // Check if bossbar exist
         Bukkit.getBossBars().forEachRemaining(bossbar -> {
             if (bossbar.getKey().getKey().equals(uniqueId.toString())) {
                 this.healthBar = bossbar;
@@ -235,14 +223,6 @@ public class OrionPlayer implements Effectable {
             this.healthBar.setProgress(0);
         else
             this.healthBar.setProgress(healthValue);
-    }
-
-    public void updateMobHealthBar(double mobHealth, double maxHealth, String title) {
-        /*
-         * if (mobHealth <= 0) { this.mobHealthBar.setVisible(false); this.mobHealthBar.setProgress(1); } else {
-         * this.mobHealthBar.setVisible(true); this.mobHealthBar.setTitle(title);
-         * this.mobHealthBar.setProgress(mobHealth / maxHealth < 1 ? mobHealth / maxHealth : 1); }
-         */
     }
 
     public void addPortalStone(String id) {
@@ -384,4 +364,187 @@ public class OrionPlayer implements Effectable {
         return Mmorpg.INSTANCE.getPlayerManager().getPlayer(player.getUniqueId());
     }
 
+    public static final class OrionPlayerBuilder {
+        private LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects = new LinkedHashMap<>();
+        private LinkedHashSet<String> portalStones = new LinkedHashSet<>();
+        private LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells = new LinkedHashMap<>();
+        private ItemStack[] quiver = new ItemStack[9];
+        private LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells = new LinkedHashMap<>();
+        private Party party;
+        private HashMap<String, Effect> displayEffectHashMap = new HashMap<>();
+        private SlotType[] slotTypes = new SlotType[] { SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT,
+                SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT, SlotType.FREE_SLOT,
+                SlotType.USE_SLOT };
+        private String[] selectedSpells = new String[9];
+        private Mode playerMode;
+        private Infos infos;
+        private Stats stats;
+        private UUID uniqueId;
+        private double health;
+        private double exp;
+        private int level;
+        private int mana;
+        private Equipments equipements;
+        private KeyedBossBar healthBar;
+        private Set<Pets> tamedPets = new LinkedHashSet<>();
+        private Set<Mounts> tamedMounts = new LinkedHashSet<>();
+        private AbstractPet pet;
+        private Support mainSupport;
+        private Race race;
+        private Jobs jobs = Jobs.getBaseJobs();
+        private Currencies currencies = new Currencies();
+
+        public OrionPlayerBuilder() {
+        }
+
+        public static OrionPlayerBuilder anOrionPlayer() {
+            return new OrionPlayerBuilder();
+        }
+
+        public OrionPlayerBuilder withOrionEffects(LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects) {
+            this.orionEffects = orionEffects;
+            return this;
+        }
+
+        public OrionPlayerBuilder withPortalStones(LinkedHashSet<String> portalStones) {
+            this.portalStones = portalStones;
+            return this;
+        }
+
+        public OrionPlayerBuilder withKnownSpells(LinkedHashMap<Class<? extends Spell>, Knowledge> knownSpells) {
+            this.knownSpells = knownSpells;
+            return this;
+        }
+
+        public OrionPlayerBuilder withQuiver(ItemStack[] quiver) {
+            this.quiver = quiver;
+            return this;
+        }
+
+        public OrionPlayerBuilder withCooldownSpells(LinkedHashMap<Class<? extends Spell>, Long> cooldownSpells) {
+            this.cooldownSpells = cooldownSpells;
+            return this;
+        }
+
+        public OrionPlayerBuilder withParty(Party party) {
+            this.party = party;
+            return this;
+        }
+
+        public OrionPlayerBuilder withDisplayEffectHashMap(HashMap<String, Effect> displayEffectHashMap) {
+            this.displayEffectHashMap = displayEffectHashMap;
+            return this;
+        }
+
+        public OrionPlayerBuilder withSlotTypes(SlotType[] slotTypes) {
+            this.slotTypes = slotTypes;
+            return this;
+        }
+
+        public OrionPlayerBuilder withSelectedSpells(String[] selectedSpells) {
+            this.selectedSpells = selectedSpells;
+            return this;
+        }
+
+        public OrionPlayerBuilder withPlayerMode(Mode playerMode) {
+            this.playerMode = playerMode;
+            return this;
+        }
+
+        public OrionPlayerBuilder withInfos(Infos infos) {
+            this.infos = infos;
+            return this;
+        }
+
+        public OrionPlayerBuilder withStats(Stats stats) {
+            this.stats = stats;
+            return this;
+        }
+
+        public OrionPlayerBuilder withUniqueId(UUID uniqueId) {
+            this.uniqueId = uniqueId;
+            return this;
+        }
+
+        public OrionPlayerBuilder withHealth(double health) {
+            this.health = health;
+            return this;
+        }
+
+        public OrionPlayerBuilder withExp(double exp) {
+            this.exp = exp;
+            return this;
+        }
+
+        public OrionPlayerBuilder withLevel(int level) {
+            this.level = level;
+            return this;
+        }
+
+        public OrionPlayerBuilder withMana(int mana) {
+            this.mana = mana;
+            return this;
+        }
+
+        public OrionPlayerBuilder withEquipements(Equipments equipements) {
+            this.equipements = equipements;
+            return this;
+        }
+
+        public OrionPlayerBuilder withHealthBar(KeyedBossBar healthBar) {
+            this.healthBar = healthBar;
+            return this;
+        }
+
+        public OrionPlayerBuilder withTamedPets(Set<Pets> tamedPets) {
+            this.tamedPets = tamedPets;
+            return this;
+        }
+
+        public OrionPlayerBuilder withPet(AbstractPet pet) {
+            this.pet = pet;
+            return this;
+        }
+
+        public OrionPlayerBuilder withTamedMounts(Set<Mounts> tamedMounts) {
+            this.tamedMounts = tamedMounts;
+            return this;
+        }
+
+        public OrionPlayerBuilder withMainSupport(Support mainSupport) {
+            this.mainSupport = mainSupport;
+            return this;
+        }
+
+        public OrionPlayerBuilder withRace(Race race) {
+            this.race = race;
+            return this;
+        }
+
+        public OrionPlayerBuilder withJobs(Jobs jobs) {
+            this.jobs = jobs;
+            return this;
+        }
+
+        public OrionPlayerBuilder withCurrencies(Currencies currencies) {
+            this.currencies = currencies;
+            return this;
+        }
+
+        public OrionPlayer build() {
+            OrionPlayer orionPlayer = new OrionPlayer(infos, stats, uniqueId, health, level, exp, mana, portalStones,
+                    equipements, knownSpells, selectedSpells, quiver, slotTypes, mainSupport, race, jobs, tamedPets,
+                    tamedMounts, currencies);
+            orionPlayer.setHealth(health);
+            orionPlayer.setParty(party);
+            orionPlayer.setPet(pet);
+            orionPlayer.displayEffectHashMap.putAll(this.displayEffectHashMap);
+            orionPlayer.playerMode = this.playerMode;
+            orionPlayer.cooldownSpells = this.cooldownSpells;
+            orionPlayer.healthBar = this.healthBar;
+            orionPlayer.initHealthBar();
+            orionPlayer.orionEffects.putAll(this.orionEffects);
+            return orionPlayer;
+        }
+    }
 }

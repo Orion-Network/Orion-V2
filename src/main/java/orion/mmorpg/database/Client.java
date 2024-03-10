@@ -138,23 +138,37 @@ public class Client extends SaveStrategy {
 
     public OrionPlayer loadPlayer(UUID uniqueId) {
         Document document = playerCollection.find(eq("uuid", uniqueId.toString())).first();
+        OrionPlayer.OrionPlayerBuilder builder = new OrionPlayer.OrionPlayerBuilder();
+        builder.withUniqueId(uniqueId);
 
         Infos info = Mmorpg.getOrionGson().GSON.fromJson(document.getString("infos"), Infos.class);
+        builder.withInfos(info);
+
         Stats stats = Mmorpg.getOrionGson().GSON.fromJson(document.getString("stats"), Stats.class);
+        builder.withStats(stats);
 
         double health = document.getDouble("health");
+        builder.withHealth(health);
+
         int level = document.getInteger("level");
+        builder.withLevel(level);
+
         double exp = document.containsKey("exp") ? document.getDouble("exp") : 0;
+        builder.withExp(exp);
+
         int mana = document.getInteger("mana");
+        builder.withMana(mana);
 
         LinkedHashSet<String> portalStones = Mmorpg.getOrionGson().GSON.fromJson(document.getString("portalStones"),
                 portalStoneType);
+        builder.withPortalStones(portalStones);
         Equipments equipements = Mmorpg.getOrionGson().GSON.fromJson(document.getString("equipements"),
                 Equipments.class);
+        builder.withEquipements(equipements);
 
         LinkedHashMap<Class<? extends Spell>, Knowledge> spells = new LinkedHashMap<>();
-        Document object = document.get("spells", Document.class);
 
+        Document object = document.get("spells", Document.class);
         object.forEach((key, value) -> {
             try {
                 spells.put((Class<? extends Spell>) Class.forName(key),
@@ -163,6 +177,7 @@ public class Client extends SaveStrategy {
                 e.printStackTrace();
             }
         });
+        builder.withKnownSpells(spells);
 
         String[] selectedSpells;
         if (document.containsKey("selectedSpells"))
@@ -170,11 +185,15 @@ public class Client extends SaveStrategy {
                     String[].class);
         else
             selectedSpells = new String[9];
+        builder.withSelectedSpells(selectedSpells);
+
         ItemStack[] quiver;
         if (document.containsKey("quiver"))
             quiver = Mmorpg.getOrionGson().GSON.fromJson((String) document.get("quiver"), ItemStack[].class);
         else
             quiver = new ItemStack[9];
+        builder.withQuiver(quiver);
+
         OrionPlayer.SlotType[] slotTypes;
         if (document.containsKey("slotTypes"))
             slotTypes = Mmorpg.getOrionGson().GSON.fromJson(document.getString("slotTypes"),
@@ -184,6 +203,8 @@ public class Client extends SaveStrategy {
                     OrionPlayer.SlotType.FREE_SLOT, OrionPlayer.SlotType.FREE_SLOT, OrionPlayer.SlotType.FREE_SLOT,
                     OrionPlayer.SlotType.FREE_SLOT, OrionPlayer.SlotType.FREE_SLOT, OrionPlayer.SlotType.FREE_SLOT,
                     OrionPlayer.SlotType.USE_SLOT };
+        builder.withSlotTypes(slotTypes);
+
         Support support;
         if (document.getString("support") == null)
             support = null;
@@ -195,18 +216,21 @@ public class Client extends SaveStrategy {
                 throw new RuntimeException(e);
             }
         }
+        builder.withMainSupport(support);
 
         Race race;
         if (document.getString("race") == null)
             race = null;
         else
             race = Race.valueOf(document.getString("race"));
+        builder.withRace(race);
 
         Jobs jobs;
         if (document.getString("jobs") == null)
             jobs = null;
         else
             jobs = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("jobs"), Jobs.class);
+        builder.withJobs(jobs);
 
         Set<Pets> pets;
         if (document.getString("pets") == null)
@@ -214,6 +238,7 @@ public class Client extends SaveStrategy {
         else
             pets = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("pets"), new TypeToken<Set<Pets>>() {
             }.getType());
+        builder.withTamedPets(pets);
 
         Set<Mounts> mounts;
         if (document.getString("mounts") == null)
@@ -222,12 +247,14 @@ public class Client extends SaveStrategy {
             mounts = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("mounts"),
                     new TypeToken<Set<Mounts>>() {
                     }.getType());
+        builder.withTamedMounts(mounts);
 
         Currencies currencies;
         if (document.getString("currencies") == null)
             currencies = new Currencies();
         else
             currencies = Mmorpg.getOrionGson().getGSON().fromJson(document.getString("currencies"), Currencies.class);
+        builder.withCurrencies(currencies);
 
         LinkedHashMap<String, LinkedHashMap<String, OEffect>> orionEffects = new LinkedHashMap<>();
         if (document.containsKey("effects")) {
@@ -246,15 +273,9 @@ public class Client extends SaveStrategy {
                 orionEffects.put(event, eventMap);
             });
         }
-        System.out.println(orionEffects.size() + " o effects");
-        OrionPlayer orionPlayer = new OrionPlayer(info, stats, uniqueId, health, level, exp, mana, portalStones,
-                equipements, spells, selectedSpells, quiver, slotTypes, support, race, jobs, pets, mounts, currencies);
-        for (Map.Entry<String, LinkedHashMap<String, OEffect>> entry : orionEffects.entrySet()) {
-            for (Map.Entry<String, OEffect> effect : entry.getValue().entrySet()) {
-                orionPlayer.addEffect(effect.getKey(), effect.getValue());
-            }
-        }
-        return orionPlayer;
+        builder.withOrionEffects(orionEffects);
+
+        return builder.build();
     }
 
 }

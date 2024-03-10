@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.ItemType;
+import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 
 import java.text.DecimalFormat;
@@ -242,7 +243,8 @@ public class Utils {
         Stats stats = new Stats.Builder().setBase(STRENGTH, 1).setBase(CRITICAL_CHANCE, 10).setBase(CRITICAL_DAMAGE, 50)
                 .setBase(ATTACK_SPEED, 100).setBase(VITALITY, 20).setBase(INTELLIGENCE, 0).setBase(DEFENCE, 0)
                 .setBase(SPEED, 25).setBase(LUCK, 0).build();
-        return new OrionPlayer(infos, stats, p.getUniqueId(), 0, 0);
+        return new OrionPlayer.OrionPlayerBuilder().withInfos(infos).withStats(stats).withUniqueId(p.getUniqueId())
+                .withEquipements(new Equipments()).withHealth(stats.get(VITALITY)).build();
     }
 
     public static class Pair<K, V> {

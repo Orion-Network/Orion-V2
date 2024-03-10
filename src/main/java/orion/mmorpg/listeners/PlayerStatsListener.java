@@ -116,15 +116,6 @@ public class PlayerStatsListener implements Listener {
                         * p.getAttackCooldown();
                 Utils.sendDebugMessage(p, "Total damage: " + totalDamage);
                 e.setDamage(totalDamage);
-                if (!(e.getTarget() instanceof Player)) {
-                    LivingEntity entity = (LivingEntity) e.getTarget();
-                    orionPlayer.updateMobHealthBar(entity.getHealth() - totalDamage, entity.getMaxHealth(),
-                            entity.getName());
-                } else {
-                    OrionPlayer target = mmorpg.getPlayerManager().getPlayer(e.getTarget().getUniqueId());
-                    orionPlayer.updateMobHealthBar(target.getHealth() - totalDamage,
-                            target.getStats().get(Stats.StatsInfo.VITALITY), e.getTarget().getName());
-                }
             }
         }
     }
@@ -277,15 +268,6 @@ public class PlayerStatsListener implements Listener {
                 }
             }
         }
-
-        if (e.getEntity().getShooter() instanceof Player) {
-            Player p = (Player) e.getEntity().getShooter();
-            OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(p.getUniqueId());
-            if (e.getHitEntity() != null && e.getEntity() instanceof LivingEntity) {
-                LivingEntity entity = (LivingEntity) e.getHitEntity();
-                orionPlayer.updateMobHealthBar(entity.getHealth(), entity.getMaxHealth(), entity.getName());
-            }
-        }
         e.getEntity().remove();
     }
 
@@ -298,6 +280,5 @@ public class PlayerStatsListener implements Listener {
         Utils.sendInfoMessage(event.getPlayer(), "Vous êtes mort.");
         event.getOrionPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
         event.getOrionPlayer().updateHealthbar();
-        event.getOrionPlayer().mobHealthBar.setVisible(false);
     }
 }

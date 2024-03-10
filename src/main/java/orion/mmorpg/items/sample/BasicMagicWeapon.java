@@ -97,14 +97,6 @@ public class BasicMagicWeapon extends BasicMeleeWeapon {
                         ((LivingEntity) e).damage(totalDamage, caster);
                         e.setVelocity(e.getVelocity().add(
                                 e.getLocation().toVector().subtract(getLocation().toVector()).normalize().multiply(1)));
-                        if (!(e instanceof Player))
-                            casterData.updateMobHealthBar(((LivingEntity) e).getHealth() - totalDamage,
-                                    ((LivingEntity) e).getMaxHealth(), e.getName());
-                        else {
-                            OrionPlayer target = Mmorpg.INSTANCE.getPlayerManager().getPlayer(e.getUniqueId());
-                            casterData.updateMobHealthBar(target.getHealth(),
-                                    target.getStats().get(Stats.StatsInfo.VITALITY), e.getName());
-                        }
                         this.cancel();
                     });
         }
