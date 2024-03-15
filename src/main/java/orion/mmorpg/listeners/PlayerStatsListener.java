@@ -216,14 +216,14 @@ public class PlayerStatsListener implements Listener {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
         orionPlayer.executeOEffect(e);
 
-        orionPlayer.getStats().removeModifiers("HAND");
+        orionPlayer.getStats().removeModifiers("MAIN_HAND");
 
         if (e.getPlayer().getInventory().getItem(e.getNewSlot()) != null
                 && e.getPlayer().getInventory().getItem(e.getNewSlot()).hasItemMeta()) {
             BasicItem basicItem = mmorpg.getItemManager()
                     .getItemFromItemstack(e.getPlayer().getInventory().getItem(e.getNewSlot()));
             if (basicItem instanceof Modifiers) {
-                orionPlayer.getStats().addModifiers("HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+                orionPlayer.getStats().addModifiers("MAIN_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }
         }
 
@@ -238,6 +238,29 @@ public class PlayerStatsListener implements Listener {
             e.getPlayer().getInventory().setHeldItemSlot(e.getPreviousSlot());
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void playerSwapHand(PlayerSwapHandItemsEvent e) {
+        OrionPlayer orionPlayer = OrionPlayer.getOrionPlayer(e.getPlayer());
+
+        orionPlayer.getStats().removeModifiers("OFF_HAND");
+        orionPlayer.getStats().removeModifiers("MAIN_HAND");
+
+        if(e.getMainHandItem() != null && e.getMainHandItem().hasItemMeta()) {
+            BasicItem basicItem = mmorpg.getItemManager().getItemFromItemstack(e.getMainHandItem());
+            if (basicItem instanceof Modifiers) {
+                orionPlayer.getStats().addModifiers("MAIN_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+            }
+        }
+
+        if(e.getOffHandItem() != null && e.getOffHandItem().hasItemMeta()) {
+            BasicItem basicItem = mmorpg.getItemManager().getItemFromItemstack(e.getOffHandItem());
+            if (basicItem instanceof Modifiers) {
+                orionPlayer.getStats().addModifiers("OFF_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+            }
+        }
+
     }
 
     @EventHandler
