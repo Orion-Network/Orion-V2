@@ -223,7 +223,8 @@ public class PlayerStatsListener implements Listener {
             BasicItem basicItem = mmorpg.getItemManager()
                     .getItemFromItemstack(e.getPlayer().getInventory().getItem(e.getNewSlot()));
             if (basicItem instanceof Modifiers) {
-                orionPlayer.getStats().addModifiers("MAIN_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+                orionPlayer.getStats().addModifiers("MAIN_HAND",
+                        ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }
         }
 
@@ -247,17 +248,19 @@ public class PlayerStatsListener implements Listener {
         orionPlayer.getStats().removeModifiers("OFF_HAND");
         orionPlayer.getStats().removeModifiers("MAIN_HAND");
 
-        if(e.getMainHandItem() != null && e.getMainHandItem().hasItemMeta()) {
+        if (e.getMainHandItem() != null && e.getMainHandItem().hasItemMeta()) {
             BasicItem basicItem = mmorpg.getItemManager().getItemFromItemstack(e.getMainHandItem());
             if (basicItem instanceof Modifiers) {
-                orionPlayer.getStats().addModifiers("MAIN_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+                orionPlayer.getStats().addModifiers("MAIN_HAND",
+                        ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }
         }
 
-        if(e.getOffHandItem() != null && e.getOffHandItem().hasItemMeta()) {
+        if (e.getOffHandItem() != null && e.getOffHandItem().hasItemMeta()) {
             BasicItem basicItem = mmorpg.getItemManager().getItemFromItemstack(e.getOffHandItem());
             if (basicItem instanceof Modifiers) {
-                orionPlayer.getStats().addModifiers("OFF_HAND", ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
+                orionPlayer.getStats().addModifiers("OFF_HAND",
+                        ((BasicEquipmentItem) basicItem).getModifiersWithReforge());
             }
         }
 

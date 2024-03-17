@@ -58,11 +58,11 @@ public class MenuGui extends ChestGui {
         if (orionPlayer.getMainSupport() != null)
             infos.add(ChatColor.YELLOW + orionPlayer.getMainSupport().getName());
         infos.addAll(orionPlayer.getStats().statsAsLore());
-        infos.add(ChatColor.WHITE + "Appuyez pour ouvrir le menu des stats");
+        infos.add(ChatColor.WHITE + "Appuyez pour voir vos effets actifs");
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);
 
-        menuPane.addItem(new GuiItem(head, e -> new StatsGui(p, orionPlayer).show(p)), 2, 0);
+        menuPane.addItem(new GuiItem(head, e -> new EffectGui(p, orionPlayer).show(p)), 2, 0);
         menuPane.addItem(
                 new GuiItem(ItemUtils.generateItemStack("JOB_PLACEHOLDER", 1), e -> new JobGui(p, orionPlayer).show(p)),
                 3, 0);
