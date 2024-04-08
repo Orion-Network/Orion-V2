@@ -207,6 +207,13 @@ public class PlayerStatsListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+
+        if (orionPlayer.getRace() == null) {
+            Utils.sendInfoMessage(e.getPlayer(), "Vous devez choisir une race dans votre /menu");
+            e.setCancelled(true);
+            return;
+        }
+
         float speed = (200 + orionPlayer.getStats().get(Stats.StatsInfo.SPEED)) / Stats.StatsInfo.SPEED.getCap();
         e.getPlayer().setWalkSpeed((speed > 1 ? 1 : (speed < -1 ? -1 : speed)));
     }
@@ -303,7 +310,7 @@ public class PlayerStatsListener implements Listener {
         event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 1));
         // p.teleport(Mmorpg.INSTANCE.getWorldManager().getPortalStone("SPAWN").getLocation()); delegate
         // to OrionWorld
-        event.getPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
+        event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 400, 25, 925));
         Utils.sendInfoMessage(event.getPlayer(), "Vous êtes mort.");
         event.getOrionPlayer().setHealth(event.getOrionPlayer().getStats().get(Stats.StatsInfo.VITALITY));
         event.getOrionPlayer().updateHealthbar();

@@ -1,5 +1,6 @@
 package orion.mmorpg.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,6 +45,8 @@ public class PlayerPickupListener implements Listener {
             basicItem.onPickupItem(e, item);
         }
 
-        ((Player) e.getEntity()).updateInventory();
+        Bukkit.getScheduler().runTaskLater(mmorpg, () -> {
+            ((Player) e.getEntity()).updateInventory();
+        }, 20L);
     }
 }

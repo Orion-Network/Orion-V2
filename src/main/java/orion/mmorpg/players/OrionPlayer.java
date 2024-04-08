@@ -211,6 +211,8 @@ public class OrionPlayer implements Effectable {
         if (!this.healthBar.getPlayers().contains(Bukkit.getPlayer(uniqueId)))
             this.healthBar.addPlayer(Objects.requireNonNull(Bukkit.getPlayer(uniqueId)));
         this.healthBar.setVisible(true);
+
+        updateHealthbar();
     }
 
     public void updateHealthbar() {

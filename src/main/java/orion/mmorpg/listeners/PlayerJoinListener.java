@@ -1,6 +1,8 @@
 package orion.mmorpg.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +37,7 @@ public class PlayerJoinListener implements Listener {
         Player player = e.getPlayer();
         if (mmorpg.getPlayerManager().getPlayersMap().containsKey(e.getPlayer().getUniqueId())) {
             OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+            orionPlayer.initHealthBar();
             orionPlayer.setFastBoard(new FastBoard(player));
             return;
         }
@@ -69,5 +72,11 @@ public class PlayerJoinListener implements Listener {
             Objects.requireNonNull(event.getPlayer().getVehicle()).remove();
             event.getPlayer().leaveVehicle();
         }
+
+        Bukkit.getBossBars().forEachRemaining(bossBar -> {
+            if (bossBar.getPlayers().contains(event.getPlayer())) {
+                bossBar.removePlayer(event.getPlayer());
+            }
+        });
     }
 }
