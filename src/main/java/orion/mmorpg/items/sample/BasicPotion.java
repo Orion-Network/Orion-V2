@@ -74,8 +74,7 @@ public class BasicPotion extends BasicConsumableItem {
         for (String effect : effectList) {
             try {
                 OEffect oEffect = (OEffect) Class.forName(effect).getConstructor(long.class).newInstance(duration);
-                Bukkit.getServer().getPluginManager()
-                        .callEvent(new OnGetEffect(data, oEffect, oEffect.getDuration(), this.getNAME()));
+                data.addEffect("basic_potion", oEffect);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
