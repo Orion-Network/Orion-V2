@@ -63,7 +63,8 @@ public class PlayerStatsListener implements Listener {
         if (event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (event.getClickedBlock().getType().equals(Material.SMITHING_TABLE)) {
                 event.setCancelled(true);
-                ((Smithing) orionPlayer.getJobs().getJob(JobType.SMITHING)).getUpgradeGui().show(event.getPlayer());
+                // TODO Correct gui to give back items if closed
+                // ((Smithing) orionPlayer.getJobs().getJob(JobType.SMITHING)).getUpgradeGui().show(event.getPlayer());
             } else if (event.getClickedBlock().getType().equals(Material.BREWING_STAND)) {
                 event.setCancelled(true);
                 ((Alchemist) orionPlayer.getJobs().getJob(JobType.ALCHEMIST)).getBrewingPane().show(event.getPlayer());

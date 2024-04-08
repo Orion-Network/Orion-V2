@@ -37,6 +37,11 @@ public class Alchemist extends AbstractJob {
 
     public ChestGui getBrewingPane() {
         ChestGui gui = new ChestGui(1, "Menu d'infusion");
+        gui.setOnBottomClick(e -> {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+            }
+        });
 
         HashMap<Integer, BasicIngredient> ingredients = new HashMap<>();
 
