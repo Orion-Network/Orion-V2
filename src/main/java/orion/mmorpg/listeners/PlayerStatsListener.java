@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +19,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.spigotmc.event.entity.EntityDismountEvent;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.events.PlayerDamageEntityEvent;
@@ -34,7 +32,6 @@ import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.jobs.Alchemist;
 import orion.mmorpg.players.jobs.JobType;
-import orion.mmorpg.players.jobs.Smithing;
 import orion.mmorpg.utils.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -208,8 +205,8 @@ public class PlayerStatsListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent e) {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
 
-        if (orionPlayer.getRace() == null) {
-            Utils.sendInfoMessage(e.getPlayer(), "Vous devez choisir une race dans votre /menu");
+        if (orionPlayer.getClasse() == null) {
+            Utils.sendInfoMessage(e.getPlayer(), "Vous devez choisir une classe dans votre /menu");
             e.setCancelled(true);
             return;
         }

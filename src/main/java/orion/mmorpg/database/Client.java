@@ -7,28 +7,22 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.nexomega.orionmob.entities.Mounts;
 import fr.nexomega.orionmob.entities.Pets;
-import fr.nexomega.orionmob.entities.samples.AbstractMob;
 import lombok.Getter;
 import org.bson.Document;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import orion.mmorpg.Mmorpg;
-import orion.mmorpg.items.tools.ToolType;
 import orion.mmorpg.players.Equipments;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.OEffect;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.jobs.Jobs;
-import orion.mmorpg.players.races.Race;
+import orion.mmorpg.players.classes.Classe;
 import orion.mmorpg.utils.*;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -88,10 +82,10 @@ public class Client extends SaveStrategy {
         else
             document.put("support", null);
 
-        if (player.getRace() != null)
-            document.put("race", player.getRace().toString());
+        if (player.getClasse() != null)
+            document.put("classe", player.getClasse().toString());
         else
-            document.put("race", null);
+            document.put("classe", null);
 
         if (player.getJobs() != null)
             document.put("jobs", Mmorpg.getOrionGson().getGSON().toJson(player.getJobs()));
@@ -218,12 +212,12 @@ public class Client extends SaveStrategy {
         }
         builder.withMainSupport(support);
 
-        Race race;
-        if (document.getString("race") == null)
-            race = null;
+        Classe classe;
+        if (document.getString("classe") == null)
+            classe = null;
         else
-            race = Race.valueOf(document.getString("race"));
-        builder.withRace(race);
+            classe = Classe.valueOf(document.getString("classe"));
+        builder.withClasse(classe);
 
         Jobs jobs;
         if (document.getString("jobs") == null)

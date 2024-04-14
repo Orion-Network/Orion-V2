@@ -2,7 +2,6 @@ package orion.mmorpg.listeners;
 
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,8 +12,6 @@ import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.utils.GameState;
 import orion.mmorpg.utils.Utils;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 public class PlayerJoinListener implements Listener {
@@ -51,8 +48,8 @@ public class PlayerJoinListener implements Listener {
             Utils.sendInfoMessage(player, "Data loaded !");
             if (orionPlayer.getMainSupport() != null)
                 orionPlayer.getMainSupport().applyEffects(orionPlayer, -1);
-            if (orionPlayer.getRace() == null)
-                player.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
+            if (orionPlayer.getClasse() == null)
+                player.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
             return;
         }
 

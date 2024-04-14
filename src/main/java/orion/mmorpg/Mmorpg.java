@@ -28,7 +28,6 @@ import orion.mmorpg.utils.Utils;
 import orion.mmorpg.utils.WorldGuardUtils;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -130,8 +129,8 @@ public final class Mmorpg extends JavaPlugin {
                 getPlayerManager().addPlayer(p.getUniqueId(), orionPlayer);
                 orionPlayer.updateHealthbar();
                 Utils.sendInfoMessage(p, "Data loaded !");
-                if (orionPlayer.getRace() == null)
-                    p.sendTitle("Bienvenu", "Selectionnez votre race via le /menu", 10, 70, 20);
+                if (orionPlayer.getClasse() == null)
+                    p.sendTitle("Bienvenu", "Selectionnez votre classe via le /menu", 10, 70, 20);
                 return;
             } else {
                 OrionPlayer orionPlayer = Utils.generateStarterPlayer(p);

@@ -66,7 +66,7 @@ public class PlayerChatListener implements Listener {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(ChatColor.GRAY + "Nom: " + ChatColor.WHITE + pl.getName() + "\n");
                 stringBuilder.append(ChatColor.GRAY + "Niveau: " + ChatColor.WHITE + stats.getLevel() + "\n");
-                stringBuilder.append(ChatColor.GRAY + "Race:" + ChatColor.WHITE + stats.getRace().getName() + "\n");
+                stringBuilder.append(ChatColor.GRAY + "Classe:" + ChatColor.WHITE + stats.getClasse().getName() + "\n");
                 stringBuilder.append(
                         ChatColor.GRAY + "Support: " + ChatColor.WHITE + stats.getMainSupport().getName() + "\n");
                 stats.getStats().statsAsLore()

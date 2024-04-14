@@ -11,7 +11,6 @@ import org.bukkit.persistence.PersistentDataType;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.jobs.JobType;
 import orion.mmorpg.utils.Namespaces;
 import orion.mmorpg.utils.Stats;
@@ -43,7 +42,7 @@ public class DataCommand implements TabExecutor {
                     builder.append(ChatColor.GRAY + "Mana : " + ChatColor.YELLOW + data.getMana() + "\n");
                     builder.append(ChatColor.GRAY + "Support : " + ChatColor.YELLOW
                             + (data.getMainSupport() == null ? "Aucun" : data.getMainSupport().getName()) + "\n");
-                    builder.append(ChatColor.GRAY + "Race : " + ChatColor.YELLOW + data.getRace().getName() + "\n");
+                    builder.append(ChatColor.GRAY + "Classe : " + ChatColor.YELLOW + data.getClasse().getName() + "\n");
                     builder.append(data.getStats().modifiersAsLore()).append("\n");
                     for (String stat : data.getStats().statsAsLore())
                         builder.append(stat + "\n");

@@ -6,7 +6,7 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.gui.AcceptGui;
 import orion.mmorpg.items.sample.BasicConsumableItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.races.Race;
+import orion.mmorpg.players.classes.Classe;
 import orion.mmorpg.utils.Rarity;
 
 import java.util.Collections;
@@ -21,10 +21,10 @@ public class CelestialSerum extends BasicConsumableItem {
     @Override
     public void onUseItem(Mmorpg mmorpg, OrionPlayer data, PlayerInteractEvent e) {
         super.onUseItem(mmorpg, data, e);
-        Race race = Race.CELESTIAL;
-        new AcceptGui("Devenir " + race.getName(), e.getPlayer(), data, () -> {
-            data.setRace(race);
-            race.getOnRaceSelected().accept(e.getPlayer(), data);
-        }, "Vous êtes devenu un(e) " + race.getName());
+        Classe classe = Classe.CELESTIAL;
+        new AcceptGui("Devenir " + classe.getName(), e.getPlayer(), data, () -> {
+            data.setClasse(classe);
+            classe.getOnRaceSelected().accept(e.getPlayer(), data);
+        }, "Vous êtes devenu un(e) " + classe.getName());
     }
 }

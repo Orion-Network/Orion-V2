@@ -34,12 +34,12 @@ public class MenuGui extends ChestGui {
         this.p = p;
         this.orionPlayer = orionPlayer;
 
-        if (orionPlayer.getRace() != null) {
+        if (orionPlayer.getClasse() != null) {
             this.addPane(this.orionPlayer.getEquipements().getEquipmentPane(this));
             this.addPane(getMenuPane());
             this.show(p);
         } else {
-            new RaceGui(p, orionPlayer);
+            new ClasseGui(p, orionPlayer);
         }
 
         this.setOnBottomClick(e -> {
@@ -53,7 +53,7 @@ public class MenuGui extends ChestGui {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         ItemMeta headMeta = head.getItemMeta();
-        headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getRace().getName() + " " + p.getName());
+        headMeta.setDisplayName(ChatColor.YELLOW + orionPlayer.getClasse().getName() + " " + p.getName());
         LinkedList<String> infos = new LinkedList<>();
         if (orionPlayer.getMainSupport() != null)
             infos.add(ChatColor.YELLOW + orionPlayer.getMainSupport().getName());

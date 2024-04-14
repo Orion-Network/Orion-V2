@@ -1,4 +1,4 @@
-package orion.mmorpg.players.races;
+package orion.mmorpg.players.classes;
 
 import lombok.Getter;
 import org.bukkit.Material;
@@ -21,12 +21,12 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 @Getter
-public enum Race {
+public enum Classe {
     HUMAN("Humain", new Stats.Builder().build(),
             BasicItem
                     .generateTemplateBasicItem(Material.STONE_SWORD, "Humain", 0,
                             Collections.singletonList(
-                                    "La race la plus populaire de ce monde malgré leurs faible magie"),
+                                    "La classe la plus populaire de ce monde malgré leurs faible magie"),
                             Rarity.COMMON)
                     .generateItem(null, 1),
             new ArrayList<>(Collections.singleton(Heal.class)), null, null, new LinkedHashMap<>() {
@@ -40,7 +40,7 @@ public enum Race {
     CELESTIAL("Célestien", new Stats.Builder().build(),
             BasicItem
                     .generateTemplateBasicItem(Material.ELYTRA, "Celestian", 0,
-                            Collections.singletonList("Une race celeste ayant la capacitée de voler"), Rarity.RARE)
+                            Collections.singletonList("Une classe celeste ayant la capacitée de voler"), Rarity.RARE)
                     .generateItem(null, 1),
             null, Arrays.asList(Spec.ELYTRA), null, null, null);
 
@@ -53,10 +53,10 @@ public enum Race {
     public Map<Integer, Class<? extends Spell>> learningSpells;
     BiConsumer<Player, OrionPlayer> onRaceSelected;
 
-    Race(String name, Stats stats, ItemStack itemStack, @Nullable ArrayList<Class<? extends Spell>> spellList,
-            @Nullable List<Spec> species, @Nullable Support support,
-            @Nullable Map<Integer, Class<? extends Spell>> learningSpells,
-            @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
+    Classe(String name, Stats stats, ItemStack itemStack, @Nullable ArrayList<Class<? extends Spell>> spellList,
+           @Nullable List<Spec> species, @Nullable Support support,
+           @Nullable Map<Integer, Class<? extends Spell>> learningSpells,
+           @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
         this.name = name;
         this.stats = stats;
         this.itemStack = itemStack;
@@ -76,7 +76,7 @@ public enum Race {
             this.onRaceSelected = onRaceSelected;
         else
             this.onRaceSelected = (p, op) -> {
-                Utils.sendDebugMessage(p, "Race selected !");
+                Utils.sendDebugMessage(p, "Classe selected !");
             };
     }
 

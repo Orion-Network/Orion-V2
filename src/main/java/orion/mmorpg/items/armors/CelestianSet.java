@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 import orion.mmorpg.Mmorpg;
 import orion.mmorpg.items.sample.BasicArmorItem;
 import orion.mmorpg.players.OrionPlayer;
-import orion.mmorpg.players.races.Race;
+import orion.mmorpg.players.classes.Classe;
 import orion.mmorpg.utils.Rarity;
 import orion.mmorpg.utils.Stats;
 import orion.mmorpg.utils.Utils;
@@ -25,7 +25,7 @@ public class CelestianSet {
 
         @Override
         public boolean onEquip(Player p, OrionPlayer data) {
-            if (data.getRace() != Race.CELESTIAL) {
+            if (data.getClasse() != Classe.CELESTIAL) {
                 Utils.sendInfoMessage(p, "Vous devez être célestien pour équiper la couronne");
                 return false;
             }

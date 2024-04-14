@@ -10,22 +10,22 @@ import orion.mmorpg.Mmorpg;
 import orion.mmorpg.players.OrionPlayer;
 import orion.mmorpg.players.abilities.Spell;
 import orion.mmorpg.players.abilities.SpellList;
-import orion.mmorpg.players.races.Race;
+import orion.mmorpg.players.classes.Classe;
 import orion.mmorpg.utils.Utils;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class RaceGui extends ChestGui {
+public class ClasseGui extends ChestGui {
 
     Player p;
     OrionPlayer orionPlayer;
-    List<Race> excludedRaces = Arrays.asList(Race.CELESTIAL);
-    int rows = (int) Math.ceil(Race.values().length / 9);
+    List<Classe> excludedClasses = Arrays.asList(Classe.CELESTIAL);
+    int rows = (int) Math.ceil(Classe.values().length / 9);
     OutlinePane racePane = new OutlinePane(0, 0, 9, 1);
 
-    public RaceGui(Player p, OrionPlayer orionPlayer) {
-        super(1, "Race Selection");
+    public ClasseGui(Player p, OrionPlayer orionPlayer) {
+        super(1, "Classe Selection");
 
         this.p = p;
         this.orionPlayer = orionPlayer;
@@ -38,16 +38,16 @@ public class RaceGui extends ChestGui {
     }
 
     public OutlinePane generateRacePane() {
-        for (Race race : Race.values()) {
-            if (excludedRaces.contains(race))
+        for (Classe classe : Classe.values()) {
+            if (excludedClasses.contains(classe))
                 continue;
-            racePane.addItem(new GuiItem(race.getItemStack(), e -> {
-                if (orionPlayer.getRace() == null) {
-                    new AcceptGui("Devenir " + race.getName(), p, orionPlayer, () -> {
-                        orionPlayer.setRace(race);
-                        for (Class<? extends Spell> s : race.spellList)
+            racePane.addItem(new GuiItem(classe.getItemStack(), e -> {
+                if (orionPlayer.getClasse() == null) {
+                    new AcceptGui("Devenir " + classe.getName(), p, orionPlayer, () -> {
+                        orionPlayer.setClasse(classe);
+                        for (Class<? extends Spell> s : classe.spellList)
                             SpellList.learnSpell(orionPlayer, s, 100);
-                        race.getOnRaceSelected().accept(p, orionPlayer);
+                        classe.getOnRaceSelected().accept(p, orionPlayer);
 
                         SphereEffect sphereEffect = new SphereEffect(Mmorpg.effectManager);
                         sphereEffect.particle = Particle.GLOW;
@@ -58,7 +58,7 @@ public class RaceGui extends ChestGui {
                         sphereEffect.start();
 
                         Mmorpg.INSTANCE.getPlayerManager().savePlayer(orionPlayer);
-                    }, "Vous êtes devenu un(e) " + race.getName());
+                    }, "Vous êtes devenu un(e) " + classe.getName());
                 } else {
                     Utils.sendErrorMessage(p, "Vous avez déja selectionné une classe");
                 }

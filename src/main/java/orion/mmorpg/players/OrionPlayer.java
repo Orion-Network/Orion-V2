@@ -26,7 +26,7 @@ import orion.mmorpg.players.abilities.SpellList;
 import orion.mmorpg.players.abilities.Support;
 import orion.mmorpg.players.jobs.Jobs;
 import orion.mmorpg.players.parties.Party;
-import orion.mmorpg.players.races.Race;
+import orion.mmorpg.players.classes.Classe;
 import orion.mmorpg.utils.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -88,7 +88,7 @@ public class OrionPlayer implements Effectable {
     private Support mainSupport;
     @Getter
     @Setter
-    private Race race;
+    private Classe classe;
 
     @Getter
     private Jobs jobs;
@@ -163,14 +163,14 @@ public class OrionPlayer implements Effectable {
      *            Retrieved Spells
      * @param mainSupport
      *            Retrieved Support
-     * @param race
-     *            Retrieved Race
+     * @param classe
+     *            Retrieved Classe
      */
     public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana,
-            LinkedHashSet<String> portalStones, Equipments equipements,
-            LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver,
-            SlotType[] slotTypes, Support mainSupport, Race race, Jobs jobs, Set<Pets> tamedPets,
-            Set<Mounts> tamedMounts, Currencies currencies) {
+                       LinkedHashSet<String> portalStones, Equipments equipements,
+                       LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver,
+                       SlotType[] slotTypes, Support mainSupport, Classe classe, Jobs jobs, Set<Pets> tamedPets,
+                       Set<Mounts> tamedMounts, Currencies currencies) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;
@@ -183,7 +183,7 @@ public class OrionPlayer implements Effectable {
         this.portalStones = portalStones;
         spells.forEach((spellClass, knowledge) -> getKnownSpells().put(spellClass, knowledge));
         this.mainSupport = mainSupport;
-        this.race = race;
+        this.classe = classe;
 
         this.initHealthBar();
 
@@ -287,8 +287,8 @@ public class OrionPlayer implements Effectable {
             e.radiusIncrease = 0.3;
             e.setLocation(p.getLocation());
             e.start();
-            if (this.getRace().getLearningSpells().containsKey(this.getLevel())) {
-                Class<? extends Spell> spellClass = this.getRace().getLearningSpells().get(this.getLevel());
+            if (this.getClasse().getLearningSpells().containsKey(this.getLevel())) {
+                Class<? extends Spell> spellClass = this.getClasse().getLearningSpells().get(this.getLevel());
                 SpellList.learnSpell(this, spellClass, 100);
                 Utils.sendInfoMessage(p, "Vous avez appris un nouveau sort !");
             }
@@ -310,8 +310,8 @@ public class OrionPlayer implements Effectable {
         board.clear();
         this.fastBoard.updateTitle("Statistiques");
         board.add(" ");
-        if (this.getRace() != null)
-            board.add(ChatColor.WHITE + "Race : " + ChatColor.GOLD + this.getRace().getName());
+        if (this.getClasse() != null)
+            board.add(ChatColor.WHITE + "Classe : " + ChatColor.GOLD + this.getClasse().getName());
         board.add(ChatColor.WHITE + "Niveau : " + ChatColor.GOLD + this.getLevel() + " ("
                 + (int) ((getExp() / getExpToNextLevel()) * 100) + "%)");
         board.add(
@@ -392,7 +392,7 @@ public class OrionPlayer implements Effectable {
         private Set<Mounts> tamedMounts = new LinkedHashSet<>();
         private AbstractPet pet;
         private Support mainSupport;
-        private Race race;
+        private Classe classe;
         private Jobs jobs = Jobs.getBaseJobs();
         private Currencies currencies = new Currencies();
 
@@ -518,8 +518,8 @@ public class OrionPlayer implements Effectable {
             return this;
         }
 
-        public OrionPlayerBuilder withRace(Race race) {
-            this.race = race;
+        public OrionPlayerBuilder withClasse(Classe classe) {
+            this.classe = classe;
             return this;
         }
 
@@ -535,7 +535,7 @@ public class OrionPlayer implements Effectable {
 
         public OrionPlayer build() {
             OrionPlayer orionPlayer = new OrionPlayer(infos, stats, uniqueId, health, level, exp, mana, portalStones,
-                    equipements, knownSpells, selectedSpells, quiver, slotTypes, mainSupport, race, jobs, tamedPets,
+                    equipements, knownSpells, selectedSpells, quiver, slotTypes, mainSupport, classe, jobs, tamedPets,
                     tamedMounts, currencies);
             orionPlayer.setHealth(health);
             orionPlayer.setParty(party);
