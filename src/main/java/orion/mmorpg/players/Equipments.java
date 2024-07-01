@@ -112,6 +112,8 @@ public class Equipments {
                 }
             }
 
+            orionPlayer.updateHealthbar();
+
             gui.update();
         };
     }

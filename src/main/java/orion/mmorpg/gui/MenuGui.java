@@ -48,8 +48,7 @@ public class MenuGui extends ChestGui {
         });
     }
 
-    public StaticPane getMenuPane() {
-        menuPane.setOnClick(e -> e.setCancelled(true));
+    public static ItemStack generateHeadStats(Player p, OrionPlayer orionPlayer) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         ItemMeta headMeta = head.getItemMeta();
@@ -61,6 +60,13 @@ public class MenuGui extends ChestGui {
         infos.add(ChatColor.WHITE + "Appuyez pour voir vos effets actifs");
         headMeta.setLore(infos);
         head.setItemMeta(headMeta);
+
+        return head;
+    }
+
+    public StaticPane getMenuPane() {
+        menuPane.setOnClick(e -> e.setCancelled(true));
+        ItemStack head = generateHeadStats(p, orionPlayer);
 
         menuPane.addItem(new GuiItem(head, e -> new EffectGui(p, orionPlayer).show(p)), 2, 0);
         menuPane.addItem(

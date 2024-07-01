@@ -24,6 +24,8 @@ import orion.mmorpg.events.OnSpellSense;
 import orion.mmorpg.events.PlayerDamageEntityEvent;
 import orion.mmorpg.events.PlayerDamagedByEntityEvent;
 import orion.mmorpg.events.RespawnEvent;
+import orion.mmorpg.gui.ClasseGui;
+import orion.mmorpg.gui.MenuGui;
 import orion.mmorpg.items.Modifiers;
 import orion.mmorpg.items.enchants.CustomEnchants;
 import orion.mmorpg.items.sample.*;
@@ -206,7 +208,8 @@ public class PlayerStatsListener implements Listener {
         OrionPlayer orionPlayer = mmorpg.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
 
         if (orionPlayer.getClasse() == null) {
-            Utils.sendInfoMessage(e.getPlayer(), "Vous devez choisir une classe dans votre /menu");
+            Utils.sendInfoMessage(e.getPlayer(), "Vous devez choisir une classe pour commencer");
+            new MenuGui(e.getPlayer(), this.mmorpg.getPlayerManager().getPlayer((e.getPlayer()).getUniqueId()));
             e.setCancelled(true);
             return;
         }
