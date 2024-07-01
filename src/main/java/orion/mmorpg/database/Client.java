@@ -258,6 +258,8 @@ public class Client extends SaveStrategy {
                 Document mapDoc = (Document) map;
                 LinkedHashMap<String, OEffect> eventMap = new LinkedHashMap<>();
                 try {
+                    if (!mapDoc.containsKey("effectClass"))
+                        return;
                     OEffect oEffect = (OEffect) Class.forName(mapDoc.getString("effectClass"))
                             .getConstructor(long.class).newInstance(mapDoc.getLong("remainingTime"));
                     eventMap.put(mapDoc.getString("id"), oEffect);

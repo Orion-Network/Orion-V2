@@ -167,10 +167,10 @@ public class OrionPlayer implements Effectable {
      *            Retrieved Classe
      */
     public OrionPlayer(Infos infos, Stats stats, UUID uniqueId, double health, int level, double exp, int mana,
-                       LinkedHashSet<String> portalStones, Equipments equipements,
-                       LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver,
-                       SlotType[] slotTypes, Support mainSupport, Classe classe, Jobs jobs, Set<Pets> tamedPets,
-                       Set<Mounts> tamedMounts, Currencies currencies) {
+            LinkedHashSet<String> portalStones, Equipments equipements,
+            LinkedHashMap<Class<? extends Spell>, Knowledge> spells, String[] selectedSpells, ItemStack[] quiver,
+            SlotType[] slotTypes, Support mainSupport, Classe classe, Jobs jobs, Set<Pets> tamedPets,
+            Set<Mounts> tamedMounts, Currencies currencies) {
         this.infos = infos;
         this.uniqueId = uniqueId;
         this.stats = stats;

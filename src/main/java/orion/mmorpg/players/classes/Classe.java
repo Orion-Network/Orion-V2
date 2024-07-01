@@ -54,9 +54,9 @@ public enum Classe {
     BiConsumer<Player, OrionPlayer> onRaceSelected;
 
     Classe(String name, Stats stats, ItemStack itemStack, @Nullable ArrayList<Class<? extends Spell>> spellList,
-           @Nullable List<Spec> species, @Nullable Support support,
-           @Nullable Map<Integer, Class<? extends Spell>> learningSpells,
-           @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
+            @Nullable List<Spec> species, @Nullable Support support,
+            @Nullable Map<Integer, Class<? extends Spell>> learningSpells,
+            @Nullable BiConsumer<Player, OrionPlayer> onRaceSelected) {
         this.name = name;
         this.stats = stats;
         this.itemStack = itemStack;
